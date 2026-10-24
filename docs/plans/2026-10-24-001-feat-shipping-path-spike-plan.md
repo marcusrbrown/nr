@@ -237,7 +237,7 @@ Upstream reuse outside this repo's scope: the `cartwheel-examples` out-of-tree p
 
 **Verification:** Both SDKs, the Darwin wasi-sdk, engine tool sources, and Playwright Chromium are present; `tuple.json` exists; all three runners work on Darwin; acceptance criteria are predeclared; ADR-0001 pins table is generated from the lock.
 
-- [ ] **Unit 3: Spike scene and native build**
+- [x] **Unit 3: Spike scene and native build**
 
 **Goal:** A running native app with the full scene: three.c ground plane, y-ordered sprite planes for two players and up to 38 enemies (40 actors at stress), jump height, HUD text, one sound, two local players, fixed deterministic tick, whitelisted debug state — with its shader table generated and linked before visual acceptance.
 

@@ -1,0 +1,9 @@
+# What the spike ships (cwpack packs only what these reach). Sprites and audio are kept as they are
+# (texture.format and audio.format default to keep), so the bytes are the generated placeholders.
+fonts/FiraSans-Regular.ttf
+fonts/FiraSans-OFL.txt
+sprites/blue-left.png
+sprites/blue-right.png
+sprites/orange-left.png
+sprites/orange-right.png
+audio/blip.wav

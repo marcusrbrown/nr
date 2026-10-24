@@ -110,3 +110,30 @@ Image data points from the gate's own frames (`image-diff-hello.log`): native vs
 - Audible audio on native and Chromium was not checked (dummy audio driver).
 - The cause of the single 0×0 Chromium frame.
 - Whether the owner's `:7331` server can be repaired the same way in place (only a copy was repaired).
+
+## Unit 3: spike scene and native build
+
+Date: 2026-10-24. Raw logs and images: `out/unit3/` (gitignored, local to the development host). Sources: `games/spike/`, root `CMakeLists.txt`.
+
+- Targets: `spike` (8 actors, the baseline) and `spike_stress` (40 actors) are two `cw_add_app` targets over one `main.c`; the count is the compile definition `SPIKE_ACTORS`, so no input script can change it. Both link the committed table `games/spike/programs/spike.txt` (`basic+map+nearest+atest`, `basic+map+nearest+instbig+atest`, `standard+l1000`).
+- Program survey: `node deps/cartwheel-engine/tools/programs.mjs spike spike_stress --no-run --logs <dir> --build build/native` with `<dir>` holding the `CW_PROGRAMS_LOG_DIR` logs of `run-cart` runs (`out/unit3/programs-survey.log`). The `--gates` branch and the run branch were not used: the run branch starts the binary without input, and the gate branch reads the engine's `tests/gates.json`.
+- Clean `TARGETS=native scripts/build.sh` and `TARGETS=cart scripts/build.sh`: exit 0, no compiler warnings (`build-native.log`, `build-cart.log`). `build/cart/carts/spike.wasc` 2,698,285 bytes, `spike_stress.wasc` 2,698,527 bytes.
+- Native 300 frames with `tests/input-2p.json`: exit 0, `cw.three.missing` 0, player 1 moves independently of player 0 (`state-a.json`, `shot-a.png`). Two runs: whitelisted state (`tests/whitelist.mjs`) and screenshot byte-identical (`determinism.log`). Checksum 3965552069.
+- `tests/ordering-check.mjs` (`ordering.log`, `ordering/f*.png`): 18 assertions over six checkpoints, all pass (greater ground-y in front, swapped positions swap it, equal ground-y resolves to the greater id, a jumping actor keeps its ground occlusion in both directions, the pillar occludes an actor behind it and is occluded by one in front). Control, `SPIKE_REVERSE_DEPTH=ON` build (`ordering-reverse.log`, `ordering-reverse/f*.png`): exit 1, 9 assertions fail.
+- Control, program row `standard+l1000` removed (`control-norow.log`, `norow-stderr.log`, `shot-norow.png`): exit 0 from `run-cart`, `cw.three.missing` 1 naming `standard+l1000`, the pillar is not drawn, the simulation checksum is unchanged.
+- Audio (`audio.log`): `sfx_tick` -1 and `voice_created` 0 at 49 frames; 50 and 1 at 50 frames (the first attack is at input frame 50).
+- Cart: romdev (`run-cart --host romdev`) and Chromium (`--host chromium`), 300 frames, same input: whitelisted state byte-equal to native, `cw.three.missing` 0 on both. `wasm{op:conformance}` conforms (one warning, `deterministic-unflagged`, as for `hello`). romdev session `nr-unit3`: `loadMedia` + `host{op:play, seconds:60}` + reload + 59 steps + `frame{op:screenshot}` + `wasm{op:debugState}` (`romdev-*.json`, `romdev-shot.png`); at 60 ticks the whitelisted state equals native's 60-frame state.
+- Stress (`spike_stress`, native, 300 frames): `cw.three.missing` 0, 40 actors, one HUD atlas page (`shot-stress.png`).
+
+Findings:
+
+- A bare three.c renderer has no pipeline, so the engine's `cw.three.missing` fields never exist for it (`hello` publishes none, and `tests/gate.mjs` then sees no missing states). The spike publishes both from `t3_renderer_generated_missing`, as `src/render/pipeline.c` does.
+- After a render2d pass (the HUD) the next three.c frame loses its depth state unless `t3_renderer_reset_bindings` runs first: without it the ground and pillar are painted over the actors (`out/unit3/noreset.png`). The spike calls it before every 3D render.
+- The `input count` whitelist entry is `spike.input_count`, the number of ticks with any action held by either player (the engine's own `input.ticks` and `input.hash` are published as well but are not on the whitelist).
+- Native audible check: not run (needs a real audio device; the runners use SDL's dummy driver).
+
+Unverified:
+
+- Audible output of the blip on native and in the browser.
+- Native p99 frame time (Unit 6).
+- Whether the render-scale-2 (1080p) path costs more than a 960x540 render for this scene (not measured).

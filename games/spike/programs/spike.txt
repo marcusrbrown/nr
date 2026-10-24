@@ -1,0 +1,4 @@
+# r186 program states spike draws (cmake/programs.cmake, tools/programs.mjs)
+basic+map+nearest+instbig+atest
+basic+map+nearest+atest
+standard+l1000

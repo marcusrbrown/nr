@@ -1,0 +1,15 @@
+[
+  {"frame": 1, "buttons": ["right"], "pad2": {"buttons": ["left"]}},
+  {"frame": 24, "buttons": ["down"], "pad2": {"buttons": ["up"]}},
+  {"frame": 42, "buttons": [], "pad2": {"buttons": ["up"]}},
+  {"frame": 48, "buttons": ["right"], "pad2": {"buttons": ["right"]}},
+  {"frame": 75, "buttons": ["right"], "pad2": {"buttons": []}},
+  {"frame": 85, "buttons": ["up"], "pad2": {"buttons": []}},
+  {"frame": 127, "buttons": ["down"], "pad2": {"buttons": []}},
+  {"frame": 145, "buttons": [], "pad2": {"buttons": ["down"]}},
+  {"frame": 175, "buttons": ["south"], "pad2": {"buttons": []}},
+  {"frame": 176, "buttons": [], "pad2": {"buttons": []}},
+  {"frame": 216, "buttons": [], "pad2": {"buttons": ["up"]}},
+  {"frame": 246, "buttons": ["south"], "pad2": {"buttons": []}},
+  {"frame": 247, "buttons": [], "pad2": {"buttons": []}}
+]

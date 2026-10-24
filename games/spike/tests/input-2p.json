@@ -1,0 +1,9 @@
+[
+  {"frame": 1, "pad2": {"buttons": []}},
+  {"frame": 10, "buttons": ["right"], "pad2": {"buttons": ["down"]}},
+  {"frame": 50, "buttons": ["right", "south"], "pad2": {"buttons": ["down", "west"]}},
+  {"frame": 51, "buttons": ["right"], "pad2": {"buttons": ["down"]}},
+  {"frame": 120, "buttons": ["up"], "pad2": {"buttons": ["left"]}},
+  {"frame": 180, "buttons": ["south", "west"], "pad2": {"buttons": []}},
+  {"frame": 181, "buttons": [], "pad2": {"buttons": []}}
+]
