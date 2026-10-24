@@ -1,0 +1,12 @@
+
+native
+frame  left    right   D       push      body   colours missing
+60     201.2   150.6   50.6    0.0786    188.3  309     0
+120    32.0    172.8   -140.8  -0.0754   113.8  326     0
+180    208.8   78.2    130.6   0.0868    150.2  176     0
+240    109.4   197.8   -88.4   -0.0784   166.3  293     0
+mean |D| 102.6
+control (flat normal map): f60 D 11.2, f120 D -24.9, f180 D 33.3, f240 D -24.7 | mean |D| 23.5
+ratio normal-mapped / flat 4.36
+
+all checks passed

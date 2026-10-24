@@ -1,0 +1,16 @@
+litspike: 2 missing state(s) -> /Users/mrbrown/src/github.com/marcusrbrown/nr/games/litspike/programs/litspike.txt
+litspike_stress: 2 missing state(s) -> /Users/mrbrown/src/github.com/marcusrbrown/nr/games/litspike/programs/litspike.txt
+litspike: regenerating (/Users/mrbrown/src/github.com/marcusrbrown/nr/games/litspike/programs)
+/Users/mrbrown/src/github.com/marcusrbrown/nr/games/litspike/programs/litspike.txt: +2 from the missing logs
+capturing 2 state(s) into /Users/mrbrown/src/github.com/marcusrbrown/nr/build/native/programs-cache/litspike-4085ddf0780e
+standard+map+nearest+instbig+nmap+atest+l0300 wgpu stages vertex+fragment, 2 groups / 7 bindings, props 27/27 found
+standard+map+nearest+instbig+nmap+atest+l0300 gl   stages vertex+fragment, 2 groups / 5 bindings, props 30/30 found
+standard+l0300             wgpu stages vertex+fragment, 2 groups / 4 bindings, props 23/23 found
+standard+l0300             gl   stages vertex+fragment, 2 groups / 3 bindings, props 24/24 found
+ok
+standard+map+nearest+instbig+nmap+atest+l0300 wgpu stages vertex+fragment, 2 groups / 7 bindings, props 27/27 found
+standard+map+nearest+instbig+nmap+atest+l0300 gl   stages vertex+fragment, 2 groups / 5 bindings, props 30/30 found
+standard+l0300             wgpu stages vertex+fragment, 2 groups / 4 bindings, props 23/23 found
+standard+l0300             gl   stages vertex+fragment, 2 groups / 3 bindings, props 24/24 found
+ok
+wrote /Users/mrbrown/src/github.com/marcusrbrown/nr/games/litspike/programs/litspike_gl.c (2 states, 33 KB), litspike_wgpu.c (2 states, 34 KB)

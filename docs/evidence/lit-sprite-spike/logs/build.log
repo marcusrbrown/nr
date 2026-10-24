@@ -1,0 +1,10 @@
+ninja: Entering directory `/Users/mrbrown/src/github.com/marcusrbrown/nr/build/native'
+[1/4] Building C object games/litspike/CMakeFiles/litspike.dir/main.c.o
+[2/4] Building C object games/litspike/CMakeFiles/litspike_stress.dir/main.c.o
+[3/4] Linking CXX executable games/litspike/litspike
+[4/4] Linking CXX executable games/litspike/litspike_stress
+ninja: Entering directory `/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart'
+[1/4] Building C object games/litspike/CMakeFiles/litspike.dir/main.c.obj
+[2/4] Building C object games/litspike/CMakeFiles/litspike_stress.dir/main.c.obj
+[3/4] Linking CXX executable games/litspike/litspike_stress.wasm; cart litspike_stress.wasc
+[4/4] Linking CXX executable games/litspike/litspike.wasm; cart litspike.wasc

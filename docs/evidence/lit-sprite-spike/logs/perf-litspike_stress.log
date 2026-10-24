@@ -1,0 +1,6 @@
+litspike_stress-1: actors 40 submit p50 0.815 p99 1.459 max 1.743 | done p50 0.815 p99 1.457 max 1.743 | ticks 721 missing 0
+litspike_stress-2: actors 40 submit p50 1.201 p99 1.453 max 1.999 | done p50 1.201 p99 1.457 max 2.005 | ticks 721 missing 0
+litspike_stress-3: actors 40 submit p50 1.173 p99 1.393 max 2.295 | done p50 1.174 p99 1.393 max 2.295 | ticks 721 missing 0
+litspike_stress-4: actors 40 submit p50 1.190 p99 1.562 max 2.104 | done p50 1.190 p99 1.563 max 2.098 | ticks 721 missing 0
+litspike_stress-5: actors 40 submit p50 1.205 p99 1.549 max 2.277 | done p50 1.205 p99 1.548 max 2.276 | ticks 721 missing 0
+{"label":"litspike_stress","app":"litspike_stress","actors":40,"runs":5,"gl":"ANGLE (Apple, Apple M1 Pro, OpenGL 4.1 Metal - 89.4)","submit":{"p50_median":1.19,"p99_median":1.459,"p99_worst":1.562,"max_worst":2.295},"done":{"p50_median":1.190000057220459,"p99_median":1.4570000171661377,"p99_worst":1.562999963760376,"max_worst":2.2950000762939453},"missing":[0,0,0,0,0],"files":["litspike_stress-1","litspike_stress-2","litspike_stress-3","litspike_stress-4","litspike_stress-5"]}

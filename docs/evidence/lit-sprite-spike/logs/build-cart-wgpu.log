@@ -1,0 +1,12 @@
+ninja: Entering directory `out/litspike/build-cart-wgpu'
+[1/11] cwpack litspike
+[2/11] cwpack litspike_stress
+[3/11] Building C object games/litspike/CMakeFiles/cwprog_litspike.dir/programs/litspike_gl.c.obj
+[4/11] Building C object games/litspike/CMakeFiles/cwprog_litspike.dir/programs/litspike_wgpu.c.obj
+[5/11] Building C object games/litspike/CMakeFiles/litspike.dir/litspike_programs.c.obj
+[6/11] Building C object games/litspike/CMakeFiles/litspike_stress.dir/litspike_stress_programs.c.obj
+[7/11] Building C object games/litspike/CMakeFiles/litspike.dir/main.c.obj
+[8/11] Linking C static library games/litspike/libcwprog_litspike.a
+[9/11] Building C object games/litspike/CMakeFiles/litspike_stress.dir/main.c.obj
+[10/11] Linking CXX executable games/litspike/litspike.wasm; cart litspike.wasc
+[11/11] Linking CXX executable games/litspike/litspike_stress.wasm; cart litspike_stress.wasc

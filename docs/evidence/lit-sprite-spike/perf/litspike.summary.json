@@ -1,0 +1,33 @@
+{
+  "label": "litspike",
+  "app": "litspike",
+  "actors": 3,
+  "runs": 5,
+  "gl": "ANGLE (Apple, Apple M1 Pro, OpenGL 4.1 Metal - 89.4)",
+  "submit": {
+    "p50_median": 1.03,
+    "p99_median": 1.183,
+    "p99_worst": 1.458,
+    "max_worst": 3.031
+  },
+  "done": {
+    "p50_median": 1.0299999713897705,
+    "p99_median": 1.1829999685287476,
+    "p99_worst": 1.4529999494552612,
+    "max_worst": 3.0339999198913574
+  },
+  "missing": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "files": [
+    "litspike-1",
+    "litspike-2",
+    "litspike-3",
+    "litspike-4",
+    "litspike-5"
+  ]
+}

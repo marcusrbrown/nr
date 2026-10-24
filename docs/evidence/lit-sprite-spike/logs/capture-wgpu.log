@@ -1,0 +1,14 @@
+native (webgpu) f60: exit 0 
+native (webgpu) f120: exit 0 
+native (webgpu) f180: exit 0 
+  adapter: apple Apple M1 Pro (106b:0000, metal-3, backend 5, type 2)
+native (webgpu) f240: exit 0 
+chromium (webgpu) f60: exit 0 
+chromium (webgpu) f120: exit 0 
+chromium (webgpu) f180: exit 0 
+chromium (webgpu) f240: exit 0 
+native (webgpu) f60: exit 0 
+native (webgpu) f120: exit 0 
+native (webgpu) f180: exit 0 
+  adapter: apple Apple M1 Pro (106b:0000, metal-3, backend 5, type 2)
+native (webgpu) f240: exit 0 

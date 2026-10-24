@@ -1,0 +1,48 @@
+
+native
+frame  left    right   D       push      body   colours missing
+60     19.7    19.7    0.0     0.0786    19.7   1       1
+120    19.7    19.7    0.0     -0.0754   19.7   1       1
+180    19.7    19.7    0.0     0.0868    19.7   1       1
+240    19.7    19.7    0.0     -0.0784   19.7   1       1
+FAIL native f60: actor body luminance 19.7 < 40
+FAIL native f60: only 1 colours on the actor body
+FAIL native f60: cw.three.missing 1
+FAIL native f120: D 0.0 and push -0.0754 differ in sign
+FAIL native f120: actor body luminance 19.7 < 40
+FAIL native f120: only 1 colours on the actor body
+FAIL native f120: cw.three.missing 1
+FAIL native f180: actor body luminance 19.7 < 40
+FAIL native f180: only 1 colours on the actor body
+FAIL native f180: cw.three.missing 1
+FAIL native f240: D 0.0 and push -0.0784 differ in sign
+FAIL native f240: actor body luminance 19.7 < 40
+FAIL native f240: only 1 colours on the actor body
+FAIL native f240: cw.three.missing 1
+FAIL native: D never changes sign across frames 60/120/180/240
+mean |D| 0.0
+
+chromium
+frame  left    right   D       push      body   colours missing
+60     19.7    19.7    0.0     0.0786    19.7   1       1
+120    19.7    19.7    0.0     -0.0754   19.7   1       1
+180    19.7    19.7    0.0     0.0868    19.7   1       1
+240    19.7    19.7    0.0     -0.0784   19.7   1       1
+FAIL chromium f60: actor body luminance 19.7 < 40
+FAIL chromium f60: only 1 colours on the actor body
+FAIL chromium f60: cw.three.missing 1
+FAIL chromium f120: D 0.0 and push -0.0754 differ in sign
+FAIL chromium f120: actor body luminance 19.7 < 40
+FAIL chromium f120: only 1 colours on the actor body
+FAIL chromium f120: cw.three.missing 1
+FAIL chromium f180: actor body luminance 19.7 < 40
+FAIL chromium f180: only 1 colours on the actor body
+FAIL chromium f180: cw.three.missing 1
+FAIL chromium f240: D 0.0 and push -0.0784 differ in sign
+FAIL chromium f240: actor body luminance 19.7 < 40
+FAIL chromium f240: only 1 colours on the actor body
+FAIL chromium f240: cw.three.missing 1
+FAIL chromium: D never changes sign across frames 60/120/180/240
+mean |D| 0.0
+
+30 check(s) failed

@@ -4,3 +4,4 @@ project(nr C CXX)
 find_package(cartwheel REQUIRED CONFIG)
 
 add_subdirectory(games/spike)
+add_subdirectory(games/litspike)

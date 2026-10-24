@@ -1,0 +1,16 @@
+{"event":"schema-ok","version":"0.150.2","tools":["loadMedia","wasm","frame","host"],"sessionsAtStart":1}
+{"event":"live-loaded","path":"/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart/carts/litspike.wasc","gpu":"gl"}
+{"event":"live-play","playing":true,"seconds":60,"fps":60,"endsAt":"2026-10-24T23:28:48.828Z","note":"runs on the server; any other call on this session (except catalog) or host({op:'stop'}) ends it","startedAt":"2026-10-24T23:27:48.830Z"}
+{"event":"loaded","fb":[1920,1080],"gpu":"gl","seed":1}
+{"event":"conformance","conforms":true,"abi":4,"warnings":["deterministic-unflagged"]}
+{"event":"ticks","expected":60,"got":60,"frameCount":60}
+{"event":"captured","frame":60,"shot":"/Users/mrbrown/src/github.com/marcusrbrown/nr/out/litspike/romdev/romdev-f60.png","checksum":140963885,"missing":0,"missingStates":""}
+{"event":"ticks","expected":120,"got":120,"frameCount":120}
+{"event":"captured","frame":120,"shot":"/Users/mrbrown/src/github.com/marcusrbrown/nr/out/litspike/romdev/romdev-f120.png","checksum":1226065879,"missing":0,"missingStates":""}
+{"event":"ticks","expected":180,"got":180,"frameCount":180}
+{"event":"captured","frame":180,"shot":"/Users/mrbrown/src/github.com/marcusrbrown/nr/out/litspike/romdev/romdev-f180.png","checksum":87545007,"missing":0,"missingStates":""}
+{"event":"ticks","expected":240,"got":240,"frameCount":240}
+{"event":"captured","frame":240,"shot":"/Users/mrbrown/src/github.com/marcusrbrown/nr/out/litspike/romdev/romdev-f240.png","checksum":1474164980,"missing":0,"missingStates":""}
+{"event":"webgpu-load","loaded":true,"gpu":"gl","hasWgpuRendering":false}
+{"event":"webgpu-ran-on","cw.gpu.api":1,"cw.gpu.errors":0,"ticks":60,"missing":0}
+{"event":"done","evidence":[{"frame":60,"checksum":140963885,"missing":0},{"frame":120,"checksum":1226065879,"missing":0},{"frame":180,"checksum":87545007,"missing":0},{"frame":240,"checksum":1474164980,"missing":0}],"webgpu":{"requestedWgpu":true,"gpu":"gl","api":1}}

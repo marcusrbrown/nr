@@ -1,0 +1,4 @@
+# What litspike ships (cwpack packs only what these reach). Sprites are kept as they are
+# (texture.format defaults to keep), so the bytes are the generated placeholders.
+sprites/figure.png
+sprites/figure-n.png
