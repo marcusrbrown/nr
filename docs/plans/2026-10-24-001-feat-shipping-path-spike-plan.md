@@ -205,7 +205,7 @@ Upstream reuse outside this repo's scope: the `cartwheel-examples` out-of-tree p
 
 **Verification:** `git status` shows only intended files; `.context/` remains ignored.
 
-- [ ] **Unit 2: Pins, dependency fetch, and preflight**
+- [x] **Unit 2: Pins, dependency fetch, and preflight**
 
 **Goal:** Reproducibly fetch the engine SDKs, cart toolchain, engine tool sources, and browser runner on this Mac; record the exact host tuple; smoke-test every runner on Darwin before any game code exists.
 

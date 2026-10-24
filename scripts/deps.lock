@@ -1,0 +1,38 @@
+# Pinned dependencies. scripts/fetch-deps.sh, scripts/preflight.sh and
+# scripts/gen-pins-table.mjs read this file; it is the only hand-edited source of pins.
+#
+# Format (whitespace-separated, same shape as cartwheel-examples scripts/deps.lock):
+#   name                     source                                   revision            [sha256 | full commit]
+# A git source pins "<revision>" or "<version tag> <full commit hash>"; the hash is what is checked out.
+# An archive source pins "<version> <sha256>"; fetch-deps.sh refuses an archive whose sha256 differs.
+# observed:* lines record a host the project does not install; nothing fetches them.
+
+# cartwheel-engine: source at the v0.15.1 commit (its tools/run-cart.mjs and tests/gate.mjs).
+# Commit: `git ls-remote --tags` peeled ref refs/tags/v0.15.1^{} (the tag object itself is c53bddcd5260beca62f1cd14aa9f8c456438466b).
+cartwheel-engine   https://github.com/monteslu/cartwheel-engine.git   v0.15.1   4a5f73e8542b0069dc0689d026fd73c399a13907
+
+# Prebuilt engine SDKs of v0.15.1 (cartwheel-engine docs/sdk.md). sha256 = the release's .sha256 asset;
+# it equals the GitHub release asset digest for the tarball.
+#   macos-arm64: Darwin-executable (clang + static libs, bin/cwpack, programs.mjs, three.c tools)
+#   cart:        target-only wasm32-wasip1-threads libraries (ThinLTO bitcode), wasmcart-pack, import checker
+cartwheel-sdk:macos-arm64 https://github.com/monteslu/cartwheel-engine/releases/download/v0.15.1/cartwheel-sdk-0.15.1-macos-arm64.tar.gz v0.15.1 7615869aa000b97dd37a54964b358e28a1ebbc7a5c1290a342840257424df047
+cartwheel-sdk:cart        https://github.com/monteslu/cartwheel-engine/releases/download/v0.15.1/cartwheel-sdk-0.15.1-cart.tar.gz        v0.15.1 00780dcbed82517aea76784c64a91415ca913d7af6fd39966b5c5de7843d950b
+
+# three.c as pinned by the engine's scripts/deps.lock at v0.15.1 (0.186.18, three.js r186).
+# fetch-deps.sh aborts if the engine's own lock names a different commit.
+three.c            https://github.com/monteslu/three.c.git             main      c5f840b62dd398a3cc59d4863065ce8029e2cae1
+
+# wasmcart as pinned by the engine's scripts/deps.lock at v0.15.1: the reference hosts run-cart.mjs drives (Chromium).
+wasmcart           https://github.com/wasmcart/wasmcart.git            v0.34.3   cd233ea13c5656634898a925c214e3aea0558884
+
+# Cart toolchain for Darwin arm64 (Darwin-executable). The engine's lock pins the x86_64-linux builds of
+# the same versions (wasi-sdk 33.0, Binaryen 123); the cart SDK's own fetch script cannot fetch these on macOS.
+# wasi-sdk sha256: GitHub release asset digest of WebAssembly/wasi-sdk release wasi-sdk-33
+#   (`gh release view wasi-sdk-33 -R WebAssembly/wasi-sdk --json assets`, asset wasi-sdk-33.0-arm64-macos.tar.gz).
+#   The release publishes no checksum asset or body list; this API digest is the only upstream source.
+# Binaryen sha256: the release's binaryen-version_123-arm64-macos.tar.gz.sha256 asset.
+wasi-sdk:darwin-arm64  https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-33/wasi-sdk-33.0-arm64-macos.tar.gz            33.0  85c997a2665ead91673b5bb88b7d0df3fc8900df3bfa244f720d478187bbdc78
+binaryen:darwin-arm64  https://github.com/WebAssembly/binaryen/releases/download/version_123/binaryen-version_123-arm64-macos.tar.gz    123   74428be348c1a09863e7b642a1fa948cabf8ec9561052233d8288e941951725b
+
+# romdev: observed on this host, not installed by the project (MCP server, http://localhost:7331).
+observed:romdev    http://localhost:7331   0.150.2   -
