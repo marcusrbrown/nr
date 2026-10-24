@@ -6,14 +6,23 @@
  *
  * SPIKE_ACTORS (compile definition): actors in play, two players and the rest enemies.
  * SPIKE_REVERSE_DEPTH (compile definition): inverts the actor depth mapping; the control build for the
- * ordering gate. */
+ * ordering gate.
+ * SPIKE_PERF (compile definition): reads one pixel back after every frame so each frame includes its GPU work,
+ * and publishes the wall time of every frame (spike.perf_ms); the measurement build, outside the simulation.
+ * SPIKE_PERF_CONTROL (compile definition): spins SPIKE_PERF_CONTROL_MS per actor per frame in the render
+ * callback; the control build that must exceed the frame budget.
+ * SPIKE_NO_PREWARM (compile definition): skips the HUD glyph preload; the control build for the glyph check. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "cartwheel/audio.h"
 #include "cartwheel/core.h"
 #include "cartwheel/debug.h"
+#if SPIKE_PERF
+#include "cartwheel/gl.h"
+#endif
 #include "cartwheel/input.h"
 #include "cartwheel/platform.h"
 #include "cartwheel/render2d.h"
@@ -26,6 +35,19 @@
 #ifndef SPIKE_REVERSE_DEPTH
 #define SPIKE_REVERSE_DEPTH 0
 #endif
+#ifndef SPIKE_PERF
+#define SPIKE_PERF 0
+#endif
+#ifndef SPIKE_PERF_CONTROL
+#define SPIKE_PERF_CONTROL 0
+#endif
+#ifndef SPIKE_PERF_CONTROL_MS
+#define SPIKE_PERF_CONTROL_MS 0.5
+#endif
+#ifndef SPIKE_NO_PREWARM
+#define SPIKE_NO_PREWARM 0
+#endif
+#define SPIKE_PERF_RING 1024
 
 #define N SPIKE_ACTORS
 #define ENEMIES (N - 2)
@@ -73,6 +95,10 @@ static struct {
   cw_sound blip;
   bool audio_on;
   int32_t hud_atlas_pages; /* HUD only: render2d atlas pages, not part of the compared state */
+#if SPIKE_PERF
+  float perf_ms[SPIKE_PERF_RING]; /* wall ms from the end of one frame's render to the end of the next's */
+  int32_t perf_n;
+#endif
   /* program states three.c skipped (in no program table), published as the pipeline does */
   int32_t three_missing;
   char three_missing_states[1024];
@@ -252,8 +278,20 @@ static void build_scene(int w, int h) {
   }
 }
 
+#if SPIKE_PERF || SPIKE_PERF_CONTROL
+static double wall_ms(void) {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return (double)ts.tv_sec * 1000.0 + (double)ts.tv_nsec * 1e-6;
+}
+#endif
+
 static void sync_scene(void) {
   for (int i = 0; i < N; i++) {
+#if SPIKE_PERF_CONTROL
+    for (double end = wall_ms() + SPIKE_PERF_CONTROL_MS; wall_ms() < end;) {
+    }
+#endif
     int kind = i < 2 ? i : KIND_ENEMY;
     set_material(S.mesh[i], S.mat[kind][S.face[i]]);
     t3_object_set_position(S.mesh[i], S.pos[i][0], S.jump[i] + SPRITE_H * 0.5f, S.pos[i][2]);
@@ -308,6 +346,10 @@ static void register_debug(void) {
   cw_debug_i32("cw.three.missing", &S.three_missing);
   cw_debug_bytes("cw.three.missing_states", S.three_missing_states, sizeof S.three_missing_states);
   cw_r2d_debug_register("r2d");
+#if SPIKE_PERF
+  cw_debug_f32_array("spike.perf_ms", S.perf_ms, SPIKE_PERF_RING);
+  cw_debug_i32("spike.perf_n", &S.perf_n);
+#endif
 }
 
 static void init(void *user) {
@@ -331,7 +373,7 @@ static void init(void *user) {
   if (S.audio_on) S.blip = cw_sound_load("audio/blip.wav", &(cw_sound_desc){ .mode = CW_SOUND_SAMPLE, .max_voices = 4 });
 
   S.font = cw_font_load("fonts/FiraSans-Regular.ttf", NULL);
-  for (size_t i = 0; i < CW_ARRAY_LEN(HUD_TEXT); i++) cw_font_preload_text(S.font, HUD_TEXT[i]);
+  for (size_t i = 0; i < CW_ARRAY_LEN(HUD_TEXT) && !SPIKE_NO_PREWARM; i++) cw_font_preload_text(S.font, HUD_TEXT[i]);
 
   int w, h;
   cw_drawable_size(&w, &h);
@@ -352,6 +394,14 @@ static void render(void *user, double alpha) {
   t3_renderer_render(S.renderer, S.scene, S.camera);
   report_missing();
   draw_hud();
+#if SPIKE_PERF
+  static double last;
+  uint8_t px[4];
+  glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
+  double now = wall_ms();
+  if (last > 0 && S.perf_n < SPIKE_PERF_RING) S.perf_ms[S.perf_n++] = (float)(now - last);
+  last = now;
+#endif
 }
 
 cw_app_desc cw_main(int argc, char **argv) {

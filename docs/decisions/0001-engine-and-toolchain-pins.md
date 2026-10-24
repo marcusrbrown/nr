@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted, 2026-10-24. Amended by the Unit 4 outcome (see Amendments).
+Accepted and final, 2026-10-24. Amended by the Unit 4 and Unit 6 outcomes (see Amendments).
 
 ## Context
 
@@ -58,3 +58,4 @@ Measured on macOS 15.7.9 arm64, Apple clang 17.0.0, node 24.22.1. Evidence: `doc
 ## Amendments
 
 - **2026-10-24, Unit 4: the Darwin cart toolchain builds the spike.** The Darwin `arm64-macos` wasi-sdk 33.0 (`clang version 22.1.0-wasi-sdk`, llvm-project `4434dabb69916856b824f68a64b029c67175e532`, target `wasm32-unknown-wasip1`) linked the cart SDK's ThinLTO bitcode for `spike` and `spike_stress` using Binaryen 123 from `deps/` and the SDKs and digests in the table above. A clean `TARGETS=cart scripts/build.sh` took 24.2 s and exited 0 with no warnings; `spike.wasc` is 2,698,285 bytes, sha256 `c7d1953e3be05c89f91247979d2bfbd953cceda4d3e96ab3a81cc3b60905d26c`; its `cart.wasm` is byte-identical to the Unit 3 build's. romdev `wasm{op:conformance}` passes on both carts (ABI 4, one `deterministic-unflagged` warning); a copy without `wc_init` fails it, and copies without `wc_render` or `wc_get_info` are refused at load. The native `.cwpak` and the cart's embedded assets carry the same 8 payloads (equal sha256). The `linux/amd64` container build path is not needed. Evidence and logs: `docs/evidence/shipping-path-spike/README.md`, Unit 4.
+- **2026-10-24, Unit 6: the pins are final for the shipping-path spike.** The pinned tuple above built and ran the spike on all three hosts with no change to the lock. Measured on it (details and raw numbers in `docs/evidence/shipping-path-spike/README.md`, Unit 6): native frame time at 40 actors p99 0.937 ms worst of 10 runs against the 16.6 ms budget, vsync off, on a one-pixel-readback build (a 0.5 ms-per-actor busy-loop control reaches 22-23 ms and fails the budget as required); cart hosts recorded only (romdev, headless Chromium); whitelisted state and checksum byte-equal on native, romdev and Chromium; `gate.mjs` green. Host facts recorded by the session script `games/spike/tests/romdev-session.mjs`: romdev 0.150.2 serves `/openapi.json` and `/tool/{name}/schema`, and the script stops on any drift from the shapes it relies on; `wasm{op:command}` advances one frame; the load runs engine frame 1. `playtest{op:open}` on this romdev install fails with `Couldn't open the SDL playtest window: log is not a function` (reported in romdev's local feedback log), so the interactive window is unavailable on the pinned host; headless romdev is unaffected. The measurement switches `SPIKE_PERF`, `SPIKE_PERF_CONTROL` and `SPIKE_NO_PREWARM` are off in the default build, which is byte-identical to the Unit 4 cart.

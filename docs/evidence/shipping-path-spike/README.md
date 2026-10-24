@@ -2,7 +2,7 @@
 
 Plan: `docs/plans/2026-10-24-001-feat-shipping-path-spike-plan.md`. Pins and decisions: `docs/decisions/0001-engine-and-toolchain-pins.md`.
 
-Raw logs cited below are under `out/unit2/`, `out/unit3/` and `out/unit45/` (gitignored, local to the development host).
+Raw logs cited below are under `out/unit2/`, `out/unit3/`, `out/unit45/` and `out/unit6/` (gitignored, local to the development host).
 
 ## Predeclared acceptance criteria
 
@@ -107,7 +107,7 @@ Image data points from the gate's own frames (`image-diff-hello.log`): native vs
 
 - `programs.mjs` (program survey against a non-engine build directory) was not run in Unit 2 (Unit 3 ran it against the native build; Unit 5 against cart runs).
 - The `wasi-sdk` sha256 has no second upstream source (no checksum asset); the fetch script verifies against the GitHub API digest.
-- Audible audio on native and Chromium was not checked (dummy audio driver).
+- Audible audio on native and Chromium was not checked in Unit 2 (dummy audio driver); owner-verified 2026-10-24 (Unit 5, audio).
 - The cause of the single 0×0 Chromium frame.
 - Whether the owner's `:7331` server can be repaired the same way in place (only a copy was repaired). Resolved after Unit 2: the `:7331` server loads GL carts (Unit 3 and Unit 5 runs); how it was repaired is not recorded here.
 
@@ -130,13 +130,13 @@ Findings:
 - A bare three.c renderer has no pipeline, so the engine's `cw.three.missing` fields never exist for it (`hello` publishes none, and `tests/gate.mjs` then sees no missing states). The spike publishes both from `t3_renderer_generated_missing`, as `src/render/pipeline.c` does.
 - After a render2d pass (the HUD) the next three.c frame loses its depth state unless `t3_renderer_reset_bindings` runs first: without it the ground and pillar are painted over the actors (`out/unit3/noreset.png`). The spike calls it before every 3D render.
 - The `input count` whitelist entry is `spike.input_count`, the number of ticks with any action held by either player (the engine's own `input.ticks` and `input.hash` are published as well but are not on the whitelist).
-- Native audible check: not run (needs a real audio device; the runners use SDL's dummy driver).
+- Native audible check: not run in this unit (the runners use SDL's dummy driver); the owner heard the blip on native on 2026-10-24 (see Unit 5, audio).
 
-Unverified:
+Unverified at the end of Unit 3 (since closed):
 
-- Audible output of the blip on native and in the browser.
-- Native p99 frame time (Unit 6).
-- Whether the render-scale-2 (1080p) path costs more than a 960x540 render for this scene (not measured).
+- Audible output of the blip on native and in the browser: owner-verified 2026-10-24 (Unit 5, audio).
+- Native p99 frame time: measured in Unit 6.
+- Whether the render-scale-2 (1080p) path costs more than a 960x540 render for this scene (not measured; the Unit 6 runs render at 1920x1080 throughout).
 
 ## Unit 4: cart build on Darwin
 
@@ -255,13 +255,183 @@ The stock entries' own control (native one frame early) passes as required on ev
 ### Audible smoke (browser half) and live preview
 
 - Commands for a person to listen (arrows move player 0, Space jumps, J attacks and plays the blip): native, `cd <repo> && CW_GPU=gl build/native/games/spike/spike` (SDL window, default audio driver; the run logs `audio: 48000 Hz, 64 voices, 8 streams`, `native-realaudio-probe.log`); Chromium, `cd <repo> && CW_TEST_GPU=desktop node games/spike/tests/chromium-audio.mjs` (a headed Chromium window; click it once, then press J).
-- `games/spike/tests/chromium-audio.mjs --check` (headless): the browser host's audio drain returned only silence over frames 1-60 and a peak sample of 0.3506 after J at frame 60 (`chromium-audio-check.log`); the page rendered the scene (`chromium-audio-page.png`). This shows audio data reaching the browser host, not that it is audible; no one has listened.
+- `games/spike/tests/chromium-audio.mjs --check` (headless): the browser host's audio drain returned only silence over frames 1-60 and a peak sample of 0.3506 after J at frame 60 (`chromium-audio-check.log`); the page rendered the scene (`chromium-audio-page.png`).
+- **Audio, owner-verified 2026-10-24:** the owner heard the attack blip on native (`CW_GPU=gl build/native/games/spike/spike`, J) and in Chromium (`games/spike/tests/chromium-audio.mjs`). The audible half of the R4 sound requirement is met.
 - romdev live: one header `x-romdev-session: nr-unit5`; `loadMedia` of `spike_stress.wasc` (`deterministicSeed` 1, `deterministicStepMs` 16.6667) then `host{op:play, seconds:60}` at 2026-10-24T22:11:26Z, response `playing: true, fps: 60, endsAt 22:12:26.776Z` (`romdev-live-load.json`, `romdev-live-play.json`). The scene was not observed on `/livestream` by the author of this section.
 
 ### Unverified
 
-- Audible output of the blip, native and in Chromium (commands above; nobody has listened).
 - A real (not edited) NaN in a whitelisted field, a blank frame from a host and a wrong-colour-space render: those controls alter the artifacts of real runs.
 - The stock `gate.mjs` gaps listed above were read from source, not exercised.
 - Image agreement on any GPU other than the Apple M1 Pro; the calibration has no spread to measure because all hosts agree exactly.
 - Whether the romdev livestream showed the stress scene.
+
+## Unit 6: romdev agent loop, stress measurements, evidence
+
+Date: 2026-10-24. Raw logs: `out/unit6/` (gitignored). Host: macOS 15.7.9 arm64, Apple M1 Pro, one GPU (`ANGLE (Apple, Apple M1 Pro, OpenGL 4.1 Metal - 89.4)`), Release builds, the toolchain and pins of ADR-0001. Nothing else was run by the measurement scripts at the same time (each matrix ran alone); the owner's machine was otherwise in normal use, so absolute numbers carry that noise.
+
+### Source changes for the measurements
+
+`games/spike/main.c` and `games/spike/CMakeLists.txt` gained three compile switches, all off by default. With them off the source compiles to the same code: `spike.wasc`'s `cart.wasm` is byte-identical to Unit 4's (sha256 `3f0a0c1a…`, `out/unit6/build-default.log`), and `tests/gate.mjs` is green after the change (`out/unit6/gate-full.log`, 10 entries `ok`).
+
+| Switch | Effect | Used for |
+| --- | --- | --- |
+| `SPIKE_PERF` | `glReadPixels` of one pixel after every frame (`cartwheel/gl.h`), so each frame includes its GPU work; publishes `spike.perf_ms` (wall ms from one frame's render end to the next's), outside the whitelist | native "done" series; cart hosts' GPU-completed frames |
+| `SPIKE_PERF_CONTROL` (`_MS`, default 0.5) | spins `SPIKE_PERF_CONTROL_MS` of wall time per actor per frame in the render callback | budget control |
+| `SPIKE_NO_PREWARM` | skips the HUD `cw_font_preload_text` calls | glyph control |
+
+Variant trees are built with `games/spike/tests/build-variant.sh` into `out/unit6/build-{perf,perfctl,noprewarm}/` (no warnings). The readback follows the engine's own `showcase_perf` method (`samples/showcase/main.c`).
+
+New scripts (all under `games/spike/tests/`): `romdev-session.mjs`, `perf-native.mjs`, `perf-carts.mjs`, `pixel-diff.mjs`, `build-variant.sh`.
+
+### Method
+
+- Native: the app on the engine's flat-out loop (`CW_FRAMES=721`, `CW_FRAME_HZ=60`: no vsync, no pacing; 721 frames take 0.42 s), SDL offscreen, `CW_TEST_GPU=desktop`. 120 warm-up frames (0-119), 600 measured (120-719). Percentiles are nearest-rank. Two series, both on the host monotonic clock:
+  - **done**: the `SPIKE_PERF` build, render end to render end with the one-pixel readback. This is the series the budget is judged on.
+  - **submit**: the default build, the engine profiler's `wall_ms` (`CW_PROFILE=1`, `profile frames`): the CPU cost of submitting a frame; the offscreen swap does not wait for the GPU.
+  - Inputs: neutral and `input-stress.json` (both players moving, jumping, attacking; audio on the dummy driver). 5 runs per configuration for the gated series, 3 for the others.
+- Cart hosts (recorded, not gated): neutral input, deterministic cart clock (never read for timing), 120 warm-up then 600 measured frames, 3 runs per configuration. romdev: one `frame{step, frames:1}` HTTP call per frame. Chromium: `host.runFrame()` timed in the page, headless Chromium through the engine's `launchChromium`, `CartHostWeb`. Each is run on the `SPIKE_PERF` cart (frames end when the GPU work does) and on the default cart (no wait); the readback overhead is the difference of their p50.
+- Host-call overhead (romdev): 200 `wasm{op:info}` calls per run, which run no frame.
+
+### Perf table, native (budget: p99 ≤ 16.6 ms at 40 actors, vsync off)
+
+All times in ms, "done" series unless marked. p50 and p99 are medians over runs; "p99 worst" and "max" are the worst run.
+
+| Config | Input | Runs | p50 | p99 (median) | p99 (worst run) | max (worst run) |
+| --- | --- | --- | --- | --- | --- | --- |
+| baseline, 8 actors | neutral | 5 | 0.378 | 0.661 | 0.964 | 2.420 |
+| baseline, 8 actors | input-stress | 5 | 0.448 | 0.854 | 1.075 | 2.547 |
+| **stress, 40 actors** | neutral | 5 | 0.388 | 0.670 | **0.937** | 2.761 |
+| **stress, 40 actors** | input-stress | 5 | 0.377 | 0.614 | **0.681** | 2.225 |
+| stress, 40 actors, submit series (default build) | input-stress | 3 | 0.105 | 0.240 | 0.245 | 0.701 |
+| baseline, 8 actors, submit series | input-stress | 3 | 0.102 | 0.257 | 0.261 | 0.506 |
+| **control**: stress + 0.5 ms busy loop per actor | input-stress | 3 | 21.045 | 22.040 | 23.107 | 29.387 |
+| control: baseline + 0.5 ms busy loop per actor | input-stress | 3 | 4.885 | 6.648 | 6.812 | 11.607 |
+| stress, real SDL window (run once, see Deviations) | input-stress | 3 | 0.874 | 2.215 | 2.222 | 3.905 |
+
+**Verdict: PASS.** Gate: p99 ≤ 16.6 ms at 40 actors, vsync off. The worst p99 over all 10 stress runs is 0.937 ms (margin about 17.7×); the gate is judged on the worst run, which is stricter than the predeclared single window. **Control: FAILS the budget as required** (p99 22.0 ms median, 23.1 ms worst, all three runs over 16.6 ms), so the gate can fail. Raw: `out/unit6/perf/*.json` (per-run series included), `out/unit6/native-matrix.log`.
+
+The scene is far under budget because it is 40 flat alpha-tested quads, one lit box, and a five-line HUD; the number says the path is not the bottleneck, not that a production slice will fit. Re-measure when real animation, lighting and effects land.
+
+### Perf table, cart hosts (recorded only)
+
+| Host | Cart | Actors | p50 | p99 (median) | p99 (worst) | max (worst) |
+| --- | --- | --- | --- | --- | --- | --- |
+| romdev (HTTP step, 1 frame/call) | SPIKE_PERF | 8 | 3.43 | 8.34 | 8.79 | 126.70 |
+| romdev | default | 8 | 2.39 | 5.85 | 6.25 | 9.11 |
+| romdev | SPIKE_PERF | 40 | 3.32 | 8.87 | 9.13 | 127.79 |
+| romdev | default | 40 | 2.45 | 6.07 | 6.93 | 15.95 |
+| Chromium (headless, `host.runFrame()`) | SPIKE_PERF | 8 | 1.45 | 3.19 | 3.33 | 8.09 |
+| Chromium | default | 8 | 0.20 | 0.29 | 0.30 | 1.01 |
+| Chromium | SPIKE_PERF | 40 | 1.48 | 2.65 | 2.97 | 3.61 |
+| Chromium | default | 40 | 0.19 | 0.26 | 0.29 | 0.66 |
+
+Overhead columns:
+
+| Host | Host call overhead (p50) | Readback overhead (SPIKE_PERF p50 − default p50) |
+| --- | --- | --- |
+| romdev | 0.57 ms (8) / 0.56 ms (40): a `wasm{info}` call that runs no frame | 1.04 ms (8) / 0.87 ms (40) |
+| Chromium | none (the page calls the host directly) | 1.25 ms (8) / 1.29 ms (40) |
+
+On the GPU-completed cart frames the 40-actor count is not slower than 8 on either cart host (romdev 3.32 vs 3.43 ms, Chromium 1.48 vs 1.45 ms p50): the cost is host and readback overhead, not actors. In every `SPIKE_PERF` romdev run exactly one frame took 120-128 ms (the 460th-501st measured frame; one such frame in each of the six runs; none in the default-cart runs). Cause not established. `ticksFinal` is 720 on every cart run (load frame + 119 + 600).
+
+### Memory (defined snapshots, not high-water marks)
+
+- Snapshot points: **after warm-up** = after frame 120 (native: the reply to the request posted at frame 121; RSS read from `ps` when that reply reached the harness, within a few frames); **end** = after frame 720 (native: the end-of-run reply). Native peak RSS from `/usr/bin/time -l`.
+- Native RSS (KiB), `SPIKE_PERF` build, stress, per run: after warm-up 37,248-38,528, end 37,296-38,528, peak 37,376-38,592. Default build, stress: after warm-up 48,624-49,456, end 49,696-50,096, peak 49,728-50,160. Baseline (8 actors) is within the same ranges (36,704-38,160 perf; 45,936-48,800 default). The default build holds about 11 MiB more than the readback build; the likely cause (un-drained GPU command buffers) was not checked.
+- Engine memory by tag (`stats`, exact at the two frames, identical in all runs): `mem_total` 8,306,242 bytes after warm-up and at the end (core 5,526,198; render2d 626,820; audio 2,148,104; scene 5,120); `mem_peak` 8,307,260. No growth between the snapshots. (three.c textures and geometry are not under the engine's tags.)
+- WASM linear-memory size: 134,217,728 bytes (128 MiB) at both snapshots on romdev (the host's own report for an out-of-range `wasm{read}`) and in Chromium (`host.memory.buffer.byteLength`), for both carts. It is the instance's size; it does not show use. High-water instrumentation is out of scope.
+
+### Glyph and atlas
+
+Event source: the engine profiler's `text.glyph_bake` zone (`CW_PROFILE_TRACE`, the whole 721-frame run, zones counted per `frame` zone; `profile.md`'s documented contract). Frame 0 contains the app's init, so the HUD preload shows there. `r2d.glyphs_missing` and `r2d.texture_uploads` are 0 at both snapshots in every run.
+
+| Build | App | Bakes in frame 0 | Bakes in frames 1-119 | Bakes in measured frames 120-719 |
+| --- | --- | --- | --- | --- |
+| prewarm (default) | stress (40) | 24 | **0** | **0** |
+| prewarm (default) | baseline (8) | 24 | **0** | **0** |
+| `SPIKE_NO_PREWARM` (control) | stress (40) | 18 | **6** (frames 2, 4, 5, 6, 7, 8) | 0 |
+| `SPIKE_NO_PREWARM` (control) | baseline (8) | 18 | **6** (frames 2-6, 8) | 0 |
+
+- Result: **zero `text.glyph_bake` events during the measured interval**, and zero after frame 0, with the prewarm. Control: with the prewarm off, events appear after frame 0 (6), so the predicate "no bakes after init" can fail.
+- Limit of the control: the HUD digits all appear within the first nine frames, so the unprewarmed build also has zero bakes in frames 120-719. The measured-interval predicate alone cannot tell the two builds apart for this HUD; the "after frame 0" predicate does. Raw: `out/unit6/perf/glyph-*.json`, `out/unit6/native-glyph-windowed.log`.
+- HUD atlas pages (`spike.hud_atlas_pages`, HUD only): 1 after warm-up and 1 at the end in all 39 native runs (including the windowed and control runs), including every stress run (`r2d.atlas_pages` agrees). Unchanged after warm-up.
+- Actor texture residency, recorded separately (computed, not measured by the engine): 4 actor textures (blue/orange × left/right), 32×48 RGBA8, nearest, no mips = 6,144 bytes each, 24,576 bytes total, shared by 6 materials; the 40 actors share them, so residency does not grow with actor count. Textures are three.c objects and are not under the engine's memory tags.
+
+### romdev session (`games/spike/tests/romdev-session.mjs`)
+
+Session `nr-unit6`, one `x-romdev-session` header on every call. `out/unit6/romdev-session.log`, exit 0.
+
+1. `GET /healthz` (version `0.150.2` must equal the pin), `GET /openapi.json` (paths for every tool used), `GET /tool/{name}/schema` (the endpoint exists on 0.150.2) for `loadMedia`, `wasm`, `input`, `frame`, `host`: parameters, types, the ops used, `additionalProperties:false`, and the documented step shape are checked against the table in the script; any difference stops the run naming the tool and parameter.
+2. Native reference: `run-cart.mjs --host native --frames 300 --input input-2p.json` → `state-native.json`, `shot-native.png`.
+3. `loadMedia` (wasmcart, `deterministicStepMs` 16.6667, `deterministicSeed` 1) → GL, 1920×1080. `wasm{conformance}`: `conforms: true` (warning `deterministic-unflagged`).
+4. `input{sequence}`: 7 steps, 2 ports, from `input-2p.json`: `framesRun` 180, `frameCount` 181 (the load's frame 1 + 180). The first script entry (frame 1, neutral) is already consumed by the load; the last entry (frame 181, neutral) runs one frame in the sequence so the rest is a plain step.
+5. `frame{step}` of the remaining 119 frames: `frameCount` 300.
+6. `wasm{read, name:'spike.ticks'}` = 300 = expected, asserted before `frame{screenshot}` and `wasm{debugState}`.
+7. `shot-romdev.png`, `state-romdev.json`. Whitelisted state + checksum (`tests/whitelist.mjs`) compared with the native run: byte-equal (630 bytes; checksum 3965552069 on both); `cw.three.missing` 0.
+
+Error paths (`--prove`; each exits 0 only when the failure is detected):
+
+| Path | Result | Log |
+| --- | --- | --- |
+| missing session header | HTTP 401 with the documented message ("Missing required `x-romdev-session` header …"); the live `SKILL.md` documents the 401; `/healthz` `sessions` 1 before and after, so no throwaway session | `romdev-prove-no-session-header.log` |
+| load-frame adjustment skipped | sequence plans 181 frames from `done = 0`; final `spike.ticks` 301, `frameCount` 301, expected 300 → `TickMismatch` raised before any screenshot, `debugState` or comparison; the screenshot file is untouched | `romdev-prove-no-load-adjust.log` |
+| schema drift | with the expectation for `frame.frames` altered to `string`: `schema drift: tool "frame" parameter "frames" is type "integer", the script sends string (pinned romdev 0.150.2)` | `romdev-prove-schema-drift.log` |
+
+Finding: `wasm{op:command}` advances one frame (`framesRun: 1`), so the session script reads the tick with `wasm{read}` rather than `stats`.
+
+### Live preview
+
+- `host{op:play, seconds:60}` on `spike_stress.wasc` (session `nr-unit6`, `deterministicSeed` 1, `deterministicStepMs` 16.6667): started 2026-10-24T22:30:48Z, `playing: true`, `fps: 60`, `endsAt` 22:31:48Z (`out/unit6/romdev-live.log`; an earlier identical run at 22:27:42Z). The scene was not observed on `/livestream` by the author of this section; the owner watched it.
+- `playtest{op:open}` (romdev's own window), once, after the play run ended: **failed**, HTTP 400, exact reason: `Couldn't open the SDL playtest window: log is not a function. That quoted SDL error is the actual fault (not a display/desktop-session problem) - report it as a romdev bug if it isn't obviously environmental.` `playtest{op:status}` afterwards: `running: false`, no window. No window opened, so no pad run was possible; the plan's scenario "the owner drives player 0 from `playtest`" is **not done**. Recorded as a romdev defect in the local feedback log (`~/.romdev/feedback.jsonl`). Headless romdev (load, step, screenshot, `debugState`) is unaffected.
+
+### Screenshots per host and cart-host pixel differences
+
+PNGs (1920×1080, committed): `shot-{native,romdev,chromium}.png` (`spike`, `input-2p`, 300 frames; romdev's from the session script) and `shot-stress-{native,romdev,chromium}.png` (`spike_stress`, `input-stress`, 720 frames; `run-cart.mjs`). State: `state-*.json`, `state-stress-*.json`.
+
+| Scenario | Pair | Differing pixels | Max channel delta | gt16 |
+| --- | --- | --- | --- | --- |
+| spike, 300 frames | native vs Chromium | 0 | 0 | 0 |
+| spike, 300 frames | native vs romdev | 1 of 2,073,600 (4.8e-7) | 79 | 4.8e-7 |
+| spike, 300 frames | romdev vs Chromium | 1 (4.8e-7) | 79 | 4.8e-7 |
+| spike_stress, 720 frames | every pair | 0 | 0 | 0 |
+
+The tolerance for every cart pair is `maxGt16` 0.0005 (calibration above); the single differing pixel is 1000× under it. Its cause was not investigated (same GPU and ANGLE path on all hosts; state is identical). Whitelisted state and checksum are byte-equal across the three hosts in both scenarios (`out/unit6/whitelist-hosts.log`; stress: ticks 720, 40 actors, checksum 2056441917, `cw.three.missing` 0 on all three).
+
+### Deviations and notes
+
+- `/tool/{name}/schema` exists on 0.150.2 and is used (with `/openapi.json`), as the plan required.
+- The budget is judged on a `SPIKE_PERF` build (readback every frame) rather than on the submit series, because the offscreen swap does not wait for the GPU: the submit series (0.24 ms p99) is not a GPU-completed measurement. The two builds' frame times differ by the readback stall (~0.27 ms p50).
+- Neutral input only on the cart hosts; native ran both neutral and `input-stress`.
+- A windowed native run (`CW_TEST_WINDOW=1`, 3 runs, p99 2.2 ms) was made once, before the owner's no-window instruction; it is in the table as context only and has not been repeated. All later runs were headless.
+- `playtest{op:open}` failed (above); the pad check is not done.
+
+### Accepted risks
+
+- One machine, one GPU (Apple M1 Pro through ANGLE/Metal); native and cart numbers share that path. Other GPUs, other drivers and a real vsync-off present on a real window (apart from the one windowed run) are unmeasured.
+- Native timing is on SDL's offscreen driver with a one-pixel readback; a presented window adds compositor cost that was only sampled once.
+- The measured scene is far lighter than the first slice will be; the 17× margin is not a forecast.
+- romdev on `:7331` carries a repaired `native-gles` (ADR-0001) and wasmcart 0.34.5, not the pinned 0.34.3; the stock install cannot load GL carts.
+- romdev `playtest{op:open}` is broken on this host (SDL error above), so the interactive pad loop is unavailable until upstream fixes it.
+- The romdev 120-128 ms frame in `SPIKE_PERF` runs and the 1-pixel native-vs-romdev difference are unexplained.
+
+### Requirements R1-R9
+
+| Req | Status | Evidence |
+| --- | --- | --- |
+| R1 One tree → native arm64 binary and `.wasc` | **met** | Clean `TARGETS="native cart" scripts/build.sh` (Units 3-4, `out/unit6/build-default.log` exit 0, no warnings); `build/native/games/spike/{spike,spike_stress}`, `build/cart/carts/{spike,spike_stress}.wasc` |
+| R2 Cart in romdev: deterministic stepping, scripted 2P input, frame stepping, screenshots, named debug state | **met** | `romdev-session.mjs`: conformance, `input{sequence}` on two ports, step, tick assertion, screenshot, `debugState`, state byte-equal to native; three error paths proved. The interactive `playtest` window is not part of R2 and failed (see Live preview) |
+| R3 Cart runs in Chromium | **met** | Headless Chromium via the engine runner: gates `ok`, `state-chromium.json`, `shot-chromium.png`, perf runs |
+| R4 Scene: y-ordered planes on a 3D ground, jump height, HUD text, one sound, one distinct-material environment element | **met** | Unit 3 ordering assertions (18 pass, reverse-depth control fails 9); pillar `MeshStandardMaterial`; sound verified by `sfx_tick` + voice flag **and audible: owner-verified 2026-10-24 on native and in Chromium** |
+| R5 Zero missing three.c states on the cart | **met** | `cw.three.missing` 0 on every native, romdev and Chromium run in Units 3-6 (`state-*.json`, perf runs); row-removed control fails the gate |
+| R6 Native p99 ≤ 16.6 ms at 40 actors, vsync off; cart hosts recorded | **met** | Worst p99 over 10 stress runs 0.937 ms; control 22.0-23.1 ms fails; romdev and Chromium p50/p99/max, memory snapshots and overhead columns above |
+| R7 Cross-host gates, exact simulation state + checksum, image tolerances, every gate has a failing control | **met** | `gate.mjs` 10 entries `ok` after the Unit 6 source change (`out/unit6/gate-full.log`); 25 controls (Unit 5); three hosts byte-equal in the Unit 6 runs |
+| R8 Versions pinned and recorded as an ADR | **met** | `scripts/deps.lock`, `build/tuple.json`, ADR-0001 (final) |
+| R9 Reviewable repo | **met** | `LICENSE`, `LICENSES/CC-BY-4.0.txt`, `README.md`, `AGENTS.md`, `docs/README.md`; `.context/` ignored |
+
+### Unverified
+
+- The `/livestream` picture itself (the author did not watch it; the owner did).
+- Any interactive pad control through romdev's `playtest` (the window does not open).
+- The cause of the 120-128 ms frame in `SPIKE_PERF` romdev runs, of the one differing pixel between native and romdev at frame 300, and of the ~11 MiB RSS difference between the default and `SPIKE_PERF` native builds.
+- Other GPUs and a presented, vsync-off window as a sustained measurement.

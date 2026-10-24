@@ -1,7 +1,7 @@
 ---
 title: "feat: Prove the Cartwheel shipping path (native + cart + romdev)"
 type: feat
-status: active
+status: completed
 date: 2026-10-24
 ---
 
@@ -328,7 +328,7 @@ Upstream reuse outside this repo's scope: the `cartwheel-examples` out-of-tree p
 
 **Verification:** `gate.mjs` green; each control red for the right reason; tables committed.
 
-- [ ] **Unit 6: romdev agent loop, stress measurements, evidence**
+- [x] **Unit 6: romdev agent loop, stress measurements, evidence**
 
 **Goal:** A repeatable romdev session script and the recorded numbers that close the spike.
 
@@ -359,6 +359,8 @@ Upstream reuse outside this repo's scope: the `cartwheel-examples` out-of-tree p
 - Error path: skipping the load-frame adjustment → final tick mismatch is detected before comparison.
 
 **Verification:** Evidence README has every number and a PNG per host; native budget met or the miss is reported as a failed requirement; ADR-0001 final.
+
+**Outcome:** native budget met (p99 0.937 ms worst of 10 runs at 40 actors); R1-R9 met. `playtest{op:open}` failed on the pinned romdev (`log is not a function`), so the pad check of the live-preview scenario is not done; recorded in the evidence README.
 
 ## System-Wide Impact
 
