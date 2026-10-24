@@ -9,7 +9,7 @@ Date: 2026-10-24. Repo HEAD 2e9426c. Engine `cartwheel-engine` v0.15.1 (4a5f73e)
 | Path | Verdict | Where it was proven |
 | --- | --- | --- |
 | GL | **GO** | native GL, GL cart in headless Chromium (WebGL2), GL cart in romdev: all three agree to within 1/255 per channel |
-| WebGPU | **GO**, with a pin change and one unverified host | native WebGPU (Dawn), dual cart in headless Chromium WebGPU: `cw.gpu.api` 2, `cw.gpu.errors` 0, `cw.three.missing` 0, pixel-identical to each other. The project pins the GL-only `cart` SDK; the dual cart needs the `cart-wgpu` SDK (not pinned). romdev 0.150.2 cannot run WebGPU carts on this machine (missing addon, below): the romdev WebGPU leg is **UNVERIFIED** |
+| WebGPU | **GO**, with a pin change | native WebGPU (Dawn), dual cart in headless Chromium WebGPU and in romdev (after the native-dawn repair, below): `cw.gpu.api` 2, `cw.gpu.errors` 0, `cw.three.missing` 0, all three pixel-identical at frame 120 (`shots/stress-wgpu-romdev-f120.png`). The project pins the GL-only `cart` SDK; the dual cart needs the `cart-wgpu` SDK (not pinned). |
 
 No path needed the normal map dropped. `cw.three.missing` is 0 on every host, every frame.
 
@@ -113,7 +113,7 @@ All paths under `deps/cartwheel-engine/deps/three.c/` (c5f840b).
 
 1. **The pinned `cart` SDK is GL-only.** `deps/cartwheel-sdk/cart/manifest.json` has `"wgpu": false` and `cart-sdk-info.cmake` `CW_SDK_WGPU OFF`; the dual (GL + WebGPU) cart comes from the separate `cartwheel-sdk-0.15.1-cart-wgpu.tar.gz` release asset (sha256 `777167301a0afaf515ef78e1ca3514ceac3ff9f1c3eade7d92ced36e8d57d4a7`, verified against the release's `.sha256`), which carries `emdawnwebgpu` and `wasmcart-wgpu`. It was fetched to `out/litspike/wgpu-probe/sdk` (untracked) with the Darwin wasi-sdk/Binaryen linked in the way `scripts/fetch-deps.sh` links them, and built to `out/litspike/build-cart-wgpu/carts/litspike.wasc` (2.49 MB against 2.38 MB for the GL cart) in 20 s. `scripts/deps.lock` and `scripts/fetch-deps.sh` were not changed; pinning it is a lock change that needs the owner's approval.
 2. **`run-cart.mjs --gpu webgpu` cannot run on macOS.** `tools/lib/wgpu-pin.mjs:62` throws `GPU test runs need the test GPU in ~/.config/cartwheel/chromium-gpu (a PCI address…)`: the pin is read from Linux sysfs. Native WebGPU is therefore launched directly (`capture-hosts.mjs --gpu webgpu`: `CW_GPU=webgpu`, `SDL_VIDEODRIVER=offscreen`, no display) and the browser leg uses `tests/chromium-wgpu.mjs`, which follows `run-cart.mjs`'s Chromium host with `deps/wasmcart` (wasmcart 0.34.3) as the cart host and fails the run unless the cart reports `usesWgpu` and `cw.gpu.api` 2.
-3. **romdev 0.150.2 cannot run a WebGPU cart here.** `loadMedia{wgpu:true}` on the dual cart returns `gpu: "gl"` and `hasWgpuRendering: false`; the cart then reports `cw.gpu.api` 1 (`romdev/calls.ndjson`, `romdev/romdev-dual-wgpu-request-f60.json`). Cause: `import('webgpu-node')` in the romdev install fails with `native-dawn: cannot load the darwin-arm64 addon from …/node_modules/native-dawn/dist/darwin-arm64/lib/dawn.node`; the install has no `dist/`. This is the same class as `docs/solutions/integration-issues/romdev-gles-node-linux-binary-on-macos-2026-10-24.md`. The installed package's own `scripts/install.mjs` downloads the release archive for its pinned version and checks its sha256; it was **not run** because it changes the owner's romdev install, and a server restart may be needed afterwards. The romdev WebGPU leg stays unverified until then.
+3. **A stock romdev 0.150.2 install cannot run a WebGPU cart on macOS.** `loadMedia{wgpu:true}` on the dual cart returns `gpu: "gl"` and `hasWgpuRendering: false`; the cart then reports `cw.gpu.api` 1 (`romdev/calls.ndjson`, `romdev/romdev-dual-wgpu-request-f60.json`). Cause: `import('webgpu-node')` fails because `node_modules/native-dawn/dist/` is absent. Repair (recorded in `docs/solutions/integration-issues/romdev-gles-node-linux-binary-on-macos-2026-10-24.md`, reported in monteslu/romdev#14): `node scripts/install.mjs` inside `node_modules/native-dawn`, then restart the server. After the repair, `loadMedia{wgpu:true}` reports `gpu: "webgpu"` on the Apple M1 Pro Metal adapter, the stress cart reports `cw.gpu.api` 2 and `cw.three.missing` 0 at frame 60, and frame 120 is pixel-identical to native WebGPU (`out/litspike/romdev-wgpu-load.json`, `romdev-wgpu-debug.json`).
 
 ## Reproduce
 
@@ -133,7 +133,6 @@ node games/litspike/tests/romdev-session.mjs
 
 ## Unverified
 
-- WebGPU carts on romdev (blocked, above).
 - WebGPU frame time and cart frame time (perf readback is GL only; the task asked for native GL numbers).
 - That the normal map is sampled nearest in the generated programs: the state key ignores its filter (`src/renderer_gen.inc:188`). Indirect evidence only: GL and WebGPU frames differ by at most one level, and a linear and a nearest sampler would differ more at texel edges.
 - Alpha-edge fringing: the sprite's alpha is 0/255 with nearest filtering and no mipmaps, so a fringe cannot occur here; art with partial alpha or mipmaps was not tried (R7's "no alpha fringing" item is untested on real art).
