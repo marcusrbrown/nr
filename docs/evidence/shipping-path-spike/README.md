@@ -2,7 +2,7 @@
 
 Plan: `docs/plans/2026-10-24-001-feat-shipping-path-spike-plan.md`. Pins and decisions: `docs/decisions/0001-engine-and-toolchain-pins.md`.
 
-Raw logs cited below are under `out/unit2/` (gitignored, local to the development host).
+Raw logs cited below are under `out/unit2/`, `out/unit3/` and `out/unit45/` (gitignored, local to the development host).
 
 ## Predeclared acceptance criteria
 
@@ -105,11 +105,11 @@ Image data points from the gate's own frames (`image-diff-hello.log`): native vs
 
 ## Unverified
 
-- `programs.mjs` (program survey against a non-engine build directory) was not run in Unit 2.
+- `programs.mjs` (program survey against a non-engine build directory) was not run in Unit 2 (Unit 3 ran it against the native build; Unit 5 against cart runs).
 - The `wasi-sdk` sha256 has no second upstream source (no checksum asset); the fetch script verifies against the GitHub API digest.
 - Audible audio on native and Chromium was not checked (dummy audio driver).
 - The cause of the single 0×0 Chromium frame.
-- Whether the owner's `:7331` server can be repaired the same way in place (only a copy was repaired).
+- Whether the owner's `:7331` server can be repaired the same way in place (only a copy was repaired). Resolved after Unit 2: the `:7331` server loads GL carts (Unit 3 and Unit 5 runs); how it was repaired is not recorded here.
 
 ## Unit 3: spike scene and native build
 
@@ -137,3 +137,131 @@ Unverified:
 - Audible output of the blip on native and in the browser.
 - Native p99 frame time (Unit 6).
 - Whether the render-scale-2 (1080p) path costs more than a 960x540 render for this scene (not measured).
+
+## Unit 4: cart build on Darwin
+
+Date: 2026-10-24. Raw logs: `out/unit45/` (gitignored, local to the development host).
+
+The halt condition (the Darwin wasi-sdk refusing the cart SDK's ThinLTO bitcode) did not trigger. The container build path was not needed.
+
+### Toolchain and build
+
+- `deps/wasi-sdk/bin/clang --version`: `clang version 22.1.0-wasi-sdk (https://github.com/llvm/llvm-project 4434dabb69916856b824f68a64b029c67175e532)`, target `wasm32-unknown-wasip1`, thread model posix; the executable is a Mach-O arm64 binary. `wasm-opt version 123 (version_123)` (`toolchain.log`).
+- `rm -rf build/cart && TARGETS=cart scripts/build.sh`: exit 0, 24.2 s wall (2 m 30.7 s user), no warning lines (`build-cart-clean.log`).
+- `build/cart/carts/spike.wasc`: 2,698,285 bytes, sha256 `c7d1953e3be05c89f91247979d2bfbd953cceda4d3e96ab3a81cc3b60905d26c`. `spike_stress.wasc`: 2,698,527 bytes, sha256 `328bf1fec9e25190d8905e45ba62c17ea3cc096cf18ea9d43f7a856bafaa9112` (`cart-sha-after.log`).
+- The Unit 3 build of the same sources has different `.wasc` hashes (`944d5ffe…`, `e02814a1…`; `cart-sha-before.log`) because the zip entries carry their build time. `cart.wasm` inside (6,817,486 bytes, sha256 `3f0a0c1a5a39fda0eaefcbc6b2cb61619e1923a80a0b859bbbd616a8a041a641`) and `manifest.json` are byte-identical across the two builds (`cart-reproducibility.log`).
+- Exports of `cart.wasm` (`cart-exports.log`): `memory`, `_initialize`, `wc_alloc`, `wc_free`, `wc_debug_state`, `malloc`, `wc_set_seed`, `wc_get_info`, `wc_init`, `wc_render`, `wc_on_text`, `wasi_thread_start`.
+
+### Conformance
+
+romdev 0.150.2 on `:7331`, session `nr-unit45-conformance`, `loadMedia` (wasmcart, `deterministicSeed` 1, `deterministicStepMs` 16.6667) then `wasm{op:conformance}`:
+
+| Cart | Result | Log |
+| --- | --- | --- |
+| `spike.wasc` | `conforms: true`, ABI 4, 1920×1080; one warning, `deterministic-unflagged` | `conformance-spike.log` |
+| `spike_stress.wasc` | the same | `conformance-spike_stress.log` |
+| copy without the `wc_init` export (`games/spike/tests/cart-tools.mjs strip-export`, the export entry removed from the wasm export section) | `conforms: false`, `requiredExportsPresent: false`, issue `missing-export` (severity error): "required export 'wc_init' is not present" | `conformance-control-no-wc_init.log` |
+| copy without `wc_render` | `loadMedia` refuses: `Cart must export wc_render`; the conformance op then has no cart (`No ROM loaded`) | `conformance-control-noexport.log` |
+| copy without `wc_get_info` | `loadMedia` refuses: `Cart must export wc_get_info` | `conformance-control-no-wc_get_info.log` |
+| copy with manifest `width` 640 (cart renders 1920) | `conforms: true`, warning `resolution-mismatch` only; not a failing control | `conformance-control-badres.log` |
+
+The real build in `build/cart/` was not modified; the controls are copies in `out/unit45/`.
+
+### Asset manifest equality
+
+`games/spike/tests/pak-manifest.mjs <native.cwpak> <cart.wasc>` reads the native `.cwpak` (header, index, strings per `deps/cartwheel-engine/src/resource/cwpak.h`; each entry decompressed and its FNV-1a 32 checked against the index hash) and the cart's `assets/` zip entries, normalizes paths (strips `res://` and the cart's `assets/`), and compares sha256 of the uncompressed payloads. Container metadata is not compared: the `.cwpak` header, index offsets, flags and compression, and the zip entries `manifest.json`, `cart.wasm` and `assets/cwfiles.txt` (the lazy-load file list).
+
+- `spike`: 8 assets (`audio/blip.wav`, `fonts/FiraSans-OFL.txt`, `fonts/FiraSans-Regular.ttf`, `res.index`, four `sprites/*.png`), all equal; exit 0 (`pak-manifest-spike.log`). `spike_stress`: the same 8, exit 0 (`pak-manifest-spike_stress.log`). The two native `.cwpak` files are byte-identical (194,993 bytes).
+- Every payload also equals the sha256 of its source file under `games/spike/assets/` (`asset-source-sha.log`): the pack keeps sprites, font and audio as they are.
+- Control: a copy of `spike.wasc` with one byte of `sprites/blue-left.png` flipped (`cart-tools.mjs tamper-asset`): exit 1, `sprites/blue-left.png: sha256 69c09db4a215… (.cwpak) vs 1a4fa0b88a63… (cart)` (`pak-manifest-control.log`).
+
+## Unit 5: program table and cross-host gates
+
+Date: 2026-10-24. Raw logs: `out/unit45/`. Runner settings are those of ADR-0001 (`CW_TEST_GPU=desktop` for `run-cart.mjs` and the tools below; `CW_TEST_GPU=software CW_WGPU_ADAPTER=apple` for `tests/gate.mjs`).
+
+### Program survey against the cart
+
+- Runs: `spike` and `spike_stress` × `input-2p` (300 frames), `input-ordering` (300), `input-stress` (780) × native (with `CW_PROGRAMS_LOG_DIR`), romdev cart and Chromium cart. Those inputs cover jump (`south`), attack, both players, HUD (always drawn) and the baseline and stress actor counts. 18 of 18 runs exit 0 with `cw.three.missing` 0 (`survey/runs.log`). The native logs are empty. The cart hosts report no program-state log, so the survey takes their `cw.three.missing_states` from the run's state file; none was nonempty (`survey/logs-cart/`, `survey/logs-native/`).
+- `node deps/cartwheel-engine/tools/programs.mjs spike spike_stress --no-run --logs <native logs> --logs <cart logs> --build build/native` → `no missing states`, exit 0 (`survey/programs-survey.log`). `--build` is the native tree because it holds `apps/<app>.json` and the capture cache; the cart tree has neither.
+- Survey control: the `standard+l1000` text from the row-removed cart's state, fed as a log (`--dry`): `spike: 1`, `1 distinct states over 1 apps` (`survey/programs-survey-control.log`).
+- `programs.mjs --table games/spike/programs/spike.txt --build build/native` regenerates `spike_gl.c` and `spike_wgpu.c` with the same sha256 as the committed files (`survey/programs-sha-before.log`, `programs-sha-after.log`, `programs-regen.log`). **The program tables did not change; nothing to recommit.**
+
+### Gates
+
+`tests/gates.json` (`CW_PROJECT_ROOT` honoured by `gate.mjs`): per scenario and cart host, a stock-shaped entry (native is the reference, `fields` is the whitelist plus `spike.checksum`, `tol` 0, the stock control of native one frame early) and two tool gates.
+
+| Entry | App, input, frames | Host pair |
+| --- | --- | --- |
+| `spike-2p-romdev`, `spike-2p-chromium` | `spike`, `input-2p`, 170 | native vs romdev / Chromium |
+| `spike-ordering-romdev`, `spike-ordering-chromium` | `spike`, `input-ordering`, 260 | same |
+| `spike-stress-romdev`, `spike-stress-chromium` | `spike_stress`, `input-stress`, 720 | same |
+| `spike-p1-romdev`, `spike-p1-chromium` | `spike`, `input-p1` (second pad only), 100 | same |
+| `spike-strict` (`games/spike/tests/gate-strict.mjs`) | reads the artifacts of the entries above | |
+| `spike-controls` (`games/spike/tests/controls.mjs`) | runs the controls below | |
+
+`TARGETS="native cart" scripts/build.sh` then `node deps/cartwheel-engine/tests/gate.mjs`: exit 0, every entry `ok` (`gate-full.log`): 55 s on the run that built the row-removed cart for `spike-controls`, 36 s with it cached.
+
+The stock comparison does not reject some defects, found by reading `deps/cartwheel-engine/tests/gate.mjs` (not run as a demonstration): a whitelisted field missing or `null` on both sides compares equal; a non-finite or `null` value against a reference `0` compares equal (`Math.abs(0 - null)` is 0); two 0×0 frames give `gt16` NaN, which is not over the bound; the missing-program check reads only the `cw.three.missing_states` text. `spike-strict` therefore rejects a missing or non-finite whitelisted field on either side, a 0×0 or size-mismatched frame, and a nonzero or non-finite `cw.three.missing` on any host. It depends on the artifacts of the strict entries (same `gate.mjs` invocation, which runs entries in file order) and fails with a message when they are absent.
+
+Finding: `run-cart.mjs` writes romdev's state with `f.values ?? f.value`; romdev reports `bytes` fields (`cw.three.missing_states`) as `text`, so on romdev the state file carries the missing-state count but not the names (`romdev-missing-states-field.log`). The count is the authoritative check on romdev.
+
+### Image-tolerance calibration
+
+Method as predeclared. Implementation choices within it: `games/spike/tests/calibrate.mjs` (inputs: the strict entries of `tests/gates.json`; data: `image-calibration.json` in this directory).
+
+- Scenarios and final frames: `spike`/`input-2p` 170, `spike`/`input-ordering` 260, `spike_stress`/`input-stress` 720, `spike`/`input-p1` 100. Each ends with something moving (players, a jump in the air), so a one-frame-early frame differs from the reference. Chosen before the measurement; at frames where all input has ended (300 for `input-2p`) a one-frame-early frame differs only by a tick label and one enemy's step.
+- Known-good: native vs host over all 9 pairs of 3 repeated runs per host per scenario; native vs native repeat runs; native vs native with only the HUD `TICK` line changed (the pixels of the 224×48 box at (16, 56) of the next frame pasted into this frame).
+- Known-bad: the host's frame replaced by black; the host's frame with sRGB decoded as if linear and, separately, encoded twice (both directions are in the set); the host one frame early, and native one frame early.
+- The colour-space and blank frames are the real frames altered in the harness; no build renders in a wrong colour space.
+
+| | native vs romdev | native vs Chromium |
+| --- | --- | --- |
+| good max `gt16` | 0.000145 (tick-only, `spike_stress` 720) | 0.000145 (the same) |
+| host vs native good samples | 0 (pixel-identical), all scenarios | 0, all scenarios |
+| bad min `gt16` | 0.001758 (one frame early, `spike` 260) | 0.001758 (the same) |
+| bad min by kind | blank 1.0; wrong colour space 0.997758; one frame early 0.001758 | the same |
+| tolerance = max(2 × good max = 0.00029, floor 0.0005) | **0.0005** | **0.0005** |
+| accepted only if ≤ bad min / 2 = 0.000879 | accepted | accepted |
+
+Per scenario, tick-only `gt16`: 0.000138 (170), 0.000139 (260), 0.000145 (720), 0.000140 (100). One frame early: 0.004343, 0.001758, 0.002935, 0.004195. The tolerance is the floor; the tick-only change (largest good sample) stays under it and under one quarter of the smallest bad sample. Both pairs are in `tests/gates.json` as `maxGt16` 0.0005 with `maxGt16Calibration` pointing at the calibration data.
+
+### Controls
+
+`games/spike/tests/controls.mjs` on the `input-2p` scenario, native as reference, on romdev and Chromium; each check applies the gate's three predicates (image `gt16` against the calibrated bound, exact whitelisted state, `cw.three.missing`) and requires exactly the expected ones to fail (`controls.log`, 25 checks, exit 0; also run by `gate.mjs` as `spike-controls`).
+
+| Control | Origin | Image | State | Missing | Notes |
+| --- | --- | --- | --- | --- | --- |
+| base | real runs | pass | pass | pass | `gt16` 0 on both hosts |
+| row removed (`standard+l1000`) | real: a cart rebuilt with the row removed from manifest and tables (`build-cart-norow`) | fail (`gt16` 0.032, pillar not drawn) | pass | **fail** (`cw.three.missing` = 1; Chromium also names the state) | state gates pass; the image fails too |
+| blank frame | real frame replaced | **fail** (`gt16` 1.0) | pass | pass | |
+| wrong colour space | real frame recoloured, both directions | **fail** (0.998, 0.998) | pass | pass | |
+| 0×0 frame | real frame replaced by a 0×0 PNG | **fail** (rejected before any metric) | pass | pass | |
+| non-finite field | real state edited: `null` in `spike.jump`, `"NaN"` in `spike.pos`, `null` `spike.checksum`, `spike.rng` removed, and `null` in the reference's `spike.jump` | pass | **fail** (rejected) | pass | a real NaN cannot be produced without changing the sim |
+| input shift | real run: player 1's input one tick late | fail (`gt16` 0.0034) | **fail**, first divergent field `spike.pos` (`spike.pos[3]`: -1.4000 vs -1.3333), then `spike.sfx_tick` 50 vs 51 | pass | |
+| tick-counter only (must pass) | native frame with the next frame's `TICK` pixels | **pass** (`gt16` 0.000138) | pass | pass | not an image control |
+
+The stock entries' own control (native one frame early) passes as required on every entry (`gate-full.log`).
+
+### Input mapping (player 1)
+
+`spike-p1-*`: only the second pad acts. romdev sends named ports (`south`, `west`, `left`, ...); Chromium sends pad index 1 as a button mask. Native reference state is pinned by `expect`: `spike.sfx_tick` 30, `spike.voice_created` 1, `spike.input_count` 99, `spike.ticks` 100. All three hosts report player 0 untouched at (-2, 2, 2), player 1 at (1.133, 3.8, 3.804) with a jump height of 1.05 in the air, identical whitelisted state, and `cw.pad1.buttons` 8192 (`left`) with `cw.pad0.buttons` 0 (`p1/summary.log`). The gate entries pass.
+
+### Findings
+
+- romdev's `loadMedia` runs engine frame 1, so an input entry at frame 1 is never applied there. `input-ordering.json` started with a movement entry at frame 1: romdev reached `spike.input_count` 205 against native's 206 at 260 frames, with `spike.pos[0]`, `spike.input_count` and `spike.checksum` different (Chromium equal); `ordering-frame1/summary.log`. The file now begins with a neutral frame-1 entry and the movement entry moved to frame 2 (`input-2p.json` and `input-stress.json` already start neutral). `ordering-check.mjs` on the shifted script: 18 of 18 assertions pass (`ordering-after-shift.log`); the reversed-depth control still fails 9 (`ordering-reverse-after-shift.log`).
+- Cross-host pixels: native, romdev and Chromium frames are pixel-identical on this machine in all four scenarios (`gt16` 0, max channel delta 0, romdev vs Chromium included). All three run on the same Apple GPU through the same ANGLE/Metal path; this says nothing about other GPUs.
+- No 0×0 frame appeared in any Unit 5 run (the Unit 2 one-off is still unexplained).
+
+### Audible smoke (browser half) and live preview
+
+- Commands for a person to listen (arrows move player 0, Space jumps, J attacks and plays the blip): native, `cd <repo> && CW_GPU=gl build/native/games/spike/spike` (SDL window, default audio driver; the run logs `audio: 48000 Hz, 64 voices, 8 streams`, `native-realaudio-probe.log`); Chromium, `cd <repo> && CW_TEST_GPU=desktop node games/spike/tests/chromium-audio.mjs` (a headed Chromium window; click it once, then press J).
+- `games/spike/tests/chromium-audio.mjs --check` (headless): the browser host's audio drain returned only silence over frames 1-60 and a peak sample of 0.3506 after J at frame 60 (`chromium-audio-check.log`); the page rendered the scene (`chromium-audio-page.png`). This shows audio data reaching the browser host, not that it is audible; no one has listened.
+- romdev live: one header `x-romdev-session: nr-unit5`; `loadMedia` of `spike_stress.wasc` (`deterministicSeed` 1, `deterministicStepMs` 16.6667) then `host{op:play, seconds:60}` at 2026-10-24T22:11:26Z, response `playing: true, fps: 60, endsAt 22:12:26.776Z` (`romdev-live-load.json`, `romdev-live-play.json`). The scene was not observed on `/livestream` by the author of this section.
+
+### Unverified
+
+- Audible output of the blip, native and in Chromium (commands above; nobody has listened).
+- A real (not edited) NaN in a whitelisted field, a blank frame from a host and a wrong-colour-space render: those controls alter the artifacts of real runs.
+- The stock `gate.mjs` gaps listed above were read from source, not exercised.
+- Image agreement on any GPU other than the Apple M1 Pro; the calibration has no spread to measure because all hosts agree exactly.
+- Whether the romdev livestream showed the stress scene.

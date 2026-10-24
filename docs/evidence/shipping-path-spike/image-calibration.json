@@ -1,0 +1,829 @@
+{
+  "generated": "2026-10-24T22:06:40.233Z",
+  "repeats": 3,
+  "floor": 0.0005,
+  "scenarios": [
+    {
+      "app": "spike",
+      "input": "../games/spike/tests/input-2p.json",
+      "frames": 170,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.00013840663580246915
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.00013840663580246915
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9980695408950617
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9979509066358024
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 170 vs romdev at 169",
+            "gt16": 0.004343171296296296
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 170 vs native at 169",
+            "gt16": 0.004343171296296296
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9980695408950617
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9979509066358024
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 170 vs chromium at 169",
+            "gt16": 0.004343171296296296
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 170 vs native at 169",
+            "gt16": 0.004343171296296296
+          }
+        ]
+      },
+      "crossHost": {
+        "gt16": 0,
+        "gt2": 0,
+        "any": 0,
+        "max": 0
+      }
+    },
+    {
+      "app": "spike",
+      "input": "../games/spike/tests/input-ordering.json",
+      "frames": 260,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.00013937114197530863
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.00013937114197530863
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9980029899691358
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9978708526234568
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 260 vs romdev at 259",
+            "gt16": 0.0017582947530864197
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 260 vs native at 259",
+            "gt16": 0.0017582947530864197
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9980029899691358
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9978708526234568
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 260 vs chromium at 259",
+            "gt16": 0.0017582947530864197
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 260 vs native at 259",
+            "gt16": 0.0017582947530864197
+          }
+        ]
+      },
+      "crossHost": {
+        "gt16": 0,
+        "gt2": 0,
+        "any": 0,
+        "max": 0
+      }
+    },
+    {
+      "app": "spike_stress",
+      "input": "../games/spike/tests/input-stress.json",
+      "frames": 720,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.00014467592592592592
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.00014467592592592592
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9979070216049383
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.997758487654321
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 720 vs romdev at 719",
+            "gt16": 0.0029345100308641975
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 720 vs native at 719",
+            "gt16": 0.0029345100308641975
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9979070216049383
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.997758487654321
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 720 vs chromium at 719",
+            "gt16": 0.0029345100308641975
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 720 vs native at 719",
+            "gt16": 0.0029345100308641975
+          }
+        ]
+      },
+      "crossHost": {
+        "gt16": 0,
+        "gt2": 0,
+        "any": 0,
+        "max": 0
+      }
+    },
+    {
+      "app": "spike",
+      "input": "../games/spike/tests/input-p1.json",
+      "frames": 100,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.0001398533950617284
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          },
+          {
+            "kind": "tick-only",
+            "label": "native vs native with only the HUD TICK line from the next frame",
+            "gt16": 0.0001398533950617284
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9979639274691358
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9978317901234568
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 100 vs romdev at 99",
+            "gt16": 0.004195119598765432
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 100 vs native at 99",
+            "gt16": 0.004195119598765432
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 1
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9979639274691358
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9978317901234568
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 100 vs chromium at 99",
+            "gt16": 0.004195119598765432
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 100 vs native at 99",
+            "gt16": 0.004195119598765432
+          }
+        ]
+      },
+      "crossHost": {
+        "gt16": 0,
+        "gt2": 0,
+        "any": 0,
+        "max": 0
+      }
+    }
+  ],
+  "pairs": {
+    "romdev": {
+      "goodMax": 0.00014467592592592592,
+      "goodMaxOf": {
+        "kind": "tick-only",
+        "label": "native vs native with only the HUD TICK line from the next frame",
+        "gt16": 0.00014467592592592592,
+        "scenario": "spike_stress/720"
+      },
+      "badMin": 0.0017582947530864197,
+      "badMinOf": {
+        "kind": "one-frame-early",
+        "label": "native at 260 vs romdev at 259",
+        "gt16": 0.0017582947530864197,
+        "scenario": "spike/260"
+      },
+      "badMinByKind": {
+        "blank": 1,
+        "wrong-colour-space": 0.997758487654321,
+        "one-frame-early": 0.0017582947530864197
+      },
+      "tolerance": 0.0005,
+      "accepted": true,
+      "verdict": "calibrated"
+    },
+    "chromium": {
+      "goodMax": 0.00014467592592592592,
+      "goodMaxOf": {
+        "kind": "tick-only",
+        "label": "native vs native with only the HUD TICK line from the next frame",
+        "gt16": 0.00014467592592592592,
+        "scenario": "spike_stress/720"
+      },
+      "badMin": 0.0017582947530864197,
+      "badMinOf": {
+        "kind": "one-frame-early",
+        "label": "native at 260 vs chromium at 259",
+        "gt16": 0.0017582947530864197,
+        "scenario": "spike/260"
+      },
+      "badMinByKind": {
+        "blank": 1,
+        "wrong-colour-space": 0.997758487654321,
+        "one-frame-early": 0.0017582947530864197
+      },
+      "tolerance": 0.0005,
+      "accepted": true,
+      "verdict": "calibrated"
+    }
+  }
+}

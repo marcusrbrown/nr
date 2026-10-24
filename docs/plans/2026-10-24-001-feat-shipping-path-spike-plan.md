@@ -274,7 +274,7 @@ Upstream reuse outside this repo's scope: the `cartwheel-examples` out-of-tree p
 
 **Verification:** `TARGETS=native scripts/build.sh` succeeds; `run-cart.mjs --host native` produces frames + state; determinism holds across two runs; program tables committed.
 
-- [ ] **Unit 4: Cart build on Darwin**
+- [x] **Unit 4: Cart build on Darwin**
 
 **Goal:** Produce `spike.wasc` from the same tree using the local `arm64-macos` wasi-sdk; record the outcome.
 
@@ -297,7 +297,7 @@ Upstream reuse outside this repo's scope: the `cartwheel-examples` out-of-tree p
 
 **Verification:** A `.wasc` exists, passes conformance, asset manifests match, and ADR-0001 records which toolchain built it.
 
-- [ ] **Unit 5: Program table and cross-host gates**
+- [x] **Unit 5: Program table and cross-host gates**
 
 **Goal:** Zero missing three.c states on the cart over the full scene; native/romdev/Chromium agree exactly on whitelisted simulation state and checksum; images within declared tolerances; every control fails its own predicate.
 

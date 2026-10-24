@@ -1,5 +1,6 @@
 [
-  {"frame": 1, "buttons": ["right"], "pad2": {"buttons": ["left"]}},
+  {"frame": 1, "buttons": [], "pad2": {"buttons": []}},
+  {"frame": 2, "buttons": ["right"], "pad2": {"buttons": ["left"]}},
   {"frame": 24, "buttons": ["down"], "pad2": {"buttons": ["up"]}},
   {"frame": 42, "buttons": [], "pad2": {"buttons": ["up"]}},
   {"frame": 48, "buttons": ["right"], "pad2": {"buttons": ["right"]}},
