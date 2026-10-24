@@ -182,7 +182,7 @@ Upstream reuse outside this repo's scope: the `cartwheel-examples` out-of-tree p
 
 ## Implementation Units
 
-- [ ] **Unit 1: Repo bootstrap and licences**
+- [x] **Unit 1: Repo bootstrap and licences**
 
 **Goal:** Make the repo reviewable and set the licence split before any code or assets land.
 
