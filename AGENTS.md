@@ -6,6 +6,7 @@
 - `scripts/` — dependency lock, fetch, preflight, build
 - `tests/` — cross-host gate definitions
 - `docs/decisions/`, `docs/plans/`, `docs/evidence/` — see `docs/README.md`
+- `docs/solutions/` — documented solutions to past problems (toolchain, runners, romdev, three.c), by category with YAML frontmatter (`module`, `tags`, `problem_type`); relevant when working in those areas
 
 ## Invariants
 
