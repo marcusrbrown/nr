@@ -5,3 +5,9 @@ build/
 deps/
 out/
 *.wasc
+
+# Opencode
+!.opencode/
+.opencode/*
+!.opencode/themes/
+!.opencode/tui.json
