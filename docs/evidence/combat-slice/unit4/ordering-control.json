@@ -1,0 +1,57 @@
+{
+ "exe": "out/unit4/build-reverse/native/games/nr/nr",
+ "frames": 243,
+ "input": "games/nr/tests/input-pillar.json",
+ "failed": 2,
+ "results": [
+  {
+   "name": "scenario",
+   "ok": true,
+   "p0": {
+    "x": 12.78002643585205,
+    "lane": -1.0799999237060547,
+    "z": 2.9119999408721924
+   },
+   "npc2": {
+    "x": 11.699999809265137,
+    "lane": 1.350000023841858,
+    "z": 0.47399991750717163
+   },
+   "camX": 10.890012741088867,
+   "pillar": {
+    "x0": 11.4,
+    "x1": 12.6,
+    "z": 0.1,
+    "y1": 3.2
+   }
+  },
+  {
+   "name": "p0 against the pillar",
+   "ok": false,
+   "expect": "pillar in front of the actor",
+   "overlapPixels": 0,
+   "actorShare": 0
+  },
+  {
+   "name": "p0 away from the pillar",
+   "ok": true,
+   "silhouettePixels": 3197,
+   "visibleShare": 0.998,
+   "note": "the projection finds the actor where the picture has it"
+  },
+  {
+   "name": "npc2 against the pillar",
+   "ok": false,
+   "expect": "actor in front of the pillar",
+   "overlapPixels": 2416,
+   "actorShare": 0.614
+  },
+  {
+   "name": "npc2 away from the pillar",
+   "ok": true,
+   "silhouettePixels": 55,
+   "visibleShare": 1,
+   "note": "the projection finds the actor where the picture has it"
+  }
+ ]
+}

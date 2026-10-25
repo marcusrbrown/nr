@@ -1,0 +1,6 @@
+ok   scenario: {"p0":{"x":12.78002643585205,"lane":-1.0799999237060547,"z":-1.0799999237060547},"npc2":{"x":11.699999809265137,"lane":1.350000023841858,"z":1.3580000400543213},"camX":10.890012741088867,"pillar":{"x0":11.4,"x1":12.6,"z":0.1,"y1":3.2}}
+ok   p0 against the pillar: {"expect":"pillar in front of the actor","overlapPixels":964,"actorShare":0}
+ok   p0 away from the pillar: {"silhouettePixels":607,"visibleShare":1,"note":"the projection finds the actor where the picture has it"}
+ok   npc2 against the pillar: {"expect":"actor in front of the pillar","overlapPixels":2146,"actorShare":1}
+ok   npc2 away from the pillar: {"silhouettePixels":463,"visibleShare":1,"note":"the projection finds the actor where the picture has it"}
+PASS: the pillar occludes the actor behind it and the actor in front occludes the pillar

@@ -8,7 +8,7 @@
 //                different atlas frame from the idle ones
 //   distinct     the hero on a walk frame and the heroes on an idle frame differ as pixels (their silhouettes
 //                are not the same image) while the three idle heroes, one frame, are the same image
-//   silhouette   the silhouette of each hero is the difference of nr and nr_bare (same lights, no heroes), read at 1
+//   silhouette   the silhouette of each hero is the difference of nr_stage and nr_bare (same lights, no heroes), read at 1
 //                scene pixel (3 screen pixels); the far-left and far-right idle heroes' silhouette width is within 2
 //                scene pixels of the centre hero's, and the centre hero's silhouette overlaps the atlas alpha
 //                projected through the belt camera (IoU >= 0.8: the camera constants in look-lib.mjs match main.c)
@@ -51,7 +51,7 @@ for (const host of HOSTS) {
 mkdirSync(join(ROOT, 'out/unit2/boundary'), { recursive: true });
 for (const tick of [14, 15, 16, 7, 8]) {
   const out = join(ROOT, 'out/unit2/boundary', `t${tick}.json`);
-  const r = spawnSync('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', 'native', '--app', 'nr', '--frames', String(tick), '--state', out, '--input', 'games/nr/tests/input-idle.json'],
+  const r = spawnSync('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', 'native', '--app', 'nr_stage', '--frames', String(tick), '--state', out, '--input', 'games/nr/tests/input-idle.json'],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CW_PROJECT_ROOT: ROOT, CW_TEST_GPU: process.env.CW_TEST_GPU || 'desktop' } });
   if (r.status !== 0) { fail(`boundary run at tick ${tick}: exit ${r.status}`); continue; }
   const st = JSON.parse(readFileSync(out, 'utf8'));

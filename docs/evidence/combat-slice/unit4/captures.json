@@ -1,0 +1,342 @@
+{
+  "hosts": {
+    "native": "native binary on WebGPU (Dawn, Metal, offscreen)",
+    "cart": "build/cart-wgpu in headless Chromium on WebGPU",
+    "gl": "state-only: native binary on GL and build/cart in headless Chromium on GL"
+  },
+  "sets": [
+    "scroll",
+    "pillar"
+  ],
+  "runs": [
+    {
+      "set": "scroll",
+      "app": "nr",
+      "frames": 61,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f61.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr",
+      "frames": 232,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f232.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr",
+      "frames": 352,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f352.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr",
+      "frames": 426,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f426.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr",
+      "frames": 640,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f640.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "pillar",
+      "app": "nr",
+      "frames": 243,
+      "input": "games/nr/tests/input-pillar.json",
+      "file": "pillar-f243.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "pillar",
+      "app": "nr_arena_bare",
+      "frames": 243,
+      "input": "games/nr/tests/input-pillar.json",
+      "file": "pillar_bare-f243.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    }
+  ],
+  "gl": [
+    {
+      "app": "nr",
+      "name": "scroll",
+      "input": "games/nr/tests/input-scroll.json",
+      "frames": 760,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 3761477319,
+        "ticks": 760,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 3761477319,
+        "ticks": 760,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr",
+      "name": "pillar",
+      "input": "games/nr/tests/input-pillar.json",
+      "frames": 300,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1285148102,
+        "ticks": 300,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1285148102,
+        "ticks": 300,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_arena_bare",
+      "name": "pillar_bare",
+      "input": "games/nr/tests/input-pillar.json",
+      "frames": 300,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1285148102,
+        "ticks": 300,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1285148102,
+        "ticks": 300,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    }
+  ]
+}

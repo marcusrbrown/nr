@@ -1,0 +1,95 @@
+[
+ {
+  "tool": "loadMedia",
+  "op": null,
+  "status": 200,
+  "response": {
+   "loaded": true,
+   "platform": "wasmcart",
+   "kind": "wasmcart",
+   "mediaKind": "cart",
+   "path": "/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart-wgpu/carts/nr.wasc",
+   "fbWidth": 1920,
+   "fbHeight": 1080,
+   "gpu": "webgpu",
+   "gpuAdapter": {
+    "vendor": "apple",
+    "architecture": "metal-3",
+    "device": "apple-m1-pro",
+    "description": "Metal driver on macOS Version 15.7.9 (Build 24G830)",
+    "featureLevel": "compatibility",
+    "powerPreference": null
+   },
+   "deterministicSeed": 1,
+   "capabilities": {
+    "kind": "wasmcart",
+    "canStepFrames": true,
+    "canScreenshot": true,
+    "canSetInput": true,
+    "hasAudio": true,
+    "hasSaveData": true,
+    "hasMemoryRegions": false,
+    "hasWasmIntrospection": true,
+    "hasGlRendering": false,
+    "hasWgpuRendering": true,
+    "hasDebugState": true,
+    "hasDeterministic": false,
+    "hasDebugEvents": true,
+    "hasCpuState": false,
+    "hasDisasm": false,
+    "hasCheats": false,
+    "hasWatchpoints": false
+   }
+  }
+ },
+ {
+  "tool": "wasm",
+  "op": "conformance",
+  "status": 200,
+  "response": {
+   "conforms": true,
+   "abi": 4,
+   "manifestAbi": 4,
+   "width": 1920,
+   "height": 1080,
+   "requiredExportsPresent": true,
+   "issues": [
+    {
+     "severity": "warn",
+     "code": "deterministic-unflagged",
+     "message": "cart exports wc_set_seed() but WC_FLAG_DETERMINISTIC isn't set - hosts won't seed it (default is a normal run). Set the flag if the cart truly honors seeded replay."
+    }
+   ],
+   "note": "conforms:false means a `severity:'error'` issue (won't run) - fix those first. warns are cosmetic/latent. Each issue's message names the fix."
+  }
+ },
+ {
+  "tool": "input",
+  "op": "sequence",
+  "status": 200,
+  "response": {
+   "stepsRun": 5,
+   "framesRun": 639,
+   "frameCount": 640
+  }
+ },
+ {
+  "tool": "wasm",
+  "op": "debugState",
+  "status": 200,
+  "response": {
+   "fields": 57
+  }
+ },
+ {
+  "tool": "frame",
+  "op": "screenshot",
+  "status": 200,
+  "response": {
+   "path": "/Users/mrbrown/src/github.com/marcusrbrown/nr/out/unit4/romdev/scroll-f640.png",
+   "width": 1920,
+   "height": 1080,
+   "overlay": null
+  }
+ }
+]

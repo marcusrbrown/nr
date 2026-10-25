@@ -1,0 +1,12 @@
+{
+"comment": "Four point lights, always present: three neons and a flash slot (intensity 0 until the special uses it). Position = follow * camera_x + base + amp * sin(2 pi * tick / period + phase) per axis; sweeps are [amp, period in ticks, phase in radians]. Intensity = intensity * (1 - flicker.depth * (0.5 + 0.5 * sin(2 pi * tick / flicker.period + flicker.phase))), times buzz.scale on the buzz.ticks ticks that start each buzz.every ticks (shifted by buzz.offset).",
+"ambient": {"color": "#7482a8", "intensity": 1.0},
+"distance": 14,
+"decay": 2,
+"lights": [
+{"name": "magenta", "color": "#ff2bd6", "intensity": 28, "follow": 0.8, "base": [2.5, 2.4, 2.4], "sweep_x": [4.5, 120, 0.2618], "sweep_y": [0.3, 120, 1.8326], "sweep_z": [0.4, 120, 0.2618], "flicker": {"depth": 0.18, "period": 53, "phase": 0.0}, "buzz": {"every": 197, "ticks": 3, "scale": 0.35, "offset": 11}},
+{"name": "cyan", "color": "#20e8ff", "intensity": 28, "follow": 0.8, "base": [4.0, 2.4, 2.4], "sweep_x": [5.5, 240, 5.2360], "sweep_y": [0.3, 240, 6.8068], "sweep_z": [0.4, 240, 5.2360], "flicker": {"depth": 0.12, "period": 71, "phase": 1.3}, "buzz": {"every": 251, "ticks": 2, "scale": 0.5, "offset": 97}},
+{"name": "amber", "color": "#ffa020", "intensity": 28, "follow": 0.8, "base": [5.5, 2.4, 2.4], "sweep_x": [3.5, 360, 4.9742], "sweep_y": [0.3, 360, 6.5450], "sweep_z": [0.4, 360, 4.9742], "flicker": {"depth": 0.22, "period": 41, "phase": 2.6}, "buzz": {"every": 313, "ticks": 4, "scale": 0.3, "offset": 163}},
+{"name": "flash", "color": "#ffffff", "intensity": 0, "follow": 1.0, "base": [0.0, 1.2, 1.8], "sweep_x": [0, 1, 0], "sweep_y": [0, 1, 0], "sweep_z": [0, 1, 0], "flicker": {"depth": 0, "period": 1, "phase": 0}, "buzz": {"every": 0, "ticks": 0, "scale": 1, "offset": 0}}
+]
+}

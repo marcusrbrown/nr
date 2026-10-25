@@ -3,3 +3,5 @@
 atlases/hero.png
 atlases/hero-n.png
 atlases/hero.json
+arena/layout.json
+arena/lights.json
