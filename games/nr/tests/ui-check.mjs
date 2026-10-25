@@ -11,7 +11,7 @@
 //
 //   title               nobody is present until start; players at the title put 3 lives each into the pool; the tick-30
 //                       presence rule does not apply; the fight begins on a second start from a player that is in
-//   AE2 upgrade         a pick in the lockout and a start from a player that is in change nothing; player 2's pick of the
+//   AE2 upgrade         a pick in the grace period and a start from a player that is in change nothing; player 2's pick of the
 //                       dash is the special of both heroes, to the end of the arena; the knockback never returns
 //   pause               nothing but the tick counter moves while the pause is up
 //   same frame          both players pick on one frame: the lower port's pick applies
@@ -60,7 +60,7 @@ const EV = Object.fromEntries(enumNames(simH, 'nr_event_kind', 'NR_EV_', 1));
 const PH = Object.fromEntries(enumNames(simH, 'nr_phase', 'NR_PH_').filter(([n]) => n !== 'COUNT'));
 const SFX = Object.fromEntries(enumNames(simH, 'nr_sfx', 'NR_SFX_').filter(([n]) => n !== 'COUNT'));
 const define = (s, name) => +s.match(new RegExp(`#define ${name} ([0-9.]+)`))[1];
-const LIVES = define(simH, 'NR_LIVES_PER_PLAYER'), LOCKOUT = define(simH, 'NR_UPGRADE_LOCKOUT'), PRESENCE = define(simH, 'NR_PRESENCE_TICKS');
+const LIVES = define(simH, 'NR_LIVES_PER_PLAYER'), GRACE = define(simH, 'NR_UPGRADE_GRACE'), PRESENCE = define(simH, 'NR_PRESENCE_TICKS');
 const MARGIN = define(simC, 'RESPAWN_MARGIN'), PPU = define(mainC, 'PPU'), DESIGN_W = define(mainC, 'DESIGN_W'), DESIGN_H = define(mainC, 'DESIGN_H'), SCALE = define(mainC, 'PIXEL_SCALE');
 const FOV = define(mainC, 'FOV_DEG'), PITCH = define(mainC, 'PITCH_DEG'), ACTOR_HALF = define(mainC, 'ACTOR_HALF');
 const voiceCaps = Object.fromEntries([...mainC.matchAll(/\[NR_SFX_([A-Z]+)\] = \{ "audio\/(\w+)\.wav", (\d+) \}/g)].map((m) => [m[1], { file: `${m[2]}.wav`, maxVoices: +m[3] }]));
@@ -125,7 +125,7 @@ let TP;
   const ok = TP > 0 && picks.length === 1 && picks[0].actor === 1 && picks[0].a === 1 && picks[0].b === 40 && ign.length === 1 && ign[0].actor === 1 && ign[0].tick === TP + 5 &&
     dash.map((e) => `${e.actor}@${e.tick}`).join() === `0@${TP + 100},1@${TP + 140}` && !knock.length && up.st['nr.special_variant'] === 1 && up.st['nr.pick_player'] === 1 && up.st['nr.phase'] === PH.FIGHT &&
     knockAfter.length === 0 && dashAfter.length > 0 && pick.actor === 1 && pick.a === 1;
-  record('AE2 upgrade', ok, `the pause begins at tick ${TP} (wave 2's last kill); a pick at +10 is inside the ${LOCKOUT}-tick lockout and does nothing; start from player 2 (in) at +5 is ignored (${ign.length} logged); player 2 picks the dash at +40; the heroes' next specials, at +100 (player 1) and +140 (player 2), are both special_dash (${dash.length} dash, ${knock.length} knockback); in the full run ${dashAfter.length} dash specials and ${knockAfter.length} knockback specials follow the pick to the end of the arena`,
+  record('AE2 upgrade', ok, `the pause begins at tick ${TP} (wave 2's last kill); a pick at +10 is inside the ${GRACE}-tick grace period and does nothing; start from player 2 (in) at +5 is ignored (${ign.length} logged); player 2 picks the dash at +40; the heroes' next specials, at +100 (player 1) and +140 (player 2), are both special_dash (${dash.length} dash, ${knock.length} knockback); in the full run ${dashAfter.length} dash specials and ${knockAfter.length} knockback specials follow the pick to the end of the arena`,
     { pauseTick: TP, picks, ignored: ign, dash, knockbackAfterPick: knockAfter.length, artifact: 'upgrade-events.json' });
   writeFileSync(join(OUT, 'upgrade-events.json'), `${JSON.stringify({ pauseTick: TP, events: ev.filter((e) => e.tick >= TP), fullRunDashAfterPick: dashAfter.length, fullRunKnockbackAfterPick: knockAfter.length }, null, 2)}\n`);
 
@@ -245,7 +245,7 @@ let TP;
     { counts, ticks, played, voiceCaps, artifact: 'ui-report.json' });
 }
 
-writeFileSync(join(OUT, 'ui-report.json'), `${JSON.stringify({ results, constants: { LIVES, LOCKOUT, PRESENCE, MARGIN }, voiceCaps }, null, 2)}\n`);
+writeFileSync(join(OUT, 'ui-report.json'), `${JSON.stringify({ results, constants: { LIVES, GRACE, PRESENCE, MARGIN }, voiceCaps }, null, 2)}\n`);
 writeFileSync(join(OUT, 'ui-report.txt'), `${lines.join('\n')}\n`);
 if (PUBLISH) { mkdirSync(PUBLISH, { recursive: true }); for (const f of ['ui-report.json', 'ui-report.txt', 'upgrade-events.json', 'join-events.json', 'full-determinism.json', 'glyph-bakes.json']) copyFileSync(join(OUT, f), join(PUBLISH, f)); }
 console.log(failed ? `${failed} scenario(s) FAILED` : `all ${results.length} scenarios passed`);

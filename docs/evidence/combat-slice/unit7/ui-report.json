@@ -32,7 +32,7 @@
     {
       "name": "AE2 upgrade",
       "ok": true,
-      "detail": "the pause begins at tick 729 (wave 2's last kill); a pick at +10 is inside the 30-tick lockout and does nothing; start from player 2 (in) at +5 is ignored (1 logged); player 2 picks the dash at +40; the heroes' next specials, at +100 (player 1) and +140 (player 2), are both special_dash (2 dash, 0 knockback); in the full run 6 dash specials and 0 knockback specials follow the pick to the end of the arena",
+      "detail": "the pause begins at tick 729 (wave 2's last kill); a pick at +10 is inside the 30-tick grace period and does nothing; start from player 2 (in) at +5 is ignored (1 logged); player 2 picks the dash at +40; the heroes' next specials, at +100 (player 1) and +140 (player 2), are both special_dash (2 dash, 0 knockback); in the full run 6 dash specials and 0 knockback specials follow the pick to the end of the arena",
       "pauseTick": 729,
       "picks": [
         {
@@ -314,7 +314,7 @@
   ],
   "constants": {
     "LIVES": 3,
-    "LOCKOUT": 30,
+    "GRACE": 30,
     "PRESENCE": 30,
     "MARGIN": 0.4
   },

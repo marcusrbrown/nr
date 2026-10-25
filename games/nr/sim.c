@@ -840,10 +840,10 @@ static void title_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
   }
 }
 
-/* The upgrade pause: joins, then the first pick after the lockout; the lower port wins a tick two players pick on. */
+/* The upgrade pause: joins, then the first pick after the grace period; the lower port wins a tick two players pick on. */
 static void upgrade_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
   start_presses(s, input);
-  if (s->ticks - s->phase_since < NR_UPGRADE_LOCKOUT) return;
+  if (s->ticks - s->phase_since < NR_UPGRADE_GRACE) return;
   for (int p = 0; p < NR_PLAYERS; p++) {
     const nr_actor *a = &s->actor[p];
     if (!a->present || a->away || input[p].tap == 0) continue;

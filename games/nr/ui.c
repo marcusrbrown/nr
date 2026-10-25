@@ -109,8 +109,8 @@ static void card(float x, float y, float w, float h, const char *name, const cha
 static void draw_upgrade(const ui_state *u, float W, float H, float k) {
   cw_r2d_rect(cw_rect_make(0, 0, W, H), cw_rgba(0.0f, 0.0f, 0.04f, 0.68f));
   text("CHOOSE YOUR SPECIAL", 0, H * 0.12f, 100 * k, WHITE, CW_ALIGN_CENTER, W);
-  text(u->lockout_left > 0 ? "GET READY" : "FIRST PRESS WINS    FOR EVERY PLAYER, TO THE END OF THE STREET", 0, H * 0.27f, 42 * k, AMBER, CW_ALIGN_CENTER, W);
-  float a = u->lockout_left > 0 ? 0.45f : 1.0f, cw = 780 * k, ch = 480 * k, y = H * 0.38f;
+  text(u->grace_left > 0 ? "GET READY" : "FIRST PRESS WINS    FOR EVERY PLAYER, TO THE END OF THE STREET", 0, H * 0.27f, 42 * k, AMBER, CW_ALIGN_CENTER, W);
+  float a = u->grace_left > 0 ? 0.45f : 1.0f, cw = 780 * k, ch = 480 * k, y = H * 0.38f;
   card(W * 0.5f - cw - 30 * k, y, cw, ch, "KNOCKBACK", "A RING OF FORCE THAT SHOVES EVERY ENEMY AWAY AND STAGGERS A HEAVY", "PRESS LEFT", PINK, a);
   card(W * 0.5f + 30 * k, y, cw, ch, "DASH", "A FAST STRIKE ALONG THE FLOOR THAT HITS EVERYONE IN ITS PATH", "PRESS RIGHT", CYAN, a);
 }

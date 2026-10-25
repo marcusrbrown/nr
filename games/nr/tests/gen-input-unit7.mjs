@@ -2,7 +2,7 @@
 //
 //   input-2p-full.json         title -> four waves -> clear, both pads: the buttons the bot plays on `nr_botfull` (it joins,
 //                              begins, fights, picks the dash with player 2 and presses back at the clear screen)
-//   input-upgrade.json         AE2: two players reach the upgrade pause; a pick during the lockout and a start press from a
+//   input-upgrade.json         AE2: two players reach the upgrade pause; a pick during the grace period and a start press from a
 //                              player that is in change nothing; player 2 picks the dash; both specials are dash
 //   input-upgrade-tie.json     the same pause with both players picking on one frame (left against right): the lower port wins
 //   input-upgrade-join.json    player 1 alone reaches the pause; pad 2 joins during it, then player 1 picks: the joiner has the pick
@@ -51,7 +51,7 @@ export function generate() {
   files['input-2p-full.json'] = scriptText(full.rows);
   const T = phaseTick(full.st, PH_UPGRADE);
   const press = (frame, who, ...buttons) => [{ frame, [who]: buttons }, { frame: frame + 2, [who]: [] }];
-  // AE2: a pick in the lockout (T+10) and start from a player that is in (T+5) do nothing; player 2 picks the dash at T+40;
+  // AE2: a pick in the grace period (T+10) and start from a player that is in (T+5) do nothing; player 2 picks the dash at T+40;
   // each hero then uses its special (T+100, T+140)
   files['input-upgrade.json'] = scriptText(compose(full.rows, T, [
     { frame: T + 1, p0: [], p1: [] },

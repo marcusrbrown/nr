@@ -22,7 +22,7 @@ typedef struct {
   int32_t variant;               /* the special the run has: 0 knockback, 1 dash */
   int32_t upgrade_done;
   int32_t pick_player;           /* the player that picked, or -1 */
-  int32_t lockout_left;          /* upgrade pause: ticks until a pick is taken */
+  int32_t grace_left;          /* upgrade pause: ticks until a pick is taken */
 } ui_state;
 
 /* Loads the font and bakes the glyphs. Call once, from init, with the GPU ready. */

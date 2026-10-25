@@ -34,7 +34,7 @@
  *
  * Upgrade. The end of wave 2 pauses the run (nothing but the tick counter, joins and the pick advance) and offers the
  * two specials: a left tap picks the knockback, a right tap the dash. Picks are ignored for the first
- * NR_UPGRADE_LOCKOUT ticks of the pause so a walking player does not pick by accident; the first press wins and the
+ * NR_UPGRADE_GRACE ticks of the pause so a walking player does not pick by accident; the first press wins and the
  * lower port wins on the same tick. The pick is the special of every hero, present or joining later, until the run ends;
  * the pause does not come again. (Without the pause, `hold_alt` lets a held special_alt choose the dash per press: the
  * combat checks use it.)
@@ -72,7 +72,7 @@
 #define NR_RESPAWN_DELAY 90 /* ticks a dead hero lies before it stands up again */
 #define NR_RESPAWN_INVULN 120
 #define NR_PRESENCE_TICKS 30 /* the tick on which the players present are decided when there is no title (the scripted and bot runs) */
-#define NR_UPGRADE_LOCKOUT 30 /* ticks at the start of the upgrade pause in which a pick is ignored */
+#define NR_UPGRADE_GRACE 30 /* ticks at the start of the upgrade pause in which a pick is ignored */
 #define NR_HERO_HP 12
 #define NR_GRUNT_HP 2
 #define NR_HEAVY_HP 16

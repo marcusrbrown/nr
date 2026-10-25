@@ -21,7 +21,7 @@
  *     start again from a player that is in begins the fight with the players that are in, 3 lives each in one pool.
  *   Fight: start from a pad that has not joined joins its player at the left edge of the camera's frame with 3 more
  *     lives; start from a pad that has joined does nothing.
- *   Upgrade (after wave 2): left picks the knockback special, right the dash, once a short lockout has passed; the first
+ *   Upgrade (after wave 2): left picks the knockback special, right the dash, once a short grace period has passed; the first
  *     press wins and the lower port wins a tick both press on.
  *   Clear and game over: back returns to the title; start at game over is refused.
  * A pad that goes away leaves its hero idle and untouchable until it is back. The builds without a title (NR_NO_TITLE:
@@ -382,7 +382,7 @@ static bool bot_on(int p) { return (NR_BOT_MASK >> p) & 1 || S.demo == 2; }
 static bool bot_free(const nr_actor *a) { return a->state == NR_ST_IDLE || a->state == NR_ST_WALK || a->state == NR_ST_RUN; }
 
 /* The menus. On the title player 1 joins, player 2 joins and player 1 starts the fight again, 20 ticks apart; in the
- * upgrade pause player 2 (player 1 when it is alone) picks the dash a moment after the lockout; at clear and game over
+ * upgrade pause player 2 (player 1 when it is alone) picks the dash a moment after the grace period; at clear and game over
  * player 1 presses back after BOT_REST ticks. Each press is held two ticks, so it is one edge. */
 #define BOT_MENU_FIRST 20
 #define BOT_MENU_GAP 20
@@ -398,7 +398,7 @@ static uint16_t bot_menu(int p) {
       if (p == 1 && bot_press_at(since, BOT_MENU_FIRST + BOT_MENU_GAP)) return BTN_START;
       return 0;
     case NR_PH_UPGRADE:
-      if (p == (s->actor[1].present ? 1 : 0) && bot_press_at(since, NR_UPGRADE_LOCKOUT + BOT_PICK_DELAY)) return BTN_RIGHT;
+      if (p == (s->actor[1].present ? 1 : 0) && bot_press_at(since, NR_UPGRADE_GRACE + BOT_PICK_DELAY)) return BTN_RIGHT;
       return 0;
     default:
       return p == 0 && bot_press_at(since, BOT_REST) ? BTN_BACK : 0;
@@ -543,7 +543,7 @@ static void fill_ui(void) {
   u->variant = s->special_variant;
   u->upgrade_done = s->upgrade_done;
   u->pick_player = s->pick_player;
-  u->lockout_left = s->phase == NR_PH_UPGRADE && u->phase_ticks < NR_UPGRADE_LOCKOUT ? NR_UPGRADE_LOCKOUT - u->phase_ticks : 0;
+  u->grace_left = s->phase == NR_PH_UPGRADE && u->phase_ticks < NR_UPGRADE_GRACE ? NR_UPGRADE_GRACE - u->phase_ticks : 0;
 }
 #endif
 
