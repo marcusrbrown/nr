@@ -64,7 +64,11 @@ static void draw_title(const ui_state *u, float W, float H, float k) {
       text(cw_frame_printf("P%d  PRESS START TO JOIN", p + 1), r.x, r.y + 38 * k, 36 * k, alpha(WHITE, 0.85f), CW_ALIGN_CENTER, r.w);
     }
   }
-  text(in ? "PRESS START AGAIN TO FIGHT" : "PRESS START TO JOIN", 0, H * 0.74f, 64 * k, alpha(AMBER, blink(u->ticks)), CW_ALIGN_CENTER, W);
+  /* the prompt stands on a dark panel with an amber edge, so it reads over the hero and the lit street whatever they are
+   * doing; the text is always at full strength and the panel's edge is what blinks */
+  float pulse = u->ticks / 30 % 2 == 0 ? 1.0f : 0.45f;
+  panel(cw_rect_make(W * 0.5f - 520 * k, H * 0.74f - 12 * k, 1040 * k, 96 * k), cw_rgba(0.02f, 0.02f, 0.07f, 0.86f), alpha(AMBER, pulse), 4 * k);
+  text(in ? "PRESS START AGAIN TO FIGHT" : "PRESS START TO JOIN", 0, H * 0.74f, 64 * k, AMBER, CW_ALIGN_CENTER, W);
   text("MOVE ARROWS OR D-PAD    ATTACK Z OR X    JUMP SPACE OR A    GRAB X OR B    SPECIAL C OR Y    DASH SHIFT OR RB", 0, H * 0.90f, 28 * k,
        alpha(WHITE, 0.9f), CW_ALIGN_CENTER, W);
 }

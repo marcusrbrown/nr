@@ -1,0 +1,31 @@
+{
+  "bar": 7,
+  "results": [
+    {
+      "tick": 30,
+      "textPixels": 10233,
+      "backPixels": 94167,
+      "textLum": 0.4686,
+      "backLum": 0.0124,
+      "ratio": 8.31,
+      "ok": true
+    },
+    {
+      "tick": 60,
+      "textPixels": 13869,
+      "backPixels": 90531,
+      "textLum": 0.4686,
+      "backLum": 0.0082,
+      "ratio": 8.91,
+      "ok": true
+    },
+    {
+      "before": "docs/evidence/combat-slice/look/title.png",
+      "textPixels": 9216,
+      "backPixels": 95184,
+      "textLum": 0.1153,
+      "backLum": 0.0208,
+      "ratio": 2.33
+    }
+  ]
+}
