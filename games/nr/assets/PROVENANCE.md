@@ -8,10 +8,10 @@ The manifest `hero.json` records the recipe, profile and per-frame payload hashe
 
 | Input | sha256 |
 | --- | --- |
-| `tools/render/recipes/hero.json` | `6ad47b52556f31a241dda759e00ee9e622e74a0e4d9319a32984ace65391fedf` |
-| `tools/render/profiles/hero.json` | `6a4f3428371c2b19dbc9033b828c261cbb5d8afa75ce66932bfb088a6bc5b49f` |
-| `atlases/hero.png` | `9d708e617c69e0e3219752472fd2f9ac59fce5ab414c43bea2294dd259974391` |
-| `atlases/hero.json` | `949644fe1d24320ebb6cb18d67fd2a83b478440ae895c19cb5dd5ccfc0f5bb03` |
+| `tools/render/recipes/hero.json` | `63f809c115f4c8f46b430f38f86c5a16605433288e0a521b10548bf60787b3ac` |
+| `tools/render/profiles/hero.json` | `b16a646b353e1ed813ef11237c8a63a6594fee5d45a3d98f2201d325bc02e33e` |
+| `atlases/hero.png` | `527b84da35addffbfc44da53f06b2adc010577aa6aeca7315cc49d6c79a73c23` |
+| `atlases/hero.json` | `e66a3fd775c13e922c0b7d21986de0cbdee9164d202d512925b9a3ea6152f60f` |
 
 Changing the profile changes its hash; `tools/render/pin-profile.mjs` re-pins the recipe, and the atlas is re-rendered.
 
@@ -30,11 +30,15 @@ and any file whose sha256 differs from `tools/render/kits.json`. The rendered sp
 | Universal Animation Library [Standard] | https://quaternius.com/packs/universalanimationlibrary.html (download: https://quaternius.itch.io/universal-animation-library) | `UAL1_Standard.glb` | `69591853d817...`; full digest in `kits.json` |
 | | | licence `License.txt` | `6d01f55c6e4c49a2c9963e147e561945ae2c83958c8ca667d90a6bffdbfac061` |
 
-Universal Animation Library 2 is listed in `kits.json` and not yet downloaded; nothing in this directory uses it.
+| Universal Animation Library 2 [Standard] | https://quaternius.com/packs/universalanimationlibrary2.html (download: https://quaternius.itch.io/universal-animation-library-2) | `UAL2_Standard.glb` (the profile's second animation file; the clip map draws on it for the hook, throw, knockdown, get-up and slide) | `8cee20ab1bc5...`; full digest in `kits.json` |
+| | | licence `License.txt` | `6d01f55c6e4c49a2c9963e147e561945ae2c83958c8ca667d90a6bffdbfac061` |
+
+The atlas holds only idle and walk, both UAL1 actions; no frame in it comes from UAL2 yet. `UAL2_Standard_RM.glb` (root motion) and `Mannequin_F.*` are pinned and audited, not used.
 
 ## Hand-keyed and derived clips
 
 None. The atlas holds `idle` (`Idle_Loop`) and `walk` (`Walk_Loop`), both library actions. The profile's other clips are
 mapped to library actions (substitutes) or marked gaps awaiting hand keys; see `docs/evidence/combat-slice/clip-audit.md`.
-Colours, hair choice, proportions and the belt, visor and chest-stripe attachments are the profile's, drafted by the
-implementing agent and awaiting the owner's tuning.
+Colours, hair choice, proportions, the height-band painting and the attachments (belt, buckle, pauldrons, baggy
+trouser legs, knee pads, pocket, back pack and band) are the profile's, drafted by the implementing agent and tuned
+from the owner's Unit 2 review notes; they remain open to tuning.

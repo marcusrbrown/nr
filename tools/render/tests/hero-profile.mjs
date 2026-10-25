@@ -60,7 +60,7 @@ test('every kit file the profile names is a CC0 kit file kits.json pins, and the
     assert.equal(kit.licence.spdx, 'CC0-1.0');
     assert.equal(kit.files.find((f) => f.path === ref.path)?.sha256, ref.sha256, ref.path);
   }
-  const used = [profile.models.body, profile.models.animations, ...profile.models.hair];
+  const used = [profile.models.body, ...profile.models.animations, ...profile.models.hair];
   for (const m of used) assert.ok(profile.kitFiles.some((r) => r.kit === m.kit && r.path === m.path), m.path);
   assert.equal(recipe.model.profileSha256, sha256(readFileSync(profilePath)), 'run: node tools/render/pin-profile.mjs tools/render/recipes/hero.json');
 });
@@ -78,6 +78,7 @@ test('the recipe renders only ready clips, and every clip of the map names real 
       for (const f of [sg.start, sg.end]) assert.ok(f >= a.start - 1e-6 && f <= a.end + 1e-6, `${name}: ${sg.action} frame ${f} outside ${a.start}-${a.end}`);
     }
     assert.equal(clip.segments.length === 0, clip.status === 'gap', `${name}: gap iff no segments`);
+    assert.equal(clip.ready, clip.segments.length > 0, `${name}: ready iff it names actions`);
   }
   const slot = (n) => ({ jumpkick: 'jump kick' })[n] ?? n;
   for (const [name, clip] of Object.entries(profile.clips)) {
@@ -177,4 +178,32 @@ test('a slot naming a clip the profile lacks exits 12', () => {
   const r = render(join(dir, 'recipes/hero.json'), join(dir, 'raw'));
   assert.equal(r.status, 12);
   assert.match(r.log, /the profile has no clip 'moonwalk'/);
+});
+
+test('every ready clip of the profile renders (its actions bind and pose the figure), the gaps are refused', () => {
+  const dir = join(OUT, 'all-clips');
+  mkdirSync(join(dir, 'recipes'), { recursive: true });
+  cpSync(join(RENDER, 'profiles'), join(dir, 'profiles'), { recursive: true });
+  const ready = Object.entries(profile.clips).filter(([, c]) => c.ready).map(([n]) => n);
+  assert.ok(ready.length >= 14, `${ready.length} ready clips`);
+  const all = structuredClone(recipe);
+  all.name = 'hero-all-clips';
+  all.slots = ready.map((n) => ({ id: n, clip: n, frames: 3, facing: 'east' }));
+  writeFileSync(join(dir, 'recipes/hero.json'), JSON.stringify(all));
+  const r = render(join(dir, 'recipes/hero.json'), join(dir, 'raw'));
+  assert.equal(r.status, 0, r.log.slice(-1500));
+  assert.equal(json(join(dir, 'raw/done.json')).frames.length, ready.length * 3);
+
+  const gap = Object.entries(profile.clips).find(([, c]) => !c.ready);
+  if (gap) {
+    const bad = structuredClone(recipe);
+    bad.slots = [{ id: gap[0], clip: gap[0], frames: 2, facing: 'east' }];
+    mkdirSync(join(OUT, 'gap'), { recursive: true });
+    cpSync(join(RENDER, 'profiles'), join(OUT, 'gap/profiles'), { recursive: true });
+    mkdirSync(join(OUT, 'gap/recipes'), { recursive: true });
+    writeFileSync(join(OUT, 'gap/recipes/hero.json'), JSON.stringify(bad));
+    const g = render(join(OUT, 'gap/recipes/hero.json'), join(OUT, 'gap/raw'));
+    assert.equal(g.status, 12, g.log.slice(-600));
+    assert.match(g.log, /is not ready \(a gap awaiting a hand-keyed action\)/);
+  }
 });

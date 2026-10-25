@@ -5,11 +5,28 @@
   "description": "A character as an owner-tunable profile over the pinned CC0 kits (tools/render/kits.json): which kit files, body proportions, the retexture palette and per-bone colour regions, skinned attachments, and the clip map from game state to library actions. A recipe (recipe.schema.json) pins a profile by sha256; nr_render.py builds the figure from it. Palette values are '#rrggbb'; region and attachment colours name a palette key.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "kitFiles", "models", "body", "palette", "regions", "pose", "clips"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "kitFiles",
+    "models",
+    "body",
+    "palette",
+    "regions",
+    "pose",
+    "clips"
+  ],
   "properties": {
-    "schemaVersion": { "const": 1 },
-    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
-    "title": { "type": "string" },
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "title": {
+      "type": "string"
+    },
     "kitFiles": {
       "type": "array",
       "minItems": 1,
@@ -17,43 +34,107 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["kit", "path", "sha256"],
+        "required": [
+          "kit",
+          "path",
+          "sha256"
+        ],
         "properties": {
-          "kit": { "type": "string" },
-          "path": { "type": "string" },
-          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          "kit": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
         }
       }
     },
     "models": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["body", "animations"],
+      "required": [
+        "body",
+        "animations"
+      ],
       "properties": {
         "body": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["kit", "path", "mesh"],
+          "required": [
+            "kit",
+            "path",
+            "mesh"
+          ],
           "properties": {
-            "kit": { "type": "string" },
-            "path": { "type": "string" },
-            "mesh": { "type": "string", "description": "Name of the skinned body mesh object." },
-            "extras": { "type": "object", "description": "Other meshes of the file to keep (eyes, eyebrows): object name -> palette key.", "additionalProperties": { "type": "string" } }
+            "kit": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "mesh": {
+              "type": "string",
+              "description": "Name of the skinned body mesh object."
+            },
+            "extras": {
+              "type": "object",
+              "description": "Other meshes of the file to keep (eyes, eyebrows): object name -> palette key.",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
           }
         },
         "animations": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["kit", "path"],
-          "properties": { "kit": { "type": "string" }, "path": { "type": "string" } }
+          "type": "array",
+          "minItems": 1,
+          "description": "Kit files whose actions the clip map draws on; an action name is unique across them.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kit",
+              "path"
+            ],
+            "properties": {
+              "kit": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
         },
         "hair": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["kit", "path", "mesh", "color"],
-            "properties": { "kit": { "type": "string" }, "path": { "type": "string" }, "mesh": { "type": "string" }, "color": { "type": "string" } }
+            "required": [
+              "kit",
+              "path",
+              "mesh",
+              "color"
+            ],
+            "properties": {
+              "kit": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "mesh": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            }
           }
         }
       }
@@ -61,29 +142,84 @@
     "body": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["standingHeightPx"],
+      "required": [
+        "standingHeightPx"
+      ],
       "properties": {
-        "standingHeightPx": { "type": "number", "minimum": 8, "description": "Height of the standing pose (fitClip frame 0) in the render camera, hair included." },
-        "widthScale": { "type": "number", "minimum": 0.1, "description": "Left-right scale relative to height." },
-        "depthScale": { "type": "number", "minimum": 0.1, "description": "Front-back scale relative to height." },
-        "headScale": { "type": "number", "minimum": 0.1 },
-        "handScale": { "type": "number", "minimum": 0.1 }
+        "standingHeightPx": {
+          "type": "number",
+          "minimum": 8,
+          "description": "Height of the standing pose (fitClip frame 0) in the render camera, hair included."
+        },
+        "widthScale": {
+          "type": "number",
+          "minimum": 0.1,
+          "description": "Left-right scale relative to height."
+        },
+        "depthScale": {
+          "type": "number",
+          "minimum": 0.1,
+          "description": "Front-back scale relative to height."
+        },
+        "headScale": {
+          "type": "number",
+          "minimum": 0.1
+        },
+        "handScale": {
+          "type": "number",
+          "minimum": 0.1
+        }
       }
     },
-    "palette": { "type": "object", "description": "Named sRGB colours. 'default' colours faces no region claims.", "additionalProperties": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" } },
-    "defaultColor": { "type": "string" },
+    "palette": {
+      "type": "object",
+      "description": "Named sRGB colours. 'default' colours faces no region claims.",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^#[0-9a-fA-F]{6}$"
+      }
+    },
+    "defaultColor": {
+      "type": "string"
+    },
     "regions": {
       "type": "array",
       "minItems": 1,
-      "description": "Ordered; a face takes the first region whose bone patterns (fnmatch) match the bone that dominates most of its vertices.",
+      "description": "Ordered; a vertex takes the first region whose bone patterns match its dominant bone and whose heightRange holds it; a face takes the region most of its vertices took.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "color", "bones"],
+        "required": [
+          "name",
+          "color",
+          "bones"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "color": { "type": "string" },
-          "bones": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "bones": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "description": "fnmatch patterns on the bone that dominates a vertex."
+          },
+          "heightRange": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "Rest-pose height band the region covers, as fractions of the body mesh's height (0 soles, 1 crown); lo <= hi."
+          }
         }
       }
     },
@@ -92,28 +228,79 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "shape", "bone", "color"],
+        "required": [
+          "id",
+          "shape",
+          "bone",
+          "color"
+        ],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
-          "shape": { "enum": ["sphere", "box", "cylinder", "cone", "plane"] },
-          "bone": { "type": "string" },
-          "offset": { "$ref": "#/$defs/vec3", "description": "From the bone's rest head, in armature space (X the character's left, -Y forward, Z up)." },
-          "rotationDeg": { "$ref": "#/$defs/vec3" },
-          "size": { "$ref": "#/$defs/vec3" },
-          "color": { "type": "string" }
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]*$"
+          },
+          "shape": {
+            "enum": [
+              "sphere",
+              "box",
+              "cylinder",
+              "cone",
+              "plane"
+            ]
+          },
+          "bone": {
+            "type": "string"
+          },
+          "offset": {
+            "$ref": "#/$defs/vec3",
+            "description": "From the bone's rest head, in armature space (X the character's left, -Y forward, Z up)."
+          },
+          "rotationDeg": {
+            "$ref": "#/$defs/vec3"
+          },
+          "size": {
+            "$ref": "#/$defs/vec3"
+          },
+          "color": {
+            "type": "string"
+          }
         }
       }
     },
     "pose": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["fitClip"],
+      "required": [
+        "fitClip"
+      ],
       "properties": {
-        "fitClip": { "type": "string", "description": "Clip whose first frame fits the figure to standingHeightPx and puts its lowest point on the ground." },
-        "anchor": { "enum": ["feet-xy", "pelvis-xy", "none"], "description": "The point held at the plane origin each frame: the midpoint of the feet (the actor's ground position), the pelvis, or nothing." },
-        "pinRoot": { "type": "boolean", "description": "Zero the library's root-bone travel." },
-        "facing": { "enum": ["south", "east", "north", "west"] },
-        "note": { "type": "string" }
+        "fitClip": {
+          "type": "string",
+          "description": "Clip whose first frame fits the figure to standingHeightPx and puts its lowest point on the ground."
+        },
+        "anchor": {
+          "enum": [
+            "feet-xy",
+            "pelvis-xy",
+            "none"
+          ],
+          "description": "The point held at the plane origin each frame: the midpoint of the feet (the actor's ground position), the pelvis, or nothing."
+        },
+        "pinRoot": {
+          "type": "boolean",
+          "description": "Zero the library's root-bone travel."
+        },
+        "facing": {
+          "enum": [
+            "south",
+            "east",
+            "north",
+            "west"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
       }
     },
     "clips": {
@@ -122,31 +309,84 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["status", "ready", "loop", "segments"],
+        "required": [
+          "status",
+          "ready",
+          "loop",
+          "segments"
+        ],
         "properties": {
-          "status": { "enum": ["exact", "substitute", "gap"] },
-          "ready": { "type": "boolean" },
-          "loop": { "type": "boolean" },
+          "status": {
+            "enum": [
+              "exact",
+              "substitute",
+              "gap"
+            ]
+          },
+          "ready": {
+            "type": "boolean",
+            "description": "Every segment names a real action in the pinned kits, so the clip can be rendered. False for a gap awaiting a hand-keyed action."
+          },
+          "loop": {
+            "type": "boolean"
+          },
           "segments": {
             "type": "array",
             "description": "Played in order; frames are action frames at 24 fps; end < start plays in reverse. Empty for a gap awaiting a hand-keyed action.",
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["action", "start", "end"],
-              "properties": { "action": { "type": "string" }, "start": { "type": "number" }, "end": { "type": "number" } }
+              "required": [
+                "action",
+                "start",
+                "end"
+              ],
+              "properties": {
+                "action": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "number"
+                },
+                "end": {
+                  "type": "number"
+                }
+              }
             }
           },
-          "handKey": { "type": "string" },
+          "handKey": {
+            "type": "string"
+          },
           "proposal": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["frames", "ms"],
-            "properties": { "frames": { "type": "integer", "minimum": 1 }, "ms": { "type": "integer", "minimum": 1 } }
+            "required": [
+              "frames",
+              "ms"
+            ],
+            "properties": {
+              "frames": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "ms": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
           }
         }
       }
     }
   },
-  "$defs": { "vec3": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 } }
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    }
+  }
 }

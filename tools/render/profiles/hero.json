@@ -9,6 +9,11 @@
       "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997"
     },
     {
+      "kit": "universal-animation-library-2",
+      "path": "UAL2_Standard.glb",
+      "sha256": "8cee20ab1bc55130092447e810e26df22dd2803eccc54f52137a7d54d7ab88a8"
+    },
+    {
       "kit": "universal-base-characters",
       "path": "Superhero_Male_FullBody.bin",
       "sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f"
@@ -39,10 +44,16 @@
         "Eyebrows": "brow"
       }
     },
-    "animations": {
-      "kit": "universal-animation-library",
-      "path": "UAL1_Standard.glb"
-    },
+    "animations": [
+      {
+        "kit": "universal-animation-library",
+        "path": "UAL1_Standard.glb"
+      },
+      {
+        "kit": "universal-animation-library-2",
+        "path": "UAL2_Standard.glb"
+      }
+    ],
     "hair": [
       {
         "kit": "universal-base-characters",
@@ -61,17 +72,21 @@
   },
   "palette": {
     "default": "#ff00ff",
-    "skin": "#d9a07c",
-    "hair": "#e0309c",
-    "eyes": "#10131a",
-    "brow": "#3a1a30",
-    "jacket": "#4a3a9c",
-    "trim": "#20e8ff",
-    "glove": "#1f2433",
-    "trousers": "#2d3552",
-    "boots": "#171b27",
-    "belt": "#ff2bd6",
-    "visor": "#20e8ff"
+    "skin": "#e2a67f",
+    "hair": "#ff2e88",
+    "eyes": "#0b0d14",
+    "brow": "#2a1620",
+    "jacket": "#1f2750",
+    "jacketHi": "#34408a",
+    "trim": "#19e3ff",
+    "glove": "#19e3ff",
+    "trousers": "#232a45",
+    "boots": "#0c0e16",
+    "sole": "#eef1f8",
+    "belt": "#eef1f8",
+    "pad": "#eef1f8",
+    "pack": "#2c3470",
+    "pocket": "#2f3862"
   },
   "defaultColor": "default",
   "regions": [
@@ -103,11 +118,37 @@
       ]
     },
     {
+      "name": "sneakers",
+      "color": "sole",
+      "bones": [
+        "foot_*",
+        "ball_*"
+      ]
+    },
+    {
+      "name": "boot-shafts",
+      "color": "boots",
+      "bones": [
+        "calf_*"
+      ],
+      "heightRange": [
+        0.0,
+        0.22
+      ]
+    },
+    {
+      "name": "yoke",
+      "color": "jacketHi",
+      "bones": [
+        "spine_03",
+        "clavicle_*"
+      ]
+    },
+    {
       "name": "jacket",
       "color": "jacket",
       "bones": [
         "spine_*",
-        "clavicle_*",
         "upperarm_*"
       ]
     },
@@ -119,14 +160,6 @@
         "thigh_*",
         "calf_*"
       ]
-    },
-    {
-      "name": "boots",
-      "color": "boots",
-      "bones": [
-        "foot_*",
-        "ball_*"
-      ]
     }
   ],
   "attachments": [
@@ -136,45 +169,205 @@
       "bone": "pelvis",
       "offset": [
         0,
-        0,
-        0.05
+        -0.016,
+        0.075
       ],
       "size": [
-        0.34,
-        0.25,
+        0.37,
+        0.27,
         0.07
       ],
       "color": "belt"
     },
     {
-      "id": "visor",
+      "id": "buckle",
       "shape": "box",
-      "bone": "Head",
+      "bone": "pelvis",
       "offset": [
         0,
-        -0.09,
-        0.1
+        -0.158,
+        0.075
       ],
       "size": [
-        0.19,
-        0.05,
-        0.045
+        0.075,
+        0.03,
+        0.06
       ],
-      "color": "visor"
+      "color": "trim"
     },
     {
-      "id": "chest-stripe",
-      "shape": "box",
-      "bone": "spine_03",
+      "id": "pauldron-r",
+      "shape": "sphere",
+      "bone": "upperarm_r",
+      "offset": [
+        -0.02,
+        0.015,
+        0.04
+      ],
+      "size": [
+        0.14,
+        0.14,
+        0.09
+      ],
+      "color": "trim"
+    },
+    {
+      "id": "pauldron-l",
+      "shape": "sphere",
+      "bone": "upperarm_l",
+      "offset": [
+        0.02,
+        0.015,
+        0.04
+      ],
+      "size": [
+        0.14,
+        0.14,
+        0.09
+      ],
+      "color": "trim"
+    },
+    {
+      "id": "thigh-r",
+      "shape": "cylinder",
+      "bone": "thigh_r",
       "offset": [
         0,
-        -0.12,
-        0
+        -0.004,
+        -0.215
+      ],
+      "size": [
+        0.21,
+        0.24,
+        0.42
+      ],
+      "color": "trousers"
+    },
+    {
+      "id": "thigh-l",
+      "shape": "cylinder",
+      "bone": "thigh_l",
+      "offset": [
+        0,
+        -0.004,
+        -0.215
+      ],
+      "size": [
+        0.21,
+        0.24,
+        0.42
+      ],
+      "color": "trousers"
+    },
+    {
+      "id": "shin-r",
+      "shape": "cylinder",
+      "bone": "calf_r",
+      "offset": [
+        0,
+        0.03,
+        -0.16
+      ],
+      "size": [
+        0.15,
+        0.17,
+        0.3
+      ],
+      "color": "trousers"
+    },
+    {
+      "id": "shin-l",
+      "shape": "cylinder",
+      "bone": "calf_l",
+      "offset": [
+        0,
+        0.03,
+        -0.16
+      ],
+      "size": [
+        0.15,
+        0.17,
+        0.3
+      ],
+      "color": "trousers"
+    },
+    {
+      "id": "pocket-r",
+      "shape": "box",
+      "bone": "thigh_r",
+      "offset": [
+        -0.1,
+        0,
+        -0.17
       ],
       "size": [
         0.04,
-        0.03,
-        0.3
+        0.15,
+        0.14
+      ],
+      "color": "pocket"
+    },
+    {
+      "id": "knee-r",
+      "shape": "box",
+      "bone": "calf_r",
+      "offset": [
+        0,
+        -0.005,
+        0.0
+      ],
+      "size": [
+        0.17,
+        0.2,
+        0.1
+      ],
+      "color": "pad"
+    },
+    {
+      "id": "knee-l",
+      "shape": "box",
+      "bone": "calf_l",
+      "offset": [
+        0,
+        -0.005,
+        0.0
+      ],
+      "size": [
+        0.17,
+        0.2,
+        0.1
+      ],
+      "color": "pad"
+    },
+    {
+      "id": "pack",
+      "shape": "box",
+      "bone": "spine_02",
+      "offset": [
+        0,
+        0.2,
+        0.11
+      ],
+      "size": [
+        0.23,
+        0.13,
+        0.27
+      ],
+      "color": "pack"
+    },
+    {
+      "id": "pack-band",
+      "shape": "box",
+      "bone": "spine_02",
+      "offset": [
+        0,
+        0.2,
+        0.11
+      ],
+      "size": [
+        0.235,
+        0.135,
+        0.05
       ],
       "color": "trim"
     }
@@ -194,8 +387,8 @@
       "segments": [
         {
           "action": "Idle_Loop",
-          "start": 0,
-          "end": 60
+          "start": 0.0,
+          "end": 60.0
         }
       ],
       "proposal": {
@@ -210,8 +403,8 @@
       "segments": [
         {
           "action": "Walk_Loop",
-          "start": 0,
-          "end": 32
+          "start": 0.0,
+          "end": 32.0
         }
       ],
       "proposal": {
@@ -221,12 +414,12 @@
     },
     "run": {
       "status": "exact",
-      "ready": false,
+      "ready": true,
       "loop": true,
       "segments": [
         {
           "action": "Jog_Fwd_Loop",
-          "start": 0,
+          "start": 0.0,
           "end": 22.4
         }
       ],
@@ -237,12 +430,12 @@
     },
     "hit1": {
       "status": "substitute",
-      "ready": false,
+      "ready": true,
       "loop": false,
       "segments": [
         {
           "action": "Punch_Jab",
-          "start": 0,
+          "start": 0.0,
           "end": 20.8
         }
       ],
@@ -253,13 +446,13 @@
     },
     "hit2": {
       "status": "substitute",
-      "ready": false,
+      "ready": true,
       "loop": false,
       "segments": [
         {
           "action": "Punch_Cross",
-          "start": 0,
-          "end": 24
+          "start": 0.0,
+          "end": 24.0
         }
       ],
       "proposal": {
@@ -268,11 +461,21 @@
       }
     },
     "hit3": {
-      "status": "gap",
-      "ready": false,
+      "status": "substitute",
+      "ready": true,
       "loop": false,
-      "segments": [],
-      "handKey": "third strike (kick or hook); UAL2 3/4-hit combo clips are the expected source",
+      "segments": [
+        {
+          "action": "Melee_Hook",
+          "start": 0.0,
+          "end": 11.2
+        },
+        {
+          "action": "Melee_Hook_Rec",
+          "start": 0.0,
+          "end": 14.4
+        }
+      ],
       "proposal": {
         "frames": 7,
         "ms": 60
@@ -280,22 +483,22 @@
     },
     "jump": {
       "status": "exact",
-      "ready": false,
+      "ready": true,
       "loop": false,
       "segments": [
         {
           "action": "Jump_Start",
-          "start": 0,
-          "end": 32
+          "start": 0.0,
+          "end": 32.0
         },
         {
           "action": "Jump_Loop",
-          "start": 0,
-          "end": 60
+          "start": 0.0,
+          "end": 60.0
         },
         {
           "action": "Jump_Land",
-          "start": 0,
+          "start": 0.0,
           "end": 30.4
         }
       ],
@@ -309,7 +512,7 @@
       "ready": false,
       "loop": false,
       "segments": [],
-      "handKey": "leg extension over Jump_Loop",
+      "handKey": "leg extension over the air pose (NinjaJump_Idle_Loop or Jump_Loop); neither library has a kick",
       "proposal": {
         "frames": 5,
         "ms": 80
@@ -327,11 +530,16 @@
       }
     },
     "throw": {
-      "status": "gap",
-      "ready": false,
+      "status": "exact",
+      "ready": true,
       "loop": false,
-      "segments": [],
-      "handKey": "lift and heave",
+      "segments": [
+        {
+          "action": "OverhandThrow",
+          "start": 0.0,
+          "end": 32.0
+        }
+      ],
       "proposal": {
         "frames": 6,
         "ms": 80
@@ -339,13 +547,13 @@
     },
     "hurt": {
       "status": "exact",
-      "ready": false,
+      "ready": true,
       "loop": false,
       "segments": [
         {
           "action": "Hit_Chest",
-          "start": 0,
-          "end": 8
+          "start": 0.0,
+          "end": 8.0
         }
       ],
       "proposal": {
@@ -354,14 +562,14 @@
       }
     },
     "knockdown": {
-      "status": "substitute",
-      "ready": false,
+      "status": "exact",
+      "ready": true,
       "loop": false,
       "segments": [
         {
-          "action": "Death01",
-          "start": 0,
-          "end": 57.6
+          "action": "Hit_Knockback",
+          "start": 0.0,
+          "end": 20.0
         }
       ],
       "proposal": {
@@ -370,14 +578,14 @@
       }
     },
     "getup": {
-      "status": "substitute",
-      "ready": false,
+      "status": "exact",
+      "ready": true,
       "loop": false,
       "segments": [
         {
-          "action": "Death01",
-          "start": 57.6,
-          "end": 0
+          "action": "LayToIdle",
+          "start": 0.0,
+          "end": 36.8
         }
       ],
       "proposal": {
@@ -387,13 +595,13 @@
     },
     "dash": {
       "status": "substitute",
-      "ready": false,
+      "ready": true,
       "loop": true,
       "segments": [
         {
           "action": "Sprint_Loop",
-          "start": 0,
-          "end": 16
+          "start": 0.0,
+          "end": 16.0
         }
       ],
       "proposal": {
@@ -403,22 +611,22 @@
     },
     "special_knockback": {
       "status": "substitute",
-      "ready": false,
+      "ready": true,
       "loop": false,
       "segments": [
         {
           "action": "Spell_Simple_Enter",
-          "start": 0,
+          "start": 0.0,
           "end": 12.8
         },
         {
           "action": "Spell_Simple_Shoot",
-          "start": 0,
-          "end": 12
+          "start": 0.0,
+          "end": 12.0
         },
         {
           "action": "Spell_Simple_Exit",
-          "start": 0,
+          "start": 0.0,
           "end": 10.4
         }
       ],
@@ -429,18 +637,23 @@
     },
     "special_dash": {
       "status": "substitute",
-      "ready": false,
+      "ready": true,
       "loop": false,
       "segments": [
         {
-          "action": "Sprint_Loop",
-          "start": 0,
-          "end": 16
+          "action": "Slide_Start",
+          "start": 0.0,
+          "end": 20.0
         },
         {
-          "action": "Punch_Cross",
-          "start": 8,
-          "end": 24
+          "action": "Slide_Loop",
+          "start": 0.0,
+          "end": 48.0
+        },
+        {
+          "action": "Slide_Exit",
+          "start": 0.0,
+          "end": 12.0
         }
       ],
       "proposal": {

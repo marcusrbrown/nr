@@ -223,13 +223,15 @@ def read_profile(recipe: dict, recipe_path: Path, kits_dir: Path) -> tuple[dict,
         if sha256_file(file) != ref["sha256"]:
             raise InputError(f"{file} differs from its pinned sha256 {ref['sha256']}")
         verified.append({"kit": ref["kit"], "path": ref["path"], "sha256": ref["sha256"]})
-    used = {(m["kit"], m["path"]) for m in [profile["models"]["body"], profile["models"]["animations"], *profile["models"].get("hair", [])]}
+    used = {(m["kit"], m["path"]) for m in [profile["models"]["body"], *profile["models"]["animations"], *profile["models"].get("hair", [])]}
     listed = {(r["kit"], r["path"]) for r in profile["kitFiles"]}
     if not used <= listed:
         raise InputError(f"profile models use kit files that kitFiles does not list: {sorted(used - listed)}")
     for slot in recipe["slots"]:
         if slot["clip"] not in profile["clips"]:
             raise InputError(f"slot {slot['id']}: the profile has no clip {slot['clip']!r}")
+        if not profile["clips"][slot["clip"]].get("ready"):
+            raise InputError(f"slot {slot['id']}: clip {slot['clip']!r} is not ready (a gap awaiting a hand-keyed action)")
     return profile, digest, verified
 
 
@@ -446,8 +448,9 @@ class KitFigure:
         def kit_path(ref: dict) -> Path:
             return kits_dir / ref["kit"] / ref["path"]
 
-        for o in import_gltf(kit_path(models["animations"])):  # only the actions are wanted
-            bpy.data.objects.remove(o, do_unlink=True)
+        for ref in models["animations"]:  # only the actions are wanted; an action name is unique across the files
+            for o in import_gltf(kit_path(ref)):
+                bpy.data.objects.remove(o, do_unlink=True)
         objs = import_gltf(kit_path(models["body"]))
         self.arm = next((o for o in objs if o.type == "ARMATURE"), None)
         if self.arm is None:
@@ -489,19 +492,24 @@ class KitFigure:
     def colour(self, key: str):
         return hex_to_linear(self.palette.get(key, key))
 
-    def region_of_bone(self, bone: str, regions: list[dict]) -> int:
+    def region_of(self, bone: str, height: float, regions: list[dict]) -> int:
+        """First region whose bone patterns match the dominant bone and whose heightRange (fractions of the body's rest
+        height, 0 at the soles, 1 at the crown) holds the vertex."""
         for index, region in enumerate(regions):
-            if any(fnmatch.fnmatchcase(bone, pat) for pat in region["bones"]):
+            lo, hi = region.get("heightRange", (0.0, 1.0))
+            if lo <= height <= hi and any(fnmatch.fnmatchcase(bone, pat) for pat in region["bones"]):
                 return index
         return len(regions)
 
     def paint(self, obj, regions: list[dict]) -> None:
         """One emission material per region; each face takes the region most of its vertices' dominant bones fall in."""
         group_names = {g.index: g.name for g in obj.vertex_groups}
+        zs = [(obj.matrix_world @ v.co).z for v in obj.data.vertices]
+        z0, z1 = min(zs), max(zs)
         vertex_region = []
-        for v in obj.data.vertices:
+        for v, z in zip(obj.data.vertices, zs):
             bone = group_names[max(v.groups, key=lambda g: g.weight).group] if v.groups else "root"
-            vertex_region.append(self.region_of_bone(bone, regions))
+            vertex_region.append(self.region_of(bone, (z - z0) / (z1 - z0), regions))
         obj.data.materials.clear()
         for region in regions:
             obj.data.materials.append(emission_material(f"albedo_{region['name']}", self.colour(region["color"])))
