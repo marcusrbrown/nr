@@ -52,7 +52,9 @@ static bool fail(nr_json *root, nr_atlas *a, const char *why) {
   cw_error("anim: %s", why);
   nr_json_free(root);
   free(a->geom);
+  free(a->geom_flip);
   a->geom = NULL;
+  a->geom_flip = NULL;
   return false;
 }
 
@@ -111,6 +113,7 @@ bool nr_atlas_load(nr_atlas *a, const char *name, float pixels_per_unit, bool fl
   a->material->alpha_test = 0.5f;
 
   a->geom = calloc((size_t)a->frame_count, sizeof *a->geom);
+  a->geom_flip = calloc((size_t)a->frame_count, sizeof *a->geom_flip);
   for (int i = 0; i < a->frame_count; i++) {
     const nr_json *f = frames->kid[i];
     const nr_json *r = nr_json_get(f, "rect");
@@ -127,10 +130,19 @@ bool nr_atlas_load(nr_atlas *a, const char *name, float pixels_per_unit, bool fl
     uv[4] = u0; uv[5] = v1;
     uv[6] = u1; uv[7] = v1;
     a->geom[i] = g;
+    t3_geometry *m = t3_plane_geometry_new(a->width, a->height, 1, 1);
+    float *muv = t3_attribute_f32(m->attributes[T3_ATTR_UV]);
+    muv[0] = u1; muv[1] = v0;
+    muv[2] = u0; muv[3] = v0;
+    muv[4] = u1; muv[5] = v1;
+    muv[6] = u0; muv[7] = v1;
+    a->geom_flip[i] = m;
   }
   nr_json_free(root);
   return true;
 }
+
+t3_geometry *nr_atlas_geometry(const nr_atlas *a, int frame, bool flip) { return flip ? a->geom_flip[frame] : a->geom[frame]; }
 
 int nr_clip_index(const nr_atlas *a, const char *name) {
   for (int i = 0; i < a->clip_count; i++)

@@ -2,7 +2,11 @@
 // look-captures.mjs wrote (nr_lit_h / nr_lit_v and their flat-normal controls); hosts: native, cart (both WebGPU).
 //
 //   node games/nr/tests/lit-side-check.mjs --dir out/unit2/caps --hosts native,cart \
-//       [--min-ratio 2] [--report <file.json>]
+//       [--facing left] [--min-ratio 2] [--report <file.json>]
+//
+// --facing left measures the nr_lit_*_left builds, where the hero is drawn on the mirrored plane (anim.h): the atlas
+// frame is mirrored about the hero's pivot and its normals' x is negated, so a texel whose normal pointed to the
+// sprite's right is a left-facing one in the world, and the same predicates must hold.
 //
 // The hero is held on idle frame 0 at x = 0 under one light (intensity 20) on a sweep of 240 ticks: along x (h) or
 // along y (v). Its opaque texels are classed by the normal sheet: left-facing (normal x < -0.3), right-facing (> 0.3),
@@ -28,6 +32,8 @@ const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 && argv[
 const DIR = resolve(ROOT, opt('dir', 'out/unit2/caps'));
 const HOSTS = opt('hosts', 'native,cart').split(',');
 const MIN_RATIO = +opt('min-ratio', 2);
+const LEFT = opt('facing', 'right') === 'left';
+const SUFFIX = LEFT ? '_left' : '';
 const FRAMES = [30, 60, 180, 210];
 const HERO = { x: 0, z: 0 };
 const HERO_CENTRE_Y = 1.0; // the standing hero is 2 units tall
@@ -35,14 +41,14 @@ const PUSH_MIN = 0.5, BODY_MIN = 15;
 
 const atlas = loadAtlas();
 const cam = camera(0);
-const texels = frameTexels(atlas, 0);
+const texels = frameTexels(atlas, 0).map((t) => (LEFT ? { ...t, nx: -t.nx } : t));
 const classes = {
   left: texels.filter((t) => t.nx < -0.3), right: texels.filter((t) => t.nx > 0.3),
   up: texels.filter((t) => t.ny > 0.3), down: texels.filter((t) => t.ny < -0.3),
 };
 const screen = new Map();
 for (const t of texels) {
-  const [x, y] = project(cam, texelWorld(atlas, cam, HERO, t.u, t.v));
+  const [x, y] = project(cam, texelWorld(atlas, cam, HERO, t.u, t.v, LEFT));
   screen.set(t, [Math.round(x), Math.round(y)]);
 }
 
@@ -72,10 +78,10 @@ for (const host of HOSTS) {
   report.hosts[host] = {};
   console.log(`\n${host}`);
   for (const axis of ['h', 'v']) {
-    const app = `nr_lit_${axis}`;
-    if (!existsSync(`${capBase(DIR, host, `lit_${axis}`, FRAMES[0])}.png`)) { fail(`${host}: no ${app} captures in ${DIR}`); continue; }
-    const rows = FRAMES.map((f) => measure(host, `lit_${axis}`, f));
-    const flat = FRAMES.map((f) => measure(host, `lit_${axis}_flat`, f));
+    const app = `nr_lit_${axis}${SUFFIX}`;
+    if (!existsSync(`${capBase(DIR, host, `lit_${axis}${SUFFIX}`, FRAMES[0])}.png`)) { fail(`${host}: no ${app} captures in ${DIR}`); continue; }
+    const rows = FRAMES.map((f) => measure(host, `lit_${axis}${SUFFIX}`, f));
+    const flat = FRAMES.map((f) => measure(host, `lit_${axis}${SUFFIX}_flat`, f));
     const swing = (r) => [r[1].D - r[2].D, r[0].D - r[3].D];
     const S = swing(rows), Sf = swing(flat);
     report.hosts[host][axis] = { rows, flat, swing: S, flatSwing: Sf };

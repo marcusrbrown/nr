@@ -50,19 +50,20 @@ const ray = (sx, sy) => {
 };
 
 const heroes = state['nr.hero_pos'].length / 3;
-const actor = (i) => ({ id: i, x: state['nr.hero_pos'][i * 3], lane: state['nr.hero_pos'][i * 3 + 1], z: state['nr.hero_pos'][i * 3 + 2], frame: state['nr.hero_frame'][i] });
+const actor = (i) => ({ id: i, x: state['nr.hero_pos'][i * 3], lane: state['nr.hero_pos'][i * 3 + 1], z: state['nr.hero_pos'][i * 3 + 2], frame: state['nr.hero_frame'][i], face: state['nr.actor_facing'][i] });
 
-/** The atlas texel under the ray at scene pixel (sx, sy) for an actor's plane (facing the camera, tilted by the pitch), or null. */
+/** The atlas texel under the ray at scene pixel (sx, sy) for an actor's plane (facing the camera, tilted by the pitch), or null.
+ * An actor facing left has its plane mirrored about its centre (the pivot's offset with it). */
 function heroTexel(act, sx, sy) {
   const rightOff = (cell.width / 2 - piv.x) / CAM.ppu, upOff = (piv.y - cell.height / 2) / CAM.ppu;
-  const c = [act.x + rightOff, upOff * cam.cp, act.z - upOff * cam.sp];
+  const c = [act.x + rightOff * act.face, upOff * cam.cp, act.z - upOff * cam.sp];
   const N = [0, cam.sp, cam.cp], X = [1, 0, 0], Y = [0, cam.cp, -cam.sp];
   const d = ray(sx, sy), den = dot(N, d);
   if (Math.abs(den) < 1e-9) return null;
   const t = dot(N, [c[0] - cam.pos[0], c[1] - cam.pos[1], c[2] - cam.pos[2]]) / den;
   if (t <= 0) return null;
   const p = [cam.pos[0] + d[0] * t - c[0], cam.pos[1] + d[1] * t - c[1], cam.pos[2] + d[2] * t - c[2]];
-  const u = Math.floor(dot(p, X) * CAM.ppu + cell.width / 2), v = Math.floor(cell.height / 2 - dot(p, Y) * CAM.ppu);
+  const u = Math.floor(act.face * dot(p, X) * CAM.ppu + cell.width / 2), v = Math.floor(cell.height / 2 - dot(p, Y) * CAM.ppu);
   return u >= 0 && v >= 0 && u < cell.width && v < cell.height ? { u, v } : null;
 }
 const frameRect = (i) => atlas.manifest.frames[i].rect;

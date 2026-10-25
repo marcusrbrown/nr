@@ -5,11 +5,12 @@
 //
 // For each row in the manifest (and for the full manifest as the baseline) it writes <out>/<variant>/nr.txt, generates
 // the tables beside it with the engine's programs.mjs (--table, against the native build tree's capture cache), builds
-// the `nr` target in <out>/<variant>/build with -DNR_PROGRAMS=<that manifest>, and runs it on the engine's fixed clock.
+// the `nr` target in <out>/<variant>/build with -DNR_PROGRAMS=<that manifest>, and runs it for 120 frames of the combat script on the engine's fixed clock.
 //   baseline         cw.three.missing == 0
 //   without <row>    cw.three.missing == 1 and the one state is <row>
-// The instanced row (instbig) is reached only when actors that share a frame batch into one instanced draw; the
-// non-instanced row by an actor drawn alone on its frame; the plain `standard+l0400` row by the stage's ground and wall.
+// The instanced row (instbig) is reached only when actors that share a frame and a facing batch into one instanced draw;
+// the non-instanced row by an actor drawn alone on its frame (the combat script's hit and hurt frames, which no other
+// actor shares; an idle street batches every actor); the plain `standard+l0400` row by the street's surfaces.
 import { spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -43,7 +44,7 @@ for (const v of variants) {
   sh('cmake', ['-S', ROOT, '-B', build, '-G', 'Ninja', '-DCMAKE_BUILD_TYPE=Release', `-Dcartwheel_DIR=${SDK}/macos-arm64/lib/cmake/cartwheel`, `-DNR_PROGRAMS=${join(dir, 'nr.txt')}`]);
   sh('ninja', ['-C', build, 'nr']);
   const state = join(dir, 'state.json');
-  sh('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', 'native', '--app', 'nr', '--exe', join(build, 'games/nr/nr'), '--frames', '60', '--state', state, '--input', 'games/nr/tests/input-idle.json']);
+  sh('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', 'native', '--app', 'nr', '--exe', join(build, 'games/nr/nr'), '--frames', '120', '--state', state, '--input', 'games/nr/tests/input-combat.json']);
   const st = JSON.parse(readFileSync(state, 'utf8'));
   const missing = Buffer.from(st['cw.three.missing_states'], 'hex').toString().replace(/\0+$/, '').split('\n').filter(Boolean);
   const ok = v.removed === null ? st['cw.three.missing'] === 0 : st['cw.three.missing'] === 1 && missing.length === 1 && missing[0] === v.removed;

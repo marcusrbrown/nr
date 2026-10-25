@@ -22,9 +22,10 @@ const SESSION = 'nr-unit2';
 const OUT = resolve(ROOT, opt('out', 'out/unit2/romdev'));
 const LIVE_SECONDS = +opt('live-seconds', 60);
 const WHITELIST = { // field -> number of values
-  'nr.hero_pos': 12, 'nr.hero_clip': 4, 'nr.hero_step': 4, 'nr.hero_frame': 4, 'nr.light_pos': 12, 'nr.light_intensity': 4,
-  'nr.cam_x': 1, 'nr.heroes': 1, 'nr.lights': 1, 'nr.ticks': 1, 'nr.checksum': 1, 'nr.lit_test': 1, 'nr.flat_normals': 1, 'nr.px': 8,
-  'cw.three.missing': 1,
+  'nr.hero_pos': 27, 'nr.hero_clip': 9, 'nr.hero_step': 9, 'nr.hero_frame': 9, 'nr.light_pos': 12, 'nr.light_intensity': 4,
+  'nr.actor_y': 9, 'nr.actor_vy': 9, 'nr.actor_state': 9, 'nr.actor_state_tick': 9, 'nr.actor_hp': 9, 'nr.actor_facing': 9, 'nr.rng': 4, 'nr.events': 2560,
+  'nr.cam_x': 1, 'nr.heroes': 1, 'nr.lights': 1, 'nr.ticks': 1, 'nr.checksum': 1, 'nr.sim_checksum': 1, 'nr.input_count': 1, 'nr.wave': 1, 'nr.lives': 1,
+  'nr.lit_test': 1, 'nr.flat_normals': 1, 'nr.px': 8, 'cw.three.missing': 1,
 };
 const CART = resolve(ROOT, 'build/cart-wgpu/carts/nr.wasc');
 mkdirSync(OUT, { recursive: true });

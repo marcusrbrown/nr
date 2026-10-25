@@ -41,12 +41,13 @@ export function loadAtlas(name = 'hero') {
   return { manifest, colour: readImage(join(dir, `${name}.png`)), normal: readImage(join(dir, `${name}-n.png`)) };
 }
 
-/** World position of texel (u, v) of a hero's plane for the atlas cell geometry; the hero stands at (x, 0, z). */
-export function texelWorld(atlas, cam, hero, u, v) {
-  const { cell } = atlas.manifest, pv = atlas.manifest.frames[0].pivot;
+/** World position of texel (u, v) of a hero's plane for the atlas cell geometry; the hero stands at (x, 0, z). `flip` is a
+ * hero facing left: the plane is mirrored about its centre, which the pivot offset mirrors with. */
+export function texelWorld(atlas, cam, hero, u, v, flip = false) {
+  const { cell } = atlas.manifest, pv = atlas.manifest.frames[0].pivot, s = flip ? -1 : 1;
   const rightOff = (cell.width / 2 - pv.x) / CAM.ppu, upOff = (pv.y - cell.height / 2) / CAM.ppu;
-  const centre = [hero.x + rightOff, upOff * cam.cp, hero.z - upOff * cam.sp];
-  const lx = (u + 0.5 - cell.width / 2) / CAM.ppu, ly = (cell.height / 2 - (v + 0.5)) / CAM.ppu;
+  const centre = [hero.x + rightOff * s, upOff * cam.cp, hero.z - upOff * cam.sp];
+  const lx = (u + 0.5 - cell.width / 2) / CAM.ppu * s, ly = (cell.height / 2 - (v + 0.5)) / CAM.ppu;
   return [centre[0] + lx, centre[1] + ly * cam.cp, centre[2] - ly * cam.sp];
 }
 

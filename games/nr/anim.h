@@ -30,6 +30,7 @@ typedef struct {
   int frame_count, clip_count;
   nr_clip clips[NR_MAX_CLIPS];
   t3_geometry **geom;       /* one plane per atlas frame, UVs on that frame's rect */
+  t3_geometry **geom_flip;  /* the same planes with the frame's u range reversed: the frame facing left */
   t3_material *material;
 } nr_atlas;
 
@@ -38,6 +39,12 @@ typedef struct {
  * Returns false and reports through cw_error when a file is missing or the manifest is not one this loader reads
  * (one page, one atlas page's frames). */
 bool nr_atlas_load(nr_atlas *a, const char *name, float pixels_per_unit, bool flat_normals);
+
+/* The plane of atlas frame `frame`, mirrored when `flip` is set. A mirrored plane keeps the winding and the material of
+ * the plain one (three.c does not turn the front face of a mirrored world matrix, so a negative x scale would cull the
+ * plane); its u axis runs against world x, so the tangent frame that the normal map is read in flips with the picture
+ * and a normal that pointed to the sprite's right points to the world's left. */
+t3_geometry *nr_atlas_geometry(const nr_atlas *a, int frame, bool flip);
 
 /* Index of a clip by name, or -1. */
 int nr_clip_index(const nr_atlas *a, const char *name);
