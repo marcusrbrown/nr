@@ -1,7 +1,7 @@
 ---
 title: "feat: Combat slice — lit sprite brawler in one three.c arena"
 type: feat
-status: active
+status: completed
 date: 2026-10-24
 origin: docs/brainstorms/2026-10-24-combat-slice-requirements.md
 ---
@@ -402,7 +402,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** Full two-player scripted run completes to the clear screen natively; HUD/screens visible in captures; audio `sfx_tick` values present.
 
-- [ ] **Unit 8: Gates, perf, romdev session, evidence**
+- [x] **Unit 8: Gates, perf, romdev session, evidence** (f466599..34671e6, evidence ffe815e; brawler gate met, the look gate's checklist is the owner's and is open: `docs/evidence/combat-slice/look/CHECKLIST.md`)
 
 **Goal:** Close both gates: look captures on native + cart judged by the owner; cross-host brawler gate with recalibrated image tolerance; perf at wave-4 counts; romdev session and livestream; evidence README.
 
