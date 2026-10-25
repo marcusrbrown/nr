@@ -113,7 +113,9 @@ for (let x = -14, i = 0; x < 34; i++) {
 // backdrop: the sky, a haze that glows toward the horizon, and the skyline: dark silhouettes of distant towers at
 // z = -15.4 (frame top y 1.4 there) with a few lit windows and aerials
 add({ id: 'sky', layer: 'backdrop', shape: 'plane', x: 10, y: 12, z: -16, w: 90, h: 30, color: '#151a2e', emissive: hex(0x1a2246), emissive_intensity: 0.5 });
-[[0.1, 0.8, 0xc23fa0, 1.0], [0.8, 0.6, 0x8a35b0, 0.95], [1.3, 0.8, 0x4a3aa0, 0.9]].forEach(([y, h, c, k], i) => add({ id: `haze-${i}`, layer: 'backdrop', shape: 'plane', x: 10, y, z: -15.95, w: 90, h, color: '#151a2e', emissive: hex(c), emissive_intensity: k }));
+// haze-1 and haze-2 overlap in y 0.9 to 1.1, so haze-2 stands 0.02 behind the others: planes at one depth are ordered by
+// the host's depth-buffer and draw-order tie-break, which differs between hosts
+[[0.1, 0.8, 0xc23fa0, 1.0, -15.95], [0.8, 0.6, 0x8a35b0, 0.95, -15.95], [1.3, 0.8, 0x4a3aa0, 0.9, -15.97]].forEach(([y, h, c, k, z], i) => add({ id: `haze-${i}`, layer: 'backdrop', shape: 'plane', x: 10, y, z, w: 90, h, color: '#151a2e', emissive: hex(c), emissive_intensity: k }));
 const SKY_Z = -15.4;
 for (let x = -18, i = 0; x < 38; i++) {
   const w = r3(1.4 + Math.floor(rand() * 22) / 10), h = r3(0.6 + Math.floor(rand() * 75) / 100);
