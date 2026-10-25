@@ -52,8 +52,9 @@
  *     frame (nr.perf_ms); the measurement build, GL only, outside the simulation.
  *   NR_PERF_CONTROL: spins NR_PERF_CONTROL_MS per actor per frame in the render callback; the control build that must exceed
  *     the frame budget.
- *   NR_DROP_LIGHT: the fourth point light is not added to the scene, so every lit draw is a three-light (l0300) program
- *     state; the control build of the missing-state predicate.
+ *   NR_EXTRA_LIGHT: a fifth point light (intensity 0) is added to the scene, so every lit draw is an l0500 program state the
+ *     table does not have (three.c draws a frame with fewer lights than a row's with that row, never one with more); the
+ *     control build of the missing-state predicate.
  *
  * The state hosts compare (tick, phase, every actor's position, jump, state and hp, the rng, lives, wave, camera, input
  * count, the special, the sounds asked for, checksum) and the program states three.c skipped are published as debug
@@ -119,8 +120,8 @@
 #ifndef NR_PERF_CONTROL_MS
 #define NR_PERF_CONTROL_MS 0.5
 #endif
-#ifndef NR_DROP_LIGHT
-#define NR_DROP_LIGHT 0
+#ifndef NR_EXTRA_LIGHT
+#define NR_EXTRA_LIGHT 0
 #endif
 #define NR_PERF_RING 1024
 #define NR_ARENA (NR_LIT_TEST == 0 && NR_STAGE_LEGACY == 0)
@@ -873,8 +874,8 @@ static void build_scene(int w, int h) {
 #if NR_ARENA
   arena_build(&S.ar, S.scene, S.light);
   S.solids = S.ar.solid_count;
-#if NR_DROP_LIGHT
-  t3_object_remove((t3_object *)S.scene, S.light[LIGHTS - 1]);
+#if NR_EXTRA_LIGHT
+  t3_object_add((t3_object *)S.scene, t3_point_light_new(0xffffff, 0.0f, LIGHT_DISTANCE, LIGHT_DECAY));
 #endif
 #else
   /* the street: drawn first and never in the depth buffer, so a hero's feet below its pivot are not cut by it */

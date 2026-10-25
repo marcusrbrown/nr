@@ -24,7 +24,7 @@ option(NR_REVERSE_DEPTH "Invert the actor depth mapping (control build)" OFF)
 option(NR_PERF "Read a pixel back every frame and publish per-frame wall times (measurement build, GL)" OFF)
 option(NR_PERF_CONTROL "Spin NR_PERF_CONTROL_MS per actor per frame (budget control build)" OFF)
 set(NR_PERF_CONTROL_MS 0.5 CACHE STRING "Milliseconds the control build spins per actor per frame")
-option(NR_DROP_LIGHT "Leave the fourth point light out of the scene (missing-state control build)" OFF)
+option(NR_EXTRA_LIGHT "Add a fifth point light to the scene (missing-state control build)" OFF)
 
 set(NR_APPS nr nr_waves nr_dummies nr_bot nr_bot1 nr_botfull nr_botsolo nr_stress nr_arena_bare nr_stage nr_lit_h nr_lit_v nr_lit_h_flat nr_lit_v_flat nr_lit_h_left nr_lit_v_left nr_lit_h_left_flat nr_lit_v_left_flat nr_solo_0 nr_solo_1 nr_solo_2 nr_bare)
 set(previous "")
@@ -89,7 +89,7 @@ foreach(app ${NR_APPS})
   target_compile_definitions(${app} PRIVATE NR_LIT_TEST=${lit} NR_FLAT_NORMALS=${flat} NR_NO_HEROES=${bare}
     NR_STAGE_LEGACY=${legacy} NR_LIT_FACE=${face} NR_DUMMIES=${dummies} NR_BOT_MASK=${bot_mask} NR_BOT_FOCUS=${bot_focus} NR_NO_TITLE=${no_title} NR_STRESS=${stress}
     NR_REVERSE_DEPTH=$<BOOL:${NR_REVERSE_DEPTH}> NR_PERF=$<BOOL:${NR_PERF}> NR_PERF_CONTROL=$<BOOL:${NR_PERF_CONTROL}>
-    NR_PERF_CONTROL_MS=${NR_PERF_CONTROL_MS} NR_DROP_LIGHT=$<BOOL:${NR_DROP_LIGHT}>)
+    NR_PERF_CONTROL_MS=${NR_PERF_CONTROL_MS} NR_EXTRA_LIGHT=$<BOOL:${NR_EXTRA_LIGHT}>)
   target_compile_options(${app} PRIVATE -ffp-contract=off -Wall -Wextra)
   # the apps run cwpack on the same manifest and share its import cache: one at a time
   if(previous)
