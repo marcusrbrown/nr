@@ -139,7 +139,7 @@ artifacts). Measured on one machine: Apple M1 Pro, macOS 15.7.9, romdev 0.150.2.
 - Depth: two planes of the arena at one depth with overlapping extents are ordered by the host's tie-break, which differed between
   romdev GL and native (8,037 pixels at the top of the frame); planes that overlap stand at distinct depths (`gen-arena.mjs`,
   the second haze band 0.02 behind the first).
-- Atlas: 14 hero clips (96 frames), the grunt (27) and the heavy (27), 36.12 MiB decoded against the 64 MiB budget. Measured in
+- Atlas: 14 hero clips (96 frames), the grunt (27) and the heavy (27), 36.12 MiB decoded against the 64 MiB budget; with player 2's colour sheet (`hero-p2.png`, 9.38 MiB, Round 2) 45.49 MiB. Measured in cart runs at the end of the full game: 52.6 MiB (GL) and 53.1 MiB (WebGPU) of the 128 MiB wasm touched, under the 64 MiB the atlases alone are allowed. Measured in
   cart runs, everything the game touches in the 128 MiB wasm is 46.0 MiB (GL) to 46.5 MiB (WebGPU) at the end of the full game,
   so the budget holds with the whole heap counted. `jumpkick` and `grab` remain gaps for the owner's hand-keyed clips.
 - Image tolerance across hosts: 0.0005 of the pixels differing by more than 16 levels, the floor, calibrated on the lit scene by
@@ -155,6 +155,43 @@ artifacts). Measured on one machine: Apple M1 Pro, macOS 15.7.9, romdev 0.150.2.
 The independent review of the look set (`docs/evidence/combat-slice/look/REVIEW-oracle.md`) found six things to tune. Each is a
 presentation change except the camera's allowance, which is in the simulation's leash; the decisions follow, with the captures
 that show them in `docs/evidence/combat-slice/README.md` ("Round 2").
+
+### Combat captures (finding 1)
+
+The combat captures are taken on `nr_look` (`NR_LOOK` in `main.c`): the street block with real grunts and a heavy that stand still
+(`sim.passive`: they react to hits and never act, are not held in the frame, and the flag is outside the checksum), three stations
+along the street played by `input-look.json`. A combo state's hit lands on its tick 4, when the UAL jab, cross and hook clips still draw
+the wind-up, so the capture takes tick 8 of the state: clip frame 2, the extension (0.86 units from the pivot for hit 2, 1.08 for hit 3),
+inside the active ticks 4 to 12 with the grunt already reacting. The radius special tests on ticks 12 to 15 and tick 14 draws frame 3
+(0.98 of the clip's widest, 1.02); the dash special's frame 2 is its widest (1.19). `look-set.mjs` asserts these from the native run's
+state before it keeps a picture. The wave captures moved to the ticks that still show their state under the Round 2 leash.
+
+### Heavy palette (finding 2)
+
+Under the darkest neon the heavy's plates, helmet and boots (luminance 8 to 22 against a street ring of 22 to 26) sat on the street.
+`tools/render/profiles/heavy.json` palette values were raised, ambient untouched: `plate` #1d2029 to #7f89ac, `plateHi` #3b4052 to
+#b0b8d4, `helm` #1d2029 to #8d96b6, `boots` #0e0f13 to #565c74, `sole` #3a3d48 to #a9b0c8, `suit` and `suitHi`, `pack`, `hotDim`, and the
+orange trim's coverage raised (chest core, pauldron trims, bracer bands: 0.03 to 0.05, 0.10 to 0.14, 0.12 to 0.16). Re-pinned
+(`tools/render/pin-profile.mjs`), re-rendered, installed, `PROVENANCE.md` updated. Same frame counts and cell: 27 frames of 224x224 on
+2016x672. `games/nr/tests/heavy-contrast.mjs` reads the silhouette's bands against the street ring in the same capture
+(`docs/evidence/combat-slice/round2/heavy-contrast.txt`): in `heavy-windup.png` the street ring is 70.7 and the bands boots 76.8, legs
+105.0, torso 150.4, head 148.7 (before: ring 26.4, boots 8.4, legs 21.6, torso 21.0, head 18.4); in `heavy-staggered.png` ring 37.5, boots 44.8.
+
+### Street depth (finding 5)
+
+Each shop front gains a dark plinth, a light cornice that projects 0.26, a pilaster at each end that projects 0.25 (its side face turns
+to the camera on both sides of the screen), and a framed, muntined window with a sill; the pillar gains a plinth, a capital and two panel
+lines. 76 solids (207 to 283 in `layout.json`); no new random draw, so the 207 existing solids are byte-identical. The program table is
+unchanged (`programs-survey`: no new state; `cw.three.missing` 0 on every host). `games/nr/tests/depth-check.mjs` generalises the haze
+check of Unit 8 (63cd18b): it builds every visible face of every box and plane and fails when two same-facing, overlapping faces lie in one
+plane. It found ties the fix had not covered (skyline windows of one tower, `skyline-12` and `skyline-ref`), now at their own depths; its
+control plants the haze bands at one depth again and must find them. Nearest overlapping pair that does not tie: 0.01 units.
+
+### Title prompt (finding 6)
+
+"PRESS START AGAIN TO FIGHT" is amber at full strength on a dark panel with an amber edge; the edge is what blinks. Contrast of the text
+against its backing, measured from the capture (`games/nr/tests/title-contrast-check.mjs`): 2.33:1 before, 8.31:1 at the dim phase of the
+edge and 8.91:1 at the full phase. Glyph bakes after frame 0: 0 on every screen (`ui-check`).
 
 ### Per-player accent (finding 3)
 
@@ -178,8 +215,7 @@ Cost: one more decoded colour sheet, 9.38 MiB (the normal sheet is shared), 45.4
 ### Camera clamp allowance (finding 4)
 
 The leash holds a player inside the frame less an allowance (`CAMERA_ALLOWANCE` in `main.c`, `nr_view.allowance`). It was a fixed 0.45
-units, which a hero's reach exceeds in most attacks (a hero standing at the edge with the dash special out lost its fist and its
-body past the frame). It is now sized from the atlases: the widest a frame of any clip reaches from its pivot along x, both
+units, which a hero's attack reach exceeds (the dash special's frame reaches 1.19). It is now sized from the atlases: the widest a frame of any clip reaches from its pivot along x, both
 facings (a plane facing left is the frame mirrored about the pivot, so the extents swap and the maximum is the same). Measured
 by `games/nr/tests/reach-check.mjs` (`docs/evidence/combat-slice/round2/reach-check.txt`):
 

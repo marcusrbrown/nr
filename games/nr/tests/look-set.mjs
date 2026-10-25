@@ -12,8 +12,9 @@
 //   mid-walk           the walking hero of nr_stage at tick 180, and both players walking on the belt (scroll, tick 352)
 //   scroll-*           the full belt scroll on input-scroll.json: ticks 61, 232, 352, 426, 640
 //   pillar, pillar-bare  the actor behind and the actor in front of the pillar, with and without the actors drawn (tick 243)
-//   grunt-*, heavy-*   the four waves played on input-waves.json: a grunt in the air (450), the heavy winding up (990), the wave 4
-//                      crowd (1600), the heavy staggered (2050)
+//   grunt-*, heavy-*   the four waves played on input-waves.json: a grunt in the air (424, the thrown grunt's tick 8), the heavy
+//                      winding up (935, tick 8 of its attack), the wave 4 crowd (1560: grunts, the heavy and both players), the heavy
+//                      staggered (1910, tick 5 of the stagger)
 //   combat-*           the moveset against real grunts and a heavy that stand still (nr_look, input-look.json): hit2 and hit3 of one combo
 //                      on a grunt backed against the pillar (ticks 264 and 280, tick 8 of each state), the radius special (124, tick 14)
 //                      and the dash special (49, tick 9). The hit lands on tick 4 of a combo state, when the clip is still drawing the
@@ -70,10 +71,10 @@ const CAPTURES = [
   ['scroll-f640', 'nr_dummies', `${T}input-scroll.json`, 640, 'belt scroll: the end of the street'],
   ['pillar', 'nr_dummies', `${T}input-pillar.json`, 243, 'one player behind the pillar, a stand-in in front of it'],
   ['pillar-bare', 'nr_arena_bare', `${T}input-pillar.json`, 243, 'the same street and lights, no actors (the control for the occlusion)'],
-  ['grunt-airborne', 'nr_waves', `${T}input-waves.json`, 450, 'wave 2: a grunt in the air'],
-  ['heavy-windup', 'nr_waves', `${T}input-waves.json`, 990, 'wave 3: the heavy winding up'],
-  ['wave4-crowd', 'nr_waves', `${T}input-waves.json`, 1600, 'wave 4: the crowd, grunts and the heavy with both players'],
-  ['heavy-staggered', 'nr_waves', `${T}input-waves.json`, 2050, 'wave 4: the heavy staggered'],
+  ['grunt-airborne', 'nr_waves', `${T}input-waves.json`, 424, 'wave 2: a grunt in the air'],
+  ['heavy-windup', 'nr_waves', `${T}input-waves.json`, 935, 'wave 3: the heavy winding up'],
+  ['wave4-crowd', 'nr_waves', `${T}input-waves.json`, 1560, 'wave 4: the crowd, grunts and the heavy with both players'],
+  ['heavy-staggered', 'nr_waves', `${T}input-waves.json`, 1910, 'wave 4: the heavy staggered'],
   ['combat-hit2', 'nr_look', LOOK, 264, 'the combo: hit 2 on a real grunt, tick 8 of the state (frame 2, the extension)', combat('hit2', 4, 8, 2, [[8, ST.HURT]])],
   ['combat-hit3', 'nr_look', LOOK, 280, 'the combo: hit 3 on the same grunt, backed against the pillar, tick 8 of the state', combat('hit3', 5, 8, 2, [[8, ST.KNOCKDOWN]])],
   ['combat-radius-special', 'nr_look', LOOK, 124, 'the radius special among real grunts and the heavy, tick 14 of the state (frame 3)', combat('special_knockback', 14, 14, 3, [[4, ST.STAGGER], [5, ST.HURT], [6, ST.HURT], [7, ST.HURT]])],

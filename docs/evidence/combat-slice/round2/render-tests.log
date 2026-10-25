@@ -1,0 +1,30 @@
+✔ the hero profile and recipe validate against their schemas (3.323417ms)
+✔ every kit file the profile names is a CC0 kit file kits.json pins, and the recipe pins this profile (0.628ms)
+✔ the recipe renders every ready clip once and no gap, with the profile's loop flag and at least 4 frames (0.334041ms)
+✔ the recipe renders only ready clips, and every clip of the map names real actions with the audit status (1.346833ms)
+✔ hero atlas: identical hashes on two runs, 128 px tall, pivot on the ground, centred, green-up normals (40213.7395ms)
+✔ a kit file that differs from its pinned sha256 exits 12 and writes nothing (728.736834ms)
+✔ an unstaged kit exits 12 naming fetch-kits.sh (481.318584ms)
+✔ a recipe that pins another profile hash exits 12 naming both (513.64375ms)
+✔ a slot naming a clip the profile lacks exits 12 (644.837583ms)
+✔ a palette override naming a colour the profile lacks exits 12, and the schema refuses a malformed one (790.433959ms)
+✔ every ready clip of the profile renders (its actions bind and pose the figure), the gaps are refused (9690.673875ms)
+✔ a hero set wider than one page continues on the next page and the manifest records each frame's page (2708.140333ms)
+✔ a normal sheet rect that differs from its colour rect, or a pivot outside its rect, fails naming the frame (460.737667ms)
+✔ the allowlist is CC0-1.0 only (2.088666ms)
+✔ a verified kit is staged (3.298292ms)
+✔ a licence off the allowlist is refused and nothing is staged (1.45875ms)
+✔ a licence file that does not state CC0 is refused (1.717125ms)
+✔ a tampered file (sha256 differs from the pin) is refused and nothing is staged (2.360958ms)
+✔ an unpinned file is refused without --pin and pinned with it (3.085625ms)
+✔ a missing file names the download page (1.708709ms)
+✔ the committed manifest names a manual-download page for every kit (0.285459ms)
+✔ an unknown --kit id is an error that lists the valid ids, and --pin writes nothing (75.930292ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56307.517291

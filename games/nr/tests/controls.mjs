@@ -25,7 +25,7 @@
 // "REAL" controls are a new build or a new run; the others alter the artifacts of a real run. The nr HUD draws no tick
 // counter, so the spike's tick-counter-only image control has no counterpart; `non-whitelisted` is the state-side analogue.
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { readImage, writePng } from '../../../deps/cartwheel-engine/tools/lib/png.mjs';
 import { ROOT, SCRIPTS } from './brawler.mjs';
@@ -74,10 +74,24 @@ const sh = (cmd, args) => {
   const r = spawnSync(cmd, args, { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CW_PROJECT_ROOT: ROOT, CW_TEST_GPU: 'desktop' } });
   if (r.status) throw new Error(`${cmd} ${args.slice(0, 3).join(' ')}: ${(r.stderr || r.stdout).split('\n').slice(-5).join(' | ')}`);
 };
+const newestSource = () => {
+  let t = statSync(join(ROOT, 'CMakeLists.txt')).mtimeMs;
+  const walk = (d) => {
+    for (const e of readdirSync(d, { withFileTypes: true })) {
+      if (e.name === 'tests' || e.name === 'programs') continue;
+      const f = join(d, e.name);
+      if (e.isDirectory()) walk(f);
+      else t = Math.max(t, statSync(f).mtimeMs);
+    }
+  };
+  walk(join(ROOT, 'games/nr'));
+  return t;
+};
 /** a cart of `app` for `target` (cart | cart-wgpu) built with extra CMake definitions; cached under OUT */
 function controlCart(kind, target, defs, manifest = null) {
   const dir = join(OUT, `build-${kind}-${target}`), cart = join(dir, 'carts', `${sc.app}.wasc`);
-  if (existsSync(cart)) return cart;
+  // the cache is good while it is newer than every source and asset of the game; an older cart is the game as it was
+  if (existsSync(cart) && statSync(cart).mtimeMs > newestSource()) return cart;
   const extra = [];
   if (manifest) {
     const progs = join(OUT, `programs-${kind}`);

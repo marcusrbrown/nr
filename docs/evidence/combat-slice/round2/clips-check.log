@@ -1,0 +1,15 @@
+PASS provenance: manifest names this recipe and profile: recipe 365e95c19299, profile ed1477fa4840
+PASS provenance: sheet hashes: 2 sheet(s) match the manifest
+PASS clips: the 14 ready clips are in the atlas in recipe order, the gaps are not: 14 clips; placeholders: jumpkick, grab
+PASS clips: manifest clips match the recipe slots
+PASS clips: anim.c names the same clips, with the gaps marked: 16 slots, 2 gaps
+PASS frames: every clip has at least 4 frames, contiguous, and every pivot is inside its rect: 14 clips, 96 frames, pivot (80, 144) in every 160x160 rect
+PASS frames: no silhouette within 3 px of its cell edge (a clipped pose): all frames inside x 15-155 of 160
+PASS pages: rects inside their pages; the multi-page placement recorded: 1 page(s): 0: 1920x1280; clips crossing a page: none
+PASS rects: each frame's normal rect has its colour rect's alpha: 96 frames
+PASS rects: a normal rect that differs from its colour rect fails naming the frame (control): frame 5 (idle 5): the normal sheet's rect differs from the colour sheet's at texel (85, 22): alpha 0 against 255
+PASS budget: the committed hero set and the planned three-character set fit: hero 96 frames 18.75 MiB; planned hero 106 21.09, grunt 27 7.03, heavy 38 9.38; total 37.50 of 64 MiB
+PASS contact sheets written: contact.png 5824x8124: 14 rows, 4x nearest, cell crop (11, 16) 149x144, pivot in magenta
+
+ok: 12 of 12 checks
+artifacts: /Users/mrbrown/src/github.com/marcusrbrown/nr/out/round2/clips-check

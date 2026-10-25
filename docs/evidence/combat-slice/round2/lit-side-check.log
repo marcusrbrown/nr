@@ -1,0 +1,43 @@
+texels 2946; left 763 right 1050 up 356 down 1079; screen 1920x1080
+
+native
+ horizontal  frame  D        D-flat   push   body   missing
+             flat control D: 3.31, 2.84, 5.25, 5.83
+             swing S = D60-D180 -23.46 (flat -2.42), D30-D210 -22.56 (flat -2.51)
+             30    -7.54    -10.85   -1.70  38.1   0
+             60    -8.29    -11.13   -2.40  33.9   0
+             180   15.17    9.91     2.40   33.5   0
+             210   15.02    9.20     1.70   37.7   0
+             ratio swing 0: 9.71x
+             ratio swing 1: 8.97x
+ vertical    frame  D        D-flat   push   body   missing
+             flat control D: 17.94, 16.92, 12.62, 13.49
+             swing S = D60-D180 30.75 (flat 4.30), D30-D210 28.88 (flat 4.45)
+             30    17.94    -0.01    1.56   41.2   0
+             60    20.58    3.67     2.20   36.9   0
+             180   -10.17   -22.79   -2.20  35.3   0
+             210   -10.95   -24.44   -1.56  40.5   0
+             ratio swing 0: 7.16x
+             ratio swing 1: 6.49x
+
+cart
+ horizontal  frame  D        D-flat   push   body   missing
+             flat control D: 3.31, 2.84, 5.25, 5.83
+             swing S = D60-D180 -23.46 (flat -2.42), D30-D210 -22.56 (flat -2.51)
+             30    -7.54    -10.85   -1.70  38.1   0
+             60    -8.29    -11.13   -2.40  33.9   0
+             180   15.17    9.91     2.40   33.5   0
+             210   15.02    9.20     1.70   37.7   0
+             ratio swing 0: 9.71x
+             ratio swing 1: 8.97x
+ vertical    frame  D        D-flat   push   body   missing
+             flat control D: 17.94, 16.92, 12.62, 13.49
+             swing S = D60-D180 30.75 (flat 4.30), D30-D210 28.88 (flat 4.45)
+             30    17.94    -0.01    1.56   41.2   0
+             60    20.58    3.67     2.20   36.9   0
+             180   -10.17   -22.79   -2.20  35.3   0
+             210   -10.95   -24.44   -1.56  40.5   0
+             ratio swing 0: 7.16x
+             ratio swing 1: 6.49x
+
+all checks passed

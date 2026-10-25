@@ -1,0 +1,7 @@
+ok   camera: monotonic, every player in frame, cw.three.missing 0 at 17 ticks
+ok   idle: both players at x 0, the camera at 0 at ticks 1 and 61 (no jitter)
+ok   leash: trailing player at the left edge (x 0.841), leader at the soft wall (x 8.441), camera held at 4.800 since tick 142; gap 7.60 units
+ok   end: camera at 20, players at 23.482 (lane 1.20) and 23.959 (lane -0.60), where the leash puts them (the arena's bound is 24)
+ok   lights: x spans 1.1..21.7, -0.7..24.8, 2.1..24.4 (together -0.7..24.8), flash slot at 0
+ok   parallax: camera 4.44 units; shifts (screen px) play lane 879, near shop sign 780 (x0.887), far tower sign 695 (x0.791), skyline window 483 (x0.549); an actor's world shift is 852.5
+all scroll checks passed

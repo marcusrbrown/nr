@@ -4,14 +4,14 @@ Plan: `docs/plans/2026-10-24-002-feat-combat-slice-plan.md`. Decisions: `docs/de
 Origin and the two gates: `docs/brainstorms/2026-10-24-combat-slice-requirements.md`. Per-unit artifacts sit in `unit2/`,
 `unit3/` and so on; the Unit 8 artifacts are `gates/`, `controls/`, `perf/`, `romdev/`, `look/` and `image-calibration.*`.
 Everything below was measured on one machine: Apple M1 Pro (ANGLE on Metal for GL, Dawn on Metal for WebGPU), macOS 15.7.9,
-romdev 0.150.2, headless Chromium from the engine's harness, HEAD 41ddfe3 plus the Unit 8 commits.
+romdev 0.150.2, headless Chromium from the engine's harness, HEAD 41ddfe3 plus the Unit 8 commits; Round 2 (below) was measured on 600cf0a plus its own commits.
 
 ## Verdicts
 
 | Gate | Verdict | Evidence |
 | --- | --- | --- |
 | Brawler gate | **met** | 10 stock entries of `tests/gates.json` (5 scripts x romdev GL, Chromium GL) and `nr-strict` pass under the engine's `gate.mjs`; `nr-wgpu` (Chromium WebGPU, romdev WebGPU against native WebGPU, 5 scripts) and `nr-controls` (56 controls) pass as tool gates; native p99 at the wave-4 count is 1.16 ms against 16.6 ms and its busy-loop control exceeds it; romdev session `nr-unit8` ends at the expected tick with state equal to native on GL and WebGPU. `gates/gate-gl.log`, `gates/gate-wgpu.log`, `gates/gate-tools.log`, `controls/controls.json`, `perf/`, `romdev/session-summary.json` |
-| Look gate | **pending the owner's checklist** | The R7 capture set is assembled (`look/`, 25 captures, native on WebGPU, each with its cart-equality line in `look/set.json`) and `look/CHECKLIST.md` is unfilled. Whatever the brawler gate shows, this gate passes only when every item there is checked |
+| Look gate | **pending the owner's checklist** | The R7 capture set is assembled (`look/`, 26 captures after Round 2, native on WebGPU, each with its cart-equality line in `look/set.json`) and `look/CHECKLIST.md` is unfilled. Whatever the brawler gate shows, this gate passes only when every item there is checked |
 
 ### Brawler gate: what it checks
 
@@ -33,11 +33,11 @@ Each stock entry also runs the engine's control: the native run one frame short 
 
 | Script | Frames (the last frame) | Final `nr.checksum` (golden) | Facts at the end |
 | --- | ---: | ---: | --- |
-| `input-2p-full` (nr) | 2164 | 3853076974 | phase clear, wave 4, cleared, players hp 9 and 12, lives 4, dash picked |
-| `input-waves` (nr_waves) | 2374 | 2932405792 | last wave ended (tick 2374), wave 4, players hp 3 and 12 |
+| `input-2p-full` (nr) | 2164 | 1196977218 | phase clear, wave 4, cleared, 2 players, lives 4, dash picked |
+| `input-waves` (nr_waves) | 2099 | 1922784415 | last wave ended (tick 2099), wave 4, 2 players alive |
 | `input-combat` (nr_dummies) | 658 | 1835212864 | both players hp 12 and 9, the dummies' state as scripted |
-| `input-join-mid` (nr) | 800 | 1670758902 | one join, 2 players, wave 2 |
-| `input-upgrade` (nr) | 989 | 3196666525 | dash picked, wave 3 |
+| `input-join-mid` (nr) | 790 | 3971475687 | one join, 2 players, wave 2 |
+| `input-upgrade` (nr) | 989 | 1355188033 | dash picked, wave 3 |
 
 The last frame of each is where the picture is still changing, so that the image predicate can see a one-frame shift: the clear
 screen of `input-2p-full` holds still from tick 2165, so the gate runs it to 2164, the tick the arena is cleared (at 2300 a run
@@ -185,7 +185,6 @@ The session ends with the cart loaded on the title (WebGPU, tick 1, phase title,
   except the one WebGPU row that waits for the GPU.
 - The goldens are the native GL run of this unit; they pin regressions of the simulation and the scripts, and the gate also checks the
   facts of each script. They do not prove the fights are good.
-- A hero mid-combo beside a grunt on the street is not a capture of its own in the look set; the wave captures show the fights.
 - The look and feel of the captures, the screens and the sounds is the owner's call (look gate).
 
 ## Unit 3: hero clip set, render time and atlas size
@@ -260,3 +259,61 @@ Regenerate:
 - Cross-machine render equality: the hashes are equal on this machine only, as ADR-0002 defines.
 - The Unit 2 checks were run on a clean copy of HEAD plus the Unit 3 files (`main.c` unchanged from Unit 2), not on the
   working tree that Unit 4 is changing.
+
+## Round 2: the look-gate review
+
+`look/REVIEW-oracle.md` (HEAD 600cf0a) found six things. Each is fixed in its own commit; the table lists finding, fix, and the captures
+before (the 600cf0a set, in git history) and after (`look/`). The decisions and numbers are in ADR-0002 ("Round 2"). One machine, as above.
+
+| # | Finding | Fix | Captures (before > after) |
+| --- | --- | --- | --- |
+| 1 | The combat captures used dummies, and hit 3 and the contact tick were missing | `nr_look`: real grunts and a heavy that stand still, three stations, `input-look.json`; contact tick chosen inside the active window and asserted from state | `combat-hit2` (dummies, tick 49 of `input-combat`) > `combat-hit2` (real grunt, `input-look` 264); new `combat-hit3` (280); `combat-radius-special` > same name (124); `combat-dash-special` > same name (49) |
+| 2 | The heavy's plates, gauntlets and boots sat on the street under the darkest neon | `heavy.json` palette values and trim coverage raised, ambient untouched; re-pinned, re-rendered, reinstalled | `heavy-windup`, `heavy-staggered`, `wave4-crowd`: boots 8.4 > 76.8 against a street ring of 26.4 > 70.7 (windup); `round2/heavy-contrast.txt` |
+| 3 | P1 and P2 could not be mapped to the HUD's magenta and cyan | `hero-p2` atlas: the same render with `hair`, `trim`, `glove` overridden to the HUD's cyan; the hero's accents are the HUD's magenta; player 2 draws the second colour sheet over the hero's geometry and normals | every capture with both players: `scroll-f061`, `combat-hit2`, `wave4-crowd`, `heavy-staggered`, `hud`; `round2/hero-variant-check.txt` |
+| 4 | The camera clamp's silhouette allowance was a fixed 0.45 | `CAMERA_ALLOWANCE` 1.2, the hero's widest frame (1.188, `special_dash`), from `reach-check`; FOV and pitch unchanged | `scroll-f232`, `scroll-f640` (the leash holds a whole hero at the edge); `round2/reach-check.txt` |
+| 5 | The static street read flat | plinths, cornices, pilasters, framed windows and sills on the storefronts; plinth, capital and panel lines on the pillar; no tied planes (`depth-check`) | `scroll-f061`, `scroll-f352`, `pillar`, `pillar-bare` |
+| 6 | The title prompt faded into the hero and the lit ground | dark panel with an amber edge, text at full strength | `title`: 2.33:1 > 8.31:1 (dim phase) and 8.91:1; `round2/title-contrast-check.json` |
+
+The wave captures moved to ticks that still show their state under the new leash: `grunt-airborne` 450 > 424, `heavy-windup` 990 > 935,
+`wave4-crowd` 1600 > 1560, `heavy-staggered` 2050 > 1910.
+
+### Simulation, goldens and gates
+
+Presentation-only for findings 1, 2, 3, 5 and 6: the simulation's inputs are unchanged (`sim.passive` is read only by `nr_look`'s scene and
+is outside the checksum). **Finding 4 is a simulation change and was unavoidable**: the allowance is the leash's input, which sets where
+players and wave enemies may stand. The bot-driven scripts (`input-2p-full`, `-waves`, `-join-mid`, `-upgrade`, `-upgrade-join`,
+`-upgrade-tie`) were regenerated from the bots, `goldens.json` rewritten (the table above; `input-combat`'s checksum 1835212864 is
+unchanged), and two gate runs end on other ticks (waves 2374 > 2099 and join-mid 800 > 790, ticks where the picture still changes).
+The leader's soft wall is 7.6 units ahead of the trailing player (was 9.1).
+
+| Run | Result | Log |
+| --- | --- | --- |
+| `gate.mjs` (23 entries: 10 stock nr, spike's, `nr-strict`, `nr-wgpu` x 5 scripts x 2 hosts, `nr-controls` 56) | exit 0, every entry `ok` | `round2/gates/gate-all.log` |
+| `sim-check` | 27 `ok` | `round2/sim-check.log` |
+| `ui-check` | 12 scenarios passed; 0 glyph bakes after frame 0 | `round2/ui-check.log` |
+| `scroll-check`, `ordering-check` | passed (pillar: 964 of 964 overlap pixels hidden behind it, in front 2156 of 2156) | `round2/scroll-check2.log`, `round2/ordering-check2.log` |
+| `stage-check`, `lit-side-check` (right and left) | passed; swing ratios 9.71x and 8.97x horizontal, 7.16x and 6.49x vertical (floor 2x) | `round2/lit-side-check.log`, `-left.log` |
+| `programs-survey`, `programs-controls` | no new program state; every row-removal control gives `cw.three.missing` 1 naming it | `round2/programs-controls.log` |
+| `clips-check`, `enemies-check`, `tools/render/tests` | 12 of 12, 17 of 17, 22 pass | `round2/clips-check.log`, `enemies-check.log`, `render-tests.log` |
+| `depth-check` (and its control) | 0 ties; the control finds the planted tie | `round2/depth-check*.txt` |
+| `look-set` | 26 captures, every one pixel-identical to native with equal state (43 fields) and `cw.three.missing` 0/0 | `round2/look-set.log`, `look/set.json` |
+
+`lit-side-check` no longer asserts the sign of a response within 0.5 of zero (the vertical sweep's first frame: the small up-facing class
+responds by -0.01 with the accents recoloured); its swing ratios, which decide, are as before. The control carts of `controls.mjs` are cached
+under `out/`; the cache is now invalidated by any newer source or asset of the game (a stale cache ran the previous sim and failed 8 controls).
+
+### Atlas budget
+
+Decoded: hero 18.75 MiB, grunt 7.03, heavy 10.34 = 36.12 MiB for the three atlases (unchanged), plus player 2's colour sheet 9.38 MiB =
+**45.49 MiB** against 64 MiB (`round2/hero-variant-check.txt`). Touched in a cart run at the end of the full game: 52.6 MiB on GL and 53.1 MiB
+on WebGPU of the 128 MiB wasm (`round2/perf/`), up from 46.0 and 46.5.
+
+### Not verified in Round 2
+
+- The owner's checklist is unfilled; whether the fixes read right is theirs. No before and after pictures were compared by eye beyond the
+  agent's own look at the captures.
+- One machine and one GPU, as above; the cart frames equal native's here.
+- The heavy's hook (1.69 units) still reaches past the 1.2 allowance for the ticks it plays at the frame's edge; holding it in would take
+  1.7 units, 2.5 of the screen's 10 (ADR-0002).
+- Hit 3's capture shows the UAL hook's bent-over pose at tick 8 of the state (the clip frame whose reach, 1.08 units, was the widest the ticks tested drew); the other ticks of its active window were not compared by eye.
+- `host{op:play}` was not called; the romdev session below ends on the cart at the title.

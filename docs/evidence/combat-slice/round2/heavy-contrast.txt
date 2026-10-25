@@ -1,0 +1,6 @@
+before heavy-windup: street ring 26.4 boots 8.4  legs 21.6  torso 21.0  head 18.4
+after  heavy-windup: street ring 70.7 boots 76.8  legs 105.0  torso 150.4  head 148.7
+before heavy-staggered: street ring 21.8 boots 12.3  legs 13.8  torso 15.1  head 22.1
+after  heavy-staggered: street ring 37.5 boots 44.8  legs 46.0  torso 65.7  head 66.4
+before wave4-crowd: street ring 49.9 boots 48.9  legs 62.9  torso 57.3  head 65.0
+after  wave4-crowd: street ring 39.0 boots 59.0  legs 62.1  torso 79.2  head 79.1

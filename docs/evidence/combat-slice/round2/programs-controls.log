@@ -1,0 +1,6 @@
+ok   baseline: cw.three.missing 0 []
+ok   without-standard-l0400: cw.three.missing 1 ["standard+l0400"]
+ok   without-standard-map-nearest-instbig-nmap-atest-l0400: cw.three.missing 1 ["standard+map+nearest+instbig+nmap+atest+l0400"]
+ok   without-standard-map-nearest-nmap-atest-l0400: cw.three.missing 1 ["standard+map+nearest+nmap+atest+l0400"]
+ok   without-standard-instbig-l0400: cw.three.missing 1 ["standard+instbig+l0400"]
+all controls passed
