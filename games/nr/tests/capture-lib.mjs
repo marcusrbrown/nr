@@ -28,10 +28,10 @@ export function nativeInputFile(scriptPath, dir) {
 const gpuEnv = () => ({ ...process.env, CW_PROJECT_ROOT: ROOT, CW_TEST_GPU: process.env.CW_TEST_GPU || 'desktop' });
 
 /** The native binary of `app` (a path under build/native/games/nr, or `exe`) on WebGPU; status 0 and the state's WebGPU counters checked. */
-export function nativeWgpu(app, base, frames, { input = null, exe = null, inputDir = join(ROOT, 'out/unit4/input') } = {}) {
+export function nativeWgpu(app, base, frames, { input = null, exe = null, inputDir = join(ROOT, 'out/unit4/input'), env = {} } = {}) {
   const bin = exe ? resolve(exe) : join(ROOT, 'build/native/games/nr', app);
   const e = { ...process.env, CW_GPU: 'webgpu', CW_FRAMES: String(frames), CW_FRAME_HZ: '60', CW_WARMUP_SPREAD: '0', SDL_AUDIODRIVER: 'dummy',
-    SDL_VIDEODRIVER: 'offscreen', CW_SCREENSHOT: `${base}.png`, CW_DEBUG_DUMP: `${base}.json`, CW_ASSETS: existsSync(`${bin}.assets`) ? `${bin}.assets` : '' };
+    SDL_VIDEODRIVER: 'offscreen', CW_SCREENSHOT: `${base}.png`, CW_DEBUG_DUMP: `${base}.json`, CW_ASSETS: existsSync(`${bin}.assets`) ? `${bin}.assets` : '', ...env };
   if (input) e.CW_INPUT = nativeInputFile(input, inputDir);
   for (const k of ['DISPLAY', 'WAYLAND_DISPLAY', 'WAYLAND_SOCKET', 'XAUTHORITY']) delete e[k];
   const r = spawnSync(bin, [], { env: e, encoding: 'utf8', timeout: 180000 });

@@ -22,10 +22,11 @@ const OUT = arg('out') ? join(ROOT, arg('out')) : join(dirname(fileURLToPath(imp
 const BUTTON = [[1, 'right'], [2, 'left'], [4, 'up'], [8, 'down'], [16, 'west'], [32, 'south'], [64, 'east'], [128, 'north'], [256, 'r'], [512, 'l'], [1024, 'start'], [2048, 'back']];
 const names = (mask) => BUTTON.filter(([bit]) => mask & bit).map(([, n]) => n);
 
-export function generate() {
-  const base = join(ROOT, 'out/unit6/gen-waves');
-  const r = nativeWgpu(APP, base, TICKS, { inputDir: join(ROOT, 'out/unit6/input') });
-  if (r.status !== 0) throw new Error(`${APP}: ${(r.stderr || r.stdout || '').slice(-300)}`);
+/** Runs `app` (a build with a bot) for `ticks` ticks; returns { rows, st }: the bot's buttons as input-script rows and the final state. */
+export function botRows(app = APP, ticks = TICKS) {
+  const base = join(ROOT, `out/unit7/gen-${app}-${ticks}`);
+  const r = nativeWgpu(app, base, ticks, { inputDir: join(ROOT, 'out/unit7/input') });
+  if (r.status !== 0) throw new Error(`${app}: ${(r.stderr || r.stdout || '').slice(-300)}`);
   const st = JSON.parse(readFileSync(`${base}.json`, 'utf8'));
   const n = st['nr.bot_log_count'], log = st['nr.bot_log'];
   if (n > log.length / 2) throw new Error(`the bot log holds ${log.length / 2} of ${n} changes`);
@@ -36,8 +37,11 @@ export function generate() {
     if (tick === 1) { rows[0] = { frame: 1, buttons: names(p0), pad2: { buttons: names(p1) } }; continue; }
     rows.push({ frame: tick, buttons: names(p0), pad2: { buttons: names(p1) } });
   }
-  return `[\n${rows.map((e) => `  ${JSON.stringify(e)}`).join(',\n')}\n]\n`;
+  return { rows, st };
 }
+
+export const scriptText = (rows) => `[\n${rows.map((e) => `  ${JSON.stringify(e)}`).join(',\n')}\n]\n`;
+export const generate = () => scriptText(botRows().rows);
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   process.env.CW_TEST_GPU ||= 'desktop';
