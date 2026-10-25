@@ -245,7 +245,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** Owner reviews the capture set via romdev livestream and the PNGs; ADR-0002 records the approved-for-now density and lighting values. The camera angle is tuned against Unit 4's occlusion and scroll captures. This is the first look-gate checkpoint.
 
-- [ ] **Unit 3: Full hero clip set and atlas budget**
+- [x] **Unit 3: Full hero clip set and atlas budget** (0b06304; 14 clips / 96 frames, one page, pelvis anchor)
 
 **Goal:** Render all twelve hero clips, measure render time and atlas size, and fix the per-clip frame counts and atlas budget.
 
@@ -272,7 +272,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** Hero set committed; atlas budget, per-enemy allowance and hero frame counts written into ADR-0002; render-time table in evidence.
 
-- [ ] **Unit 4: Arena block and lights**
+- [x] **Unit 4: Arena block and lights** (7711a90; camera values current, open to tuning)
 
 **Goal:** Build the one street block: ground, 3D storefronts and pillars with parallax, four animated neon lights, scrolling camera with clamp and leash.
 
