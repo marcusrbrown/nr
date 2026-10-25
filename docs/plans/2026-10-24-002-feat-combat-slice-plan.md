@@ -303,7 +303,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** Look captures regenerated with the arena (now the full R7 set minus enemies); owner review via livestream; camera values recorded in ADR-0002; program tables committed.
 
-- [ ] **Unit 5: Combat core — hero moveset and hit resolution**
+- [x] **Unit 5: Combat core — hero moveset and hit resolution** (1d57749..44bf5a8; swing totals follow clip length 22/25 ticks, not action2d's 31)
 
 **Goal:** Deterministic simulation for one or two heroes: movement, combo, jump/jump-kick, grab/throw, hurt, knockdown, special variants, with hitboxes and reactions.
 
