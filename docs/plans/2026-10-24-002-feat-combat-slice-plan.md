@@ -210,7 +210,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** Round-trip test green; three builds succeed; spike gates unchanged; ADR-0001 table regenerated (`gen-pins-table.mjs --check` passes); ADR-0002 written.
 
-- [ ] **Unit 2: Kits, hero profile, first clips, and the density check**
+- [x] **Unit 2: Kits, hero profile, first clips, and the density check** (9eb2d33..3f97cb1; look approved for now; jump kick and grab are owner hand-key work; special/dash clip picks accepted)
 
 **Goal:** Pin the Quaternius kits, audit their clips, draft and tune the hero profile, render idle + walk through the pipeline, load it in a new `games/nr` app with the belt camera at 640×360, and produce the first look captures.
 

@@ -29,11 +29,11 @@ The camera angle is tuned against Unit 4's occlusion and scroll captures.
 
 Changes to answer the notes, to be judged on `stage-f60..f240.png` and `solo_*-f60.png`:
 
-- [ ] Shoes and trousers separate: white sneakers against near-black boot shafts and mid-navy trousers
-- [ ] Trousers read as baggy cargo legs, not leggings (wider thigh and shin volumes, white knee pads, a side pocket)
-- [ ] No pink on the back of the legs: the pink is the hair only; the back has a navy pack with a cyan band
-- [ ] No visor, mask or eye strip; the head is skin and hair
-- [ ] No broken light-blue side strip: the jacket is one navy body with a lighter yoke, cyan pauldron discs and a white belt with a cyan buckle
-- [ ] Hero reads as a hero: dark base clothing, two accents (cyan and white), pink hair, silhouette breaks at shoulders, pack, belt and knees
-- [ ] Scene fill raised (ambient 0x7482a8, ground and wall lighter); neon colours still set the colour of the lit side
-- [ ] Normal map judged now that the figure has more form
+- [x] Shoes and trousers separate: white sneakers against near-black boot shafts and mid-navy trousers
+- [x] Trousers read as baggy cargo legs, not leggings (wider thigh and shin volumes, white knee pads, a side pocket)
+- [x] No pink on the back of the legs: the pink is the hair only; the back has a navy pack with a cyan band
+- [x] No visor, mask or eye strip; the head is skin and hair
+- [x] No broken light-blue side strip: the jacket is one navy body with a lighter yoke, cyan pauldron discs and a white belt with a cyan buckle
+- [x] Hero reads as a hero: dark base clothing, two accents (cyan and white), pink hair, silhouette breaks at shoulders, pack, belt and knees
+- [x] Scene fill raised (ambient 0x7482a8, ground and wall lighter); neon colours still set the colour of the lit side
+- [x] Normal map judged now that the figure has more form
