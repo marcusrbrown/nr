@@ -83,7 +83,7 @@ The art pipeline is the project's largest cost and its least proven part. Panthe
 **Pipeline**
 - R19. A scripted route turns a 3D character model and animation set into sprite frames plus normal maps plus an atlas manifest; on a clean checkout with the pinned Blender and script versions it reproduces the same atlas payload hashes.
 - R20. The three characters' clip sets (R8, R21) are produced by that route, not hand-drawn.
-- R23. The three character models are owner-authored inside this slice: AI-assisted image-to-mesh from approved concept art, cleaned up and rigged in Blender; each model records its concept source, generator, licence and human edits in the asset provenance manifest.
+- R23. The three characters are owner-authored profiles over pinned CC0 kits (Quaternius Universal Base Characters body, Universal Animation Library 1 and 2 clips), following the Panthea Studio route: a profile JSON selects body, hair, proportions, outfit/retexture, clip map and pose policy; clips the kits lack are hand-keyed in Blender. Each character records kit URLs, sha256s, licence, profile hash and hand-keyed clips in the asset provenance manifest. No image-to-mesh generation.
 
 ---
 
