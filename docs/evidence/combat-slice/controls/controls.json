@@ -1,0 +1,1412 @@
+[
+  {
+    "id": "base",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "blank",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9412586805555555,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "94.1259% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/decoded-as-linear",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.8914236111111111,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "89.1424% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/encoded-twice",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9961892361111111,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "99.6189% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "zero-size-frame",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": null,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "host frame is 0x0"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/null-in-array (JSON of NaN)",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.light_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/string",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/scalar-null",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.cam_x: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/field-missing",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.rng: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/reference",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: reference value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-whitelisted/voices-this-host-made",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "input-shift/player-2-one-tick-late",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "fail"
+    },
+    "gt16": 0.5533723958333333,
+    "firstDivergent": "nr.hero_pos",
+    "problems": {
+      "image": [
+        "55.3372% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [
+        "nr.hero_pos[0]: 10.350439071655273 vs 24",
+        "nr.hero_clip[7]: 4 vs 1",
+        "nr.hero_step[7]: 4 vs 0",
+        "nr.hero_frame[7]: 22 vs 4",
+        "nr.light_pos[0]: 14.608312606811523 vs 20.54298210144043",
+        "nr.cam_x[0]: 12.581663131713867 vs 20",
+        "nr.cam_left[0]: 12.581663131713867 vs 20",
+        "nr.checksum[0]: 3853076974 vs 570342521",
+        "nr.sim_checksum[0]: 2841677422 vs 3060167958",
+        "nr.actor_state[7]: 18 vs 1",
+        "nr.actor_state_tick[1]: 7 vs 6",
+        "nr.actor_hp[0]: 9 vs 12",
+        "nr.actor_facing[4]: 1 vs -1",
+        "nr.actor_invuln[1]: 29 vs 0",
+        "nr.actor_kind[7]: 2 vs 3",
+        "nr.actor_target[2]: 0 vs 1",
+        "nr.actor_present[7]: 0 vs 1",
+        "nr.rng[0]: 1603752752 vs 1653601655",
+        "nr.wave[0]: 4 vs 3",
+        "nr.lives[0]: 4 vs 5",
+        "nr.input_count[0]: 1203 vs 1223",
+        "nr.event_count[0]: 491 vs 361",
+        "nr.events[5]: 41 vs 42",
+        "nr.cleared[0]: 1 vs 0",
+        "nr.wave_phase[0]: 2 vs 1",
+        "nr.phase[0]: 3 vs 1",
+        "nr.pick_player[0]: 1 vs 0",
+        "nr.sfx_count[0]: 63 vs 35",
+        "nr.sfx_tick[0]: 2164 vs 1318"
+      ],
+      "missing": [],
+      "golden": [
+        "nr.checksum 570342521 is not the golden 3853076974",
+        "nr.input_count 1223 is not the golden 1203",
+        "nr.phase 1 is not the golden 3",
+        "nr.wave 3 is not the golden 4",
+        "nr.cleared 0 is not the golden 1",
+        "nr.lives 5 is not the golden 4",
+        "nr.actor_hp [12,4,-1,0,0,0,0,10,0,0,0] is not the golden [9,12,0,0,0,0,0,0,0,0,0]",
+        "nr.actor_state [3,3,18,18,18,18,18,1,0,0,0] is not the golden [3,3,18,18,18,18,18,18,18,18,18]",
+        "nr.sim_checksum 3060167958 is not the golden 2841677422",
+        "game state is not clear",
+        "the last wave did not end",
+        "wave index 4 not reached"
+      ]
+    }
+  },
+  {
+    "id": "row-removed/standard+map+nearest+nmap+atest+l0400",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": false,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.014622395833333333,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "1.4622% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 1"
+      ],
+      "golden": []
+    }
+  },
+  {
+    "id": "light-count-changed/five-lights",
+    "host": "romdev",
+    "ok": true,
+    "namesChecked": false,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.5230685763888889,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "52.3069% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 4"
+      ],
+      "golden": []
+    }
+  },
+  {
+    "id": "base",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "blank",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9412586805555555,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "94.1259% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/decoded-as-linear",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.8914236111111111,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "89.1424% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/encoded-twice",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9961892361111111,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "99.6189% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "zero-size-frame",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": null,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "host frame is 0x0"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/null-in-array (JSON of NaN)",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.light_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/string",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/scalar-null",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.cam_x: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/field-missing",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.rng: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/reference",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: reference value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-whitelisted/voices-this-host-made",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "input-shift/player-2-one-tick-late",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "fail"
+    },
+    "gt16": 0.5533723958333333,
+    "firstDivergent": "nr.hero_pos",
+    "problems": {
+      "image": [
+        "55.3372% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [
+        "nr.hero_pos[0]: 10.350439071655273 vs 24",
+        "nr.hero_clip[7]: 4 vs 1",
+        "nr.hero_step[7]: 4 vs 0",
+        "nr.hero_frame[7]: 22 vs 4",
+        "nr.light_pos[0]: 14.608312606811523 vs 20.54298210144043",
+        "nr.cam_x[0]: 12.581663131713867 vs 20",
+        "nr.cam_left[0]: 12.581663131713867 vs 20",
+        "nr.checksum[0]: 3853076974 vs 570342521",
+        "nr.sim_checksum[0]: 2841677422 vs 3060167958",
+        "nr.actor_state[7]: 18 vs 1",
+        "nr.actor_state_tick[1]: 7 vs 6",
+        "nr.actor_hp[0]: 9 vs 12",
+        "nr.actor_facing[4]: 1 vs -1",
+        "nr.actor_invuln[1]: 29 vs 0",
+        "nr.actor_kind[7]: 2 vs 3",
+        "nr.actor_target[2]: 0 vs 1",
+        "nr.actor_present[7]: 0 vs 1",
+        "nr.rng[0]: 1603752752 vs 1653601655",
+        "nr.wave[0]: 4 vs 3",
+        "nr.lives[0]: 4 vs 5",
+        "nr.input_count[0]: 1203 vs 1223",
+        "nr.event_count[0]: 491 vs 361",
+        "nr.events[5]: 41 vs 42",
+        "nr.cleared[0]: 1 vs 0",
+        "nr.wave_phase[0]: 2 vs 1",
+        "nr.phase[0]: 3 vs 1",
+        "nr.pick_player[0]: 1 vs 0",
+        "nr.sfx_count[0]: 63 vs 35",
+        "nr.sfx_tick[0]: 2164 vs 1318"
+      ],
+      "missing": [],
+      "golden": [
+        "nr.checksum 570342521 is not the golden 3853076974",
+        "nr.input_count 1223 is not the golden 1203",
+        "nr.phase 1 is not the golden 3",
+        "nr.wave 3 is not the golden 4",
+        "nr.cleared 0 is not the golden 1",
+        "nr.lives 5 is not the golden 4",
+        "nr.actor_hp [12,4,-1,0,0,0,0,10,0,0,0] is not the golden [9,12,0,0,0,0,0,0,0,0,0]",
+        "nr.actor_state [3,3,18,18,18,18,18,1,0,0,0] is not the golden [3,3,18,18,18,18,18,18,18,18,18]",
+        "nr.sim_checksum 3060167958 is not the golden 2841677422",
+        "game state is not clear",
+        "the last wave did not end",
+        "wave index 4 not reached"
+      ]
+    }
+  },
+  {
+    "id": "row-removed/standard+map+nearest+nmap+atest+l0400",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.014622395833333333,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "1.4622% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 1",
+        "program states without a table row: standard+map+nearest+nmap+atest+l0400"
+      ],
+      "golden": []
+    }
+  },
+  {
+    "id": "light-count-changed/five-lights",
+    "host": "chromium",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.5230685763888889,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "52.3069% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 4",
+        "program states without a table row: standard+l0500, standard+instbig+l0500, standard+map+nearest+nmap+atest+l0500, standard+map+nearest+instbig+nmap+atest+l0500"
+      ],
+      "golden": []
+    }
+  },
+  {
+    "id": "base",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "blank",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9412152777777778,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "94.1215% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/decoded-as-linear",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.8913628472222223,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "89.1363% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/encoded-twice",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9961892361111111,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "99.6189% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "zero-size-frame",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": null,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "host frame is 0x0"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/null-in-array (JSON of NaN)",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.light_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/string",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/scalar-null",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.cam_x: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/field-missing",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.rng: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/reference",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: reference value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-whitelisted/voices-this-host-made",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "input-shift/player-2-one-tick-late",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "fail"
+    },
+    "gt16": 0.5533897569444445,
+    "firstDivergent": "nr.hero_pos",
+    "problems": {
+      "image": [
+        "55.3390% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [
+        "nr.hero_pos[0]: 10.350439071655273 vs 24",
+        "nr.hero_clip[7]: 4 vs 1",
+        "nr.hero_step[7]: 4 vs 0",
+        "nr.hero_frame[7]: 22 vs 4",
+        "nr.light_pos[0]: 14.608312606811523 vs 20.54298210144043",
+        "nr.cam_x[0]: 12.581663131713867 vs 20",
+        "nr.cam_left[0]: 12.581663131713867 vs 20",
+        "nr.checksum[0]: 3853076974 vs 570342521",
+        "nr.sim_checksum[0]: 2841677422 vs 3060167958",
+        "nr.actor_state[7]: 18 vs 1",
+        "nr.actor_state_tick[1]: 7 vs 6",
+        "nr.actor_hp[0]: 9 vs 12",
+        "nr.actor_facing[4]: 1 vs -1",
+        "nr.actor_invuln[1]: 29 vs 0",
+        "nr.actor_kind[7]: 2 vs 3",
+        "nr.actor_target[2]: 0 vs 1",
+        "nr.actor_present[7]: 0 vs 1",
+        "nr.rng[0]: 1603752752 vs 1653601655",
+        "nr.wave[0]: 4 vs 3",
+        "nr.lives[0]: 4 vs 5",
+        "nr.input_count[0]: 1203 vs 1223",
+        "nr.event_count[0]: 491 vs 361",
+        "nr.events[5]: 41 vs 42",
+        "nr.cleared[0]: 1 vs 0",
+        "nr.wave_phase[0]: 2 vs 1",
+        "nr.phase[0]: 3 vs 1",
+        "nr.pick_player[0]: 1 vs 0",
+        "nr.sfx_count[0]: 63 vs 35",
+        "nr.sfx_tick[0]: 2164 vs 1318"
+      ],
+      "missing": [],
+      "golden": [
+        "nr.checksum 570342521 is not the golden 3853076974",
+        "nr.input_count 1223 is not the golden 1203",
+        "nr.phase 1 is not the golden 3",
+        "nr.wave 3 is not the golden 4",
+        "nr.cleared 0 is not the golden 1",
+        "nr.lives 5 is not the golden 4",
+        "nr.actor_hp [12,4,-1,0,0,0,0,10,0,0,0] is not the golden [9,12,0,0,0,0,0,0,0,0,0]",
+        "nr.actor_state [3,3,18,18,18,18,18,1,0,0,0] is not the golden [3,3,18,18,18,18,18,18,18,18,18]",
+        "nr.sim_checksum 3060167958 is not the golden 2841677422",
+        "game state is not clear",
+        "the last wave did not end",
+        "wave index 4 not reached"
+      ]
+    }
+  },
+  {
+    "id": "row-removed/standard+map+nearest+nmap+atest+l0400",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.014618055555555556,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "1.4618% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 1",
+        "program states without a table row: standard+map+nearest+nmap+atest+l0400"
+      ],
+      "golden": []
+    }
+  },
+  {
+    "id": "light-count-changed/five-lights",
+    "host": "chromium-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.5230164930555555,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "52.3016% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 4",
+        "program states without a table row: standard+l0500, standard+instbig+l0500, standard+map+nearest+nmap+atest+l0500, standard+map+nearest+instbig+nmap+atest+l0500"
+      ],
+      "golden": []
+    }
+  },
+  {
+    "id": "base",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "blank",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9412152777777778,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "94.1215% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/decoded-as-linear",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.8913628472222223,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "89.1363% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "wrong-colour-space/encoded-twice",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0.9961892361111111,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "99.6189% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "zero-size-frame",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": null,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "host frame is 0x0"
+      ],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/null-in-array (JSON of NaN)",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.light_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/string",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/scalar-null",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.cam_x: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/field-missing",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.rng: value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-finite/reference",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [
+        "rejected: nr.hero_pos: reference value missing or not finite"
+      ],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "non-whitelisted/voices-this-host-made",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "pass",
+      "state": "pass",
+      "missing": "pass",
+      "golden": "pass"
+    },
+    "gt16": 0,
+    "firstDivergent": null,
+    "problems": {
+      "image": [],
+      "state": [],
+      "missing": [],
+      "golden": []
+    }
+  },
+  {
+    "id": "input-shift/player-2-one-tick-late",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "fail",
+      "missing": "pass",
+      "golden": "fail"
+    },
+    "gt16": 0.5533897569444445,
+    "firstDivergent": "nr.hero_pos",
+    "problems": {
+      "image": [
+        "55.3390% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [
+        "nr.hero_pos[0]: 10.350439071655273 vs 24",
+        "nr.hero_clip[7]: 4 vs 1",
+        "nr.hero_step[7]: 4 vs 0",
+        "nr.hero_frame[7]: 22 vs 4",
+        "nr.light_pos[0]: 14.608312606811523 vs 20.54298210144043",
+        "nr.cam_x[0]: 12.581663131713867 vs 20",
+        "nr.cam_left[0]: 12.581663131713867 vs 20",
+        "nr.checksum[0]: 3853076974 vs 570342521",
+        "nr.sim_checksum[0]: 2841677422 vs 3060167958",
+        "nr.actor_state[7]: 18 vs 1",
+        "nr.actor_state_tick[1]: 7 vs 6",
+        "nr.actor_hp[0]: 9 vs 12",
+        "nr.actor_facing[4]: 1 vs -1",
+        "nr.actor_invuln[1]: 29 vs 0",
+        "nr.actor_kind[7]: 2 vs 3",
+        "nr.actor_target[2]: 0 vs 1",
+        "nr.actor_present[7]: 0 vs 1",
+        "nr.rng[0]: 1603752752 vs 1653601655",
+        "nr.wave[0]: 4 vs 3",
+        "nr.lives[0]: 4 vs 5",
+        "nr.input_count[0]: 1203 vs 1223",
+        "nr.event_count[0]: 491 vs 361",
+        "nr.events[5]: 41 vs 42",
+        "nr.cleared[0]: 1 vs 0",
+        "nr.wave_phase[0]: 2 vs 1",
+        "nr.phase[0]: 3 vs 1",
+        "nr.pick_player[0]: 1 vs 0",
+        "nr.sfx_count[0]: 63 vs 35",
+        "nr.sfx_tick[0]: 2164 vs 1318"
+      ],
+      "missing": [],
+      "golden": [
+        "nr.checksum 570342521 is not the golden 3853076974",
+        "nr.input_count 1223 is not the golden 1203",
+        "nr.phase 1 is not the golden 3",
+        "nr.wave 3 is not the golden 4",
+        "nr.cleared 0 is not the golden 1",
+        "nr.lives 5 is not the golden 4",
+        "nr.actor_hp [12,4,-1,0,0,0,0,10,0,0,0] is not the golden [9,12,0,0,0,0,0,0,0,0,0]",
+        "nr.actor_state [3,3,18,18,18,18,18,1,0,0,0] is not the golden [3,3,18,18,18,18,18,18,18,18,18]",
+        "nr.sim_checksum 3060167958 is not the golden 2841677422",
+        "game state is not clear",
+        "the last wave did not end",
+        "wave index 4 not reached"
+      ]
+    }
+  },
+  {
+    "id": "row-removed/standard+map+nearest+nmap+atest+l0400",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.014618055555555556,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "1.4618% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 1",
+        "program states without a table row: standard+map+nearest+nmap+atest+l0400"
+      ],
+      "golden": []
+    }
+  },
+  {
+    "id": "light-count-changed/five-lights",
+    "host": "romdev-wgpu",
+    "ok": true,
+    "namesChecked": true,
+    "got": {
+      "image": "fail",
+      "state": "pass",
+      "missing": "fail",
+      "golden": "pass"
+    },
+    "gt16": 0.5230164930555555,
+    "firstDivergent": null,
+    "problems": {
+      "image": [
+        "52.3016% of pixels differ by >16 (bound 0.0500%)"
+      ],
+      "state": [],
+      "missing": [
+        "cw.three.missing = 4",
+        "program states without a table row: standard+l0500, standard+instbig+l0500, standard+map+nearest+nmap+atest+l0500, standard+map+nearest+instbig+nmap+atest+l0500"
+      ],
+      "golden": []
+    }
+  }
+]

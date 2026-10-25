@@ -1,8 +1,192 @@
 # Combat slice evidence
 
 Plan: `docs/plans/2026-10-24-002-feat-combat-slice-plan.md`. Decisions: `docs/decisions/0002-render-pipeline-and-look.md`.
-Per-unit artifacts sit in `unit2/`, `unit3/` and so on. The gate verdicts and the owner's look checklist join this file
-in Unit 8.
+Origin and the two gates: `docs/brainstorms/2026-10-24-combat-slice-requirements.md`. Per-unit artifacts sit in `unit2/`,
+`unit3/` and so on; the Unit 8 artifacts are `gates/`, `controls/`, `perf/`, `romdev/`, `look/` and `image-calibration.*`.
+Everything below was measured on one machine: Apple M1 Pro (ANGLE on Metal for GL, Dawn on Metal for WebGPU), macOS 15.7.9,
+romdev 0.150.2, headless Chromium from the engine's harness, HEAD 41ddfe3 plus the Unit 8 commits.
+
+## Verdicts
+
+| Gate | Verdict | Evidence |
+| --- | --- | --- |
+| Brawler gate | **met** | 10 stock entries of `tests/gates.json` (5 scripts x romdev GL, Chromium GL) and `nr-strict` pass under the engine's `gate.mjs`; `nr-wgpu` (Chromium WebGPU, romdev WebGPU against native WebGPU, 5 scripts) and `nr-controls` (56 controls) pass as tool gates; native p99 at the wave-4 count is 1.16 ms against 16.6 ms and its busy-loop control exceeds it; romdev session `nr-unit8` ends at the expected tick with state equal to native on GL and WebGPU. `gates/gate-gl.log`, `gates/gate-wgpu.log`, `gates/gate-tools.log`, `controls/controls.json`, `perf/`, `romdev/session-summary.json` |
+| Look gate | **pending the owner's checklist** | The R7 capture set is assembled (`look/`, 25 captures, native on WebGPU, each with its cart-equality line in `look/set.json`) and `look/CHECKLIST.md` is unfilled. Whatever the brawler gate shows, this gate passes only when every item there is checked |
+
+### Brawler gate: what it checks
+
+For each of `input-2p-full`, `input-waves`, `input-combat`, `input-join-mid`, `input-upgrade` (`games/nr/tests/brawler.mjs` lists
+the five with their app and last frame), the host's run is held to the native binary on the same graphics API by:
+
+- the whitelisted simulation state (43 `nr.*` fields: every actor, the rng, camera, lights, lives, wave, phase, pick, joins,
+  the sounds the simulation asked for, the event log, both checksums), exact, with a field missing or not finite on either side a
+  rejection (`games/nr/tests/gate-strict.mjs`, built on the spike's predicates);
+- the frame, under the calibrated bound (0.0005 of the pixels differing by more than 16 levels; below);
+- zero cumulative `cw.three.missing` and no program state named in `cw.three.missing_states`, on every host and on native;
+- the committed golden of the script (`games/nr/tests/goldens.json`): the final `nr.checksum` and 13 more final-state fields,
+  on native and on the host;
+- the script's facts: `input-2p-full` ends with `nr.phase == clear` (the clear screen), wave index 4 reached, both players
+  present, alive (hp > 0, not dead) and the count of players 2; `input-waves` ends cleared at wave index 4 with both alive;
+  `input-join-mid` has exactly one join; `input-upgrade` has the dash picked.
+
+Each stock entry also runs the engine's control: the native run one frame short must not match.
+
+| Script | Frames (the last frame) | Final `nr.checksum` (golden) | Facts at the end |
+| --- | ---: | ---: | --- |
+| `input-2p-full` (nr) | 2164 | 3853076974 | phase clear, wave 4, cleared, players hp 9 and 12, lives 4, dash picked |
+| `input-waves` (nr_waves) | 2374 | 2932405792 | last wave ended (tick 2374), wave 4, players hp 3 and 12 |
+| `input-combat` (nr_dummies) | 658 | 1835212864 | both players hp 12 and 9, the dummies' state as scripted |
+| `input-join-mid` (nr) | 800 | 1670758902 | one join, 2 players, wave 2 |
+| `input-upgrade` (nr) | 989 | 3196666525 | dash picked, wave 3 |
+
+The last frame of each is where the picture is still changing, so that the image predicate can see a one-frame shift: the clear
+screen of `input-2p-full` holds still from tick 2165, so the gate runs it to 2164, the tick the arena is cleared (at 2300 a run
+one frame short differs by 0 pixels). The whole run to tick 2300 is also held to native in the romdev session below.
+
+Hosts per entry (results in `gates/`): romdev GL (`build/cart`, `loadMedia wgpu:false`), Chromium GL (`build/cart`), Chromium
+WebGPU and romdev WebGPU (`build/cart-wgpu`, `loadMedia wgpu:true`), each against the native binary on its own API. The native
+binary is the reference; `run-cart.mjs --gpu webgpu` reads a Linux GPU pin and cannot run on macOS, so the WebGPU legs run through
+`games/nr/tests/capture-hosts.mjs` (native with `CW_GPU=webgpu`, Chromium through `chromium-wgpu.mjs`, romdev through the HTTP tools
+with a deterministic clock). Every WebGPU run reports `cw.gpu.api` 2 and no WebGPU errors.
+
+## Image tolerance calibration
+
+Method of `docs/evidence/shipping-path-spike/README.md`, run on the lit scene by `games/nr/tests/calibrate.mjs`
+(`image-calibration.json`, `image-calibration.log`). Per script, three repeats of the native binary and of each of the four hosts
+plus every host one frame early. Known good: host against native over all 9 repeat pairs and native against native. Known bad:
+the host's frame blanked, in the wrong colour space (sRGB decoded as linear, and encoded twice), and one frame early (host and native).
+Tolerance of a pair = 2 x max(good), floor 0.0005; accepted only if at most half of min(bad).
+
+| Pair (host against) | max good gt16 | min bad gt16 (which) | blank / colour space / one frame early, min | tolerance | verdict |
+| --- | ---: | ---: | --- | ---: | --- |
+| romdev GL (native GL) | 0 | 0.002509 (one frame early, join-mid) | 0.9413 / 0.8914 / 0.002509 | 0.0005 | calibrated |
+| Chromium GL (native GL) | 0 | 0.002509 | 0.9413 / 0.8914 / 0.002509 | 0.0005 | calibrated |
+| Chromium WebGPU (native WebGPU) | 0 | 0.002513 | 0.9412 / 0.8914 / 0.002513 | 0.0005 | calibrated |
+| romdev WebGPU (native WebGPU) | 0 | 0.002513 | 0.9412 / 0.8914 / 0.002513 | 0.0005 | calibrated |
+
+The floor decides the tolerance (twice a maximum of 0 is 0), and the floor is 0.0005 against 0.001255 allowed (half the smallest
+bad). Per script the smallest one-frame-early shift is 0.5193 (`2p-full`), 0.0478 (`waves`), 0.1315 (`combat`), 0.0025
+(`join-mid`) and 0.0193 (`upgrade`). All four hosts of every script give frames identical to the native frame (romdev against
+Chromium on GL, Chromium against romdev on WebGPU: 0 differing pixels in all five).
+
+The first calibration failed: on romdev GL the good maximum was 0.003876 (`2p-full`), 0.003125 (`waves`) and 0.003142
+(`join-mid`), above half the smallest bad (0.002509), and the tolerance was not widened (`image-calibration-first-attempt.log`).
+The cause was the scene: two haze planes of the sky overlapped (y 0.9 to 1.1) at the same depth, and romdev's GL run ordered them
+differently from native in a band at the top of the frame (8,037 pixels in x 0 to 950, y 21 to 41). The arena generator now puts
+the second plane 0.02 behind the first (`games/nr/assets/arena/gen-arena.mjs`); the calibration above is the run after that fix.
+The simulation checksums did not change.
+
+## Controls
+
+`games/nr/tests/controls.mjs` runs the gate's predicates (image, state, missing, golden) on each broken input on the
+title-to-clear script against native, on romdev GL, Chromium GL, Chromium WebGPU and romdev WebGPU: 14 controls x 4 hosts = 56.
+Every one failed exactly the predicates it must, with the others green (`controls/controls.json`; `i`, `s`, `m`, `g` below are
+the image, state, missing and golden predicates).
+
+| Control | What it is | Fails | Stays green |
+| --- | --- | --- | --- |
+| base | unmodified run | none | i s m g |
+| blank | the host's frame replaced by black (gt16 0.941) | i | s m g |
+| wrong colour space | sRGB decoded as linear (0.891) / encoded twice (0.996) | i | s m g |
+| 0x0 frame | the host's frame replaced by a 0x0 PNG | i (rejected before any metric) | s m g |
+| non-finite field | a null in `nr.light_pos`, the string `NaN` in `nr.hero_pos`, a null scalar `nr.cam_x`, `nr.rng` missing, and a null in the reference's `nr.hero_pos` | s (rejected, the field is named) | i m g |
+| non-whitelisted field | `nr.sfx_played` (the voices this host made) altered | none | i s m g |
+| one-tick input shift | REAL run with player 2's input one tick late | s (first divergent field `nr.hero_pos`), g (checksum, input count), i (gt16 0.553) | m |
+| row removed | REAL cart built without `standard+map+nearest+nmap+atest+l0400`; `cw.three.missing` 1, the state named (on hosts whose state carries the names) | m, i (the draws are skipped) | s g |
+| light count changed | REAL cart built with a fifth point light; the four lit rows become `l0500` states with no row (`cw.three.missing` 4, named) | m, i | s g |
+
+Notes: the input shift moves the same fact through the state, the golden and the picture, so those three fail together; `missing`
+stays green. Fewer lights is not a control: three.c draws a frame with fewer lights than a row's with that row, so a lost light
+changes no program state; the control adds one. `run-cart.mjs`'s romdev host does not carry byte fields, so on romdev GL the
+removed row is checked by `cw.three.missing == 1` and not by name (`namesChecked: false`); the other three hosts check the name. The
+nr HUD draws no tick counter, so the spike's tick-counter-only control has no counterpart; the non-whitelisted control is its
+state-side analogue and nothing fails.
+
+## Perf
+
+Native: `games/nr/tests/perf-native.mjs` on `nr_stress` (`games/nr/main.c`, `NR_STRESS`): the wave-4 population, 8 grunts, a
+heavy, both heroes and the street block with 4 point lights at 1920x1080 (640x360 scene), every actor on a frame of its own
+(11 distinct atlas frames, advancing every 6 ticks, so each draws as its own non-instanced plane), no waves, no title. GL
+backend, no vsync, no pacing; 120 warm-up frames and 600 measured, 10 runs, the one-pixel `glReadPixels` build (`NR_PERF`) so every frame
+includes its GPU work. Budget 16.6 ms.
+
+| Series | p50 (median of runs) | p99 (median of runs) | p99, worst run | max, worst run |
+| --- | ---: | ---: | ---: | ---: |
+| native, with GPU work (done), 10 runs | 0.845 ms | 1.082 ms | **1.163 ms** | 3.021 ms |
+| native, CPU submit, 10 runs | 0.847 ms | 1.073 ms | 1.135 ms | 3.038 ms |
+| busy-loop control (2.0 ms per actor per frame, 22 ms), 3 runs | 23.391 ms | 23.642 ms | **23.683 ms** | 29.121 ms |
+
+The worst p99 is 7 % of the budget; the control is 1.4 times the budget, so the measurement can see a frame over it. Every run
+ended at tick 721 with checksum 62082975 and `cw.three.missing` 0. The scene has no HUD (`nr_stress` has no title or screens), so the
+render2d draws of the full game are not in these numbers.
+
+Cart hosts, recorded and not gated (`perf/*.json`, `perf/carts.log`; 3 runs x 600 frames after 120 warm-up, the cart's own clock virtual
+and deterministic, every time on the host's real clock):
+
+| Host | Series | p50 | p99 (median / worst run) | max |
+| --- | --- | ---: | ---: | ---: |
+| Chromium GL | `runFrame()` (wasm, GL submit; the GPU runs in another process) | 0.20 ms | 0.28 / 0.28 ms | 0.55 ms |
+| Chromium WebGPU | `runFrame()` (submit) | 0.29 ms | 0.45 / 0.47 ms | 4.0 ms |
+| Chromium WebGPU | `runFrame()` + `readGpuFrame()` (waits for the GPU, reads 1080p back) | 6.5 ms | 8.7 / 8.7 ms | n/a |
+| romdev GL | one `frame{step 1}` HTTP call per frame | 3.57 ms | 6.54 / 6.54 ms | 140 ms |
+| romdev WebGPU | one `frame{step 1}` HTTP call per frame | 8.83 ms | 15.97 / 16.28 ms | 139 ms |
+
+The romdev rows include the call and the host's frame capture (a `wasm{info}` call that runs no frame costs 0.50 to 0.57 ms at p50),
+and its max values are the first frame after a call gap; the Chromium submit rows are not GPU-complete. None of these is a
+frame-time claim for a player's browser: they show the cart runs the wave-4 scene on every cart host at a rate well inside a frame
+on this machine.
+
+## Memory
+
+The cart's WASM linear memory is 134,217,728 bytes (128 MiB) on romdev and in Chromium, GL and WebGPU, at load and at the end
+of every run: that is the memory the host allocated, not what the game touched. What the game touched is measured by scanning
+linear memory for 4 KiB pages holding any non-zero byte (`games/nr/tests/perf-carts.mjs`, Chromium), after 120 warm-up frames
+and at the end:
+
+| Cart, run | After warm-up | End | Atlas sheets, decoded (computed, Unit 6) |
+| --- | ---: | ---: | ---: |
+| `nr` (full game), `input-2p-full`, 2300 frames, GL | 45.8 MiB | 46.0 MiB (48,259,072 B) | 36.12 MiB |
+| `nr` (full game), `input-2p-full`, 2300 frames, WebGPU | 46.3 MiB | 46.5 MiB (48,750,592 B) | 36.12 MiB |
+| `nr_stress`, 720 frames, GL / WebGPU | 44.3 / 44.2 MiB | 44.3 / 44.2 MiB | 36.12 MiB |
+
+All of the game's memory, the three decoded atlases included, is under the 64 MiB the atlas budget allows for the atlases
+alone (46.5 MiB at most), and about 36 % of the 128 MiB wasm. The engine's own tag counts through `stats` (`mem_total` 77,814 B
+on `nr_stress` after warm-up, `perf/romdev-gl-nr_stress.json`) do not include the atlas pixel buffers. Native process RSS on
+`nr_stress` (not wasm): 105 to 130 MiB at the end, 148 to 172 MiB peak (`perf/native-nr_stress.summary.json`).
+
+## romdev session `nr-unit8`
+
+`games/nr/tests/romdev-unit8.mjs`, one session, `build/cart-wgpu/carts/nr.wasc`, a GL run (`loadMedia wgpu:false`, reported
+`gpu: gl`) and a WebGPU run (`wgpu:true`, `gpu: webgpu`, adapter apple metal-3, apple-m1-pro). For each:
+
+- `wasm{conformance}`: conforms, abi 4.
+- `input-2p-full` as `input{sequence}` steps with the load frame counted (`loadMedia` ran frame 1; `docs/solutions/logic-errors/romdev-loadmedia-consumes-frame-one-2026-10-24.md`):
+  `nr.ticks` equals the engine frame count at every stop (30, 61, 500, 765, 1000, 2164, 2250, 2300).
+- Screenshots of each screen: the title (tick 30), both players joined and the fight begun (61), wave 2 (500), the upgrade
+  choice (765), the fight with the HUD (1000), the clear screen (2164 and 2250); `romdev/gl-f*.png`, `romdev/wgpu-f*.png`.
+- `debugState` at tick 2164: the golden of `input-2p-full` (checksum 3853076974, `brawlerProblems` empty) and equal to native's
+  49 fields; at tick 2300: checksum 1637854936, equal to native's state of tick 2300 on the same API, `cw.three.missing` 0; on
+  WebGPU `cw.gpu.api` 2, `cw.gpu.errors` 0 (`romdev/session-summary.json`, `romdev/events.ndjson`, `romdev/*-state-f2300.json`).
+
+The session ends with the cart loaded on the title (WebGPU, tick 1, phase title, no players, `nr.demo` 0) and the session alive
+(`romdev/left-at-title.png`). `host{op:play}` was not called, so nothing has been shown on the livestream.
+
+## Scope limits and what is not verified
+
+- One machine and one GPU: every host ran on the same Apple M1 Pro, so the frames are pixel-identical (good maximum 0) and the tolerance is
+  the floor. This does not bound the difference between GPUs or drivers; a run on other hardware is compared by the same bound
+  and may need the calibration redone.
+- The sound effects are generated placeholders (`games/nr/assets/LICENSE-NOTICES.md`); audio ran against SDL's dummy driver and
+  nothing was heard.
+- Two hero clips are gaps: `jumpkick` and `grab` are the owner's hand-keyed clips, not in the atlas, and the moveset runs without them.
+- The darkening at the rims of the normal map on knocked-down bodies (they can read as translucent) is accepted for this slice
+  (`unit7/translucency/README.md`); no atlas or pipeline change was made.
+- The perf scene has no HUD; the full game's 2D draws are unmeasured. Cart-host times are records, not budgets, and are not GPU-complete
+  except the one WebGPU row that waits for the GPU.
+- The goldens are the native GL run of this unit; they pin regressions of the simulation and the scripts, and the gate also checks the
+  facts of each script. They do not prove the fights are good.
+- A hero mid-combo beside a grunt on the street is not a capture of its own in the look set; the wave captures show the fights.
+- The look and feel of the captures, the screens and the sounds is the owner's call (look gate).
 
 ## Unit 3: hero clip set, render time and atlas size
 

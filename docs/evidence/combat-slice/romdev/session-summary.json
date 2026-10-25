@@ -1,0 +1,206 @@
+{
+  "session": "nr-unit8",
+  "cart": "/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart-wgpu/carts/nr.wasc",
+  "startedAt": "2026-10-25T18:31:36.054Z",
+  "apis": {
+    "gl": {
+      "gpu": "gl",
+      "conformance": true,
+      "heapBytes": {
+        "atTitle": 134217728,
+        "afterRun": 134217728
+      },
+      "goldenAt": 2164,
+      "goldenProblems": [],
+      "stateEqualToNative": {
+        "2164": true,
+        "2300": true
+      },
+      "checksumAt2300": 1637854936,
+      "cw.gpu.api": 1,
+      "cw.three.missing": 0,
+      "stops": [
+        {
+          "tick": 30,
+          "phase": 0,
+          "wave": 0,
+          "lives": 3,
+          "players": 1,
+          "checksum": 1247569533,
+          "shot": "gl-f30.png"
+        },
+        {
+          "tick": 61,
+          "phase": 1,
+          "wave": 0,
+          "lives": 6,
+          "players": 2,
+          "checksum": 1866796217,
+          "shot": "gl-f61.png"
+        },
+        {
+          "tick": 500,
+          "phase": 1,
+          "wave": 2,
+          "lives": 6,
+          "players": 2,
+          "checksum": 410821110,
+          "shot": "gl-f500.png"
+        },
+        {
+          "tick": 765,
+          "phase": 2,
+          "wave": 2,
+          "lives": 6,
+          "players": 2,
+          "checksum": 3798697054,
+          "shot": "gl-f765.png"
+        },
+        {
+          "tick": 1000,
+          "phase": 1,
+          "wave": 3,
+          "lives": 6,
+          "players": 2,
+          "checksum": 1825271965,
+          "shot": "gl-f1000.png"
+        },
+        {
+          "tick": 2164,
+          "phase": 3,
+          "wave": 4,
+          "lives": 4,
+          "players": 2,
+          "checksum": 3853076974,
+          "shot": "gl-f2164.png"
+        },
+        {
+          "tick": 2250,
+          "phase": 3,
+          "wave": 4,
+          "lives": 4,
+          "players": 2,
+          "checksum": 3321727242,
+          "shot": "gl-f2250.png"
+        },
+        {
+          "tick": 2300,
+          "phase": 3,
+          "wave": 4,
+          "lives": 4,
+          "players": 2,
+          "checksum": 1637854936,
+          "shot": "gl-f2300.png"
+        }
+      ]
+    },
+    "webgpu": {
+      "gpu": "webgpu",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "apple-m1-pro",
+        "description": "Metal driver on macOS Version 15.7.9 (Build 24G830)",
+        "featureLevel": "compatibility",
+        "powerPreference": null
+      },
+      "conformance": true,
+      "heapBytes": {
+        "atTitle": 134217728,
+        "afterRun": 134217728
+      },
+      "goldenAt": 2164,
+      "goldenProblems": [],
+      "stateEqualToNative": {
+        "2164": true,
+        "2300": true
+      },
+      "checksumAt2300": 1637854936,
+      "cw.gpu.api": 2,
+      "cw.three.missing": 0,
+      "stops": [
+        {
+          "tick": 30,
+          "phase": 0,
+          "wave": 0,
+          "lives": 3,
+          "players": 1,
+          "checksum": 1247569533,
+          "shot": "wgpu-f30.png"
+        },
+        {
+          "tick": 61,
+          "phase": 1,
+          "wave": 0,
+          "lives": 6,
+          "players": 2,
+          "checksum": 1866796217,
+          "shot": "wgpu-f61.png"
+        },
+        {
+          "tick": 500,
+          "phase": 1,
+          "wave": 2,
+          "lives": 6,
+          "players": 2,
+          "checksum": 410821110,
+          "shot": "wgpu-f500.png"
+        },
+        {
+          "tick": 765,
+          "phase": 2,
+          "wave": 2,
+          "lives": 6,
+          "players": 2,
+          "checksum": 3798697054,
+          "shot": "wgpu-f765.png"
+        },
+        {
+          "tick": 1000,
+          "phase": 1,
+          "wave": 3,
+          "lives": 6,
+          "players": 2,
+          "checksum": 1825271965,
+          "shot": "wgpu-f1000.png"
+        },
+        {
+          "tick": 2164,
+          "phase": 3,
+          "wave": 4,
+          "lives": 4,
+          "players": 2,
+          "checksum": 3853076974,
+          "shot": "wgpu-f2164.png"
+        },
+        {
+          "tick": 2250,
+          "phase": 3,
+          "wave": 4,
+          "lives": 4,
+          "players": 2,
+          "checksum": 3321727242,
+          "shot": "wgpu-f2250.png"
+        },
+        {
+          "tick": 2300,
+          "phase": 3,
+          "wave": 4,
+          "lives": 4,
+          "players": 2,
+          "checksum": 1637854936,
+          "shot": "wgpu-f2300.png"
+        }
+      ]
+    }
+  },
+  "leftAt": {
+    "gpu": "webgpu",
+    "phase": 0,
+    "ticks": 1,
+    "players": 0,
+    "demo": 0,
+    "at": "2026-10-25T18:31:51.398Z"
+  },
+  "ok": true
+}

@@ -1,0 +1,167 @@
+[
+  {
+    "id": "2p-full",
+    "gate": "nr-2p-full",
+    "app": "nr",
+    "frames": 2164,
+    "ok": true,
+    "problems": [],
+    "rows": {
+      "chromium-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 3853076974,
+        "missing": 0,
+        "ms": 11784
+      },
+      "romdev-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 3853076974,
+        "missing": 0,
+        "ms": 5043
+      },
+      "control": {
+        "stateDiverges": true,
+        "firstDivergent": "nr.ticks"
+      },
+      "native-wgpu": {
+        "checksum": 3853076974,
+        "missing": 0,
+        "ms": 929
+      }
+    }
+  },
+  {
+    "id": "waves",
+    "gate": "nr-waves",
+    "app": "nr_waves",
+    "frames": 2374,
+    "ok": true,
+    "problems": [],
+    "rows": {
+      "chromium-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 2932405792,
+        "missing": 0,
+        "ms": 12554
+      },
+      "romdev-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 2932405792,
+        "missing": 0,
+        "ms": 4765
+      },
+      "control": {
+        "stateDiverges": true,
+        "firstDivergent": "nr.ticks"
+      },
+      "native-wgpu": {
+        "checksum": 2932405792,
+        "missing": 0,
+        "ms": 800
+      }
+    }
+  },
+  {
+    "id": "combat",
+    "gate": "nr-combat",
+    "app": "nr_dummies",
+    "frames": 658,
+    "ok": true,
+    "problems": [],
+    "rows": {
+      "chromium-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 1835212864,
+        "missing": 0,
+        "ms": 4283
+      },
+      "romdev-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 1835212864,
+        "missing": 0,
+        "ms": 1622
+      },
+      "control": {
+        "stateDiverges": true,
+        "firstDivergent": "nr.ticks"
+      },
+      "native-wgpu": {
+        "checksum": 1835212864,
+        "missing": 0,
+        "ms": 380
+      }
+    }
+  },
+  {
+    "id": "join-mid",
+    "gate": "nr-join-mid",
+    "app": "nr",
+    "frames": 800,
+    "ok": true,
+    "problems": [],
+    "rows": {
+      "chromium-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 1670758902,
+        "missing": 0,
+        "ms": 4915
+      },
+      "romdev-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 1670758902,
+        "missing": 0,
+        "ms": 1914
+      },
+      "control": {
+        "stateDiverges": true,
+        "firstDivergent": "nr.ticks"
+      },
+      "native-wgpu": {
+        "checksum": 1670758902,
+        "missing": 0,
+        "ms": 556
+      }
+    }
+  },
+  {
+    "id": "upgrade",
+    "gate": "nr-upgrade",
+    "app": "nr",
+    "frames": 989,
+    "ok": true,
+    "problems": [],
+    "rows": {
+      "chromium-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 3196666525,
+        "missing": 0,
+        "ms": 6271
+      },
+      "romdev-wgpu": {
+        "gt16": 0,
+        "tolerance": 0.0005,
+        "checksum": 3196666525,
+        "missing": 0,
+        "ms": 2508
+      },
+      "control": {
+        "stateDiverges": true,
+        "firstDivergent": "nr.ticks"
+      },
+      "native-wgpu": {
+        "checksum": 3196666525,
+        "missing": 0,
+        "ms": 568
+      }
+    }
+  }
+]

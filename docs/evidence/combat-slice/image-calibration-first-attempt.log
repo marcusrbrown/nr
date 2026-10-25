@@ -1,0 +1,4 @@
+2p-full: romdev good max 0.003876 bad min 0.519293 | chromium good max 0.000000 bad min 0.519293 | chromium-wgpu good max 0.000000 bad min 0.519327 | romdev-wgpu good max 0.000000 bad min 0.519327
+waves: romdev good max 0.003125 bad min 0.047843 | chromium good max 0.000000 bad min 0.047843 | chromium-wgpu good max 0.000000 bad min 0.047843 | romdev-wgpu good max 0.000000 bad min 0.047843
+combat: romdev good max 0.000490 bad min 0.131484 | chromium good max 0.000000 bad min 0.131484 | chromium-wgpu good max 0.000000 bad min 0.131484 | romdev-wgpu good max 0.000000 bad min 0.131484
+join-mid: romdev good max 0.003142 bad min 0.002509 | chromium good max 0.000000 bad min 0.002509 | chromium-wgpu good max 0.000000 bad min 0.002513 | romdev-wgpu good max 0.000000 bad min 0.002513

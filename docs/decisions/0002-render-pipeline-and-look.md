@@ -4,6 +4,7 @@
 
 - Pipeline (Blender settings, passes, normal convention, post-processing, manifest, licence split, reproducibility definition): accepted, 2026-10-24, from combat-slice Unit 1.
 - Camera, pixel density and lighting: **proposed**. They are the current values, tuned as the prototype develops: Unit 2 measured the density, Unit 4 checked the camera against its occlusion and scroll captures, and the owner's review of the look captures sets what is approved for now. Nothing below marked proposed constrains art production beyond the current render.
+- Final values of the combat slice (section "Final values", Unit 8): measured against the brawler gate, which is met; the look gate is the owner's checklist in `docs/evidence/combat-slice/look/CHECKLIST.md`, not yet filled, so the proposed items stay proposed until it is.
 
 ## Context
 
@@ -120,6 +121,33 @@ it there and records the page; the loader reads one page per character today). T
   sheets (and a third time for the committed install) on this machine.
 - Clip table: `games/nr/anim.c` names the hero's 16 clip slots; `jumpkick` and `grab` are gap slots (the profile marks
   them not ready with a `handKey` note, the renderer refuses them with exit 12) until the owner hand-keys them.
+
+## Final values
+
+The values the slice ends on, with what was measured against them (`docs/evidence/combat-slice/README.md` has the tables and the
+artifacts). Measured on one machine: Apple M1 Pro, macOS 15.7.9, romdev 0.150.2.
+
+- Camera and density: perspective camera, vertical FOV 18 degrees, pitched 20 degrees (the sprite render camera's elevation), 64
+  scene pixels per world unit at the centre lane, the centre lane's ground line 100 scene pixels below the frame's centre; the
+  window is 1920x1080 logical with `pixel_scale 3`, a 640x360 scene upscaled by the engine with nearest filtering; the hero's
+  idle figure is 128 px. Unchanged since Units 2 and 4.
+- Lighting: ambient 0x7482a8 and four point lights (three neons at intensity 28 and a flash slot at 0), distance 14, decay 2, so
+  one program state, `l0400`, covers the game; the four `l0400` rows of `games/nr/programs/nr.txt` are all it draws. three.c covers a
+  frame with fewer lights than a row's with that row; a fifth light has no row and is a missing state (the gate's light-count
+  control). A host that draws a program state without a row fails the gate on `cw.three.missing`.
+- Depth: two planes of the arena at one depth with overlapping extents are ordered by the host's tie-break, which differed between
+  romdev GL and native (8,037 pixels at the top of the frame); planes that overlap stand at distinct depths (`gen-arena.mjs`,
+  the second haze band 0.02 behind the first).
+- Atlas: 14 hero clips (96 frames), the grunt (27) and the heavy (27), 36.12 MiB decoded against the 64 MiB budget. Measured in
+  cart runs, everything the game touches in the 128 MiB wasm is 46.0 MiB (GL) to 46.5 MiB (WebGPU) at the end of the full game,
+  so the budget holds with the whole heap counted. `jumpkick` and `grab` remain gaps for the owner's hand-keyed clips.
+- Image tolerance across hosts: 0.0005 of the pixels differing by more than 16 levels, the floor, calibrated on the lit scene by
+  the spike's method (good maximum 0 on all four cart-host pairs; smallest bad 0.0025, a frame one early; the bound is at most
+  half of that). The hosts' frames were pixel-identical on this machine, so the number is the floor, not a measured spread.
+- Frame budget: the wave-4 population (8 grunts, a heavy, two heroes, the street block, four lights, every actor on its own
+  frame) renders with GPU work in a p99 of 1.16 ms at worst over 10 native runs, against 16.6 ms; the busy-loop control is 23.7 ms.
+  The full game's 2D screens are not in that scene.
+- Not settled here: the look. Whether the lit side, silhouettes, occlusion and screens are right is the owner's checklist.
 
 ## Consequences
 

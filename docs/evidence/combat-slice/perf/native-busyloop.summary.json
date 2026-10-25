@@ -1,0 +1,50 @@
+{
+  "label": "nr_stress_busyloop",
+  "app": "nr_stress",
+  "actors": 11,
+  "distinctFrames": 11,
+  "runs": 3,
+  "gl": "ANGLE (Apple, Apple M1 Pro, OpenGL 4.1 Metal - 89.4)",
+  "submit": {
+    "p50_median": 23.388,
+    "p99_median": 23.619,
+    "p99_worst": 23.723,
+    "max_worst": 29.152
+  },
+  "done": {
+    "p50_median": 23.391000747680664,
+    "p99_median": 23.642000198364258,
+    "p99_worst": 23.683000564575195,
+    "max_worst": 29.121000289916992
+  },
+  "missing": [
+    0,
+    0,
+    0
+  ],
+  "checksums": [
+    62082975
+  ],
+  "rssKiB": [
+    {
+      "afterWarmup": 127616,
+      "end": 83024,
+      "peak": 169488
+    },
+    {
+      "afterWarmup": 164304,
+      "end": 95136,
+      "peak": 170416
+    },
+    {
+      "afterWarmup": 162704,
+      "end": 40592,
+      "peak": 165504
+    }
+  ],
+  "files": [
+    "nr_stress_busyloop-1",
+    "nr_stress_busyloop-2",
+    "nr_stress_busyloop-3"
+  ]
+}

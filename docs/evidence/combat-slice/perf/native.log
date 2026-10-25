@@ -1,0 +1,11 @@
+nr_stress-1: actors 11 (11 distinct frames) submit p50 0.778 p99 1.024 max 1.490 | done p50 0.776 p99 1.052 max 1.489 | ticks 721 missing 0 rss 171072/133360/176256 KiB
+nr_stress-2: actors 11 (11 distinct frames) submit p50 0.872 p99 1.118 max 3.021 | done p50 0.871 p99 1.163 max 2.979 | ticks 721 missing 0 rss 150032/113280/155568 KiB
+nr_stress-3: actors 11 (11 distinct frames) submit p50 0.848 p99 1.095 max 2.894 | done p50 0.848 p99 1.108 max 2.855 | ticks 721 missing 0 rss 167152/131248/172512 KiB
+nr_stress-4: actors 11 (11 distinct frames) submit p50 0.834 p99 1.071 max 2.678 | done p50 0.832 p99 1.073 max 2.658 | ticks 721 missing 0 rss 162688/123328/168064 KiB
+nr_stress-5: actors 11 (11 distinct frames) submit p50 0.874 p99 1.079 max 2.591 | done p50 0.873 p99 1.081 max 2.735 | ticks 721 missing 0 rss 156496/118368/162272 KiB
+nr_stress-6: actors 11 (11 distinct frames) submit p50 0.874 p99 1.135 max 2.412 | done p50 0.872 p99 1.139 max 2.377 | ticks 721 missing 0 rss 155008/117664/160368 KiB
+nr_stress-7: actors 11 (11 distinct frames) submit p50 0.840 p99 1.073 max 2.516 | done p50 0.839 p99 1.120 max 2.510 | ticks 721 missing 0 rss 151648/113632/156848 KiB
+nr_stress-8: actors 11 (11 distinct frames) submit p50 0.836 p99 1.024 max 2.507 | done p50 0.836 p99 1.045 max 2.501 | ticks 721 missing 0 rss 165728/129392/171392 KiB
+nr_stress-9: actors 11 (11 distinct frames) submit p50 0.856 p99 1.065 max 2.283 | done p50 0.855 p99 1.082 max 2.268 | ticks 721 missing 0 rss 150656/113216/156336 KiB
+nr_stress-10: actors 11 (11 distinct frames) submit p50 0.847 p99 1.084 max 3.038 | done p50 0.845 p99 1.097 max 3.021 | ticks 721 missing 0 rss 145888/107440/151456 KiB
+{"label":"nr_stress","app":"nr_stress","actors":11,"distinctFrames":11,"runs":10,"gl":"ANGLE (Apple, Apple M1 Pro, OpenGL 4.1 Metal - 89.4)","submit":{"p50_median":0.847,"p99_median":1.073,"p99_worst":1.135,"max_worst":3.038},"done":{"p50_median":0.84500002861

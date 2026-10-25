@@ -1,0 +1,3 @@
+ok   nr-wgpu (games/nr/tests/capture-hosts.mjs)
+ok   nr-controls (games/nr/tests/controls.mjs)
+exit 0

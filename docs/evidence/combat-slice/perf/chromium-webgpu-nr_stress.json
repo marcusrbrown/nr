@@ -1,0 +1,221 @@
+{
+ "summary": {
+  "label": "chromium-webgpu-nr_stress",
+  "host": "chromium",
+  "gpu": "webgpu",
+  "cart": "/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart-wgpu/carts/nr_stress.wasc",
+  "frames": 720,
+  "runs": 3,
+  "p50_median": 0.2900000065565109,
+  "p99_median": 0.45499999821186066,
+  "p99_worst": 0.4699999988079071,
+  "max_worst": 3.9549999982118607,
+  "done_p99_worst": 8.725000008940697,
+  "call_overhead_p50_median": null,
+  "heapBytes": [
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   }
+  ],
+  "filled": [
+   {
+    "atTitle": {
+     "pages": 558,
+     "bytes": 2285568,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11320,
+     "bytes": 46366720,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11324,
+     "bytes": 46383104,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   {
+    "atTitle": {
+     "pages": 558,
+     "bytes": 2285568,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11320,
+     "bytes": 46366720,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11324,
+     "bytes": 46383104,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   {
+    "atTitle": {
+     "pages": 558,
+     "bytes": 2285568,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11320,
+     "bytes": 46366720,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11324,
+     "bytes": 46383104,
+     "highestNonZeroBytes": 134217680
+    }
+   }
+  ],
+  "engineMem": [
+   null,
+   null,
+   null
+  ],
+  "ticksFinal": [
+   720,
+   720,
+   720
+  ]
+ },
+ "runs": [
+  {
+   "run": 1,
+   "frame_ms": {
+    "n": 600,
+    "p50": 0.2900000065565109,
+    "p99": 0.4350000023841858,
+    "max": 3.9549999982118607,
+    "mean": 0.3096250006059806
+   },
+   "done_ms": {
+    "n": 600,
+    "p50": 6.450000002980232,
+    "p99": 8.04500000178814,
+    "max": 17.260000005364418,
+    "mean": 6.579275000517567
+   },
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 558,
+     "bytes": 2285568,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11320,
+     "bytes": 46366720,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11324,
+     "bytes": 46383104,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 720,
+   "renderer": "{\"vendor\":\"apple\",\"architecture\":\"metal-3\",\"device\":\"\",\"description\":\"\",\"featureLevel\":\"compatibility\",\"powerPreference\":\"high-performance\"}"
+  },
+  {
+   "run": 2,
+   "frame_ms": {
+    "n": 600,
+    "p50": 0.2900000065565109,
+    "p99": 0.45499999821186066,
+    "max": 0.7950000017881393,
+    "mean": 0.30583333380520344
+   },
+   "done_ms": {
+    "n": 600,
+    "p50": 6.514999985694885,
+    "p99": 8.679999992251396,
+    "max": 15.599999994039536,
+    "mean": 6.630508333320419
+   },
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 558,
+     "bytes": 2285568,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11320,
+     "bytes": 46366720,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11324,
+     "bytes": 46383104,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 720,
+   "renderer": "{\"vendor\":\"apple\",\"architecture\":\"metal-3\",\"device\":\"\",\"description\":\"\",\"featureLevel\":\"compatibility\",\"powerPreference\":\"high-performance\"}"
+  },
+  {
+   "run": 3,
+   "frame_ms": {
+    "n": 600,
+    "p50": 0.3149999976158142,
+    "p99": 0.4699999988079071,
+    "max": 1.7150000035762787,
+    "mean": 0.3235833330204089
+   },
+   "done_ms": {
+    "n": 600,
+    "p50": 6.590000003576279,
+    "p99": 8.725000008940697,
+    "max": 15.75500001013279,
+    "mean": 6.758908333256841
+   },
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 558,
+     "bytes": 2285568,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11320,
+     "bytes": 46366720,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11324,
+     "bytes": 46383104,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 720,
+   "renderer": "{\"vendor\":\"apple\",\"architecture\":\"metal-3\",\"device\":\"\",\"description\":\"\",\"featureLevel\":\"compatibility\",\"powerPreference\":\"high-performance\"}"
+  }
+ ]
+}

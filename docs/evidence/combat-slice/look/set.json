@@ -1,0 +1,513 @@
+{
+  "hosts": {
+    "native": "native binary on WebGPU (Dawn on Metal, offscreen)",
+    "cart": "build/cart-wgpu in headless Chromium on WebGPU"
+  },
+  "size": [
+    1920,
+    1080
+  ],
+  "captures": 25,
+  "set": [
+    {
+      "name": "idle-light-0",
+      "what": "hero idle under neon light 0 only",
+      "app": "nr_solo_0",
+      "input": "games/nr/tests/input-idle.json",
+      "tick": 60,
+      "file": "idle-light-0.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "idle-light-1",
+      "what": "hero idle under neon light 1 only",
+      "app": "nr_solo_1",
+      "input": "games/nr/tests/input-idle.json",
+      "tick": 60,
+      "file": "idle-light-1.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "idle-light-2",
+      "what": "hero idle under neon light 2 only",
+      "app": "nr_solo_2",
+      "input": "games/nr/tests/input-idle.json",
+      "tick": 60,
+      "file": "idle-light-2.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "idle-all-lights-f60",
+      "what": "heroes idle under the three neons, one walking on its own frame",
+      "app": "nr_stage",
+      "input": "games/nr/tests/input-idle.json",
+      "tick": 60,
+      "file": "idle-all-lights-f60.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "idle-all-lights-f120",
+      "what": "the same, the lights moved",
+      "app": "nr_stage",
+      "input": "games/nr/tests/input-idle.json",
+      "tick": 120,
+      "file": "idle-all-lights-f120.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "mid-walk-stage",
+      "what": "the walking hero mid-stride",
+      "app": "nr_stage",
+      "input": "games/nr/tests/input-idle.json",
+      "tick": 180,
+      "file": "mid-walk-stage.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "mid-walk-belt",
+      "what": "both players walking on the belt, mid-scroll",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-scroll.json",
+      "tick": 352,
+      "file": "mid-walk-belt.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "scroll-f061",
+      "what": "belt scroll: both players at one x, the camera on them",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-scroll.json",
+      "tick": 61,
+      "file": "scroll-f061.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "scroll-f232",
+      "what": "belt scroll: the trailing player at the left edge, the leader at the soft wall",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-scroll.json",
+      "tick": 232,
+      "file": "scroll-f232.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "scroll-f352",
+      "what": "belt scroll: mid-scroll",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-scroll.json",
+      "tick": 352,
+      "file": "scroll-f352.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "scroll-f426",
+      "what": "belt scroll: the pillar and the signs in view",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-scroll.json",
+      "tick": 426,
+      "file": "scroll-f426.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "scroll-f640",
+      "what": "belt scroll: the end of the street",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-scroll.json",
+      "tick": 640,
+      "file": "scroll-f640.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "pillar",
+      "what": "one player behind the pillar, a stand-in in front of it",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-pillar.json",
+      "tick": 243,
+      "file": "pillar.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "pillar-bare",
+      "what": "the same street and lights, no actors (the control for the occlusion)",
+      "app": "nr_arena_bare",
+      "input": "games/nr/tests/input-pillar.json",
+      "tick": 243,
+      "file": "pillar-bare.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "grunt-airborne",
+      "what": "wave 2: a grunt in the air",
+      "app": "nr_waves",
+      "input": "games/nr/tests/input-waves.json",
+      "tick": 450,
+      "file": "grunt-airborne.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "heavy-windup",
+      "what": "wave 3: the heavy winding up",
+      "app": "nr_waves",
+      "input": "games/nr/tests/input-waves.json",
+      "tick": 990,
+      "file": "heavy-windup.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "wave4-crowd",
+      "what": "wave 4: the crowd, grunts and the heavy with both players",
+      "app": "nr_waves",
+      "input": "games/nr/tests/input-waves.json",
+      "tick": 1600,
+      "file": "wave4-crowd.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "heavy-staggered",
+      "what": "wave 4: the heavy staggered",
+      "app": "nr_waves",
+      "input": "games/nr/tests/input-waves.json",
+      "tick": 2050,
+      "file": "heavy-staggered.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "combat-hit2",
+      "what": "the combo: hit 2 landing",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-combat.json",
+      "tick": 49,
+      "file": "combat-hit2.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "combat-radius-special",
+      "what": "the radius special",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-combat.json",
+      "tick": 362,
+      "file": "combat-radius-special.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "combat-dash-special",
+      "what": "the dash special",
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-combat.json",
+      "tick": 429,
+      "file": "combat-dash-special.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "title",
+      "what": "the title screen",
+      "app": "nr",
+      "input": "games/nr/tests/input-2p-full.json",
+      "tick": 30,
+      "file": "title.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "hud",
+      "what": "the fight with the HUD",
+      "app": "nr",
+      "input": "games/nr/tests/input-2p-full.json",
+      "tick": 1000,
+      "file": "hud.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "upgrade",
+      "what": "the upgrade choice screen",
+      "app": "nr",
+      "input": "games/nr/tests/input-2p-full.json",
+      "tick": 765,
+      "file": "upgrade.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    },
+    {
+      "name": "clear",
+      "what": "the clear screen",
+      "app": "nr",
+      "input": "games/nr/tests/input-2p-full.json",
+      "tick": 2164,
+      "file": "clear.png",
+      "nativeMissing": 0,
+      "cartMissing": 0,
+      "cartVsNative": {
+        "sameSize": true,
+        "width": 1920,
+        "height": 1080,
+        "identical": true,
+        "differingPixels": 0,
+        "maxChannelDiff": 0,
+        "simStateEqual": true,
+        "fieldsCompared": 43
+      }
+    }
+  ]
+}

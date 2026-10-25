@@ -1,0 +1,91 @@
+{
+ "summary": {
+  "label": "chromium-webgpu-nr-full",
+  "host": "chromium",
+  "gpu": "webgpu",
+  "cart": "/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart-wgpu/carts/nr.wasc",
+  "frames": 2300,
+  "runs": 1,
+  "p50_median": 0.3449999988079071,
+  "p99_median": 0.5,
+  "p99_worst": 0.5,
+  "max_worst": 2.105000004172325,
+  "done_p99_worst": 8.594999998807907,
+  "call_overhead_p50_median": null,
+  "heapBytes": [
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   }
+  ],
+  "filled": [
+   {
+    "atTitle": {
+     "pages": 560,
+     "bytes": 2293760,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11841,
+     "bytes": 48500736,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11902,
+     "bytes": 48750592,
+     "highestNonZeroBytes": 134217680
+    }
+   }
+  ],
+  "engineMem": [
+   null
+  ],
+  "ticksFinal": [
+   2300
+  ]
+ },
+ "runs": [
+  {
+   "run": 1,
+   "frame_ms": {
+    "n": 2180,
+    "p50": 0.3449999988079071,
+    "p99": 0.5,
+    "max": 2.105000004172325,
+    "mean": 0.3566399083430067
+   },
+   "done_ms": {
+    "n": 2180,
+    "p50": 6.545000001788139,
+    "p99": 8.594999998807907,
+    "max": 15.82999999821186,
+    "mean": 6.670823394582359
+   },
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 560,
+     "bytes": 2293760,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11841,
+     "bytes": 48500736,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11902,
+     "bytes": 48750592,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 2300,
+   "renderer": "{\"vendor\":\"apple\",\"architecture\":\"metal-3\",\"device\":\"\",\"description\":\"\",\"featureLevel\":\"compatibility\",\"powerPreference\":\"high-performance\"}"
+  }
+ ]
+}

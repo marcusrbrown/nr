@@ -1,0 +1,1854 @@
+{
+  "generated": "2026-10-25T18:00:27.355Z",
+  "repeats": 3,
+  "floor": 0.0005,
+  "scenarios": [
+    {
+      "id": "2p-full",
+      "app": "nr",
+      "frames": 2164,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 0.9412586805555555
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.8914236111111111
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9961892361111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2164 vs romdev at 2163",
+            "gt16": 0.5192925347222223
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2164 vs native at 2163",
+            "gt16": 0.5192925347222223
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 0.9412586805555555
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.8914236111111111
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9961892361111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2164 vs chromium at 2163",
+            "gt16": 0.5192925347222223
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2164 vs native at 2163",
+            "gt16": 0.5192925347222223
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank chromium-wgpu",
+            "gt16": 0.9412152777777778
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu with sRGB decoded as linear",
+            "gt16": 0.8913628472222223
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu encoded twice",
+            "gt16": 0.9961892361111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2164 vs chromium-wgpu at 2163",
+            "gt16": 0.5193272569444445
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2164 vs native-wgpu at 2163",
+            "gt16": 0.5193272569444445
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank romdev-wgpu",
+            "gt16": 0.9412152777777778
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu with sRGB decoded as linear",
+            "gt16": 0.8913628472222223
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu encoded twice",
+            "gt16": 0.9961892361111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2164 vs romdev-wgpu at 2163",
+            "gt16": 0.5193272569444445
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2164 vs native-wgpu at 2163",
+            "gt16": 0.5193272569444445
+          }
+        ]
+      },
+      "crossHost": {
+        "romdev-vs-chromium": 0,
+        "chromium-wgpu-vs-romdev-wgpu": 0
+      }
+    },
+    {
+      "id": "waves",
+      "app": "nr_waves",
+      "frames": 2374,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 0.9757161458333333
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9498480902777777
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9891189236111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2374 vs romdev at 2373",
+            "gt16": 0.04784288194444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2374 vs native at 2373",
+            "gt16": 0.04784288194444444
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 0.9757161458333333
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9498480902777777
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9891189236111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2374 vs chromium at 2373",
+            "gt16": 0.04784288194444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 2374 vs native at 2373",
+            "gt16": 0.04784288194444444
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank chromium-wgpu",
+            "gt16": 0.9756597222222222
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu with sRGB decoded as linear",
+            "gt16": 0.94984375
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu encoded twice",
+            "gt16": 0.9891189236111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2374 vs chromium-wgpu at 2373",
+            "gt16": 0.04784288194444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2374 vs native-wgpu at 2373",
+            "gt16": 0.04784288194444444
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank romdev-wgpu",
+            "gt16": 0.9756597222222222
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu with sRGB decoded as linear",
+            "gt16": 0.94984375
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu encoded twice",
+            "gt16": 0.9891189236111111
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2374 vs romdev-wgpu at 2373",
+            "gt16": 0.04784288194444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 2374 vs native-wgpu at 2373",
+            "gt16": 0.04784288194444444
+          }
+        ]
+      },
+      "crossHost": {
+        "romdev-vs-chromium": 0,
+        "chromium-wgpu-vs-romdev-wgpu": 0
+      }
+    },
+    {
+      "id": "combat",
+      "app": "nr_dummies",
+      "frames": 658,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 0.9887630208333333
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9708550347222222
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9807335069444445
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 658 vs romdev at 657",
+            "gt16": 0.131484375
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 658 vs native at 657",
+            "gt16": 0.131484375
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 0.9887630208333333
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9708550347222222
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9807335069444445
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 658 vs chromium at 657",
+            "gt16": 0.131484375
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 658 vs native at 657",
+            "gt16": 0.131484375
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank chromium-wgpu",
+            "gt16": 0.9887630208333333
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu with sRGB decoded as linear",
+            "gt16": 0.9708550347222222
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu encoded twice",
+            "gt16": 0.9807421875
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 658 vs chromium-wgpu at 657",
+            "gt16": 0.131484375
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 658 vs native-wgpu at 657",
+            "gt16": 0.131484375
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank romdev-wgpu",
+            "gt16": 0.9887630208333333
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu with sRGB decoded as linear",
+            "gt16": 0.9708550347222222
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu encoded twice",
+            "gt16": 0.9807421875
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 658 vs romdev-wgpu at 657",
+            "gt16": 0.131484375
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 658 vs native-wgpu at 657",
+            "gt16": 0.131484375
+          }
+        ]
+      },
+      "crossHost": {
+        "romdev-vs-chromium": 0,
+        "chromium-wgpu-vs-romdev-wgpu": 0
+      }
+    },
+    {
+      "id": "join-mid",
+      "app": "nr",
+      "frames": 800,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 0.9802213541666667
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9632291666666667
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9900694444444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 800 vs romdev at 799",
+            "gt16": 0.0025086805555555557
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 800 vs native at 799",
+            "gt16": 0.0025086805555555557
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 0.9802213541666667
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9632291666666667
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9900694444444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 800 vs chromium at 799",
+            "gt16": 0.0025086805555555557
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 800 vs native at 799",
+            "gt16": 0.0025086805555555557
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank chromium-wgpu",
+            "gt16": 0.9802126736111111
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu with sRGB decoded as linear",
+            "gt16": 0.9632161458333334
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu encoded twice",
+            "gt16": 0.9900694444444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 800 vs chromium-wgpu at 799",
+            "gt16": 0.0025130208333333333
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 800 vs native-wgpu at 799",
+            "gt16": 0.0025130208333333333
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank romdev-wgpu",
+            "gt16": 0.9802126736111111
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu with sRGB decoded as linear",
+            "gt16": 0.9632161458333334
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu encoded twice",
+            "gt16": 0.9900694444444444
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 800 vs romdev-wgpu at 799",
+            "gt16": 0.0025130208333333333
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 800 vs native-wgpu at 799",
+            "gt16": 0.0025130208333333333
+          }
+        ]
+      },
+      "crossHost": {
+        "romdev-vs-chromium": 0,
+        "chromium-wgpu-vs-romdev-wgpu": 0
+      }
+    },
+    {
+      "id": "upgrade",
+      "app": "nr",
+      "frames": 989,
+      "good": {
+        "romdev": [
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs romdev r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r1 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r2 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native r3 vs chromium r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native r1 vs native r3",
+            "gt16": 0
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs chromium-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r1 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r2 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r1",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "host",
+            "label": "native-wgpu r3 vs romdev-wgpu r3",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r2",
+            "gt16": 0
+          },
+          {
+            "kind": "repeat",
+            "label": "native-wgpu r1 vs native-wgpu r3",
+            "gt16": 0
+          }
+        ]
+      },
+      "bad": {
+        "romdev": [
+          {
+            "kind": "blank",
+            "label": "native vs blank romdev",
+            "gt16": 0.9832769097222223
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev with sRGB decoded as linear",
+            "gt16": 0.9569401041666666
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs romdev encoded twice",
+            "gt16": 0.9871961805555556
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 989 vs romdev at 988",
+            "gt16": 0.0193359375
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 989 vs native at 988",
+            "gt16": 0.0193359375
+          }
+        ],
+        "chromium": [
+          {
+            "kind": "blank",
+            "label": "native vs blank chromium",
+            "gt16": 0.9832769097222223
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium with sRGB decoded as linear",
+            "gt16": 0.9569401041666666
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native vs chromium encoded twice",
+            "gt16": 0.9871961805555556
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 989 vs chromium at 988",
+            "gt16": 0.0193359375
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native at 989 vs native at 988",
+            "gt16": 0.0193359375
+          }
+        ],
+        "chromium-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank chromium-wgpu",
+            "gt16": 0.9832725694444444
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu with sRGB decoded as linear",
+            "gt16": 0.9569053819444444
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs chromium-wgpu encoded twice",
+            "gt16": 0.9871961805555556
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 989 vs chromium-wgpu at 988",
+            "gt16": 0.01934027777777778
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 989 vs native-wgpu at 988",
+            "gt16": 0.01934027777777778
+          }
+        ],
+        "romdev-wgpu": [
+          {
+            "kind": "blank",
+            "label": "native-wgpu vs blank romdev-wgpu",
+            "gt16": 0.9832725694444444
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu with sRGB decoded as linear",
+            "gt16": 0.9569053819444444
+          },
+          {
+            "kind": "wrong-colour-space",
+            "label": "native-wgpu vs romdev-wgpu encoded twice",
+            "gt16": 0.9871961805555556
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 989 vs romdev-wgpu at 988",
+            "gt16": 0.01934027777777778
+          },
+          {
+            "kind": "one-frame-early",
+            "label": "native-wgpu at 989 vs native-wgpu at 988",
+            "gt16": 0.01934027777777778
+          }
+        ]
+      },
+      "crossHost": {
+        "romdev-vs-chromium": 0,
+        "chromium-wgpu-vs-romdev-wgpu": 0
+      }
+    }
+  ],
+  "pairs": {
+    "romdev": {
+      "reference": "native",
+      "goodMax": 0,
+      "goodMaxOf": {
+        "kind": "host",
+        "label": "native r1 vs romdev r1",
+        "gt16": 0,
+        "scenario": "2p-full"
+      },
+      "badMin": 0.0025086805555555557,
+      "badMinOf": {
+        "kind": "one-frame-early",
+        "label": "native at 800 vs romdev at 799",
+        "gt16": 0.0025086805555555557,
+        "scenario": "join-mid"
+      },
+      "badMinByKind": {
+        "blank": 0.9412586805555555,
+        "wrong-colour-space": 0.8914236111111111,
+        "one-frame-early": 0.0025086805555555557
+      },
+      "tolerance": 0.0005,
+      "accepted": true,
+      "verdict": "calibrated"
+    },
+    "chromium": {
+      "reference": "native",
+      "goodMax": 0,
+      "goodMaxOf": {
+        "kind": "host",
+        "label": "native r1 vs chromium r1",
+        "gt16": 0,
+        "scenario": "2p-full"
+      },
+      "badMin": 0.0025086805555555557,
+      "badMinOf": {
+        "kind": "one-frame-early",
+        "label": "native at 800 vs chromium at 799",
+        "gt16": 0.0025086805555555557,
+        "scenario": "join-mid"
+      },
+      "badMinByKind": {
+        "blank": 0.9412586805555555,
+        "wrong-colour-space": 0.8914236111111111,
+        "one-frame-early": 0.0025086805555555557
+      },
+      "tolerance": 0.0005,
+      "accepted": true,
+      "verdict": "calibrated"
+    },
+    "chromium-wgpu": {
+      "reference": "native-wgpu",
+      "goodMax": 0,
+      "goodMaxOf": {
+        "kind": "host",
+        "label": "native-wgpu r1 vs chromium-wgpu r1",
+        "gt16": 0,
+        "scenario": "2p-full"
+      },
+      "badMin": 0.0025130208333333333,
+      "badMinOf": {
+        "kind": "one-frame-early",
+        "label": "native-wgpu at 800 vs chromium-wgpu at 799",
+        "gt16": 0.0025130208333333333,
+        "scenario": "join-mid"
+      },
+      "badMinByKind": {
+        "blank": 0.9412152777777778,
+        "wrong-colour-space": 0.8913628472222223,
+        "one-frame-early": 0.0025130208333333333
+      },
+      "tolerance": 0.0005,
+      "accepted": true,
+      "verdict": "calibrated"
+    },
+    "romdev-wgpu": {
+      "reference": "native-wgpu",
+      "goodMax": 0,
+      "goodMaxOf": {
+        "kind": "host",
+        "label": "native-wgpu r1 vs romdev-wgpu r1",
+        "gt16": 0,
+        "scenario": "2p-full"
+      },
+      "badMin": 0.0025130208333333333,
+      "badMinOf": {
+        "kind": "one-frame-early",
+        "label": "native-wgpu at 800 vs romdev-wgpu at 799",
+        "gt16": 0.0025130208333333333,
+        "scenario": "join-mid"
+      },
+      "badMinByKind": {
+        "blank": 0.9412152777777778,
+        "wrong-colour-space": 0.8913628472222223,
+        "one-frame-early": 0.0025130208333333333
+      },
+      "tolerance": 0.0005,
+      "accepted": true,
+      "verdict": "calibrated"
+    }
+  }
+}

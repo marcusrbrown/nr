@@ -1,0 +1,203 @@
+{
+ "summary": {
+  "label": "chromium-gl-nr_stress",
+  "host": "chromium",
+  "gpu": "gl",
+  "cart": "/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart/carts/nr_stress.wasc",
+  "frames": 720,
+  "runs": 3,
+  "p50_median": 0.20499999821186066,
+  "p99_median": 0.2849999964237213,
+  "p99_worst": 0.2849999964237213,
+  "max_worst": 0.5499999970197678,
+  "done_p99_worst": null,
+  "call_overhead_p50_median": null,
+  "heapBytes": [
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   }
+  ],
+  "filled": [
+   {
+    "atTitle": {
+     "pages": 522,
+     "bytes": 2138112,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11328,
+     "bytes": 46399488,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11345,
+     "bytes": 46469120,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   {
+    "atTitle": {
+     "pages": 522,
+     "bytes": 2138112,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11328,
+     "bytes": 46399488,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11345,
+     "bytes": 46469120,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   {
+    "atTitle": {
+     "pages": 522,
+     "bytes": 2138112,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11328,
+     "bytes": 46399488,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11345,
+     "bytes": 46469120,
+     "highestNonZeroBytes": 134217680
+    }
+   }
+  ],
+  "engineMem": [
+   null,
+   null,
+   null
+  ],
+  "ticksFinal": [
+   720,
+   720,
+   720
+  ]
+ },
+ "runs": [
+  {
+   "run": 1,
+   "frame_ms": {
+    "n": 600,
+    "p50": 0.2149999886751175,
+    "p99": 0.2849999964237213,
+    "max": 0.5499999970197678,
+    "mean": 0.21121666679779688
+   },
+   "done_ms": null,
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 522,
+     "bytes": 2138112,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11328,
+     "bytes": 46399488,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11345,
+     "bytes": 46469120,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 720,
+   "renderer": "ANGLE (Apple, Apple M1 Pro, OpenGL 4.1)"
+  },
+  {
+   "run": 2,
+   "frame_ms": {
+    "n": 600,
+    "p50": 0.20499999821186066,
+    "p99": 0.26000000536441803,
+    "max": 0.4449999928474426,
+    "mean": 0.20026666678488256
+   },
+   "done_ms": null,
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 522,
+     "bytes": 2138112,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11328,
+     "bytes": 46399488,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11345,
+     "bytes": 46469120,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 720,
+   "renderer": "ANGLE (Apple, Apple M1 Pro, OpenGL 4.1)"
+  },
+  {
+   "run": 3,
+   "frame_ms": {
+    "n": 600,
+    "p50": 0.20499999821186066,
+    "p99": 0.2849999964237213,
+    "max": 0.46000000834465027,
+    "mean": 0.20310000004867712
+   },
+   "done_ms": null,
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 522,
+     "bytes": 2138112,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11328,
+     "bytes": 46399488,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11345,
+     "bytes": 46469120,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 720,
+   "renderer": "ANGLE (Apple, Apple M1 Pro, OpenGL 4.1)"
+  }
+ ]
+}

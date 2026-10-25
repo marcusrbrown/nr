@@ -1,0 +1,5 @@
+ok   nr-2p-full [wgpu] (native-wgpu, chromium-wgpu, romdev-wgpu) chromium-wgpu gt16 0.000000, romdev-wgpu gt16 0.000000; control one frame short diverges at nr.ticks
+ok   nr-waves [wgpu] (native-wgpu, chromium-wgpu, romdev-wgpu) chromium-wgpu gt16 0.000000, romdev-wgpu gt16 0.000000; control one frame short diverges at nr.ticks
+ok   nr-combat [wgpu] (native-wgpu, chromium-wgpu, romdev-wgpu) chromium-wgpu gt16 0.000000, romdev-wgpu gt16 0.000000; control one frame short diverges at nr.ticks
+ok   nr-join-mid [wgpu] (native-wgpu, chromium-wgpu, romdev-wgpu) chromium-wgpu gt16 0.000000, romdev-wgpu gt16 0.000000; control one frame short diverges at nr.ticks
+ok   nr-upgrade [wgpu] (native-wgpu, chromium-wgpu, romdev-wgpu) chromium-wgpu gt16 0.000000, romdev-wgpu gt16 0.000000; control one frame short diverges at nr.ticks

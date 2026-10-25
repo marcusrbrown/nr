@@ -1,0 +1,236 @@
+{
+ "summary": {
+  "label": "romdev-gl-nr_stress",
+  "host": "romdev",
+  "gpu": "gl",
+  "cart": "/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart/carts/nr_stress.wasc",
+  "frames": 720,
+  "runs": 3,
+  "p50_median": 3.5679999999993015,
+  "p99_median": 6.536582999999155,
+  "p99_worst": 6.543709000000035,
+  "max_worst": 140.4754580000008,
+  "done_p99_worst": null,
+  "call_overhead_p50_median": 0.49704100000053586,
+  "heapBytes": [
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   }
+  ],
+  "filled": [
+   null,
+   null,
+   null
+  ],
+  "engineMem": [
+   {
+    "mem_total": 77814,
+    "mem_peak": 77814,
+    "mem": {
+     "general": 0,
+     "core": 72694,
+     "scene": 5120,
+     "render": 0,
+     "render2d": 0,
+     "physics": 0,
+     "audio": 0,
+     "anim": 0,
+     "ui": 0,
+     "resource": 0,
+     "script": 0,
+     "game": 0,
+     "editor": 0,
+     "nav": 0
+    }
+   },
+   {
+    "mem_total": 77814,
+    "mem_peak": 77814,
+    "mem": {
+     "general": 0,
+     "core": 72694,
+     "scene": 5120,
+     "render": 0,
+     "render2d": 0,
+     "physics": 0,
+     "audio": 0,
+     "anim": 0,
+     "ui": 0,
+     "resource": 0,
+     "script": 0,
+     "game": 0,
+     "editor": 0,
+     "nav": 0
+    }
+   },
+   {
+    "mem_total": 77814,
+    "mem_peak": 77814,
+    "mem": {
+     "general": 0,
+     "core": 72694,
+     "scene": 5120,
+     "render": 0,
+     "render2d": 0,
+     "physics": 0,
+     "audio": 0,
+     "anim": 0,
+     "ui": 0,
+     "resource": 0,
+     "script": 0,
+     "game": 0,
+     "editor": 0,
+     "nav": 0
+    }
+   }
+  ],
+  "ticksFinal": [
+   721,
+   721,
+   721
+  ]
+ },
+ "runs": [
+  {
+   "run": 1,
+   "frame_ms": {
+    "n": 600,
+    "p50": 3.6030829999999696,
+    "p99": 6.543709000000035,
+    "max": 132.3700829999998,
+    "mean": 4.07047484333333
+   },
+   "call_overhead_ms": {
+    "n": 200,
+    "p50": 0.5559159999997974,
+    "p99": 2.688000000000102,
+    "max": 4.163332999999966,
+    "mean": 0.6639231449999852
+   },
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "engineMem": {
+    "mem_total": 77814,
+    "mem_peak": 77814,
+    "mem": {
+     "general": 0,
+     "core": 72694,
+     "scene": 5120,
+     "render": 0,
+     "render2d": 0,
+     "physics": 0,
+     "audio": 0,
+     "anim": 0,
+     "ui": 0,
+     "resource": 0,
+     "script": 0,
+     "game": 0,
+     "editor": 0,
+     "nav": 0
+    }
+   },
+   "ticksFinal": 721
+  },
+  {
+   "run": 2,
+   "frame_ms": {
+    "n": 600,
+    "p50": 3.5181249999996,
+    "p99": 6.27599999999984,
+    "max": 140.4754580000008,
+    "mean": 3.9398340216666536
+   },
+   "call_overhead_ms": {
+    "n": 200,
+    "p50": 0.49704100000053586,
+    "p99": 0.9135840000008102,
+    "max": 2.831416999999419,
+    "mean": 0.5334462799999438
+   },
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "engineMem": {
+    "mem_total": 77814,
+    "mem_peak": 77814,
+    "mem": {
+     "general": 0,
+     "core": 72694,
+     "scene": 5120,
+     "render": 0,
+     "render2d": 0,
+     "physics": 0,
+     "audio": 0,
+     "anim": 0,
+     "ui": 0,
+     "resource": 0,
+     "script": 0,
+     "game": 0,
+     "editor": 0,
+     "nav": 0
+    }
+   },
+   "ticksFinal": 721
+  },
+  {
+   "run": 3,
+   "frame_ms": {
+    "n": 600,
+    "p50": 3.5679999999993015,
+    "p99": 6.536582999999155,
+    "max": 131.12345800000003,
+    "mean": 3.988789525000002
+   },
+   "call_overhead_ms": {
+    "n": 200,
+    "p50": 0.44829199999912817,
+    "p99": 0.9298340000004828,
+    "max": 2.678750000000946,
+    "mean": 0.4852275350000855
+   },
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "engineMem": {
+    "mem_total": 77814,
+    "mem_peak": 77814,
+    "mem": {
+     "general": 0,
+     "core": 72694,
+     "scene": 5120,
+     "render": 0,
+     "render2d": 0,
+     "physics": 0,
+     "audio": 0,
+     "anim": 0,
+     "ui": 0,
+     "resource": 0,
+     "script": 0,
+     "game": 0,
+     "editor": 0,
+     "nav": 0
+    }
+   },
+   "ticksFinal": 721
+  }
+ ]
+}

@@ -1,0 +1,99 @@
+{
+  "label": "nr_stress",
+  "app": "nr_stress",
+  "actors": 11,
+  "distinctFrames": 11,
+  "runs": 10,
+  "gl": "ANGLE (Apple, Apple M1 Pro, OpenGL 4.1 Metal - 89.4)",
+  "submit": {
+    "p50_median": 0.847,
+    "p99_median": 1.073,
+    "p99_worst": 1.135,
+    "max_worst": 3.038
+  },
+  "done": {
+    "p50_median": 0.8450000286102295,
+    "p99_median": 1.0820000171661377,
+    "p99_worst": 1.1629999876022339,
+    "max_worst": 3.0209999084472656
+  },
+  "missing": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "checksums": [
+    62082975
+  ],
+  "rssKiB": [
+    {
+      "afterWarmup": 171072,
+      "end": 133360,
+      "peak": 176256
+    },
+    {
+      "afterWarmup": 150032,
+      "end": 113280,
+      "peak": 155568
+    },
+    {
+      "afterWarmup": 167152,
+      "end": 131248,
+      "peak": 172512
+    },
+    {
+      "afterWarmup": 162688,
+      "end": 123328,
+      "peak": 168064
+    },
+    {
+      "afterWarmup": 156496,
+      "end": 118368,
+      "peak": 162272
+    },
+    {
+      "afterWarmup": 155008,
+      "end": 117664,
+      "peak": 160368
+    },
+    {
+      "afterWarmup": 151648,
+      "end": 113632,
+      "peak": 156848
+    },
+    {
+      "afterWarmup": 165728,
+      "end": 129392,
+      "peak": 171392
+    },
+    {
+      "afterWarmup": 150656,
+      "end": 113216,
+      "peak": 156336
+    },
+    {
+      "afterWarmup": 145888,
+      "end": 107440,
+      "peak": 151456
+    }
+  ],
+  "files": [
+    "nr_stress-1",
+    "nr_stress-2",
+    "nr_stress-3",
+    "nr_stress-4",
+    "nr_stress-5",
+    "nr_stress-6",
+    "nr_stress-7",
+    "nr_stress-8",
+    "nr_stress-9",
+    "nr_stress-10"
+  ]
+}

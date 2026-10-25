@@ -1,0 +1,108 @@
+2p-full: romdev good max 0.000000 bad min 0.519293 | chromium good max 0.000000 bad min 0.519293 | chromium-wgpu good max 0.000000 bad min 0.519327 | romdev-wgpu good max 0.000000 bad min 0.519327
+waves: romdev good max 0.000000 bad min 0.047843 | chromium good max 0.000000 bad min 0.047843 | chromium-wgpu good max 0.000000 bad min 0.047843 | romdev-wgpu good max 0.000000 bad min 0.047843
+combat: romdev good max 0.000000 bad min 0.131484 | chromium good max 0.000000 bad min 0.131484 | chromium-wgpu good max 0.000000 bad min 0.131484 | romdev-wgpu good max 0.000000 bad min 0.131484
+join-mid: romdev good max 0.000000 bad min 0.002509 | chromium good max 0.000000 bad min 0.002509 | chromium-wgpu good max 0.000000 bad min 0.002513 | romdev-wgpu good max 0.000000 bad min 0.002513
+upgrade: romdev good max 0.000000 bad min 0.019336 | chromium good max 0.000000 bad min 0.019336 | chromium-wgpu good max 0.000000 bad min 0.019340 | romdev-wgpu good max 0.000000 bad min 0.019340
+{
+  "romdev": {
+    "reference": "native",
+    "goodMax": 0,
+    "goodMaxOf": {
+      "kind": "host",
+      "label": "native r1 vs romdev r1",
+      "gt16": 0,
+      "scenario": "2p-full"
+    },
+    "badMin": 0.0025086805555555557,
+    "badMinOf": {
+      "kind": "one-frame-early",
+      "label": "native at 800 vs romdev at 799",
+      "gt16": 0.0025086805555555557,
+      "scenario": "join-mid"
+    },
+    "badMinByKind": {
+      "blank": 0.9412586805555555,
+      "wrong-colour-space": 0.8914236111111111,
+      "one-frame-early": 0.0025086805555555557
+    },
+    "tolerance": 0.0005,
+    "accepted": true,
+    "verdict": "calibrated"
+  },
+  "chromium": {
+    "reference": "native",
+    "goodMax": 0,
+    "goodMaxOf": {
+      "kind": "host",
+      "label": "native r1 vs chromium r1",
+      "gt16": 0,
+      "scenario": "2p-full"
+    },
+    "badMin": 0.0025086805555555557,
+    "badMinOf": {
+      "kind": "one-frame-early",
+      "label": "native at 800 vs chromium at 799",
+      "gt16": 0.0025086805555555557,
+      "scenario": "join-mid"
+    },
+    "badMinByKind": {
+      "blank": 0.9412586805555555,
+      "wrong-colour-space": 0.8914236111111111,
+      "one-frame-early": 0.0025086805555555557
+    },
+    "tolerance": 0.0005,
+    "accepted": true,
+    "verdict": "calibrated"
+  },
+  "chromium-wgpu": {
+    "reference": "native-wgpu",
+    "goodMax": 0,
+    "goodMaxOf": {
+      "kind": "host",
+      "label": "native-wgpu r1 vs chromium-wgpu r1",
+      "gt16": 0,
+      "scenario": "2p-full"
+    },
+    "badMin": 0.0025130208333333333,
+    "badMinOf": {
+      "kind": "one-frame-early",
+      "label": "native-wgpu at 800 vs chromium-wgpu at 799",
+      "gt16": 0.0025130208333333333,
+      "scenario": "join-mid"
+    },
+    "badMinByKind": {
+      "blank": 0.9412152777777778,
+      "wrong-colour-space": 0.8913628472222223,
+      "one-frame-early": 0.0025130208333333333
+    },
+    "tolerance": 0.0005,
+    "accepted": true,
+    "verdict": "calibrated"
+  },
+  "romdev-wgpu": {
+    "reference": "native-wgpu",
+    "goodMax": 0,
+    "goodMaxOf": {
+      "kind": "host",
+      "label": "native-wgpu r1 vs romdev-wgpu r1",
+      "gt16": 0,
+      "scenario": "2p-full"
+    },
+    "badMin": 0.0025130208333333333,
+    "badMinOf": {
+      "kind": "one-frame-early",
+      "label": "native-wgpu at 800 vs romdev-wgpu at 799",
+      "gt16": 0.0025130208333333333,
+      "scenario": "join-mid"
+    },
+    "badMinByKind": {
+      "blank": 0.9412152777777778,
+      "wrong-colour-space": 0.8913628472222223,
+      "one-frame-early": 0.0025130208333333333
+    },
+    "tolerance": 0.0005,
+    "accepted": true,
+    "verdict": "calibrated"
+  }
+}
+exit 0

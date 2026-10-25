@@ -1,0 +1,85 @@
+{
+ "summary": {
+  "label": "chromium-gl-nr-full",
+  "host": "chromium",
+  "gpu": "gl",
+  "cart": "/Users/mrbrown/src/github.com/marcusrbrown/nr/build/cart/carts/nr.wasc",
+  "frames": 2300,
+  "runs": 1,
+  "p50_median": 0.24500000476837158,
+  "p99_median": 0.3100000023841858,
+  "p99_worst": 0.3100000023841858,
+  "max_worst": 1.6099999994039536,
+  "done_p99_worst": null,
+  "call_overhead_p50_median": null,
+  "heapBytes": [
+   {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   }
+  ],
+  "filled": [
+   {
+    "atTitle": {
+     "pages": 518,
+     "bytes": 2121728,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11723,
+     "bytes": 48017408,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11782,
+     "bytes": 48259072,
+     "highestNonZeroBytes": 134217680
+    }
+   }
+  ],
+  "engineMem": [
+   null
+  ],
+  "ticksFinal": [
+   2300
+  ]
+ },
+ "runs": [
+  {
+   "run": 1,
+   "frame_ms": {
+    "n": 2180,
+    "p50": 0.24500000476837158,
+    "p99": 0.3100000023841858,
+    "max": 1.6099999994039536,
+    "mean": 0.241720183528618
+   },
+   "done_ms": null,
+   "heapBytes": {
+    "atTitle": 134217728,
+    "afterWarmup": 134217728,
+    "end": 134217728
+   },
+   "filled": {
+    "atTitle": {
+     "pages": 518,
+     "bytes": 2121728,
+     "highestNonZeroBytes": 134217680
+    },
+    "afterWarmup": {
+     "pages": 11723,
+     "bytes": 48017408,
+     "highestNonZeroBytes": 134217680
+    },
+    "end": {
+     "pages": 11782,
+     "bytes": 48259072,
+     "highestNonZeroBytes": 134217680
+    }
+   },
+   "ticksFinal": 2300,
+   "renderer": "ANGLE (Apple, Apple M1 Pro, OpenGL 4.1)"
+  }
+ ]
+}

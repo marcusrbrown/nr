@@ -1,0 +1,4 @@
+nr_stress_busyloop-1: actors 11 (11 distinct frames) submit p50 23.381 p99 23.723 max 24.904 | done p50 23.380 p99 23.683 max 24.854 | ticks 721 missing 0 rss 127616/83024/169488 KiB
+nr_stress_busyloop-2: actors 11 (11 distinct frames) submit p50 23.388 p99 23.619 max 29.152 | done p50 23.391 p99 23.642 max 29.121 | ticks 721 missing 0 rss 164304/95136/170416 KiB
+nr_stress_busyloop-3: actors 11 (11 distinct frames) submit p50 23.399 p99 23.597 max 23.886 | done p50 23.401 p99 23.595 max 23.876 | ticks 721 missing 0 rss 162704/40592/165504 KiB
+{"label":"nr_stress_busyloop","app":"nr_stress","actors":11,"distinctFrames":11,"runs":3,"gl":"ANGLE (Apple, Apple M1 Pro, OpenGL 4.1 Metal - 89.4)","submit":{"p50_median":23.388,"p99_median":23.619,"p99_worst":23.723,"max_worst":
