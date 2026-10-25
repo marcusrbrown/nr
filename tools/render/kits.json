@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "licenceAllowlist": [
+    "CC0-1.0"
+  ],
+  "kits": [
+    {
+      "id": "universal-base-characters",
+      "title": "Universal Base Characters [Standard]",
+      "publisher": "Quaternius",
+      "sourceUrl": "https://quaternius.com/packs/universalbasecharacters.html",
+      "downloadPage": "https://quaternius.itch.io/universal-base-characters",
+      "acquisition": {
+        "method": "manual",
+        "reason": "The pack page's download buttons are itch.io's per-download token flow (Itch.attachBuyButton); there is no stable direct URL, and quaternius.com/packs/*.html links nothing else. github.com/Quaternius publishes no kit repository."
+      },
+      "licence": {
+        "spdx": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "licenceFile": {
+        "path": "License_Standard.txt",
+        "sha256": "0f4beaf0fe360a7732e58bbe3dbf60a2422367fbea60cb9ea4add968f383268e"
+      },
+      "notes": "The free Standard download is glTF/FBX/OBJ with a portion of the models and no rigged .blend (the .blend files are the paid Source version). Sizes and sha256 below were computed on first fetch.",
+      "files": [
+        {
+          "path": "Hair_Beard.bin",
+          "sha256": "bf2f46ef5808665ef31082f787bc68c51ff063e81b76ca1a51ac86a9ae723be7",
+          "size": 41356
+        },
+        {
+          "path": "Hair_Beard.gltf",
+          "sha256": "80013b9791ce12c65fbe693cf669b02ef5c38091c653bf13b9415d2d8380e0ce",
+          "size": 23104
+        },
+        {
+          "path": "Hair_Long.bin",
+          "sha256": "268fd531d2c2ac321783d36fcf106d15c5c76e8923eec2c8704d5fe9de953589",
+          "size": 181756
+        },
+        {
+          "path": "Hair_Long.gltf",
+          "sha256": "27e2c63e8f98c79fb600268ffcc92b36c621b8653b5a7dcbadb08328f3f887a9",
+          "size": 23813
+        },
+        {
+          "path": "Hair_SimpleParted.bin",
+          "sha256": "ecd7c81959f3985d6254458a440daaaa18a8bfbb1dbe111c68a04a72374d54db",
+          "size": 51332
+        },
+        {
+          "path": "Hair_SimpleParted.gltf",
+          "sha256": "fe0f354d7f95d83d38e15c60794dcc063fa4d60550706f3d7ba51491cdc07c56",
+          "size": 23114
+        },
+        {
+          "path": "Superhero_Male_FullBody.bin",
+          "sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f",
+          "size": 720076
+        },
+        {
+          "path": "Superhero_Male_FullBody.gltf",
+          "sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4",
+          "size": 30989
+        }
+      ],
+      "firstFetch": {
+        "date": "2026-10-24",
+        "source": "marcusrbrown/panthea@9556db8 tools/render/kits/universal-base-characters",
+        "note": "First fetch on 2026-10-24 staged these bytes from the owner's marcusrbrown/panthea checkout (tools/render/kits/..., the owner's earlier download of the same Standard pack), not from itch.io; every sha256 equals the one that checkout's tools/render/kits.json records. Re-download from downloadPage and run fetch-kits.sh --from <dir> to confirm against upstream."
+      }
+    },
+    {
+      "id": "universal-animation-library",
+      "title": "Universal Animation Library [Standard]",
+      "publisher": "Quaternius",
+      "sourceUrl": "https://quaternius.com/packs/universalanimationlibrary.html",
+      "downloadPage": "https://quaternius.itch.io/universal-animation-library",
+      "acquisition": {
+        "method": "manual",
+        "reason": "itch.io per-download token flow; no stable direct URL (see universal-base-characters)."
+      },
+      "licence": {
+        "spdx": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "licenceFile": {
+        "path": "License.txt",
+        "sha256": "6d01f55c6e4c49a2c9963e147e561945ae2c83958c8ca667d90a6bffdbfac061"
+      },
+      "notes": "UAL1_Standard.glb is the Standard (free) glTF with the v2.x rig naming (the same naming as the base characters).",
+      "files": [
+        {
+          "path": "UAL1_Standard.glb",
+          "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997",
+          "size": 7618436
+        }
+      ],
+      "firstFetch": {
+        "date": "2026-10-24",
+        "source": "marcusrbrown/panthea@9556db8 tools/render/kits/universal-animation-library",
+        "note": "First fetch on 2026-10-24 staged these bytes from the owner's marcusrbrown/panthea checkout (tools/render/kits/..., the owner's earlier download of the same Standard pack), not from itch.io; every sha256 equals the one that checkout's tools/render/kits.json records. Re-download from downloadPage and run fetch-kits.sh --from <dir> to confirm against upstream."
+      }
+    },
+    {
+      "id": "universal-animation-library-2",
+      "title": "Universal Animation Library 2 [Standard]",
+      "publisher": "Quaternius",
+      "sourceUrl": "https://quaternius.com/packs/universalanimationlibrary2.html",
+      "downloadPage": "https://quaternius.itch.io/universal-animation-library-2",
+      "acquisition": {
+        "method": "manual",
+        "reason": "itch.io per-download token flow; no stable direct URL (see universal-base-characters)."
+      },
+      "licence": {
+        "spdx": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "licenceFile": {
+        "path": "License.txt",
+        "sha256": null
+      },
+      "notes": "Not yet downloaded: no file is pinned. First fetch: download the Standard pack from downloadPage, then run tools/render/fetch-kits.sh --from <dir> --kit universal-animation-library-2 --pin and commit kits.json. The licence file name above is assumed from UAL1's pack and is corrected at that point if it differs.",
+      "files": []
+    }
+  ]
+}
