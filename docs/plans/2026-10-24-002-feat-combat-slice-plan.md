@@ -177,7 +177,7 @@ runtime tick (60 Hz, deterministic):
 
 ## Implementation Units
 
-- [ ] **Unit 1: Toolchain pins and render pipeline skeleton**
+- [x] **Unit 1: Toolchain pins and render pipeline skeleton** (b325ecb)
 
 **Goal:** Pin Blender 4.5 LTS and the cart-wgpu SDK; create the Blender render script and post-processing with a placeholder model so the whole route runs end to end before any real art.
 
