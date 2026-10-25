@@ -51,13 +51,13 @@ mkdirSync(join(OUT, 'gl'), { recursive: true });
 const COMBAT = 'games/nr/tests/input-combat.json', SCROLL = 'games/nr/tests/input-scroll.json', PILLAR = 'games/nr/tests/input-pillar.json', IDLE = 'games/nr/tests/input-idle.json';
 // a run: the app, the name its files take, the input script, the ticks; `gl` is how many frames its GL state run takes
 export const SETS = {
-  scroll: { runs: [{ app: 'nr', name: 'scroll', input: SCROLL, frames: [61, 232, 352, 426, 640] }], gl: { frames: 760 } },
-  pillar: { runs: [{ app: 'nr', name: 'pillar', input: PILLAR, frames: [243] }, { app: 'nr_arena_bare', name: 'pillar_bare', input: PILLAR, frames: [243] }], gl: { frames: 300 } },
+  scroll: { runs: [{ app: 'nr_dummies', name: 'scroll', input: SCROLL, frames: [61, 232, 352, 426, 640] }], gl: { frames: 760 } },
+  pillar: { runs: [{ app: 'nr_dummies', name: 'pillar', input: PILLAR, frames: [243] }, { app: 'nr_arena_bare', name: 'pillar_bare', input: PILLAR, frames: [243] }], gl: { frames: 300 } },
   stage: { runs: [{ app: 'nr_stage', name: 'stage', input: IDLE, frames: [60, 120, 180, 240] }], gl: { frames: 60 } },
   solo: { runs: ['nr_solo_0', 'nr_solo_1', 'nr_solo_2'].map((app) => ({ app, name: app.replace(/^nr_/, ''), input: IDLE, frames: [60] })), gl: { frames: 60 } },
   lit: { runs: ['nr_lit_h', 'nr_lit_v', 'nr_lit_h_flat', 'nr_lit_v_flat', 'nr_lit_h_left', 'nr_lit_v_left', 'nr_lit_h_left_flat', 'nr_lit_v_left_flat'].map((app) => ({ app, name: app.replace(/^nr_/, ''), input: IDLE, frames: [30, 60, 180, 210] })), gl: { frames: 60 } },
   bare: { runs: [{ app: 'nr_bare', name: 'bare', input: IDLE, frames: [60] }], gl: { frames: 60 } },
-  combat: { runs: [{ app: 'nr', name: 'combat', input: COMBAT, frames: [49, 183, 205, 279, 362, 429, 700] }], gl: { frames: 760 } },
+  combat: { runs: [{ app: 'nr_dummies', name: 'combat', input: COMBAT, frames: [49, 183, 205, 279, 362, 429, 700] }], gl: { frames: 760 } },
 };
 const REVIEW = ['scroll', 'pillar', 'stage', 'solo', 'combat'];
 

@@ -29,11 +29,16 @@
 #define HURT_HALF_X 0.35f    /* the hurtbox: half width, half depth in lanes, height */
 #define HURT_HALF_LANE 0.3f
 #define HURT_HEIGHT 2.0f
-#define HERO_HP 12
 #define HERO_INVULN 60       /* action2d's invulnerability after a hit */
 #define CAM_MIN_X 0.0f
 #define CAM_MAX_X 20.0f
 #define CAM_MAX_STEP 0.3f
+#define RESPAWN_MARGIN 0.4f  /* a hero stands up this far inside the left edge of the frame */
+#define ENEMY_LINGER 40      /* ticks a dead enemy lies before it is gone */
+#define HEAVY_FLINCH_WAIT 120 /* ticks after a heavy flinches before a hit flinches it again */
+#define HEAVY_KNOCK_SHARE 0.5f /* a heavy is pushed this share of what a special pushes a grunt */
+#define AI_LANE_SPREAD 0.25f /* enemies stand this far apart in lane round their target */
+#define AI_LANE_SETTLE 0.05f
 
 /* ── the state table ───────────────────────────────────────────────────────────────────────────────────────────── */
 
@@ -54,8 +59,11 @@ typedef struct {
 
 /* Lengths follow the clips: ticks = frames * ms * 60 / 1000 (hit1 6 x 60 ms = 21.6, hit3 7 x 60 = 25.2, throw 6 x 80 =
  * 28.8, hurt 4 x 80 = 19.2, knockdown 8 x 90 = 43.2, getup 6 x 90 = 32.4, dash 6 x 70 = 25.2, special_knockback 9 x 70 =
- * 37.8, special_dash 8 x 60 = 28.8). A melee swing tests for 9 ticks and its state is 18 ticks of cooldown past the
- * startup, as in action2d. */
+ * 37.8, special_dash 8 x 60 = 28.8; the grunt's attack 5 x 70 = 21, the heavy's 8 x 130 = 62.4). A melee swing tests
+ * for 9 ticks and its state is 18 ticks of cooldown past the startup, as in action2d. An enemy's swing is shorter or
+ * slower by its clip: the grunt's tests for 4 ticks from tick 8, the heavy's for 6 from tick 24 (the hook's
+ * extension). The grunt's knockdown and getup, which play their own clips, run as long as the hero's (the clips are
+ * 5 x 144 = 720 ms and 4 x 135 = 540 ms). The heavy's stagger holds the last pose of its clip for the rest of 60 ticks. */
 static const state_def DEF[NR_ST_COUNT] = {
   [NR_ST_IDLE] = { { "idle", 0, 0, 0 }, SHAPE_NONE, 0, 0, 0, 0, 0, 0, false, 0, 0, -1 },
   [NR_ST_WALK] = { { "walk", 0, 0, 0 }, SHAPE_NONE, 0, 0, 0, 0, 0, 0, false, 0, 0, -1 },
@@ -76,14 +84,34 @@ static const state_def DEF[NR_ST_COUNT] = {
   [NR_ST_GRABBED] = { { "grabbed", 0, 0, 0 }, SHAPE_NONE, 0, 0, 0, 0, 0, 0, false, 0, 0, -1 },
   [NR_ST_THROWN] = { { "thrown", 0, 0, 0 }, SHAPE_NONE, 0, 0, 0, 0, 0, 0, false, 0, 0, -1 },
   [NR_ST_DEAD] = { { "dead", 0, 0, 0 }, SHAPE_NONE, 0, 0, 0, 0, 0, 0, false, 0, 0, -1 },
+  [NR_ST_ATTACK] = { { "attack", 21, 8, 4 }, SHAPE_BOX, 0.2f, 1.2f, 0.4f, 0.0f, 1.9f, 1, false, 0.05f, 6, -1 },
+  [NR_ST_HEAVY_ATTACK] = { { "heavy_attack", 62, 24, 6 }, SHAPE_BOX, 0.2f, 1.7f, 0.45f, 0.0f, 2.1f, 3, true, 0.2f, 12, -1 },
+  [NR_ST_STAGGER] = { { "stagger", 60, 0, 0 }, SHAPE_NONE, 0, 0, 0, 0, 0, 0, false, 0, 0, -1 },
 };
 
 const nr_state_info *nr_state_info_of(int32_t state) { return state >= 0 && state < NR_ST_COUNT ? &DEF[state].info : NULL; }
+
+/* The enemies' numbers: how fast they walk along the street and across the lanes, how close they stand, how near they
+ * must be to swing (along x and across lanes), the ticks before the next swing and the swing's state. */
+typedef struct {
+  int32_t hp;
+  float speed_x, speed_z, standoff, reach_x, reach_z;
+  int32_t cooldown, swing;
+} enemy_def;
+
+static const enemy_def ENEMY[NR_KIND_COUNT] = {
+  [NR_KIND_GRUNT] = { NR_GRUNT_HP, 0.045f, 0.03f, 0.9f, 1.05f, 0.4f, 80, NR_ST_ATTACK },
+  [NR_KIND_HEAVY] = { NR_HEAVY_HP, 0.025f, 0.018f, 1.25f, 1.5f, 0.45f, 130, NR_ST_HEAVY_ATTACK },
+};
 
 /* ── helpers ───────────────────────────────────────────────────────────────────────────────────────────────────── */
 
 static float clampf(float v, float lo, float hi) { return v < lo ? lo : v > hi ? hi : v; }
 static float absf(float v) { return v < 0.0f ? -v : v; }
+static int32_t milli(float v) { return (int32_t)(v >= 0.0f ? v * 1000.0f + 0.5f : v * 1000.0f - 0.5f); }
+
+static bool is_hero(const nr_actor *a) { return a->kind == NR_KIND_HERO; }
+static bool is_wave_enemy(const nr_actor *a) { return a->present && (a->kind == NR_KIND_GRUNT || a->kind == NR_KIND_HEAVY); }
 
 static void log_event(nr_sim *s, int32_t kind, int32_t actor, int32_t a, int32_t b) {
   if (s->event_count >= NR_EVENT_CAP) {
@@ -98,42 +126,56 @@ static void log_event(nr_sim *s, int32_t kind, int32_t actor, int32_t a, int32_t
   e[4] = b;
 }
 
+void nr_sim_log(nr_sim *s, int32_t kind, int32_t actor, int32_t a, int32_t b) { log_event(s, kind, actor, a, b); }
+
+/* Walking and running state entries are not logged unless `log_moves` is set (they would fill the log of a long run). */
+static bool moves_only(int32_t from, int32_t to) {
+  return to == NR_ST_WALK || to == NR_ST_RUN || (to == NR_ST_IDLE && (from == NR_ST_WALK || from == NR_ST_RUN));
+}
+
 static void enter(nr_sim *s, int i, int32_t state) {
   nr_actor *a = &s->actor[i];
+  int32_t from = a->state;
   a->state = state;
   a->tick = 0;
   a->hit_mask = 0;
   a->knock_left = 0;
   a->knock_total = 0;
-  log_event(s, NR_EV_ENTER, i, state, 0);
+  bool quiet = is_hero(a) ? !s->log_moves && moves_only(from, state) : a->kind != NR_KIND_DUMMY && (state == NR_ST_IDLE || state == NR_ST_WALK);
+  if (!quiet) log_event(s, NR_EV_ENTER, i, state, 0);
 }
 
 static void enter_if_changed(nr_sim *s, int i, int32_t state) {
   if (s->actor[i].state != state) enter(s, i, state);
 }
 
-/* Moves an actor, each axis on its own so it slides along the arena's bounds and the pillar. */
-static void move_actor(nr_sim *s, int i, float dx, float dz) {
+/* Moves an actor, each axis on its own so it slides along the arena's bounds and the pillar. Returns whether it moved. */
+static bool move_actor(nr_sim *s, int i, float dx, float dz) {
   nr_actor *a = &s->actor[i];
   const arena *ar = s->arena;
+  bool moved = false;
   if (dx != 0.0f) {
     float nx = clampf(a->x + dx, ar->x_min, ar->x_max);
-    if (!arena_blocked(ar, nx, a->lane)) a->x = nx;
+    if (!arena_blocked(ar, nx, a->lane) && nx != a->x) { a->x = nx; moved = true; }
   }
   if (dz != 0.0f) {
     float nl = clampf(a->lane + dz, ar->lane_min, ar->lane_max);
-    if (!arena_blocked(ar, a->x, nl)) a->lane = nl;
+    if (!arena_blocked(ar, a->x, nl) && nl != a->lane) { a->lane = nl; moved = true; }
   }
+  return moved;
 }
 
-/* An actor a hit can land on: not down, not held, not thrown, not dead. */
+/* An actor a hit can land on: not down, not held, not thrown, not dead, not a hero whose pad is gone. */
 static bool targetable(const nr_actor *t) {
-  if (!t->present || t->hp <= 0) return false;
+  if (!t->present || t->hp <= 0 || t->away) return false;
   switch (t->state) {
     case NR_ST_KNOCKDOWN: case NR_ST_GETUP: case NR_ST_GRABBED: case NR_ST_THROWN: case NR_ST_DEAD: return false;
     default: return true;
   }
 }
+
+/* A hero an enemy can be sent after: standing (or down but not dead), its pad plugged in. */
+static bool chaseable(const nr_actor *h) { return h->present && !h->away && h->hp > 0 && h->state != NR_ST_DEAD; }
 
 static void release_hold(nr_sim *s, int i) {
   nr_actor *a = &s->actor[i];
@@ -160,12 +202,85 @@ static bool overlaps(const nr_actor *a, const state_def *d, const nr_actor *t) {
   return absf(t->lane - a->lane) <= d->half_lane + HURT_HALF_LANE;
 }
 
+/* ── targets ───────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+static int enemies_on(const nr_sim *s, int player) {
+  int n = 0;
+  for (int i = NR_PLAYERS; i < s->actor_count; i++)
+    if (is_wave_enemy(&s->actor[i]) && s->actor[i].hp > 0 && s->actor[i].target == player) n++;
+  return n;
+}
+
+/* The player with the fewest enemies after it, the lowest id on a tie; -1 when no player can be chased. */
+static int least_chased(const nr_sim *s) {
+  int best = -1, best_n = 0;
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    if (!chaseable(&s->actor[p])) continue;
+    int n = enemies_on(s, p);
+    if (best < 0 || n < best_n) { best = p; best_n = n; }
+  }
+  return best;
+}
+
+/* The player the next spawn of the wave takes: the players that can be chased in turn. */
+static int alternate_target(const nr_sim *s) {
+  int list[NR_PLAYERS], n = 0;
+  for (int p = 0; p < NR_PLAYERS; p++)
+    if (chaseable(&s->actor[p])) list[n++] = p;
+  return n ? list[s->waves.spawned % n] : -1;
+}
+
+static void retarget(nr_sim *s, int i) {
+  nr_actor *a = &s->actor[i];
+  int t = least_chased(s);
+  if (t != a->target) {
+    a->target = t;
+    log_event(s, NR_EV_RETARGET, i, t, 0);
+  }
+}
+
+/* ── hits ──────────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+/* A heavy shrugs a hit off: only a special staggers it, a plain hit flinches it when it is not swinging and has not
+ * flinched lately, and none of them pushes it or knocks it down. */
+static void hit_heavy(nr_sim *s, int ai, int ti, const state_def *d) {
+  nr_actor *a = &s->actor[ai], *t = &s->actor[ti];
+  if (t->hp <= 0) {
+    log_event(s, NR_EV_DEAD, ti, 0, 0);
+    enter(s, ti, NR_ST_DEAD);
+    return;
+  }
+  bool special = d == &DEF[NR_ST_SPECIAL_KNOCKBACK] || d == &DEF[NR_ST_SPECIAL_DASH];
+  if (special) {
+    if (a->x != t->x) t->facing = a->x > t->x ? 1 : -1;
+    enter(s, ti, NR_ST_STAGGER);
+    log_event(s, NR_EV_STAGGER, ti, ai, 0);
+    if (d->shape == SHAPE_RADIUS) {
+      float dx = t->x - a->x, dz = t->lane - a->lane, dist = sqrtf(dx * dx + dz * dz);
+      if (dist >= 0.001f) {
+        t->knock_x = dx / dist * d->knock * HEAVY_KNOCK_SHARE;
+        t->knock_z = dz / dist * d->knock * HEAVY_KNOCK_SHARE;
+        t->knock_left = t->knock_total = d->knock_ticks;
+      }
+    }
+    return;
+  }
+  if (t->state == NR_ST_HEAVY_ATTACK || t->state == NR_ST_STAGGER || t->flinch_wait > 0) return;
+  if (a->x != t->x) t->facing = a->x > t->x ? 1 : -1;
+  enter(s, ti, NR_ST_HURT);
+  t->flinch_wait = HEAVY_FLINCH_WAIT;
+}
+
 static void apply_hit(nr_sim *s, int ai, int ti, const state_def *d) {
   nr_actor *a = &s->actor[ai], *t = &s->actor[ti];
   a->hit_mask |= 1 << ti;
   release_hold(s, ti);
   t->hp -= d->damage;
   log_event(s, NR_EV_HIT, ai, ti, d->damage);
+  if (t->kind == NR_KIND_HEAVY) {
+    hit_heavy(s, ai, ti, d);
+    return;
+  }
   if (a->x != t->x) t->facing = a->x > t->x ? 1 : -1;
   float kx, kz;
   if (d->shape == SHAPE_RADIUS) {
@@ -195,7 +310,7 @@ static void resolve_hits(nr_sim *s) {
       if (ti == ai || !t->present || (a->hit_mask & (1 << ti)) || !overlaps(a, d, t)) continue;
       if (a->team == t->team) {
         a->hit_mask |= 1 << ti;
-        log_event(s, NR_EV_SKIP_TEAM, ai, ti, 0);
+        if (is_hero(a)) log_event(s, NR_EV_SKIP_TEAM, ai, ti, 0);
         continue;
       }
       if (!targetable(t)) continue;
@@ -282,10 +397,21 @@ static void hero_free(nr_sim *s, int i, const nr_input *in) {
   enter_if_changed(s, i, !moving ? NR_ST_IDLE : a->run_dir != 0 ? NR_ST_RUN : NR_ST_WALK);
 }
 
+/* A hero's death takes a life from the pool; it stands up again when lives remain. */
+static void hero_died(nr_sim *s, int i) {
+  nr_actor *a = &s->actor[i];
+  if (s->lives > 0) s->lives--;
+  a->respawn = s->lives > 0;
+  log_event(s, NR_EV_LIFE_LOST, i, s->lives, a->respawn);
+}
+
 static void end_state(nr_sim *s, int i) {
   nr_actor *a = &s->actor[i];
   switch (a->state) {
-    case NR_ST_KNOCKDOWN: enter(s, i, a->hp <= 0 ? NR_ST_DEAD : NR_ST_GETUP); break;
+    case NR_ST_KNOCKDOWN:
+      enter(s, i, a->hp <= 0 ? NR_ST_DEAD : NR_ST_GETUP);
+      if (a->state == NR_ST_DEAD && is_hero(a)) hero_died(s, i);
+      break;
     default: enter(s, i, NR_ST_IDLE); break;
   }
 }
@@ -302,6 +428,71 @@ static void airborne(nr_sim *s, int i, const nr_input *in) {
   }
 }
 
+/* A dead hero stands up at the left edge of the frame, in the lane it started in, when lives remain. */
+static void respawn_hero(nr_sim *s, int i) {
+  static const float LANE[NR_PLAYERS] = { 0.6f, -0.6f };
+  nr_actor *a = &s->actor[i];
+  const arena *ar = s->arena;
+  float lane = LANE[i], x = clampf(s->cam_x - nr_sim_view_half(s, lane) + RESPAWN_MARGIN, ar->x_min, ar->x_max);
+  while (arena_blocked(ar, x, lane) && x < ar->x_max) x += 0.5f;
+  a->x = x;
+  a->lane = lane;
+  a->y = a->vy = a->vx = 0.0f;
+  a->hp = NR_HERO_HP;
+  a->invuln = NR_RESPAWN_INVULN;
+  a->facing = 1;
+  a->holding = a->held_by = -1;
+  a->respawn = 0;
+  a->run_dir = 0;
+  enter(s, i, NR_ST_IDLE);
+  log_event(s, NR_EV_RESPAWN, i, milli(x), milli(lane));
+}
+
+/* The lane direction that walks an enemy at (x, lane) round the block it is up against: towards the nearer edge of the
+ * block's lanes. */
+static int detour_dir(const arena *ar, float x, float lane) {
+  for (int k = 0; k < ar->block_count; k++) {
+    const arena_block *b = &ar->block[k];
+    if (x >= b->x0 - 0.5f && x <= b->x1 + 0.5f) return lane < (b->lane0 + b->lane1) * 0.5f ? -1 : 1;
+  }
+  return 1;
+}
+
+/* An enemy standing or walking: take a target, swing when it is in reach, otherwise walk to the place beside it. */
+static void enemy_ai(nr_sim *s, int i) {
+  nr_actor *a = &s->actor[i];
+  const enemy_def *e = &ENEMY[a->kind];
+  if (a->target < 0 || !chaseable(&s->actor[a->target])) retarget(s, i);
+  if (a->target < 0) {
+    enter_if_changed(s, i, NR_ST_IDLE);
+    return;
+  }
+  const nr_actor *t = &s->actor[a->target];
+  float dx = t->x - a->x, ax = absf(dx);
+  float lane_goal = t->lane + (float)((i % 3) - 1) * AI_LANE_SPREAD, dz = lane_goal - a->lane;
+  if (dx > 0.0f) a->facing = 1;
+  else if (dx < 0.0f) a->facing = -1;
+  if (a->ai_wait == 0 && ax <= e->reach_x && absf(t->lane - a->lane) <= e->reach_z) {
+    a->ai_wait = e->cooldown;
+    enter(s, i, e->swing);
+    return;
+  }
+  float mx = 0.0f, mz = 0.0f, gap = ax - e->standoff;
+  if (gap > 0.001f) mx = (float)a->facing * (gap < e->speed_x ? gap : e->speed_x);
+  if (mx == 0.0f) a->detour = 0;
+  if (a->detour != 0) mz = (float)a->detour * e->speed_z;
+  else if (absf(dz) > AI_LANE_SETTLE) mz = (dz > 0.0f ? 1.0f : -1.0f) * (absf(dz) < e->speed_z ? absf(dz) : e->speed_z);
+  /* up against a block: walk along it, to the side of the target's lane it is on, until the street is open */
+  if (mx != 0.0f && arena_blocked(s->arena, clampf(a->x + mx, s->arena->x_min, s->arena->x_max), a->lane) && a->detour == 0) {
+    a->detour = detour_dir(s->arena, a->x + mx, a->lane);
+    mz = (float)a->detour * e->speed_z;
+  } else if (a->detour != 0 && mx != 0.0f && !arena_blocked(s->arena, clampf(a->x + mx, s->arena->x_min, s->arena->x_max), a->lane)) {
+    a->detour = 0;
+  }
+  bool moved = move_actor(s, i, mx, mz);
+  enter_if_changed(s, i, moved ? NR_ST_WALK : NR_ST_IDLE);
+}
+
 static void update_actor(nr_sim *s, int i, const nr_input *in) {
   nr_actor *a = &s->actor[i];
   if (!a->present) return;
@@ -315,9 +506,11 @@ static void update_actor(nr_sim *s, int i, const nr_input *in) {
     case NR_ST_IDLE: case NR_ST_WALK: case NR_ST_RUN:
       if (in) {
         hero_free(s, i, in);
-      } else {
+      } else if (a->kind == NR_KIND_DUMMY) {
         for (int k = 0; k < a->strike_count; k++)
           if (a->strike[k].tick == s->ticks) enter(s, i, a->strike[k].state);
+      } else {
+        enemy_ai(s, i);
       }
       break;
     case NR_ST_HIT1: case NR_ST_HIT2: case NR_ST_HIT3:
@@ -373,6 +566,13 @@ static void update_actor(nr_sim *s, int i, const nr_input *in) {
         }
       }
       break;
+    case NR_ST_DEAD:
+      if (is_hero(a)) {
+        if (a->respawn && a->tick >= NR_RESPAWN_DELAY) respawn_hero(s, i);
+      } else if (a->kind != NR_KIND_DUMMY && a->tick >= ENEMY_LINGER) {
+        a->present = 0;
+      }
+      break;
     default:
       break;
   }
@@ -385,19 +585,26 @@ float nr_sim_view_half(const nr_sim *s, float lane) {
   return s->view.half_width * depth / s->view.distance - s->view.actor_half;
 }
 
-/* Follows the players' midpoint, holds every player in frame, never scrolls back. Every player is inside the current
- * frame when this runs, so the camera's range is never empty: it is limited by the trailing player (it cannot move on
- * past where that player would leave the frame), by the leader (it cannot move back past where that player would) and
- * by the furthest it has scrolled. */
+/* A hero the camera follows: present, its pad plugged in, alive. */
+static bool follows(const nr_actor *a) { return a->present && !a->away && a->state != NR_ST_DEAD; }
+
+/* Follows the followed players' midpoint, holds every player in frame, never scrolls back. Every player is inside the
+ * current frame when this runs, so the camera's range is never empty: it is limited by the trailing player (it cannot
+ * move on past where that player would leave the frame), by the leader (it cannot move back past where that player
+ * would) and by the furthest it has scrolled. With nobody to follow it stays where it is. */
 static void step_camera(nr_sim *s) {
   float lo = s->cam_left > CAM_MIN_X ? s->cam_left : CAM_MIN_X, hi = CAM_MAX_X, mid = 0.0f;
+  int n = 0;
   for (int i = 0; i < NR_PLAYERS; i++) {
+    if (!follows(&s->actor[i])) continue;
     float h = nr_sim_view_half(s, s->actor[i].lane);
     if (s->actor[i].x - h > lo) lo = s->actor[i].x - h;
     if (s->actor[i].x + h < hi) hi = s->actor[i].x + h;
     mid += s->actor[i].x;
+    n++;
   }
-  mid /= (float)NR_PLAYERS;
+  if (!n) return;
+  mid /= (float)n;
   float target = clampf(mid, lo, hi);
   s->cam_x += clampf(target - s->cam_x, -CAM_MAX_STEP, CAM_MAX_STEP);
   if (s->cam_x > s->cam_left) s->cam_left = s->cam_x;
@@ -411,13 +618,16 @@ static uint32_t checksum_of(const nr_sim *s, uint32_t h) {
   for (int i = 0; i < s->actor_count; i++) {
     const nr_actor *a = &s->actor[i];
     float f[8] = { a->x, a->lane, a->y, a->vy, a->vx, a->knock_x, a->knock_z, 0.0f };
-    int32_t n[20] = { a->knock_left, a->knock_total, a->facing, a->state, a->tick, a->hp, a->invuln, a->team, a->hit_mask, a->holding,
-                      a->held_by, a->grabbable, a->present, a->variant, a->last_tap_dir, a->last_tap_tick, a->run_dir, 0, 0, 0 };
+    int32_t n[28] = { a->knock_left, a->knock_total, a->facing, a->state, a->tick, a->hp, a->invuln, a->team, a->hit_mask, a->holding,
+                      a->held_by, a->grabbable, a->present, a->variant, a->last_tap_dir, a->last_tap_tick, a->run_dir, a->kind, a->target, a->away,
+                      a->respawn, a->ai_wait, a->flinch_wait, a->detour, 0, 0, 0, 0 };
     h = fold(h, f, sizeof f);
     h = fold(h, n, sizeof n);
   }
   float cam[2] = { s->cam_x, s->cam_left };
-  int32_t sc[6] = { s->ticks, s->input_count, s->wave, s->lives, s->actor_count, s->event_count };
+  const nr_waves *w = &s->waves;
+  int32_t sc[18] = { s->ticks, s->input_count, s->wave, s->lives, s->actor_count, s->event_count, s->players, s->game_over, s->start_refused, s->waves_on,
+                     w->phase, w->delay, w->grunts_left, w->heavies_left, w->spawn_gap, w->spawned, w->upgrade_ready, w->cleared };
   h = fold(h, cam, sizeof cam);
   h = fold(h, s->rng.s, sizeof s->rng.s);
   h = fold(h, sc, sizeof sc);
@@ -428,27 +638,44 @@ void nr_sim_init(nr_sim *s, const arena *arena, nr_view view) {
   memset(s, 0, sizeof *s);
   s->arena = arena;
   s->view = view;
-  s->lives = 3;
+  s->players = NR_PLAYERS;
+  s->lives = NR_LIVES_PER_PLAYER * NR_PLAYERS;
+  s->waves_on = 1;
+  s->log_moves = 1;
   s->checksum = CW_HASH32_INIT;
   cw_rng_seed(&s->rng, 0x4e52u);
+  s->waves.phase = NR_WAVES_WAITING;
+  s->waves.delay = NR_WAVE_FIRST_DELAY;
   static const float LANE[NR_PLAYERS] = { 0.6f, -0.6f };
+  s->actor_count = NR_SIM_MAX_ACTORS;
+  for (int i = 0; i < NR_SIM_MAX_ACTORS; i++) {
+    s->actor[i].target = -1;
+    s->actor[i].team = NR_TEAM_ENEMY;
+    s->actor[i].holding = s->actor[i].held_by = -1;
+    s->actor[i].facing = 1;
+  }
   for (int i = 0; i < NR_PLAYERS; i++) {
     nr_actor *a = &s->actor[i];
     a->x = 0.0f;
     a->lane = LANE[i];
-    a->facing = 1;
     a->state = NR_ST_IDLE;
-    a->hp = HERO_HP;
+    a->hp = NR_HERO_HP;
     a->team = NR_TEAM_HERO;
-    a->holding = a->held_by = -1;
+    a->kind = NR_KIND_HERO;
     a->present = 1;
   }
-  s->actor_count = NR_PLAYERS;
+}
+
+/* The first free enemy slot, or -1. */
+static int free_slot(const nr_sim *s) {
+  for (int i = NR_PLAYERS; i < s->actor_count; i++)
+    if (!s->actor[i].present) return i;
+  return -1;
 }
 
 int nr_sim_add_dummy(nr_sim *s, float x, float lane, int32_t hp, bool grabbable, int32_t facing) {
-  if (s->actor_count >= NR_SIM_MAX_ACTORS) return -1;
-  int id = s->actor_count++;
+  int id = free_slot(s);
+  if (id < 0) return -1;
   nr_actor *a = &s->actor[id];
   memset(a, 0, sizeof *a);
   a->x = x;
@@ -457,10 +684,39 @@ int nr_sim_add_dummy(nr_sim *s, float x, float lane, int32_t hp, bool grabbable,
   a->state = NR_ST_IDLE;
   a->hp = hp;
   a->team = NR_TEAM_ENEMY;
+  a->kind = NR_KIND_DUMMY;
   a->grabbable = grabbable ? 1 : 0;
   a->holding = a->held_by = -1;
+  a->target = -1;
   a->present = 1;
   return id;
+}
+
+int nr_sim_spawn_enemy(nr_sim *s, int32_t kind, float x, float lane) {
+  int id = free_slot(s);
+  if (id < 0 || (kind != NR_KIND_GRUNT && kind != NR_KIND_HEAVY)) return -1;
+  nr_actor *a = &s->actor[id];
+  memset(a, 0, sizeof *a);
+  a->x = x;
+  a->lane = lane;
+  a->facing = s->cam_x >= x ? 1 : -1;
+  a->state = NR_ST_IDLE;
+  a->hp = ENEMY[kind].hp;
+  a->team = NR_TEAM_ENEMY;
+  a->kind = kind;
+  a->grabbable = kind == NR_KIND_GRUNT;
+  a->holding = a->held_by = -1;
+  a->target = alternate_target(s);
+  a->present = 1;
+  log_event(s, NR_EV_SPAWN, id, kind, a->target);
+  return id;
+}
+
+int nr_sim_enemies_alive(const nr_sim *s) {
+  int n = 0;
+  for (int i = NR_PLAYERS; i < s->actor_count; i++)
+    if (is_wave_enemy(&s->actor[i]) && s->actor[i].hp > 0) n++;
+  return n;
 }
 
 void nr_sim_set_strikes(nr_sim *s, int actor, const nr_strike *strikes, int count) {
@@ -469,32 +725,78 @@ void nr_sim_set_strikes(nr_sim *s, int actor, const nr_strike *strikes, int coun
   for (int k = 0; k < a->strike_count; k++) a->strike[k] = strikes[k];
 }
 
+/* A hero whose pad was just unplugged or plugged back in. Unplugging lets go of what it holds. */
+static void set_away(nr_sim *s, int p, bool away) {
+  nr_actor *a = &s->actor[p];
+  if ((a->away != 0) == away) return;
+  a->away = away ? 1 : 0;
+  if (away) release_hold(s, p);
+  log_event(s, NR_EV_AWAY, p, away ? 1 : 0, 0);
+}
+
+/* The game is over when the pool is empty and no hero is alive or about to stand up. */
+static void check_game_over(nr_sim *s) {
+  if (s->game_over || s->lives > 0) return;
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    const nr_actor *a = &s->actor[p];
+    if (a->present && (a->state != NR_ST_DEAD || a->respawn)) return;
+  }
+  s->game_over = 1;
+  log_event(s, NR_EV_GAME_OVER, -1, 0, 0);
+}
+
 void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
   s->ticks++;
   bool any = false;
   for (int p = 0; p < NR_PLAYERS; p++) any = any || input[p].any;
   if (any) s->input_count++;
-  float before[NR_PLAYERS][2];
+  if (s->ticks == 1) {
+    s->players = 0;
+    for (int p = 0; p < NR_PLAYERS; p++) {
+      s->actor[p].present = p == 0 || input[p].connected ? 1 : 0;
+      s->players += s->actor[p].present;
+    }
+    s->lives = NR_LIVES_PER_PLAYER * s->players;
+  }
+  if (s->game_over) {
+    for (int p = 0; p < NR_PLAYERS; p++) {
+      if (!input[p].start) continue;
+      s->start_refused++;
+      log_event(s, NR_EV_START_REFUSED, p, 0, 0);
+    }
+    s->checksum = checksum_of(s, s->checksum);
+    return;
+  }
+  nr_input idle_input = { .connected = false };
+  const nr_input *eff[NR_PLAYERS];
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    if (s->actor[p].present) set_away(s, p, p != 0 && !input[p].connected);
+    eff[p] = s->actor[p].away ? &idle_input : &input[p];
+  }
+  float before[NR_SIM_MAX_ACTORS];
   for (int i = 0; i < s->actor_count; i++) {
     nr_actor *a = &s->actor[i];
+    before[i] = a->x;
     if (!a->present) continue;
     a->tick++;
     if (a->invuln > 0) a->invuln--;
-    if (i < NR_PLAYERS) {
-      before[i][0] = a->x;
-      before[i][1] = a->lane;
-    }
+    if (a->ai_wait > 0) a->ai_wait--;
+    if (a->flinch_wait > 0) a->flinch_wait--;
   }
-  for (int i = 0; i < s->actor_count; i++) update_actor(s, i, i < NR_PLAYERS ? &input[i] : NULL);
+  for (int i = 0; i < s->actor_count; i++) update_actor(s, i, i < NR_PLAYERS ? eff[i] : NULL);
   resolve_hits(s);
   /* no player stands past the edge of the frame it is in: the trailing player cannot walk off the left and the leader
-   * stops at the right (the soft wall) until the camera, which follows the midpoint, moves on */
-  for (int p = 0; p < NR_PLAYERS; p++) {
-    nr_actor *a = &s->actor[p];
+   * stops at the right (the soft wall) until the camera, which follows the midpoint, moves on; the enemies of the waves
+   * stay in the frame the same way */
+  for (int i = 0; i < s->actor_count; i++) {
+    nr_actor *a = &s->actor[i];
+    if (!a->present || a->kind == NR_KIND_DUMMY || a->state == NR_ST_DEAD) continue;
     float h = nr_sim_view_half(s, a->lane), x = clampf(a->x, s->cam_x - h, s->cam_x + h);
-    if (arena_blocked(s->arena, x, a->lane)) a->x = before[p][0];
+    if (arena_blocked(s->arena, x, a->lane)) a->x = before[i];
     else a->x = x;
   }
   step_camera(s);
+  if (s->waves_on) nr_waves_step(s);
+  check_game_over(s);
   s->checksum = checksum_of(s, s->checksum);
 }

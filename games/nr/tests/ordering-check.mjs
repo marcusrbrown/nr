@@ -29,8 +29,8 @@ const layout = JSON.parse(readFileSync(join(ROOT, 'games/nr/assets/arena/layout.
 const P = layout.solids.find((s) => s.id === 'pillar');
 const FACE = { x0: P.x - P.w / 2, x1: P.x + P.w / 2, z: P.z + P.d / 2, y1: P.h };
 
-const base = join(OUT, EXE ? 'control' : 'nr'), bareBase = join(OUT, 'bare');
-const a = nativeWgpu('nr', base, FRAMES, { input: INPUT, exe: EXE });
+const base = join(OUT, EXE ? 'control' : 'nr_dummies'), bareBase = join(OUT, 'bare');
+const a = nativeWgpu('nr_dummies', base, FRAMES, { input: INPUT, exe: EXE });
 const b = nativeWgpu('nr_arena_bare', bareBase, FRAMES, { input: INPUT, exe: BARE_EXE });
 if (a.status !== 0 || b.status !== 0) { console.error(`capture failed: ${(a.stderr || '').slice(-300)} ${(b.stderr || '').slice(-300)}`); process.exit(1); }
 

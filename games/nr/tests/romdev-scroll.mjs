@@ -24,7 +24,7 @@ const OUT = resolve(ROOT, opt('out', 'out/unit4/romdev'));
 const FRAMES = +opt('frames', 640);
 const NATIVE = resolve(ROOT, opt('native-state', 'out/unit4/caps/scroll-f640.json'));
 const LIVE_SECONDS = +opt('live-seconds', 60);
-const CART = resolve(ROOT, 'build/cart-wgpu/carts/nr.wasc');
+const CART = resolve(ROOT, 'build/cart-wgpu/carts/nr_dummies.wasc');
 const SCRIPT = JSON.parse(readFileSync(join(ROOT, 'games/nr/tests/input-scroll.json'), 'utf8'));
 const COMPARED = ['nr.ticks', 'nr.hero_pos', 'nr.hero_clip', 'nr.hero_step', 'nr.light_pos', 'nr.light_intensity', 'nr.cam_x', 'nr.cam_left', 'nr.checksum'];
 mkdirSync(OUT, { recursive: true });

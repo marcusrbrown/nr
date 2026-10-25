@@ -8,8 +8,21 @@
  * height above the ground (a jump). An actor stands at (x, lane); its hurtbox is a box around that point.
  *
  * Teams. A hit lands only on an actor of the other team; a same-team overlap is logged and does nothing (no friendly
- * fire). Heroes are team 0 and actors 0 .. NR_PLAYERS - 1; every actor after them is an enemy, and the test dummy is
- * an enemy with no AI (it stands still, or swings on a schedule).
+ * fire). Heroes are team 0 and actors 0 .. NR_PLAYERS - 1; every actor after them is an enemy: a grunt, a heavy (both
+ * spawned by the waves) or the test dummy, which has no AI (it stands still, or swings on a schedule).
+ *
+ * Players. A player is present when its pad is connected on the first tick (player 0 always is); the pool of lives
+ * is NR_LIVES_PER_PLAYER for each present player. A hero whose hp runs out is knocked down and dies; each death takes
+ * a life from the pool, and while lives remain the hero stands up at the left edge of the camera's frame after
+ * NR_RESPAWN_DELAY ticks. When the pool is empty and no hero is alive or waiting to respawn the game is over: the
+ * simulation stops advancing its actors (the tick counter and the checksum go on) and a start press is refused. A
+ * hero whose pad is disconnected finishes the state it is in, then idles, and cannot be hit or targeted until the pad
+ * is back; a grab it was holding is let go, and the camera and the leash ignore it.
+ *
+ * Enemies. A grunt (2 hp) and a heavy (NR_HEAVY_HP hp) chase the player they are assigned, swing when it is in reach,
+ * walk round the arena's blocks and stay inside the camera's frame. Spawns alternate between the players that can be
+ * targeted; an enemy whose target dies, disconnects or is gone takes the player with the fewest enemies. A heavy cannot
+ * be grabbed, shrugs off a hit while it swings and is staggered (NR_ST_STAGGER) only by a special.
  *
  * States. Every state has a length in ticks, the tick of its first hit test (`startup`) and how many ticks it tests
  * (`active`); the rest is recovery. `tick` is the ticks since the state was entered: the tick a state is entered on is
@@ -27,19 +40,28 @@
 
 #include "arena.h"
 #include "cartwheel/core.h"
+#include "waves.h"
 
 #define NR_PLAYERS 2
-#define NR_SIM_MAX_ACTORS 12
+#define NR_MAX_ENEMIES 9 /* the last wave: 8 grunts and a heavy */
+#define NR_SIM_MAX_ACTORS (NR_PLAYERS + NR_MAX_ENEMIES)
 #define NR_MAX_STRIKES 4
-#define NR_EVENT_CAP 512
+#define NR_EVENT_CAP 1536
 #define NR_EVENT_FIELDS 5
+#define NR_LIVES_PER_PLAYER 3
+#define NR_RESPAWN_DELAY 90 /* ticks a dead hero lies before it stands up again */
+#define NR_RESPAWN_INVULN 120
+#define NR_HERO_HP 12
+#define NR_GRUNT_HP 2
+#define NR_HEAVY_HP 16
 
 typedef enum { NR_TEAM_HERO = 0, NR_TEAM_ENEMY = 1 } nr_team;
+typedef enum { NR_KIND_HERO, NR_KIND_DUMMY, NR_KIND_GRUNT, NR_KIND_HEAVY, NR_KIND_COUNT } nr_kind;
 
 typedef enum {
   NR_ST_IDLE, NR_ST_WALK, NR_ST_RUN, NR_ST_HIT1, NR_ST_HIT2, NR_ST_HIT3, NR_ST_JUMP, NR_ST_JUMPKICK, NR_ST_GRAB,
   NR_ST_THROW, NR_ST_HURT, NR_ST_KNOCKDOWN, NR_ST_GETUP, NR_ST_DASH, NR_ST_SPECIAL_KNOCKBACK, NR_ST_SPECIAL_DASH,
-  NR_ST_GRABBED, NR_ST_THROWN, NR_ST_DEAD, NR_ST_COUNT
+  NR_ST_GRABBED, NR_ST_THROWN, NR_ST_DEAD, NR_ST_ATTACK, NR_ST_HEAVY_ATTACK, NR_ST_STAGGER, NR_ST_COUNT
 } nr_state;
 
 typedef enum {
@@ -51,7 +73,19 @@ typedef enum {
   NR_EV_LAND,        /* actor landed from a throw, taking a hp */
   NR_EV_SKIP_TEAM,   /* actor's attack overlapped a, a teammate */
   NR_EV_SKIP_INVULN, /* actor's attack overlapped a, which was invulnerable */
-  NR_EV_DEAD         /* actor ran out of hp */
+  NR_EV_DEAD,        /* actor ran out of hp */
+  NR_EV_SPAWN,       /* actor (an enemy) appeared: a its kind, b the player it targets (-1 none) */
+  NR_EV_RETARGET,    /* actor now targets player a (-1 none) */
+  NR_EV_WAVE_BEGIN,  /* wave a began (actor -1) */
+  NR_EV_WAVE_END,    /* wave a ended: its last enemy died (actor -1) */
+  NR_EV_UPGRADE,     /* wave 2 ended: the upgrade flag is set (actor -1) */
+  NR_EV_CLEAR,       /* the last wave ended (actor -1) */
+  NR_EV_LIFE_LOST,   /* hero actor died: a lives left in the pool, b 1 when it will stand up again */
+  NR_EV_RESPAWN,     /* hero actor stood up at x a / 1000, lane b / 1000 */
+  NR_EV_GAME_OVER,   /* the pool is empty and no hero is alive (actor -1) */
+  NR_EV_AWAY,        /* hero actor's pad: a 1 disconnected, 0 back */
+  NR_EV_START_REFUSED, /* a start press at game over (actor = player) */
+  NR_EV_STAGGER      /* actor (a heavy) was staggered by a special of a */
 } nr_event_kind;
 
 /* One player's input for a tick: the stick, the buttons that went down this tick, and `tap`, the direction (-1 left,
@@ -60,7 +94,8 @@ typedef enum {
 typedef struct {
   float mx, my;
   int8_t tap;
-  bool attack, jump, grab, special, dash, special_alt, any;
+  bool attack, jump, grab, special, dash, special_alt, start, any;
+  bool connected; /* the player's pad is plugged in (player 0 always is: the keyboard plays) */
 } nr_input;
 
 /* A scheduled swing of a test dummy: enter `state` (NR_ST_HIT1 or NR_ST_HIT3) on `tick`. */
@@ -79,6 +114,13 @@ typedef struct {
   int32_t holding, held_by;        /* a grab in progress: the actor held / the actor holding this one, or -1 */
   int32_t grabbable, present;
   int32_t variant;                 /* the special: 0 knockback, 1 dash */
+  int32_t kind;                    /* nr_kind */
+  int32_t target;                  /* an enemy's player (actor id), or -1 */
+  int32_t away;                    /* a hero whose pad is disconnected */
+  int32_t respawn;                 /* a dead hero: it will stand up again */
+  int32_t ai_wait;                 /* an enemy: ticks until it may swing again */
+  int32_t flinch_wait;             /* a heavy: ticks until a hit flinches it again */
+  int32_t detour;                  /* an enemy: -1 / +1 the lane direction it walks to get round a block, 0 none */
   int32_t last_tap_dir, last_tap_tick, run_dir;
   int32_t strike_count;
   nr_strike strike[NR_MAX_STRIKES];
@@ -95,7 +137,12 @@ typedef struct {
   int32_t actor_count;
   float cam_x, cam_left;
   cw_rng rng;
+  nr_waves waves;
   int32_t ticks, input_count, wave, lives;
+  int32_t players;                 /* present at the first tick */
+  int32_t waves_on;                /* the waves spawn enemies (off for the test dummies' arena) */
+  int32_t game_over, start_refused;
+  int32_t log_moves;               /* log a hero's walk, run and idle-after-walk entries too */
   uint32_t checksum;
   int32_t events[NR_EVENT_CAP][NR_EVENT_FIELDS];
   int32_t event_count, events_dropped;
@@ -109,6 +156,20 @@ int nr_sim_add_dummy(nr_sim *s, float x, float lane, int32_t hp, bool grabbable,
 
 /* Schedules a dummy's swings; at most NR_MAX_STRIKES. */
 void nr_sim_set_strikes(nr_sim *s, int actor, const nr_strike *strikes, int count);
+
+/* Spawns a grunt or a heavy (NR_KIND_GRUNT, NR_KIND_HEAVY) at (x, lane), facing the middle of the frame, in the first
+ * free enemy slot; the player it targets is the next in the wave's alternation. Returns its actor id, or -1 when
+ * there is no free slot. Used by the waves. */
+int nr_sim_spawn_enemy(nr_sim *s, int32_t kind, float x, float lane);
+
+/* Appends an event to the log (the waves use it). */
+void nr_sim_log(nr_sim *s, int32_t kind, int32_t actor, int32_t a, int32_t b);
+
+/* One tick of the spawn schedule (waves.c), run at the end of nr_sim_step while `waves_on` is set. */
+void nr_waves_step(nr_sim *s);
+
+/* Enemies of the waves (grunts and heavies) that are standing: present with hp left. */
+int nr_sim_enemies_alive(const nr_sim *s);
 
 /* One tick. */
 void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]);

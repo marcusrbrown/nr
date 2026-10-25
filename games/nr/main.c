@@ -8,16 +8,26 @@
  * larger lane is nearer the camera and wins the depth test, and equal lanes resolve to the greater id. The street
  * block (arena.c, assets/arena) is drawn in the same depth buffer.
  *
- * Simulation. sim.c owns the actors (two heroes and the test dummies), their states, hits, the leash and the camera;
- * this file feeds it each player's input, maps every actor's state to a clip and frame, and draws. An actor faces
- * left on a mirrored plane (anim.h: nr_atlas_geometry): the plane's tangent frame mirrors with the picture, so the
- * normal map still lights the side that faces the light.
+ * Simulation. sim.c owns the actors (two heroes, then the grunts and heavies the waves spawn, or the test dummies),
+ * their states, hits, lives, the leash and the camera; waves.c the spawn schedule. This file feeds the simulation each
+ * player's input, maps every actor's state to its character's clip and frame, and draws: the hero, the grunt and the
+ * heavy each have an atlas and a material, and an actor shows the plane of its own. An actor faces left on a mirrored
+ * plane (anim.h: nr_atlas_geometry): the plane's tangent frame mirrors with the picture, so the normal map still lights
+ * the side that faces the light.
  *
  * Controls (key / pad): move arrows / d-pad or left stick, attack Z / west, jump space / south, grab X / east,
- * special C / north, dash left shift / right shoulder; the special's dash variant is picked by holding V / left
- * shoulder with it.
+ * special C / north, dash left shift / right shoulder, start Return / start; the special's dash variant is picked by
+ * holding V / left shoulder with it. A player is present when its pad is connected on the first tick (player 0 always
+ * is); a pad that goes away leaves its hero idle and untouchable until it is back.
+ *
+ * Self-play. `nr.demo` is a field a host sets: 1 plays the combat script of the test dummies' arena (demo_combat.inc), 2
+ * hands both players to the bot below, which fights the waves. NR_BOT_MASK builds an app whose players are bots from
+ * the first tick.
  *
  * Builds (compile definitions):
+ *   NR_DUMMIES: the street block with the test dummies (layout_dummies) in place of the waves: the combat checks.
+ *   NR_BOT_MASK: the players (bit 0 player 0, bit 1 player 1) the bot plays from the first tick; NR_BOT_FOCUS makes a
+ *     bot fight only the enemies that chase it.
  *   NR_STAGE_LEGACY: the look checkpoint's stage (a plain street, four fixed actors, no input); the lit-side and
  *     silhouette checks measure on it. NR_LIT_TEST implies it.
  *   NR_LIT_TEST: 0 = the street block; 1 = one hero held on one frame under a light that sweeps along x;
@@ -60,10 +70,20 @@
 #ifndef NR_LIT_FACE
 #define NR_LIT_FACE 1
 #endif
+#ifndef NR_DUMMIES
+#define NR_DUMMIES 0
+#endif
+#ifndef NR_BOT_MASK
+#define NR_BOT_MASK 0
+#endif
+#ifndef NR_BOT_FOCUS
+#define NR_BOT_FOCUS 0
+#endif
 #define NR_ARENA (NR_LIT_TEST == 0 && NR_STAGE_LEGACY == 0)
 
-#define NR_DUMMIES 7 /* the arena's test dummies: actors NR_PLAYERS .. */
-#define ACTORS (NR_LIT_TEST ? 1 : NR_ARENA ? NR_PLAYERS + NR_DUMMIES : 4)
+#define ACTORS (NR_LIT_TEST ? 1 : NR_ARENA ? NR_SIM_MAX_ACTORS : 4) /* the actors the state publishes */
+#define CHARS 3 /* hero, grunt, heavy */
+#define BOT_LOG 3072 /* bot input changes kept for the script generator */
 #define LIGHTS ARENA_LIGHTS
 #define TWO_PI 6.2831853f
 
@@ -106,31 +126,40 @@ static struct {
   int32_t actor_facing[ACTORS];
   int32_t actor_team[ACTORS];
   int32_t actor_invuln[ACTORS];
-  int32_t clip[ACTORS];       /* clip index in the hero atlas */
+  int32_t actor_kind[ACTORS];   /* nr_kind */
+  int32_t actor_target[ACTORS]; /* the player an enemy chases, or -1 */
+  int32_t actor_away[ACTORS];   /* a hero whose pad is disconnected */
+  int32_t actor_present[ACTORS];
+  int32_t clip[ACTORS];       /* clip index in the actor's own atlas */
   int32_t step[ACTORS];       /* frame within the clip */
-  int32_t frame[ACTORS];      /* atlas frame */
+  int32_t frame[ACTORS];      /* frame of the actor's atlas */
   int32_t clip_tick[ACTORS];  /* ticks since the actor's clip started */
   float light_pos[LIGHTS][3];
   float light_intensity[LIGHTS];
   float cam_x;
   float cam_left;             /* the furthest the camera has scrolled: it never goes back past it */
   int32_t ticks, heroes, lights, players, input_count, wave, lives;
+  int32_t game_over, start_refused, upgrade_ready, cleared, wave_phase;
   uint32_t rng[4];
   uint32_t sim_checksum, checksum;
-  int32_t demo;               /* set by a host: the combat script plays instead of the pads (demo_combat.inc) */
+  int32_t demo;               /* set by a host: 1 plays the combat script (demo_combat.inc), 2 the bot */
   int32_t events[NR_EVENT_CAP * NR_EVENT_FIELDS];
   int32_t event_count, events_dropped;
-  cw_action left, right, up, down, attack, jump, grab, special, dash, special_alt;
+#if NR_BOT_MASK
+  int32_t bot_log[BOT_LOG * 2]; /* { tick, mask of player 0 | mask of player 1 << 16 } at every tick a mask changed */
+  int32_t bot_log_count;
+#endif
+  cw_action left, right, up, down, attack, jump, grab, special, dash, special_alt, start;
   /* presentation */
   nr_sim sim;
   nr_view view;
-  nr_atlas hero;
-  int slot_clip[NR_HERO_CLIP_COUNT]; /* atlas clip index of each hero clip slot, -1 for a gap */
+  nr_atlas atlas[CHARS];      /* hero, grunt, heavy */
+  int vclip[CHARS][NR_ST_COUNT]; /* the atlas clip each state shows, per character */
   arena ar;
   t3_renderer *renderer;
   t3_scene *scene;
   t3_camera *camera;
-  t3_mesh *mesh[ACTORS];
+  t3_mesh *mesh[ACTORS][CHARS]; /* one plane per character for every actor; the one of the actor's character is shown */
   t3_light *light[LIGHTS];
   float pitch, view_dist, view_w, view_h;
   int32_t render_w, render_h;
@@ -141,6 +170,8 @@ static struct {
   int32_t three_missing;
   char three_missing_states[1024];
 } S;
+
+#define HERO_ATLAS (S.atlas[0])
 
 
 /* ── camera ────────────────────────────────────────────────────────── */
@@ -168,46 +199,107 @@ static void place_camera(void) {
 
 #if NR_ARENA
 
-/* The clip an actor's state shows. `fixed` is a frame of the clip held for the whole state, FRAME_BY_TICK plays the clip
- * from the tick the state was entered, FRAME_LAST holds its last frame. The jump kick and the grab have no clip yet
- * (the owner hand-keys them): the jump kick shows the last frame of the jump, the grab the first frame of the idle. */
+/* The clip an actor's state shows, per character. `fixed` is a frame of the clip held for the whole state, FRAME_BY_TICK
+ * plays the clip from the tick the state was entered, FRAME_LAST holds its last frame. The jump kick and the grab have
+ * no clip yet (the owner hand-keys them): the jump kick shows the last frame of the jump, the grab the first frame of
+ * the idle. A state a character never enters shows its idle. A dead enemy lies on its last frame. */
 #define FRAME_BY_TICK -1
 #define FRAME_LAST -2
-typedef struct { int slot, fixed; } visual;
-static const visual VISUAL[NR_ST_COUNT] = {
-  [NR_ST_IDLE] = { NR_HERO_IDLE, FRAME_BY_TICK },
-  [NR_ST_WALK] = { NR_HERO_WALK, FRAME_BY_TICK },
-  [NR_ST_RUN] = { NR_HERO_RUN, FRAME_BY_TICK },
-  [NR_ST_HIT1] = { NR_HERO_HIT1, FRAME_BY_TICK },
-  [NR_ST_HIT2] = { NR_HERO_HIT2, FRAME_BY_TICK },
-  [NR_ST_HIT3] = { NR_HERO_HIT3, FRAME_BY_TICK },
-  [NR_ST_JUMP] = { NR_HERO_JUMP, FRAME_BY_TICK },
-  [NR_ST_JUMPKICK] = { NR_HERO_JUMP, FRAME_LAST },
-  [NR_ST_GRAB] = { NR_HERO_IDLE, 0 },
-  [NR_ST_THROW] = { NR_HERO_THROW, FRAME_BY_TICK },
-  [NR_ST_HURT] = { NR_HERO_HURT, FRAME_BY_TICK },
-  [NR_ST_KNOCKDOWN] = { NR_HERO_KNOCKDOWN, FRAME_BY_TICK },
-  [NR_ST_GETUP] = { NR_HERO_GETUP, FRAME_BY_TICK },
-  [NR_ST_DASH] = { NR_HERO_DASH, FRAME_BY_TICK },
-  [NR_ST_SPECIAL_KNOCKBACK] = { NR_HERO_SPECIAL_KNOCKBACK, FRAME_BY_TICK },
-  [NR_ST_SPECIAL_DASH] = { NR_HERO_SPECIAL_DASH, FRAME_BY_TICK },
-  [NR_ST_GRABBED] = { NR_HERO_HURT, 0 },
-  [NR_ST_THROWN] = { NR_HERO_KNOCKDOWN, 1 },
-  [NR_ST_DEAD] = { NR_HERO_KNOCKDOWN, FRAME_LAST },
+typedef struct { const char *clip; int fixed; } visual;
+static const visual VIS_HERO[NR_ST_COUNT] = {
+  [NR_ST_IDLE] = { "idle", FRAME_BY_TICK },
+  [NR_ST_WALK] = { "walk", FRAME_BY_TICK },
+  [NR_ST_RUN] = { "run", FRAME_BY_TICK },
+  [NR_ST_HIT1] = { "hit1", FRAME_BY_TICK },
+  [NR_ST_HIT2] = { "hit2", FRAME_BY_TICK },
+  [NR_ST_HIT3] = { "hit3", FRAME_BY_TICK },
+  [NR_ST_JUMP] = { "jump", FRAME_BY_TICK },
+  [NR_ST_JUMPKICK] = { "jump", FRAME_LAST },
+  [NR_ST_GRAB] = { "idle", 0 },
+  [NR_ST_THROW] = { "throw", FRAME_BY_TICK },
+  [NR_ST_HURT] = { "hurt", FRAME_BY_TICK },
+  [NR_ST_KNOCKDOWN] = { "knockdown", FRAME_BY_TICK },
+  [NR_ST_GETUP] = { "getup", FRAME_BY_TICK },
+  [NR_ST_DASH] = { "dash", FRAME_BY_TICK },
+  [NR_ST_SPECIAL_KNOCKBACK] = { "special_knockback", FRAME_BY_TICK },
+  [NR_ST_SPECIAL_DASH] = { "special_dash", FRAME_BY_TICK },
+  [NR_ST_GRABBED] = { "hurt", 0 },
+  [NR_ST_THROWN] = { "knockdown", 1 },
+  [NR_ST_DEAD] = { "knockdown", FRAME_LAST },
 };
+static const visual VIS_GRUNT[NR_ST_COUNT] = {
+  [NR_ST_IDLE] = { "idle", FRAME_BY_TICK },
+  [NR_ST_WALK] = { "walk", FRAME_BY_TICK },
+  [NR_ST_ATTACK] = { "attack", FRAME_BY_TICK },
+  [NR_ST_HURT] = { "hurt", FRAME_BY_TICK },
+  [NR_ST_KNOCKDOWN] = { "knockdown", FRAME_BY_TICK },
+  [NR_ST_GETUP] = { "getup", FRAME_BY_TICK },
+  [NR_ST_GRABBED] = { "hurt", 0 },
+  [NR_ST_THROWN] = { "knockdown", 1 },
+  [NR_ST_DEAD] = { "knockdown", FRAME_LAST },
+};
+static const visual VIS_HEAVY[NR_ST_COUNT] = {
+  [NR_ST_IDLE] = { "idle", FRAME_BY_TICK },
+  [NR_ST_WALK] = { "walk", FRAME_BY_TICK },
+  [NR_ST_HEAVY_ATTACK] = { "attack", FRAME_BY_TICK },
+  [NR_ST_HURT] = { "hurt", FRAME_BY_TICK },
+  [NR_ST_STAGGER] = { "stagger", FRAME_BY_TICK },
+  [NR_ST_DEAD] = { "stagger", FRAME_LAST },
+};
+static const visual *const VIS[CHARS] = { VIS_HERO, VIS_GRUNT, VIS_HEAVY };
+
+/* The character (atlas) an actor of `kind` is drawn with: the test dummy is a hero. */
+static int char_of(int32_t kind) { return kind == NR_KIND_GRUNT ? 1 : kind == NR_KIND_HEAVY ? 2 : 0; }
+
+/* The atlas clip of every state of every character, from the tables above; false when an atlas lacks a clip. */
+static bool resolve_visuals(void) {
+  bool ok = true;
+  for (int c = 0; c < CHARS; c++) {
+    int idle = nr_clip_index(&S.atlas[c], "idle");
+    for (int st = 0; st < NR_ST_COUNT; st++) {
+      const visual *v = &VIS[c][st];
+      S.vclip[c][st] = v->clip ? nr_clip_index(&S.atlas[c], v->clip) : idle;
+      if (S.vclip[c][st] < 0) {
+        cw_error("nr: atlas %d has no clip '%s' for state %d", c, v->clip ? v->clip : "idle", st);
+        ok = false;
+      }
+    }
+  }
+  return ok;
+}
 
 #include "demo_combat.inc"
 #define NR_DEMO_LOOP (NR_DEMO_TICKS + 120) /* the demo plays the script, rests two seconds and starts again */
-#define DEMO_RIGHT 1
-#define DEMO_LEFT 2
-#define DEMO_UP 4
-#define DEMO_DOWN 8
-#define DEMO_ATTACK 16
-#define DEMO_JUMP 32
-#define DEMO_GRAB 64
-#define DEMO_SPECIAL 128
-#define DEMO_DASH 256
-#define DEMO_ALT 512
+#define BTN_RIGHT 1
+#define BTN_LEFT 2
+#define BTN_UP 4
+#define BTN_DOWN 8
+#define BTN_ATTACK 16
+#define BTN_JUMP 32
+#define BTN_GRAB 64
+#define BTN_SPECIAL 128
+#define BTN_DASH 256
+#define BTN_ALT 512
+#define BTN_START 1024
+#define BOT_REST 300 /* ticks the bot's run rests after the arena is cleared or the game is over, before it starts again */
+
+/* A player's input from the buttons held on this frame and on the frame before, as read_input() makes it from the
+ * pads: the edges are the buttons that went down. A hand-made input has its pad plugged in. */
+static void input_from_mask(uint16_t now, uint16_t was, nr_input *in) {
+  uint16_t edge = (uint16_t)(now & ~was);
+  in->mx = (now & BTN_RIGHT ? 1.0f : 0.0f) - (now & BTN_LEFT ? 1.0f : 0.0f);
+  in->my = (now & BTN_DOWN ? 1.0f : 0.0f) - (now & BTN_UP ? 1.0f : 0.0f);
+  in->tap = edge & BTN_RIGHT ? 1 : edge & BTN_LEFT ? -1 : 0;
+  in->attack = edge & BTN_ATTACK;
+  in->jump = edge & BTN_JUMP;
+  in->grab = edge & BTN_GRAB;
+  in->special = edge & BTN_SPECIAL;
+  in->dash = edge & BTN_DASH;
+  in->special_alt = now & BTN_ALT;
+  in->start = edge & BTN_START;
+  in->connected = true;
+  in->any = in->mx != 0.0f || in->my != 0.0f || in->tap != 0 || in->attack || in->jump || in->grab || in->special || in->dash;
+}
 
 /* The buttons the combat script holds for player `p` on engine frame `frame`; neutral before frame 1 and after the script. */
 static uint16_t demo_buttons(int p, int32_t frame) {
@@ -218,21 +310,10 @@ static uint16_t demo_buttons(int p, int32_t frame) {
   return held;
 }
 
-/* The same input read_input() makes from the pads, made from the script: the buttons held on this frame, and the edges
- * against the frame before. The sim's tick is `sim.ticks`, so the frame about to run is sim.ticks + 1. */
+/* The combat script's input for this tick. The sim's tick is `sim.ticks`, so the frame about to run is sim.ticks + 1. */
 static void demo_input(int p, nr_input *in) {
   int32_t frame = S.sim.ticks + 1;
-  uint16_t now = demo_buttons(p, frame), was = demo_buttons(p, frame - 1), edge = (uint16_t)(now & ~was);
-  in->mx = (now & DEMO_RIGHT ? 1.0f : 0.0f) - (now & DEMO_LEFT ? 1.0f : 0.0f);
-  in->my = (now & DEMO_DOWN ? 1.0f : 0.0f) - (now & DEMO_UP ? 1.0f : 0.0f);
-  in->tap = edge & DEMO_RIGHT ? 1 : edge & DEMO_LEFT ? -1 : 0;
-  in->attack = edge & DEMO_ATTACK;
-  in->jump = edge & DEMO_JUMP;
-  in->grab = edge & DEMO_GRAB;
-  in->special = edge & DEMO_SPECIAL;
-  in->dash = edge & DEMO_DASH;
-  in->special_alt = now & DEMO_ALT;
-  in->any = in->mx != 0.0f || in->my != 0.0f || in->tap != 0 || in->attack || in->jump || in->grab || in->special || in->dash;
+  input_from_mask(demo_buttons(p, frame), demo_buttons(p, frame - 1), in);
 }
 
 /* A player's input for this tick, read from the engine's actions. */
@@ -247,18 +328,132 @@ static void read_input(int p, nr_input *in) {
   in->special = cw_action_just_pressed(p, S.special);
   in->dash = cw_action_just_pressed(p, S.dash);
   in->special_alt = cw_action_pressed(p, S.special_alt);
+  in->start = cw_action_just_pressed(p, S.start);
+  int pad = cw_input_player_pad(p);
+  in->connected = p == 0 || (pad >= 0 && cw_input_raw()->pads[pad].connected);
   in->any = mv.x != 0.0f || mv.y != 0.0f || in->tap != 0 || in->attack || in->jump || in->grab || in->special || in->dash;
+}
+
+/* ── the bot ───────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+/* A player that fights the waves: it walks up to the nearest enemy (the nearest that chases it with NR_BOT_FOCUS), turns
+ * to it and chains hit1 to hit3 as the swings' recovery windows open, grabs a heavy once (it cannot be grabbed) and every
+ * third grunt, uses the knockback special on a crowd or a heavy, and walks on to where the next wave appears when the
+ * street is clear. It reads the simulation and chooses only one axis at a time, so its input is the same through the pad
+ * path: the buttons it holds are logged and tests/gen-input-waves.mjs writes them out as input-waves.json. */
+#define BOT_REACH_X 1.1f
+#define BOT_REACH_Z 0.35f
+#define BOT_SPECIAL_GAP 360
+static struct {
+  uint16_t mask[NR_PLAYERS], was[NR_PLAYERS];
+  int32_t stuck[NR_PLAYERS], detour_until[NR_PLAYERS], detour_dir[NR_PLAYERS], special_ok[NR_PLAYERS];
+  uint32_t grabbed[NR_PLAYERS]; /* bit per actor id the bot already tried to grab */
+  float last_x[NR_PLAYERS];
+} bot;
+
+static bool bot_on(int p) { return (NR_BOT_MASK >> p) & 1 || S.demo == 2; }
+
+static bool bot_free(const nr_actor *a) { return a->state == NR_ST_IDLE || a->state == NR_ST_WALK || a->state == NR_ST_RUN; }
+
+static uint16_t bot_choose(int p) {
+  const nr_sim *s = &S.sim;
+  const nr_actor *me = &s->actor[p];
+  if (!me->present || me->hp <= 0 || me->state == NR_ST_DEAD) return 0;
+  for (int i = NR_PLAYERS; i < s->actor_count; i++)
+    if (!s->actor[i].present || s->actor[i].hp <= 0) bot.grabbed[p] &= ~(1u << i);
+  int best = -1, near = 0;
+  float best_d = 0.0f;
+  for (int i = NR_PLAYERS; i < s->actor_count; i++) {
+    const nr_actor *e = &s->actor[i];
+    if (!e->present || e->hp <= 0 || (e->kind != NR_KIND_GRUNT && e->kind != NR_KIND_HEAVY) || e->state == NR_ST_DEAD) continue;
+    float dx = e->x - me->x, dz = e->lane - me->lane;
+    if (dx * dx + dz * dz <= 5.76f) near++;
+    if (NR_BOT_FOCUS && e->target != p) continue;
+    float d = dx * dx + 4.0f * dz * dz;
+    if (best < 0 || d < best_d) { best = i; best_d = d; }
+  }
+  bool detouring = s->ticks < bot.detour_until[p];
+  uint16_t m = 0;
+  if (best < 0) {
+    /* nobody to fight: on to where the next wave appears */
+    float goal = 2.0f + 3.5f * (float)s->waves.wave;
+    if (!s->waves.cleared && me->x < goal) m = BTN_RIGHT;
+  } else {
+    const nr_actor *e = &s->actor[best];
+    float dx = e->x - me->x, dz = e->lane - me->lane, adx = dx < 0.0f ? -dx : dx, adz = dz < 0.0f ? -dz : dz;
+    uint16_t toward = dx >= 0.0f ? BTN_RIGHT : BTN_LEFT;
+    bool heavy = e->kind == NR_KIND_HEAVY, in_reach = adx <= (heavy ? 1.3f : BOT_REACH_X) && adz <= BOT_REACH_Z;
+    if (in_reach) {
+      if (bot_free(me)) {
+        bool try_grab = !((bot.grabbed[p] >> best) & 1) && (heavy || best % 3 == 0);
+        if (try_grab) {
+          m = (uint16_t)(toward | BTN_GRAB);
+          bot.grabbed[p] |= 1u << best;
+        } else if ((near >= 3 || (heavy && adx <= 2.0f)) && s->ticks >= bot.special_ok[p] && !(heavy && e->state == NR_ST_STAGGER)) {
+          m = (uint16_t)(toward | BTN_SPECIAL);
+          bot.special_ok[p] = s->ticks + BOT_SPECIAL_GAP;
+        } else {
+          m = (uint16_t)(toward | BTN_ATTACK);
+        }
+      } else if ((me->state == NR_ST_HIT1 || me->state == NR_ST_HIT2) && me->tick >= 14) {
+        m = BTN_ATTACK;
+      }
+    } else {
+      float ex = adx - BOT_REACH_X + 0.1f, ez = (adz - BOT_REACH_Z) * 1.5f;
+      if (ex < 0.0f) ex = 0.0f;
+      if (ez < 0.0f) ez = 0.0f;
+      if (ex > ez) m = toward;
+      else m = dz > 0.0f ? BTN_DOWN : BTN_UP;
+    }
+  }
+  if (m & (BTN_LEFT | BTN_RIGHT) && !(m & (BTN_ATTACK | BTN_GRAB | BTN_SPECIAL))) {
+    /* held against a block: walk round it for a while */
+    float moved = me->x - bot.last_x[p];
+    bot.stuck[p] = me->state == NR_ST_WALK && moved > -0.0001f && moved < 0.0001f ? bot.stuck[p] + 1 : 0;
+    if (bot.stuck[p] >= 12) {
+      bot.stuck[p] = 0;
+      bot.detour_until[p] = s->ticks + 70;
+      bot.detour_dir[p] = me->lane > 0.2f ? 1 : -1;
+      detouring = true;
+    }
+  } else {
+    bot.stuck[p] = 0;
+  }
+  bot.last_x[p] = me->x;
+  if (detouring && !(m & (BTN_ATTACK | BTN_GRAB | BTN_SPECIAL))) m = bot.detour_dir[p] > 0 ? BTN_DOWN : BTN_UP; /* one axis at a time: a diagonal d-pad is normalised by the engine */
+  return m;
+}
+
+/* The bot's input for player `p`; with the masks of both players known the tick is logged when either changed. */
+static void bot_input(int p, nr_input *in) {
+  bot.mask[p] = bot_choose(p);
+  input_from_mask(bot.mask[p], bot.was[p], in);
+}
+
+static void bot_commit(void) {
+#if NR_BOT_MASK
+  if ((bot.mask[0] != bot.was[0] || bot.mask[1] != bot.was[1]) && S.bot_log_count < BOT_LOG) {
+    S.bot_log[S.bot_log_count * 2] = S.sim.ticks + 1;
+    S.bot_log[S.bot_log_count * 2 + 1] = bot.mask[0] | (bot.mask[1] << 16);
+    S.bot_log_count++;
+  } else if (bot.mask[0] != bot.was[0] || bot.mask[1] != bot.was[1]) {
+    S.bot_log_count++;
+  }
+#endif
+  for (int p = 0; p < NR_PLAYERS; p++) bot.was[p] = bot.mask[p];
 }
 
 /* The clip, frame and the published fields of actor i from the simulation. */
 static void pose_actor(int i) {
   const nr_actor *a = &S.sim.actor[i];
-  const visual *v = &VISUAL[a->state];
-  int clip = S.slot_clip[v->slot];
+  int c = char_of(a->kind);
+  const nr_atlas *at = &S.atlas[c];
+  const visual *v = &VIS[c][a->state];
+  int clip = S.vclip[c][a->state];
   S.clip[i] = clip;
   S.clip_tick[i] = a->tick;
-  S.step[i] = v->fixed >= 0 ? v->fixed : v->fixed == FRAME_LAST ? S.hero.clips[clip].count - 1 : nr_clip_step_at(&S.hero, clip, a->tick);
-  S.frame[i] = S.hero.clips[clip].first + S.step[i];
+  S.step[i] = v->clip == NULL ? nr_clip_step_at(at, clip, a->tick) : v->fixed >= 0 ? v->fixed : v->fixed == FRAME_LAST ? at->clips[clip].count - 1 : nr_clip_step_at(at, clip, a->tick);
+  S.frame[i] = at->clips[clip].first + S.step[i];
   S.pos[i][0] = a->x;
   S.pos[i][1] = a->lane;
   S.pos[i][2] = arena_depth_z(&S.ar, a->lane, i);
@@ -270,6 +465,10 @@ static void pose_actor(int i) {
   S.actor_facing[i] = a->facing;
   S.actor_team[i] = a->team;
   S.actor_invuln[i] = a->invuln;
+  S.actor_kind[i] = a->kind;
+  S.actor_target[i] = a->target;
+  S.actor_away[i] = a->away;
+  S.actor_present[i] = a->present;
 }
 
 static void publish_sim(void) {
@@ -280,6 +479,12 @@ static void publish_sim(void) {
   S.input_count = S.sim.input_count;
   S.wave = S.sim.wave;
   S.lives = S.sim.lives;
+  S.players = S.sim.players;
+  S.game_over = S.sim.game_over;
+  S.start_refused = S.sim.start_refused;
+  S.upgrade_ready = S.sim.waves.upgrade_ready;
+  S.cleared = S.sim.waves.cleared;
+  S.wave_phase = S.sim.waves.phase;
   memcpy(S.rng, S.sim.rng.s, sizeof S.rng);
   S.sim_checksum = S.sim.checksum;
   memcpy(S.events, S.sim.events, sizeof S.events);
@@ -292,6 +497,7 @@ static void publish_sim(void) {
  * start, facing right, and swings on a schedule (a hit, a hit inside the invulnerability the first one gives, then a
  * knockdown) at whoever stands in its reach: only the combat script walks a player there; 8 and 2 stand on the dash
  * special's path. All but 7 face left. */
+#if NR_DUMMIES
 static void layout_dummies(void) {
   nr_sim_add_dummy(&S.sim, 11.7f, 1.35f, 99, true, -1);
   nr_sim_add_dummy(&S.sim, 2.4f, 0.6f, 12, true, -1);
@@ -303,17 +509,37 @@ static void layout_dummies(void) {
   nr_sim_set_strikes(&S.sim, striker, STRIKES, 3);
   nr_sim_add_dummy(&S.sim, 10.0f, 1.4f, 12, true, -1);
 }
+#endif
+
+/* A fresh simulation: the street with the dummies (NR_DUMMIES), or with the waves. */
+static void start_sim(void) {
+  nr_sim_init(&S.sim, &S.ar, S.view);
+#if NR_DUMMIES
+  S.sim.waves_on = 0;
+  layout_dummies();
+#else
+  S.sim.log_moves = 0;
+#endif
+  memset(&bot, 0, sizeof bot);
+}
 
 static void step_sim(void) {
   nr_input in[NR_PLAYERS];
-  if (S.demo && S.sim.ticks >= NR_DEMO_LOOP) {
-    nr_sim_init(&S.sim, &S.ar, S.view);
-    layout_dummies();
+  static int32_t end_tick;
+  if (S.demo == 1 && NR_DUMMIES && S.sim.ticks >= NR_DEMO_LOOP) start_sim();
+  if (S.demo == 2 && (S.sim.game_over || S.sim.waves.cleared)) {
+    if (!end_tick) end_tick = S.sim.ticks;
+    if (S.sim.ticks - end_tick >= BOT_REST) {
+      end_tick = 0;
+      start_sim();
+    }
   }
   for (int p = 0; p < NR_PLAYERS; p++) {
-    if (S.demo) demo_input(p, &in[p]);
+    if (S.demo == 1 && NR_DUMMIES) demo_input(p, &in[p]);
+    else if (bot_on(p)) bot_input(p, &in[p]);
     else read_input(p, &in[p]);
   }
+  bot_commit();
   nr_sim_step(&S.sim, in);
   publish_sim();
 }
@@ -338,12 +564,12 @@ static void layout_actors(void) {
 }
 
 static void step_sim(void) {
-  int idle = nr_clip_index(&S.hero, "idle"), walk = nr_clip_index(&S.hero, "walk");
+  int idle = nr_clip_index(&HERO_ATLAS, "idle"), walk = nr_clip_index(&HERO_ATLAS, "walk");
   for (int i = 0; i < ACTORS; i++) {
     S.clip[i] = (!NR_LIT_TEST && i == 3) ? walk : idle;
     S.clip_tick[i] = S.ticks;
-    S.step[i] = NR_LIT_TEST ? 0 : nr_clip_step_at(&S.hero, S.clip[i], S.clip_tick[i]);
-    S.frame[i] = S.hero.clips[S.clip[i]].first + S.step[i];
+    S.step[i] = NR_LIT_TEST ? 0 : nr_clip_step_at(&HERO_ATLAS, S.clip[i], S.clip_tick[i]);
+    S.frame[i] = HERO_ATLAS.clips[S.clip[i]].first + S.step[i];
   }
 }
 
@@ -417,6 +643,17 @@ static void fixed_update(void *user, double dt) {
 
 /* ── scene ─────────────────────────────────────────────────────────── */
 
+/* The character an actor is drawn with: the grunts and heavies of the street block have their own, everything else
+ * (the heroes, the dummies, the legacy stage's actors) is the hero. */
+static int char_of_actor(int i) {
+#if NR_ARENA
+  return char_of(S.actor_kind[i]);
+#else
+  (void)i;
+  return 0;
+#endif
+}
+
 #if !NR_ARENA
 static t3_material *standard_material(uint32_t color) {
   t3_material *m = t3_mesh_standard_material_new(color);
@@ -459,10 +696,12 @@ static void build_scene(int w, int h) {
 #endif
 
   for (int i = 0; i < ACTORS; i++) {
-    S.mesh[i] = t3_mesh_new(S.hero.geom[S.frame[i]], S.hero.material);
-    t3_object_set_rotation(S.mesh[i], -S.pitch, 0, 0);
-    S.mesh[i]->base.visible = !NR_NO_HEROES;
-    t3_object_add((t3_object *)S.scene, S.mesh[i]);
+    for (int c = 0; c < (NR_ARENA ? CHARS : 1); c++) {
+      S.mesh[i][c] = t3_mesh_new(S.atlas[c].geom[c == char_of_actor(i) ? S.frame[i] : 0], S.atlas[c].material);
+      t3_object_set_rotation(S.mesh[i][c], -S.pitch, 0, 0);
+      S.mesh[i][c]->base.visible = false;
+      t3_object_add((t3_object *)S.scene, S.mesh[i][c]);
+    }
   }
 }
 
@@ -473,13 +712,17 @@ static void build_scene(int w, int h) {
 static void sync_scene(void) {
   float sp, cp;
   cw_sincos(S.pitch, &sp, &cp);
-  float right = (S.hero.cell_w * 0.5f - S.hero.pivot_x) / PPU;
-  float up = (S.hero.pivot_y - S.hero.cell_h * 0.5f) / PPU;
   place_camera();
   for (int i = 0; i < ACTORS; i++) {
+    int shown = char_of_actor(i);
+    const nr_atlas *at = &S.atlas[shown];
+    float right = ((float)at->cell_w * 0.5f - at->pivot_x) / PPU;
+    float up = (at->pivot_y - (float)at->cell_h * 0.5f) / PPU;
     float face = S.actor_facing[i] < 0 ? -1.0f : 1.0f;
-    S.mesh[i]->geometry = nr_atlas_geometry(&S.hero, S.frame[i], face < 0.0f);
-    t3_object_set_position(S.mesh[i], S.pos[i][0] + right * face, S.actor_y[i] + up * cp, S.pos[i][2] - up * sp);
+    for (int c = 0; c < (NR_ARENA ? CHARS : 1); c++) S.mesh[i][c]->base.visible = !NR_NO_HEROES && c == shown && S.actor_present[i];
+    t3_mesh *m = S.mesh[i][shown];
+    m->geometry = nr_atlas_geometry(at, S.frame[i], face < 0.0f);
+    t3_object_set_position(m, S.pos[i][0] + right * face, S.actor_y[i] + up * cp, S.pos[i][2] - up * sp);
   }
   for (int i = 0; i < LIGHTS; i++) {
     t3_object_set_position(S.light[i], S.light_pos[i][0], S.light_pos[i][1], S.light_pos[i][2]);
@@ -519,15 +762,28 @@ static void register_debug(void) {
   cw_debug_field("nr.actor_facing", S.actor_facing, CW_DBG_I32, ACTORS);
   cw_debug_field("nr.actor_team", S.actor_team, CW_DBG_I32, ACTORS);
   cw_debug_field("nr.actor_invuln", S.actor_invuln, CW_DBG_I32, ACTORS);
+  cw_debug_field("nr.actor_kind", S.actor_kind, CW_DBG_I32, ACTORS);
+  cw_debug_field("nr.actor_target", S.actor_target, CW_DBG_I32, ACTORS);
+  cw_debug_field("nr.actor_away", S.actor_away, CW_DBG_I32, ACTORS);
+  cw_debug_field("nr.actor_present", S.actor_present, CW_DBG_I32, ACTORS);
   cw_debug_field("nr.rng", S.rng, CW_DBG_U32, 4);
   cw_debug_i32("nr.wave", &S.wave);
   cw_debug_i32("nr.lives", &S.lives);
   cw_debug_i32("nr.input_count", &S.input_count);
+  cw_debug_i32("nr.game_over", &S.game_over);
+  cw_debug_i32("nr.start_refused", &S.start_refused);
+  cw_debug_i32("nr.upgrade_ready", &S.upgrade_ready);
+  cw_debug_i32("nr.cleared", &S.cleared);
+  cw_debug_i32("nr.wave_phase", &S.wave_phase);
   cw_debug_i32("nr.demo", &S.demo);
   cw_debug_u32("nr.sim_checksum", &S.sim_checksum);
   cw_debug_field("nr.events", S.events, CW_DBG_I32, NR_EVENT_CAP * NR_EVENT_FIELDS);
   cw_debug_i32("nr.event_count", &S.event_count);
   cw_debug_i32("nr.events_dropped", &S.events_dropped);
+#if NR_BOT_MASK
+  cw_debug_field("nr.bot_log", S.bot_log, CW_DBG_I32, BOT_LOG * 2);
+  cw_debug_i32("nr.bot_log_count", &S.bot_log_count);
+#endif
   cw_debug_f32("nr.cam_x", &S.cam_x);
   cw_debug_f32("nr.cam_left", &S.cam_left);
   cw_debug_i32("nr.heroes", &S.heroes);
@@ -565,35 +821,45 @@ static void init(void *user) {
   cw_action_bind_text(S.jump, "key:space, pad:south");
   cw_action_bind_text(S.grab, "key:x, pad:east");
   cw_action_bind_text(S.special, "key:c, pad:north");
-  cw_action_bind_text(S.dash, "key:left shift, pad:rshoulder");
+  cw_action_bind_text(S.dash, "key:lshift, pad:rshoulder");
+  S.start = cw_action_add("start", 0.5f);
   cw_action_bind_text(S.special_alt, "key:v, pad:lshoulder");
+  cw_action_bind_text(S.start, "key:return, pad:start");
   S.heroes = ACTORS;
   S.lights = LIGHTS;
   S.players = NR_PLAYERS;
+  for (int i = 0; i < ACTORS; i++) {
+    S.actor_present[i] = 1;
+    S.actor_target[i] = -1;
+  }
   S.lit_test = NR_LIT_TEST;
   S.flat_normals = NR_FLAT_NORMALS;
   S.arena_on = NR_ARENA;
   S.checksum = CW_HASH32_INIT;
   init_camera_constants();
-  if (!nr_atlas_load(&S.hero, "hero", PPU, NR_FLAT_NORMALS)) {
-    cw_error("nr: the hero atlas did not load");
-    return;
+  static const char *const ATLAS_NAME[CHARS] = { "hero", "grunt", "heavy" };
+  for (int c = 0; c < (NR_ARENA ? CHARS : 1); c++) {
+    if (!nr_atlas_load(&S.atlas[c], ATLAS_NAME[c], PPU, NR_FLAT_NORMALS)) {
+      cw_error("nr: the %s atlas did not load", ATLAS_NAME[c]);
+      return;
+    }
   }
   for (int i = 0; i < ACTORS; i++) S.actor_facing[i] = NR_LIT_FACE; /* the sim sets the arena's actors' facing */
 #if NR_ARENA
   /* a standing actor's head recedes behind its ground point by its height times the sine of the plane's pitch */
-  float reach = S.hero.pivot_y / PPU * cw_sin(S.pitch) + 0.03f;
+  float reach = HERO_ATLAS.pivot_y / PPU * cw_sin(S.pitch) + 0.03f;
   if (!arena_load(&S.ar, ACTOR_HALF, reach)) {
     cw_error("nr: the arena did not load");
     return;
   }
-  if (!nr_clips_resolve(&S.hero, nr_hero_clips, NR_HERO_CLIP_COUNT, S.slot_clip)) {
-    cw_error("nr: the hero's clips do not match the atlas");
+  int slots[NR_HERO_CLIP_COUNT];
+  if (!nr_clips_resolve(&S.atlas[0], nr_hero_clips, NR_HERO_CLIP_COUNT, slots) || !nr_clips_resolve(&S.atlas[1], nr_grunt_clips, NR_GRUNT_CLIP_COUNT, slots) ||
+      !nr_clips_resolve(&S.atlas[2], nr_heavy_clips, NR_HEAVY_CLIP_COUNT, slots) || !resolve_visuals()) {
+    cw_error("nr: a character's clips do not match its atlas");
     return;
   }
   S.view = (nr_view){ ((float)SCENE_W / PPU) * 0.5f, S.view_dist, cw_cos(S.pitch), ACTOR_HALF };
-  nr_sim_init(&S.sim, &S.ar, S.view);
-  layout_dummies();
+  start_sim();
   publish_sim();
 #else
   layout_actors();

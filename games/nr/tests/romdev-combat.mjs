@@ -27,7 +27,7 @@ const OUT = resolve(ROOT, opt('out', 'out/unit5/romdev'));
 const NATIVE = resolve(ROOT, opt('native-state', 'out/unit5/sim/main-t760.json'));
 const LIVE_SECONDS = +opt('live-seconds', 120);
 const FRAMES = 760;
-const CART = resolve(ROOT, 'build/cart-wgpu/carts/nr.wasc');
+const CART = resolve(ROOT, 'build/cart-wgpu/carts/nr_dummies.wasc');
 const SCRIPT = JSON.parse(readFileSync(join(ROOT, 'games/nr/tests/input-combat.json'), 'utf8'));
 const SHOTS = [183, 279, 362, 700];
 mkdirSync(OUT, { recursive: true });

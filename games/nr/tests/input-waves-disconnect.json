@@ -1,0 +1,11 @@
+[
+  {"frame":1,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":100,"buttons":[],"pad2":{"buttons":["west"]}},
+  {"frame":102,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":115,"buttons":[],"pad2":{"buttons":["west"]}},
+  {"frame":117,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":118,"buttons":[]},
+  {"frame":560,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":580,"buttons":[],"pad2":{"buttons":["west"]}},
+  {"frame":582,"buttons":[],"pad2":{"buttons":[]}}
+]

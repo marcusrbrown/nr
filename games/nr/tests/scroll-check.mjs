@@ -39,7 +39,7 @@ const TICKS = [1, 30, 61, 100, 142, 200, 230, 240, 300, 352, 426, 480, 560, 600,
 const states = new Map();
 for (const t of TICKS) {
   const base = join(OUT, `s${t}`);
-  const r = nativeWgpu('nr', base, t, { input: INPUT });
+  const r = nativeWgpu('nr_dummies', base, t, { input: INPUT });
   if (r.status !== 0) { fail(`run to tick ${t}: ${(r.stderr || r.stdout || '').slice(-200)}`); continue; }
   states.set(t, JSON.parse(readFileSync(`${base}.json`, 'utf8')));
 }
