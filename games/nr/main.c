@@ -16,18 +16,26 @@
  * the side that faces the light.
  *
  * Controls (key / pad): move arrows / d-pad or left stick, attack Z / west, jump space / south, grab X / east,
- * special C / north, dash left shift / right shoulder, start Return / start; the special's dash variant is picked by
- * holding V / left shoulder with it. A player is present when its pad is connected on tick 30 (player 0 always is; the
- * title will decide this); a pad that goes away leaves its hero idle and untouchable until it is back.
+ * special C / north, dash left shift / right shoulder, start Return / start, back Backspace / back.
+ *   Title: start from a pad that has not joined joins its player (the keyboard and pad 0 are player 1, pad 1 player 2);
+ *     start again from a player that is in begins the fight with the players that are in, 3 lives each in one pool.
+ *   Fight: start from a pad that has not joined joins its player at the left edge of the camera's frame with 3 more
+ *     lives; start from a pad that has joined does nothing.
+ *   Upgrade (after wave 2): left picks the knockback special, right the dash, once a short lockout has passed; the first
+ *     press wins and the lower port wins a tick both press on.
+ *   Clear and game over: back returns to the title; start at game over is refused.
+ * A pad that goes away leaves its hero idle and untouchable until it is back. The builds without a title (NR_NO_TITLE:
+ * the Unit 6 scripts and the bots) decide the players on tick 30 from the pads connected then (NR_PRESENCE_TICKS).
  *
  * Self-play. `nr.demo` is a field a host sets: 1 plays the combat script of the test dummies' arena (demo_combat.inc), 2
- * hands both players to the bot below, which fights the waves. NR_BOT_MASK builds an app whose players are bots from
- * the first tick.
+ * hands both players to the bot below, which fights the waves (and, on a build with a title, joins, picks the dash with
+ * player 2 and returns to the title). NR_BOT_MASK builds an app whose players are bots from the first tick.
  *
  * Builds (compile definitions):
  *   NR_DUMMIES: the street block with the test dummies (layout_dummies) in place of the waves: the combat checks.
  *   NR_BOT_MASK: the players (bit 0 player 0, bit 1 player 1) the bot plays from the first tick; NR_BOT_FOCUS makes a
  *     bot fight only the enemies that chase it.
+ *   NR_NO_TITLE: the fight begins on the first tick with no title, no upgrade pause and no HUD (the Unit 6 builds).
  *   NR_STAGE_LEGACY: the look checkpoint's stage (a plain street, four fixed actors, no input); the lit-side and
  *     silhouette checks measure on it. NR_LIT_TEST implies it.
  *   NR_LIT_TEST: 0 = the street block; 1 = one hero held on one frame under a light that sweeps along x;
@@ -38,22 +46,26 @@
  *   NR_FLAT_NORMALS: the actors' normal map is flat; the control build of the lit-side check.
  *   NR_REVERSE_DEPTH: the actors' depth mapping is inverted (arena.c); the control build of the ordering check.
  *
- * The state hosts compare (tick, every actor's position, jump, state and hp, the rng, lives, wave, camera, input count,
- * checksum) and the program states three.c skipped are published as debug fields (nr.*, cw.three.*). */
+ * The state hosts compare (tick, phase, every actor's position, jump, state and hp, the rng, lives, wave, camera, input
+ * count, the special, the sounds asked for, checksum) and the program states three.c skipped are published as debug
+ * fields (nr.*, cw.three.*). The screens are ui.c, drawn with render2d over the 3D frame. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "anim.h"
 #include "arena.h"
+#include "cartwheel/audio.h"
 #include "cartwheel/core.h"
 #include "cartwheel/debug.h"
 #include "cartwheel/input.h"
 #include "cartwheel/math.h"
 #include "cartwheel/platform.h"
+#include "cartwheel/render2d.h"
 #include "cartwheel/render3d.h"
 #include "sim.h"
 #include "three.h"
+#include "ui.h"
 
 #ifndef NR_LIT_TEST
 #define NR_LIT_TEST 0
@@ -79,7 +91,11 @@
 #ifndef NR_BOT_FOCUS
 #define NR_BOT_FOCUS 0
 #endif
+#ifndef NR_NO_TITLE
+#define NR_NO_TITLE 0
+#endif
 #define NR_ARENA (NR_LIT_TEST == 0 && NR_STAGE_LEGACY == 0)
+#define NR_UI (NR_ARENA && !NR_DUMMIES && !NR_NO_TITLE) /* the game: a title, the HUD, the upgrade pause, the end screens */
 
 #define ACTORS (NR_LIT_TEST ? 1 : NR_ARENA ? NR_SIM_MAX_ACTORS : 4) /* the actors the state publishes */
 #define CHARS 3 /* hero, grunt, heavy */
@@ -140,6 +156,10 @@ static struct {
   float cam_left;             /* the furthest the camera has scrolled: it never goes back past it */
   int32_t ticks, heroes, lights, players, input_count, wave, lives;
   int32_t game_over, start_refused, upgrade_ready, cleared, wave_phase;
+  int32_t phase, special_variant, pick_player, joins, ignored_starts;
+  int32_t sfx_count[NR_SFX_COUNT], sfx_tick[NR_SFX_COUNT]; /* the sounds the simulation asked for: how many, and the tick of the last */
+  int32_t sfx_seen[NR_SFX_COUNT], sfx_played[NR_SFX_COUNT], voice_created; /* what this host turned into voices: not compared between hosts */
+  int32_t ui_atlas_pages, ui_glyphs_missing;
   uint32_t rng[4];
   uint32_t sim_checksum, checksum;
   int32_t demo;               /* set by a host: 1 plays the combat script (demo_combat.inc), 2 the bot */
@@ -149,7 +169,10 @@ static struct {
   int32_t bot_log[BOT_LOG * 2]; /* { tick, mask of player 0 | mask of player 1 << 16 } at every tick a mask changed */
   int32_t bot_log_count;
 #endif
-  cw_action left, right, up, down, attack, jump, grab, special, dash, special_alt, start;
+  cw_action left, right, up, down, attack, jump, grab, special, dash, special_alt, start, back;
+  cw_sound sound[NR_SFX_COUNT];
+  bool audio_on;
+  ui_state ui;
   /* presentation */
   nr_sim sim;
   nr_view view;
@@ -281,6 +304,7 @@ static bool resolve_visuals(void) {
 #define BTN_DASH 256
 #define BTN_ALT 512
 #define BTN_START 1024
+#define BTN_BACK 2048
 #define BOT_REST 300 /* ticks the bot's run rests after the arena is cleared or the game is over, before it starts again */
 
 /* A player's input from the buttons held on this frame and on the frame before, as read_input() makes it from the
@@ -297,6 +321,7 @@ static void input_from_mask(uint16_t now, uint16_t was, nr_input *in) {
   in->dash = edge & BTN_DASH;
   in->special_alt = now & BTN_ALT;
   in->start = edge & BTN_START;
+  in->back = edge & BTN_BACK;
   in->connected = true;
   in->any = in->mx != 0.0f || in->my != 0.0f || in->tap != 0 || in->attack || in->jump || in->grab || in->special || in->dash;
 }
@@ -329,6 +354,7 @@ static void read_input(int p, nr_input *in) {
   in->dash = cw_action_just_pressed(p, S.dash);
   in->special_alt = cw_action_pressed(p, S.special_alt);
   in->start = cw_action_just_pressed(p, S.start);
+  in->back = cw_action_just_pressed(p, S.back);
   int pad = cw_input_player_pad(p);
   in->connected = p == 0 || (pad >= 0 && cw_input_raw()->pads[pad].connected);
   in->any = mv.x != 0.0f || mv.y != 0.0f || in->tap != 0 || in->attack || in->jump || in->grab || in->special || in->dash;
@@ -355,8 +381,33 @@ static bool bot_on(int p) { return (NR_BOT_MASK >> p) & 1 || S.demo == 2; }
 
 static bool bot_free(const nr_actor *a) { return a->state == NR_ST_IDLE || a->state == NR_ST_WALK || a->state == NR_ST_RUN; }
 
+/* The menus. On the title player 1 joins, player 2 joins and player 1 starts the fight again, 20 ticks apart; in the
+ * upgrade pause player 2 (player 1 when it is alone) picks the dash a moment after the lockout; at clear and game over
+ * player 1 presses back after BOT_REST ticks. Each press is held two ticks, so it is one edge. */
+#define BOT_MENU_FIRST 20
+#define BOT_MENU_GAP 20
+#define BOT_PICK_DELAY 20
+static bool bot_press_at(int32_t since, int32_t at) { return since >= at && since < at + 2; }
+
+static uint16_t bot_menu(int p) {
+  const nr_sim *s = &S.sim;
+  int32_t since = s->ticks - s->phase_since;
+  switch (s->phase) {
+    case NR_PH_TITLE:
+      if (p == 0 && (bot_press_at(since, BOT_MENU_FIRST) || bot_press_at(since, BOT_MENU_FIRST + 2 * BOT_MENU_GAP))) return BTN_START;
+      if (p == 1 && bot_press_at(since, BOT_MENU_FIRST + BOT_MENU_GAP)) return BTN_START;
+      return 0;
+    case NR_PH_UPGRADE:
+      if (p == (s->actor[1].present ? 1 : 0) && bot_press_at(since, NR_UPGRADE_LOCKOUT + BOT_PICK_DELAY)) return BTN_RIGHT;
+      return 0;
+    default:
+      return p == 0 && bot_press_at(since, BOT_REST) ? BTN_BACK : 0;
+  }
+}
+
 static uint16_t bot_choose(int p) {
   const nr_sim *s = &S.sim;
+  if (s->phase != NR_PH_FIGHT) return bot_menu(p);
   const nr_actor *me = &s->actor[p];
   if (!me->present || me->hp <= 0 || me->state == NR_ST_DEAD) return 0;
   for (int i = NR_PLAYERS; i < s->actor_count; i++)
@@ -472,6 +523,30 @@ static void pose_actor(int i) {
   S.actor_present[i] = a->present;
 }
 
+#if NR_UI
+/* What the screens show, from the simulation. */
+static void fill_ui(void) {
+  const nr_sim *s = &S.sim;
+  ui_state *u = &S.ui;
+  u->phase = s->phase;
+  u->ticks = s->ticks;
+  u->phase_ticks = s->ticks - s->phase_since;
+  u->lives = s->lives;
+  u->wave = s->waves.wave;
+  u->wave_total = NR_WAVE_COUNT;
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    u->present[p] = s->actor[p].present;
+    u->away[p] = s->actor[p].away;
+    u->hp[p] = s->actor[p].hp;
+  }
+  u->hp_max = NR_HERO_HP;
+  u->variant = s->special_variant;
+  u->upgrade_done = s->upgrade_done;
+  u->pick_player = s->pick_player;
+  u->lockout_left = s->phase == NR_PH_UPGRADE && u->phase_ticks < NR_UPGRADE_LOCKOUT ? NR_UPGRADE_LOCKOUT - u->phase_ticks : 0;
+}
+#endif
+
 static void publish_sim(void) {
   for (int i = 0; i < ACTORS; i++) pose_actor(i);
   S.ticks = S.sim.ticks;
@@ -486,6 +561,16 @@ static void publish_sim(void) {
   S.upgrade_ready = S.sim.waves.upgrade_ready;
   S.cleared = S.sim.waves.cleared;
   S.wave_phase = S.sim.waves.phase;
+  S.phase = S.sim.phase;
+  S.special_variant = S.sim.special_variant;
+  S.pick_player = S.sim.pick_player;
+  S.joins = S.sim.joins;
+  S.ignored_starts = S.sim.ignored_starts;
+  memcpy(S.sfx_count, S.sim.sfx_count, sizeof S.sfx_count);
+  memcpy(S.sfx_tick, S.sim.sfx_tick, sizeof S.sfx_tick);
+#if NR_UI
+  fill_ui();
+#endif
   memcpy(S.rng, S.sim.rng.s, sizeof S.rng);
   S.sim_checksum = S.sim.checksum;
   memcpy(S.events, S.sim.events, sizeof S.events);
@@ -517,12 +602,43 @@ static void start_sim(void) {
   nr_sim_init(&S.sim, &S.ar, S.view);
 #if NR_DUMMIES
   S.sim.waves_on = 0;
+  S.sim.hold_alt = 1;
   layout_dummies();
 #else
   S.sim.log_moves = 0;
+#if NR_UI
+  nr_sim_enter_title(&S.sim);
+#endif
 #endif
   memset(&bot, 0, sizeof bot);
+  memset(S.sfx_seen, 0, sizeof S.sfx_seen);
   S.checksum = CW_HASH32_INIT;
+}
+
+#if NR_UI
+/* Back from clear or game over: a new run on the title. The tick counter goes on, so a host's frame count and the tick
+ * stay the same number; the bot's schedule reads ticks since the phase began. */
+static void restart_to_title(void) {
+  int32_t ticks = S.sim.ticks, inputs = S.sim.input_count;
+  start_sim();
+  S.sim.ticks = ticks;
+  S.sim.phase_since = ticks;
+  S.sim.input_count = inputs;
+}
+#endif
+
+/* The sounds the simulation asked for since the last tick become voices: one voice per kind per tick, however many events
+ * of that kind the tick had. */
+static void play_sfx(void) {
+  for (int k = 0; k < NR_SFX_COUNT; k++) {
+    if (S.sim.sfx_count[k] == S.sfx_seen[k]) continue;
+    S.sfx_seen[k] = S.sim.sfx_count[k];
+    S.sfx_played[k]++;
+    if (S.audio_on && S.sound[k].id) {
+      cw_voice v = cw_audio_play(S.sound[k], NULL);
+      S.voice_created = v.id != 0;
+    }
+  }
 }
 
 static void step_sim(void) {
@@ -534,6 +650,9 @@ static void step_sim(void) {
     demo_was = S.demo;
   }
   if (S.demo == 1 && NR_DUMMIES && S.sim.ticks >= NR_DEMO_LOOP) start_sim();
+#if !NR_UI
+  /* a build without a title starts the street again after the arena is cleared or the game is over; one with a title
+   * has the bot press back */
   if (S.demo == 2 && (S.sim.game_over || S.sim.waves.cleared)) {
     if (!end_tick) end_tick = S.sim.ticks;
     if (S.sim.ticks - end_tick >= BOT_REST) {
@@ -541,6 +660,9 @@ static void step_sim(void) {
       start_sim();
     }
   }
+#else
+  (void)end_tick;
+#endif
   for (int p = 0; p < NR_PLAYERS; p++) {
     if (S.demo == 1 && NR_DUMMIES) demo_input(p, &in[p]);
     else if (bot_on(p)) bot_input(p, &in[p]);
@@ -548,6 +670,10 @@ static void step_sim(void) {
   }
   bot_commit();
   nr_sim_step(&S.sim, in);
+#if NR_UI
+  if (S.sim.return_title) restart_to_title();
+#endif
+  play_sfx();
   publish_sim();
 }
 
@@ -783,6 +909,17 @@ static void register_debug(void) {
   cw_debug_i32("nr.cleared", &S.cleared);
   cw_debug_i32("nr.wave_phase", &S.wave_phase);
   cw_debug_i32("nr.demo", &S.demo);
+  cw_debug_i32("nr.phase", &S.phase);
+  cw_debug_i32("nr.special_variant", &S.special_variant);
+  cw_debug_i32("nr.pick_player", &S.pick_player);
+  cw_debug_i32("nr.joins", &S.joins);
+  cw_debug_i32("nr.ignored_starts", &S.ignored_starts);
+  cw_debug_field("nr.sfx_count", S.sfx_count, CW_DBG_I32, NR_SFX_COUNT);
+  cw_debug_field("nr.sfx_tick", S.sfx_tick, CW_DBG_I32, NR_SFX_COUNT);
+  cw_debug_field("nr.sfx_played", S.sfx_played, CW_DBG_I32, NR_SFX_COUNT);
+  cw_debug_i32("nr.voice_created", &S.voice_created);
+  cw_debug_i32("nr.ui_atlas_pages", &S.ui_atlas_pages);
+  cw_debug_i32("nr.ui_glyphs_missing", &S.ui_glyphs_missing);
   cw_debug_u32("nr.sim_checksum", &S.sim_checksum);
   cw_debug_field("nr.events", S.events, CW_DBG_I32, NR_EVENT_CAP * NR_EVENT_FIELDS);
   cw_debug_i32("nr.event_count", &S.event_count);
@@ -806,7 +943,24 @@ static void register_debug(void) {
   cw_debug_field("nr.px", S.px, CW_DBG_I32, 8);
   cw_debug_i32("cw.three.missing", &S.three_missing);
   cw_debug_bytes("cw.three.missing_states", S.three_missing_states, sizeof S.three_missing_states);
+#if NR_UI
+  cw_r2d_debug_register("r2d");
+#endif
 }
+
+#if NR_UI
+/* One sample per sound the simulation asks for; a device that is not there leaves the sounds off, not the game. */
+static void init_audio(void) {
+  static const struct { const char *path; int voices; } SOUND[NR_SFX_COUNT] = {
+    [NR_SFX_HIT] = { "audio/hit.wav", 3 }, [NR_SFX_GRAB] = { "audio/grab.wav", 2 }, [NR_SFX_SPECIAL] = { "audio/special.wav", 2 },
+    [NR_SFX_HURT] = { "audio/hurt.wav", 3 }, [NR_SFX_CONFIRM] = { "audio/confirm.wav", 2 },
+  };
+  S.audio_on = cw_audio_init(NULL);
+  if (!S.audio_on) return;
+  for (int k = 0; k < NR_SFX_COUNT; k++)
+    S.sound[k] = cw_sound_load(SOUND[k].path, &(cw_sound_desc){ .mode = CW_SOUND_SAMPLE, .max_voices = SOUND[k].voices });
+}
+#endif
 
 static void init(void *user) {
   (void)user;
@@ -832,6 +986,8 @@ static void init(void *user) {
   S.start = cw_action_add("start", 0.5f);
   cw_action_bind_text(S.special_alt, "key:v, pad:lshoulder");
   cw_action_bind_text(S.start, "key:return, pad:start");
+  S.back = cw_action_add("back", 0.5f);
+  cw_action_bind_text(S.back, "key:backspace, pad:back");
   S.heroes = ACTORS;
   S.lights = LIGHTS;
   S.players = NR_PLAYERS;
@@ -866,6 +1022,11 @@ static void init(void *user) {
     return;
   }
   S.view = (nr_view){ ((float)SCENE_W / PPU) * 0.5f, S.view_dist, cw_cos(S.pitch), ACTOR_HALF };
+#if NR_UI
+  ui_init();
+  init_audio();
+#endif
+  S.pick_player = -1;
   start_sim();
   publish_sim();
 #else
@@ -900,6 +1061,16 @@ static void render(void *user, double alpha) {
   cw_render3d_window_target(S.renderer);
   t3_renderer_render(S.renderer, S.scene, S.camera);
   report_missing();
+#if NR_UI
+  ui_draw(&S.ui);
+  S.ui_atlas_pages = ui_atlas_pages();
+  S.ui_glyphs_missing = ui_glyphs_missing();
+#endif
+}
+
+static void update(void *user, double dt) {
+  (void)user, (void)dt;
+  if (S.audio_on) cw_audio_update();
 }
 
 cw_app_desc cw_main(int argc, char **argv) {
@@ -913,6 +1084,7 @@ cw_app_desc cw_main(int argc, char **argv) {
     .fixed_hz = 60,
     .init = init,
     .fixed_update = fixed_update,
+    .update = update,
     .render = render,
     .debug = true,
   };

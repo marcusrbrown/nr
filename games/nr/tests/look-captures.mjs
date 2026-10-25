@@ -59,7 +59,7 @@ export const SETS = {
   solo: { runs: ['nr_solo_0', 'nr_solo_1', 'nr_solo_2'].map((app) => ({ app, name: app.replace(/^nr_/, ''), input: IDLE, frames: [60] })), gl: { frames: 60 } },
   lit: { runs: ['nr_lit_h', 'nr_lit_v', 'nr_lit_h_flat', 'nr_lit_v_flat', 'nr_lit_h_left', 'nr_lit_v_left', 'nr_lit_h_left_flat', 'nr_lit_v_left_flat'].map((app) => ({ app, name: app.replace(/^nr_/, ''), input: IDLE, frames: [30, 60, 180, 210] })), gl: { frames: 60 } },
   bare: { runs: [{ app: 'nr_bare', name: 'bare', input: IDLE, frames: [60] }], gl: { frames: 60 } },
-  waves: { runs: [{ app: 'nr', name: 'waves', input: WAVES, frames: [130, 450, 990, 1600, 2050] }], gl: { frames: 2700 } },
+  waves: { runs: [{ app: 'nr_waves', name: 'waves', input: WAVES, frames: [130, 450, 990, 1600, 2050] }], gl: { frames: 2700 } },
   combat: { runs: [{ app: 'nr_dummies', name: 'combat', input: COMBAT, frames: [49, 183, 205, 279, 362, 429, 700] }], gl: { frames: 760 } },
 };
 const REVIEW = ['scroll', 'pillar', 'stage', 'solo', 'combat', 'waves'];

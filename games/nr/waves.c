@@ -40,11 +40,13 @@ static void end_wave(nr_sim *s) {
   if (w->wave == NR_WAVE_UPGRADE_AFTER) {
     w->upgrade_ready = 1;
     nr_sim_log(s, NR_EV_UPGRADE, -1, w->wave, 0);
+    nr_sim_offer_upgrade(s);
   }
   if (w->wave >= NR_WAVE_COUNT) {
     w->phase = NR_WAVES_DONE;
     w->cleared = 1;
     nr_sim_log(s, NR_EV_CLEAR, -1, w->wave, 0);
+    nr_sim_run_cleared(s);
     return;
   }
   w->phase = NR_WAVES_WAITING;

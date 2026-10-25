@@ -11,14 +11,33 @@
  * fire). Heroes are team 0 and actors 0 .. NR_PLAYERS - 1; every actor after them is an enemy: a grunt, a heavy (both
  * spawned by the waves) or the test dummy, which has no AI (it stands still, or swings on a schedule).
  *
- * Players. A player is present when its pad is connected on tick NR_PRESENCE_TICKS (player 0 always is; every hero
- * stands on the street until then, so a pad the platform reports a frame or two late is not left out); the pool of
- * lives is NR_LIVES_PER_PLAYER for each present player. A hero whose hp runs out is knocked down and dies; each death takes
+ * Phases. A run is in one phase: the title (heroes of the players who joined stand on the street, nothing else moves),
+ * the fight, the upgrade pause after wave 2, the clear screen (the last wave ended) or game over (the pool is empty).
+ * The title is left by a start press from a player that has joined; the upgrade pause by the first pick; clear and game
+ * over by a `back` press, which sets `return_title` for the host to start a new run (a start press at game over is
+ * refused and counted). A build without a title (`nr_sim_init` alone: the combat checks, the Unit 6 scripts) starts in
+ * the fight with the players decided by the presence rule below and no upgrade pause.
+ *
+ * Players. With a title, a player is present once its pad pressed start there (player 0 is the keyboard and pad 0);
+ * the pool of lives is NR_LIVES_PER_PLAYER for each player present when the fight begins. A start press from a player
+ * that is not present, in the fight or the upgrade pause, joins it: it stands up at the left edge of the camera's frame
+ * with the special the run has, the pool gains NR_LIVES_PER_PLAYER, and the waves' next spawns alternate between both
+ * players. A start press from a player that is present does nothing.
+ * Without a title (`auto_presence`), a player is present when its pad is connected on tick NR_PRESENCE_TICKS (player 0
+ * always is; every hero stands on the street until then, so a pad the platform reports a frame or two late is not left
+ * out): the scripted and bot runs, which have no title to press start on. A hero whose hp runs out is knocked down and dies; each death takes
  * a life from the pool, and while lives remain the hero stands up at the left edge of the camera's frame after
  * NR_RESPAWN_DELAY ticks. When the pool is empty and no hero is alive or waiting to respawn the game is over: the
  * simulation stops advancing its actors (the tick counter and the checksum go on) and a start press is refused. A
  * hero whose pad is disconnected finishes the state it is in, then idles, and cannot be hit or targeted until the pad
  * is back; a grab it was holding is let go, and the camera and the leash ignore it.
+ *
+ * Upgrade. The end of wave 2 pauses the run (nothing but the tick counter, joins and the pick advance) and offers the
+ * two specials: a left tap picks the knockback, a right tap the dash. Picks are ignored for the first
+ * NR_UPGRADE_LOCKOUT ticks of the pause so a walking player does not pick by accident; the first press wins and the
+ * lower port wins on the same tick. The pick is the special of every hero, present or joining later, until the run ends;
+ * the pause does not come again. (Without the pause, `hold_alt` lets a held special_alt choose the dash per press: the
+ * combat checks use it.)
  *
  * Enemies. A grunt (2 hp) and a heavy (NR_HEAVY_HP hp) chase the player they are assigned, swing when it is in reach,
  * walk round the arena's blocks and stay inside the camera's frame. Spawns alternate between the players that can be
@@ -52,12 +71,18 @@
 #define NR_LIVES_PER_PLAYER 3
 #define NR_RESPAWN_DELAY 90 /* ticks a dead hero lies before it stands up again */
 #define NR_RESPAWN_INVULN 120
-#define NR_PRESENCE_TICKS 30 /* the tick on which the players present are decided (the title's stand-in) */
+#define NR_PRESENCE_TICKS 30 /* the tick on which the players present are decided when there is no title (the scripted and bot runs) */
+#define NR_UPGRADE_LOCKOUT 30 /* ticks at the start of the upgrade pause in which a pick is ignored */
 #define NR_HERO_HP 12
 #define NR_GRUNT_HP 2
 #define NR_HEAVY_HP 16
 
 typedef enum { NR_TEAM_HERO = 0, NR_TEAM_ENEMY = 1 } nr_team;
+typedef enum { NR_PH_TITLE, NR_PH_FIGHT, NR_PH_UPGRADE, NR_PH_CLEAR, NR_PH_GAMEOVER, NR_PH_COUNT } nr_phase;
+
+/* The sounds the simulation asks for: counted where the event happens, so the count does not depend on the event log
+ * having room. */
+typedef enum { NR_SFX_HIT, NR_SFX_GRAB, NR_SFX_SPECIAL, NR_SFX_HURT, NR_SFX_CONFIRM, NR_SFX_COUNT } nr_sfx;
 typedef enum { NR_KIND_HERO, NR_KIND_DUMMY, NR_KIND_GRUNT, NR_KIND_HEAVY, NR_KIND_COUNT } nr_kind;
 
 typedef enum {
@@ -87,7 +112,12 @@ typedef enum {
   NR_EV_GAME_OVER,   /* the pool is empty and no hero is alive (actor -1) */
   NR_EV_AWAY,        /* hero actor's pad: a 1 disconnected, 0 back */
   NR_EV_START_REFUSED, /* a start press at game over (actor = player) */
-  NR_EV_STAGGER      /* actor (a heavy) was staggered by a special of a */
+  NR_EV_STAGGER,     /* actor (a heavy) was staggered by a special of a */
+  NR_EV_JOIN,        /* player actor joined (title or fight): a lives in the pool after, b phase */
+  NR_EV_BEGIN,       /* the fight began from the title: a players, b lives (actor -1) */
+  NR_EV_PICK,        /* player actor picked special a (0 knockback, 1 dash) b ticks into the upgrade pause */
+  NR_EV_START_IGNORED, /* actor, a player that is present, pressed start: nothing happens */
+  NR_EV_PHASE        /* the run entered phase a (actor -1) */
 } nr_event_kind;
 
 /* One player's input for a tick: the stick, the buttons that went down this tick, and `tap`, the direction (-1 left,
@@ -96,7 +126,7 @@ typedef enum {
 typedef struct {
   float mx, my;
   int8_t tap;
-  bool attack, jump, grab, special, dash, special_alt, start, any;
+  bool attack, jump, grab, special, dash, special_alt, start, back, any;
   bool connected; /* the player's pad is plugged in (player 0 always is: the keyboard plays) */
 } nr_input;
 
@@ -115,7 +145,7 @@ typedef struct {
   int32_t hit_mask;                /* actors this state's attack has already met (bit per actor id) */
   int32_t holding, held_by;        /* a grab in progress: the actor held / the actor holding this one, or -1 */
   int32_t grabbable, present;
-  int32_t variant;                 /* the special: 0 knockback, 1 dash */
+  int32_t variant;                 /* the special this hero used last: 0 knockback, 1 dash */
   int32_t kind;                    /* nr_kind */
   int32_t target;                  /* an enemy's player (actor id), or -1 */
   int32_t away;                    /* a hero whose pad is disconnected */
@@ -144,6 +174,14 @@ typedef struct {
   int32_t players;                 /* present on tick NR_PRESENCE_TICKS (both until then) */
   int32_t waves_on;                /* the waves spawn enemies (off for the test dummies' arena) */
   int32_t game_over, start_refused;
+  int32_t phase, phase_since;      /* nr_phase and the tick it was entered */
+  int32_t auto_presence;           /* no title: the players are decided on tick NR_PRESENCE_TICKS */
+  int32_t upgrade_pause;           /* the end of wave 2 pauses for the pick (a title run) */
+  int32_t upgrade_done, special_variant, pick_player; /* the pick (0 knockback, 1 dash), the player that made it or -1 */
+  int32_t hold_alt;                /* a held special_alt picks the dash per press (the combat checks) */
+  int32_t return_title;            /* a back press at clear or game over: the host starts a new run */
+  int32_t joins, ignored_starts;   /* start presses that joined a player mid-run / that did nothing */
+  int32_t sfx_count[NR_SFX_COUNT], sfx_tick[NR_SFX_COUNT]; /* sounds asked for, and the tick of the last of each */
   int32_t log_moves;               /* log a hero's walk, run and idle-after-walk entries too */
   uint32_t checksum;
   int32_t events[NR_EVENT_CAP][NR_EVENT_FIELDS];
@@ -152,6 +190,9 @@ typedef struct {
 
 /* Starts a simulation on `arena`: the players at their starts, no dummies. */
 void nr_sim_init(nr_sim *s, const arena *arena, nr_view view);
+
+/* Puts a fresh simulation on the title: no player present, no lives, the pause enabled. */
+void nr_sim_enter_title(nr_sim *s);
 
 /* Adds a test dummy (an enemy standing still) and returns its actor id, or -1 when the actor table is full. */
 int nr_sim_add_dummy(nr_sim *s, float x, float lane, int32_t hp, bool grabbable, int32_t facing);
@@ -166,6 +207,15 @@ int nr_sim_spawn_enemy(nr_sim *s, int32_t kind, float x, float lane);
 
 /* Appends an event to the log (the waves use it). */
 void nr_sim_log(nr_sim *s, int32_t kind, int32_t actor, int32_t a, int32_t b);
+
+/* Pauses the run for the upgrade pick (waves.c, at the end of wave 2) when the pause is enabled. */
+void nr_sim_offer_upgrade(nr_sim *s);
+
+/* The last wave ended (waves.c): a run with a title goes to the clear screen. */
+void nr_sim_run_cleared(nr_sim *s);
+
+/* Enters a phase (nr_phase) and logs it. */
+void nr_sim_enter_phase(nr_sim *s, int32_t phase);
 
 /* One tick of the spawn schedule (waves.c), run at the end of nr_sim_step while `waves_on` is set. */
 void nr_waves_step(nr_sim *s);

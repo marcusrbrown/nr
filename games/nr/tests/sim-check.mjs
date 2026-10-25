@@ -373,7 +373,7 @@ VIEW.actor = +mainSrc.match(/#define ACTOR_HALF ([0-9.]+)f/)[1];
 const viewHalf = (lane) => (VIEW.half * (VIEW.dist - lane * VIEW.cosp)) / VIEW.dist - VIEW.actor;
 const arenaBounds = readJson(join(ROOT, 'games/nr/assets/arena/layout.json')).bounds;
 
-const wrun = (ticks, input, tag, app = 'nr') => run(ticks, input, tag, app);
+const wrun = (ticks, input, tag, app = 'nr_waves') => run(ticks, input, tag, app);
 const pick = (r, i) => { const st = r.st; return { x: st['nr.hero_pos'][i * 3], lane: st['nr.hero_pos'][i * 3 + 1], state: STATE_NAME[st['nr.actor_state'][i]], hp: st['nr.actor_hp'][i], kind: st['nr.actor_kind'][i], target: st['nr.actor_target'][i], away: st['nr.actor_away'][i], present: st['nr.actor_present'][i], invuln: st['nr.actor_invuln'][i], tick: st['nr.actor_state_tick'][i] }; };
 const dump = (events, file) => writeFileSync(join(OUT, file), `${events.map((e) => `${String(e.tick).padStart(5)} ${e.kind.padEnd(13)} a${e.actor} ${e.kind === 'ENTER' ? e.a : `${e.a} ${e.b}`}`).join('\n')}\n`);
 const has = (list, pred) => list.filter(pred);
@@ -506,7 +506,7 @@ dump(sevents, 'events-solo.txt');
 // ── respawn: inside the clamp ───────────────────────────────────────────────────────────────────────────────────────
 {
   const rows = [], bad = [];
-  for (const [label, evs, input, tag, app] of [['solo', sevents, SOLO_IN, 'solo', 'nr'], ['retarget', revents, IDLE_IN, 'retarget', 'nr_bot1']]) {
+  for (const [label, evs, input, tag, app] of [['solo', sevents, SOLO_IN, 'solo', 'nr_waves'], ['retarget', revents, IDLE_IN, 'retarget', 'nr_bot1']]) {
     for (const r of evs.filter((e) => e.kind === 'RESPAWN')) {
       const x = r.a / 1000, lane = r.b / 1000, run1 = wrun(r.tick, input, tag, app), cam = run1.st['nr.cam_x'], h = viewHalf(lane), p = pick(run1, r.actor);
       const lost = evs.filter((e) => e.kind === 'LIFE_LOST' && e.actor === r.actor && e.tick === r.tick - RESPAWN_DELAY);

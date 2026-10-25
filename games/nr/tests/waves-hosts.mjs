@@ -17,10 +17,10 @@ mkdirSync(OUT, { recursive: true });
 
 const T = 'games/nr/tests/';
 const RUNS = [
-  { name: 'waves', app: 'nr', input: `${T}input-waves.json`, frames: 2700 },
+  { name: 'waves', app: 'nr_waves', input: `${T}input-waves.json`, frames: 2700 },
   { name: 'bot', app: 'nr_bot', input: `${T}input-idle.json`, frames: 2700 },
-  { name: 'solo', app: 'nr', input: `${T}input-waves-solo.json`, frames: 6000 },
-  { name: 'disconnect', app: 'nr', input: `${T}input-waves-disconnect.json`, frames: 700 },
+  { name: 'solo', app: 'nr_waves', input: `${T}input-waves-solo.json`, frames: 6000 },
+  { name: 'disconnect', app: 'nr_waves', input: `${T}input-waves-disconnect.json`, frames: 700 },
   { name: 'retarget', app: 'nr_bot1', input: `${T}input-idle.json`, frames: 4200 },
 ];
 const SIM = ['nr.ticks', 'nr.hero_pos', 'nr.hero_clip', 'nr.hero_step', 'nr.hero_frame', 'nr.light_pos', 'nr.light_intensity', 'nr.cam_x', 'nr.cam_left', 'nr.checksum', 'nr.sim_checksum', 'nr.actor_y', 'nr.actor_vy',

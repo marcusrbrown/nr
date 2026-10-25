@@ -113,7 +113,26 @@ static int32_t milli(float v) { return (int32_t)(v >= 0.0f ? v * 1000.0f + 0.5f 
 static bool is_hero(const nr_actor *a) { return a->kind == NR_KIND_HERO; }
 static bool is_wave_enemy(const nr_actor *a) { return a->present && (a->kind == NR_KIND_GRUNT || a->kind == NR_KIND_HEAVY); }
 
+static void sfx(nr_sim *s, nr_sfx kind) {
+  s->sfx_count[kind]++;
+  s->sfx_tick[kind] = s->ticks;
+}
+
+/* The sound an event asks for, counted whether or not the log has room for the event. */
+static void sfx_of_event(nr_sim *s, int32_t kind, int32_t actor, int32_t a) {
+  switch (kind) {
+    case NR_EV_HIT: sfx(s, s->actor[a].kind == NR_KIND_HERO ? NR_SFX_HURT : NR_SFX_HIT); break;
+    case NR_EV_LAND: sfx(s, NR_SFX_HIT); break;
+    case NR_EV_GRAB: case NR_EV_RELEASE: sfx(s, NR_SFX_GRAB); break;
+    case NR_EV_ENTER: if (a == NR_ST_SPECIAL_KNOCKBACK || a == NR_ST_SPECIAL_DASH) sfx(s, NR_SFX_SPECIAL); break;
+    case NR_EV_JOIN: case NR_EV_BEGIN: case NR_EV_PICK: sfx(s, NR_SFX_CONFIRM); break;
+    default: break;
+  }
+  (void)actor;
+}
+
 static void log_event(nr_sim *s, int32_t kind, int32_t actor, int32_t a, int32_t b) {
+  sfx_of_event(s, kind, actor, a);
   if (s->event_count >= NR_EVENT_CAP) {
     s->events_dropped++;
     return;
@@ -371,7 +390,7 @@ static void hero_free(nr_sim *s, int i, const nr_input *in) {
   if (in->mx > 0.0f) a->facing = 1;
   else if (in->mx < 0.0f) a->facing = -1;
   if (in->special) {
-    a->variant = in->special_alt ? 1 : 0;
+    a->variant = s->special_variant || (s->hold_alt && in->special_alt) ? 1 : 0;
     enter(s, i, a->variant ? NR_ST_SPECIAL_DASH : NR_ST_SPECIAL_KNOCKBACK);
     return;
   }
@@ -428,8 +447,9 @@ static void airborne(nr_sim *s, int i, const nr_input *in) {
   }
 }
 
-/* A dead hero stands up at the left edge of the frame, in the lane it started in, when lives remain. */
-static void respawn_hero(nr_sim *s, int i) {
+/* A hero stands up at the left edge of the camera's frame, in the lane it started in, at full hp and invulnerable for a
+ * while, holding the special the run has. */
+static void stand_at_edge(nr_sim *s, int i) {
   static const float LANE[NR_PLAYERS] = { 0.6f, -0.6f };
   nr_actor *a = &s->actor[i];
   const arena *ar = s->arena;
@@ -444,8 +464,14 @@ static void respawn_hero(nr_sim *s, int i) {
   a->holding = a->held_by = -1;
   a->respawn = 0;
   a->run_dir = 0;
+  a->variant = s->special_variant;
   enter(s, i, NR_ST_IDLE);
-  log_event(s, NR_EV_RESPAWN, i, milli(x), milli(lane));
+}
+
+/* A dead hero stands up at the left edge of the frame when lives remain. */
+static void respawn_hero(nr_sim *s, int i) {
+  stand_at_edge(s, i);
+  log_event(s, NR_EV_RESPAWN, i, milli(s->actor[i].x), milli(s->actor[i].lane));
 }
 
 /* The lane direction that walks an enemy at (x, lane) round the block it is up against: towards the nearer edge of the
@@ -631,6 +657,11 @@ static uint32_t checksum_of(const nr_sim *s, uint32_t h) {
   h = fold(h, cam, sizeof cam);
   h = fold(h, s->rng.s, sizeof s->rng.s);
   h = fold(h, sc, sizeof sc);
+  if (!s->auto_presence) {
+    /* a run with a title also has its phase, the pick and the joins; a run without one keeps the fields it always had */
+    int32_t ex[8] = { s->phase, s->phase_since, s->special_variant, s->pick_player, s->upgrade_done, s->joins, s->ignored_starts, s->return_title };
+    h = fold(h, ex, sizeof ex);
+  }
   return h;
 }
 
@@ -641,6 +672,9 @@ void nr_sim_init(nr_sim *s, const arena *arena, nr_view view) {
   s->players = NR_PLAYERS;
   s->lives = NR_LIVES_PER_PLAYER * NR_PLAYERS;
   s->waves_on = 1;
+  s->phase = NR_PH_FIGHT;
+  s->auto_presence = 1;
+  s->pick_player = -1;
   s->log_moves = 1;
   s->checksum = CW_HASH32_INIT;
   cw_rng_seed(&s->rng, 0x4e52u);
@@ -734,6 +768,95 @@ static void set_away(nr_sim *s, int p, bool away) {
   log_event(s, NR_EV_AWAY, p, away ? 1 : 0, 0);
 }
 
+/* ── phases, joins and the upgrade pick ────────────────────────────────────────────────────────────────────────── */
+
+void nr_sim_enter_phase(nr_sim *s, int32_t phase) {
+  s->phase = phase;
+  s->phase_since = s->ticks;
+  if (!s->auto_presence) log_event(s, NR_EV_PHASE, -1, phase, 0); /* a run without a title keeps the event log it always had */
+}
+
+void nr_sim_enter_title(nr_sim *s) {
+  s->auto_presence = 0;
+  s->upgrade_pause = 1;
+  s->players = 0;
+  s->lives = 0;
+  s->phase = NR_PH_TITLE;
+  s->phase_since = s->ticks;
+  for (int p = 0; p < NR_PLAYERS; p++) s->actor[p].present = 0;
+}
+
+void nr_sim_offer_upgrade(nr_sim *s) {
+  if (s->upgrade_pause && !s->upgrade_done) nr_sim_enter_phase(s, NR_PH_UPGRADE);
+}
+
+void nr_sim_run_cleared(nr_sim *s) {
+  if (!s->auto_presence) nr_sim_enter_phase(s, NR_PH_CLEAR);
+}
+
+/* A player that is not present joins: at the title it stands on the street where it began, later at the camera's left edge. */
+static void join_player(nr_sim *s, int p) {
+  nr_actor *a = &s->actor[p];
+  a->present = 1;
+  a->away = 0;
+  if (s->phase != NR_PH_TITLE) {
+    stand_at_edge(s, p);
+    s->joins++;
+  }
+  s->players++;
+  s->lives += NR_LIVES_PER_PLAYER;
+  log_event(s, NR_EV_JOIN, p, s->lives, s->phase);
+}
+
+/* Start presses in the fight and the upgrade pause: a player that is not present joins, one that is does nothing. */
+static void start_presses(nr_sim *s, const nr_input input[NR_PLAYERS]) {
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    if (!input[p].start) continue;
+    if (s->actor[p].present) {
+      s->ignored_starts++;
+      log_event(s, NR_EV_START_IGNORED, p, 0, 0);
+    } else {
+      join_player(s, p);
+    }
+  }
+}
+
+/* The title: a start press from a player that has not joined joins it; one from a player that had already joined, on an
+ * earlier tick, begins the fight with the players that are in. */
+static void title_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
+  bool was_in[NR_PLAYERS], begin = false;
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    was_in[p] = s->actor[p].present != 0;
+    if (s->actor[p].present) s->actor[p].tick++;
+  }
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    if (!input[p].start) continue;
+    if (was_in[p]) begin = true;
+    else join_player(s, p);
+  }
+  if (begin && s->players > 0) {
+    log_event(s, NR_EV_BEGIN, -1, s->players, s->lives);
+    nr_sim_enter_phase(s, NR_PH_FIGHT);
+  }
+}
+
+/* The upgrade pause: joins, then the first pick after the lockout; the lower port wins a tick two players pick on. */
+static void upgrade_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
+  start_presses(s, input);
+  if (s->ticks - s->phase_since < NR_UPGRADE_LOCKOUT) return;
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    const nr_actor *a = &s->actor[p];
+    if (!a->present || a->away || input[p].tap == 0) continue;
+    s->special_variant = input[p].tap > 0 ? 1 : 0;
+    s->upgrade_done = 1;
+    s->pick_player = p;
+    for (int h = 0; h < NR_PLAYERS; h++) s->actor[h].variant = s->special_variant;
+    log_event(s, NR_EV_PICK, p, s->special_variant, s->ticks - s->phase_since);
+    nr_sim_enter_phase(s, NR_PH_FIGHT);
+    return;
+  }
+}
+
 /* The game is over when the pool is empty and no hero is alive or about to stand up. */
 static void check_game_over(nr_sim *s) {
   if (s->game_over || s->lives > 0) return;
@@ -743,6 +866,7 @@ static void check_game_over(nr_sim *s) {
   }
   s->game_over = 1;
   log_event(s, NR_EV_GAME_OVER, -1, 0, 0);
+  nr_sim_enter_phase(s, NR_PH_GAMEOVER);
 }
 
 void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
@@ -750,13 +874,25 @@ void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
   bool any = false;
   for (int p = 0; p < NR_PLAYERS; p++) any = any || input[p].any;
   if (any) s->input_count++;
-  if (s->ticks == 1) {
+  if (s->phase == NR_PH_TITLE) {
+    title_step(s, input);
+    s->checksum = checksum_of(s, s->checksum);
+    return;
+  }
+  if (s->phase == NR_PH_CLEAR) {
+    /* the last wave ended: nothing moves; a back press asks the host for a new run */
+    for (int p = 0; p < NR_PLAYERS; p++)
+      if (input[p].back) s->return_title = 1;
+    s->checksum = checksum_of(s, s->checksum);
+    return;
+  }
+  if (s->auto_presence && s->ticks == 1) {
     /* every hero stands on the street until the presence tick: a pad the platform reports a frame or two late is still in */
     for (int p = 0; p < NR_PLAYERS; p++) s->actor[p].present = 1;
     s->players = NR_PLAYERS;
     s->lives = NR_LIVES_PER_PLAYER * s->players;
   }
-  if (s->ticks == NR_PRESENCE_TICKS) {
+  if (s->auto_presence && s->ticks == NR_PRESENCE_TICKS) {
     s->players = 0;
     for (int p = 0; p < NR_PLAYERS; p++) {
       s->actor[p].present = p == 0 || input[p].connected ? 1 : 0;
@@ -766,6 +902,7 @@ void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
   }
   if (s->game_over) {
     for (int p = 0; p < NR_PLAYERS; p++) {
+      if (input[p].back) s->return_title = 1;
       if (!input[p].start) continue;
       s->start_refused++;
       log_event(s, NR_EV_START_REFUSED, p, 0, 0);
@@ -773,10 +910,16 @@ void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
     s->checksum = checksum_of(s, s->checksum);
     return;
   }
+  if (s->phase == NR_PH_UPGRADE) {
+    upgrade_step(s, input);
+    s->checksum = checksum_of(s, s->checksum);
+    return;
+  }
+  if (!s->auto_presence) start_presses(s, input);
   nr_input idle_input = { .connected = false };
   const nr_input *eff[NR_PLAYERS];
   for (int p = 0; p < NR_PLAYERS; p++) {
-    if (s->actor[p].present && s->ticks >= NR_PRESENCE_TICKS) set_away(s, p, p != 0 && !input[p].connected);
+    if (s->actor[p].present && (!s->auto_presence || s->ticks >= NR_PRESENCE_TICKS)) set_away(s, p, p != 0 && !input[p].connected);
     eff[p] = s->actor[p].away ? &idle_input : &input[p];
   }
   float before[NR_SIM_MAX_ACTORS];

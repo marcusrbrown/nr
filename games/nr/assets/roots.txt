@@ -11,3 +11,10 @@ atlases/heavy-n.png
 atlases/heavy.json
 arena/layout.json
 arena/lights.json
+fonts/FiraSans-Regular.ttf
+fonts/FiraSans-OFL.txt
+audio/hit.wav
+audio/grab.wav
+audio/special.wav
+audio/hurt.wav
+audio/confirm.wav

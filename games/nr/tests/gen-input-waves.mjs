@@ -1,5 +1,7 @@
 // Writes games/nr/tests/input-waves.json: the two-player script of the four-wave run (sim-check.mjs), the input the bot
 // in games/nr/main.c chooses when it plays both players on the `nr_bot` build, as the pad buttons a player holds.
+// With --app nr_botfull --ticks N --out FILE it writes input-2p-full.json instead: the same bot on the build with a title,
+// whose buttons include the starts that join and begin, the pick and, when the run is long enough, back.
 //
 //   node games/nr/tests/gen-input-waves.mjs            run nr_bot for TICKS ticks and write the script
 //   node games/nr/tests/gen-input-waves.mjs --check    exit 1 when the file differs from what the bot plays now
@@ -12,15 +14,18 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { nativeWgpu, ROOT } from './capture-lib.mjs';
 
-export const TICKS = 2700;
-const OUT = join(dirname(fileURLToPath(import.meta.url)), 'input-waves.json');
-const BUTTON = [[1, 'right'], [2, 'left'], [4, 'up'], [8, 'down'], [16, 'west'], [32, 'south'], [64, 'east'], [128, 'north'], [256, 'r'], [512, 'l'], [1024, 'start']];
+const argv = process.argv.slice(2);
+const arg = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 ? argv[i + 1] : d; };
+const APP = arg('app', 'nr_bot');
+export const TICKS = Number(arg('ticks', 2700));
+const OUT = arg('out') ? join(ROOT, arg('out')) : join(dirname(fileURLToPath(import.meta.url)), 'input-waves.json');
+const BUTTON = [[1, 'right'], [2, 'left'], [4, 'up'], [8, 'down'], [16, 'west'], [32, 'south'], [64, 'east'], [128, 'north'], [256, 'r'], [512, 'l'], [1024, 'start'], [2048, 'back']];
 const names = (mask) => BUTTON.filter(([bit]) => mask & bit).map(([, n]) => n);
 
 export function generate() {
   const base = join(ROOT, 'out/unit6/gen-waves');
-  const r = nativeWgpu('nr_bot', base, TICKS, { inputDir: join(ROOT, 'out/unit6/input') });
-  if (r.status !== 0) throw new Error(`nr_bot: ${(r.stderr || r.stdout || '').slice(-300)}`);
+  const r = nativeWgpu(APP, base, TICKS, { inputDir: join(ROOT, 'out/unit6/input') });
+  if (r.status !== 0) throw new Error(`${APP}: ${(r.stderr || r.stdout || '').slice(-300)}`);
   const st = JSON.parse(readFileSync(`${base}.json`, 'utf8'));
   const n = st['nr.bot_log_count'], log = st['nr.bot_log'];
   if (n > log.length / 2) throw new Error(`the bot log holds ${log.length / 2} of ${n} changes`);
@@ -39,7 +44,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const text = generate();
   if (process.argv.includes('--check')) {
     const same = readFileSync(OUT, 'utf8') === text;
-    console.log(same ? 'input-waves.json is what the bot plays' : 'input-waves.json differs from what the bot plays');
+    console.log(same ? `${OUT} is what the bot plays` : `${OUT} differs from what the bot plays`);
     process.exit(same ? 0 : 1);
   }
   writeFileSync(OUT, text);
