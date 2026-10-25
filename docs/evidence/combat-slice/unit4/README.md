@@ -38,11 +38,13 @@ and their reduced states (`nr.*`, `cw.three.*`, `cw.gpu.*`). The input scripts a
 Look at `scroll-f61|232|352|426|640.png` and `pillar-f243.png`; each line is yes or no.
 
 - [ ] The street reads as one block three screens wide: shop fronts, a second row of buildings above them, a skyline behind.
-- [ ] The three neon lights wash the shop fronts and the actors in their colours, and move over the street as it scrolls.
-- [ ] The layers shift at visibly different rates when the camera scrolls (compare `scroll-f352.png` and `scroll-f426.png`).
-- [ ] The pillar hides the player behind it and the stand-in in front of it hides the pillar (`pillar-f243.png`).
-- [ ] The camera holds both players in frame; the leader stops at the right edge (`scroll-f232.png`).
-- [ ] The hero is readable at 128 px against the street; the street is neither too dark nor too busy to read actors.
+  - There's no skyline, just the street and two rows of buildings
+- [x] The three neon lights wash the shop fronts and the actors in their colours, and move over the street as it scrolls.
+  - There was no playtest so I can only judge the scrolling from the captured images
+- [x] The layers shift at visibly different rates when the camera scrolls (compare `scroll-f352.png` and `scroll-f426.png`).
+- [x] The pillar hides the player behind it and the stand-in in front of it hides the pillar (`pillar-f243.png`).
+- [x] The camera holds both players in frame; the leader stops at the right edge (`scroll-f232.png`).
+- [x] The hero is readable at 128 px against the street; the street is neither too dark nor too busy to read actors.
 
 Known limits of this step: the actors do not face left (facing is the Unit 5 clip work), the stand-ins at x 11.7 and on the
 patrol are not enemies, and the street's windows and signs are flat emissive boxes (no textures).
