@@ -70,8 +70,10 @@
     "model": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["parts"],
+      "description": "Exactly one of parts (primitives) or profile (a character profile over the CC0 kits, pinned by profileSha256; profile.schema.json).",
       "properties": {
+        "profile": { "type": "string", "description": "Path to the profile JSON, relative to the recipe file." },
+        "profileSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
         "parts": {
           "type": "array",
           "minItems": 1,

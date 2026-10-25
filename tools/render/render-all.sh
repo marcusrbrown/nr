@@ -6,6 +6,7 @@
 #   tools/render/render-all.sh --audit              clip audit of the staged kits (tools/render/audit-clips.py) ->
 #                                                   docs/evidence/combat-slice/clip-audit.md, <OUT>/audit/clip-audit.json
 #   OUT=<dir> tools/render/render-all.sh ...        output root (default out/render)
+#   INSTALL=<dir> tools/render/render-all.sh hero   also copy each atlas (sheets + manifest) into <dir>
 #
 # Per recipe <name>: <OUT>/<name>/raw (nr_render.py frames + done.json), <OUT>/<name>/atlas (sheets + manifest),
 # <OUT>/<name>/blender.log. A render that exits non-zero stops the run with that exit code (11: Blender version or
@@ -46,7 +47,7 @@ for name in "${names[@]}"; do
   echo "render-all: $name"
   rc=0
   "$BLENDER" --background --factory-startup --python-exit-code 1 --python "$RENDER/nr_render.py" -- \
-    --recipe "$recipe" --out "$dir/raw" > "$dir/blender.log" 2>&1 || rc=$?
+    --recipe "$recipe" --out "$dir/raw" --kits "$ROOT/deps/kits" > "$dir/blender.log" 2>&1 || rc=$?
   grep -E '^RENDER ' "$dir/blender.log" || true
   if [ "$rc" -ne 0 ]; then
     tail -n 20 "$dir/blender.log" >&2
@@ -54,4 +55,5 @@ for name in "${names[@]}"; do
     exit "$rc"
   fi
   node "$RENDER/post.mjs" --recipe "$recipe" --raw "$dir/raw" --out "$dir/atlas"
+  if [ -n "${INSTALL:-}" ]; then mkdir -p "$INSTALL" && cp "$dir"/atlas/* "$INSTALL"/ && echo "render-all: $name installed in $INSTALL"; fi
 done

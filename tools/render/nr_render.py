@@ -3,11 +3,20 @@
 """Headless Blender render script of the nr sprite pipeline. The only code in the repository that imports bpy.
 
     Blender --background --factory-startup --python-exit-code 1 --python nr_render.py -- \
-        --recipe recipe.json --out raw-dir
+        --recipe recipe.json --out raw-dir [--kits deps/kits]
 
 The recipe is validated by recipe.schema.json (tools/render/post.mjs does that before this runs) and checked again
-here for the fields the script reads. For every slot frame the script poses the model, then renders two passes at
-`cell * supersample` pixels from the recipe's camera:
+here for the fields the script reads. Its model is one of two things:
+
+  parts    primitives (the placeholder and the control recipes)
+  profile  a character profile (tools/render/profiles/<id>.json, pinned by profileSha256): a base body, hair and the
+           animation library from the CC0 kits under --kits (default deps/kits, staged by fetch-kits.sh). Every kit
+           file is checked against the profile's sha256 and the kit manifest's licence allowlist before it is read. The
+           body is coloured by region from the profile's palette, posed from the library's actions through the
+           profile's clip map, fitted to its pixel height and anchored on the ground.
+
+For every slot frame the script poses the model, then renders two passes at `cell * supersample` pixels from the
+recipe's camera:
 
   albedo  unlit base colour (every material is rebuilt as an emission of its colour); Standard view transform,
           exposure 0, gamma 1, transparent film
@@ -28,6 +37,7 @@ Exit codes: 0 ok, 1 uncaught exception, 10 Cycles CPU device unavailable, 11 Ble
 
 from __future__ import annotations
 
+import fnmatch
 import hashlib
 import json
 import math
@@ -40,6 +50,7 @@ from pathlib import Path
 
 import bmesh
 import bpy
+import numpy as np
 from bpy_extras.object_utils import world_to_camera_view
 from mathutils import Euler, Vector
 
@@ -52,6 +63,8 @@ FIRST_LINE_MARKER = "RENDER start"
 SENTINEL_NAME = "done.json"
 SHAPES = ("sphere", "box", "cylinder", "cone", "plane")
 FACING_YAW_DEG = {"south": 0.0, "east": 90.0, "north": 180.0, "west": -90.0}
+ALLOWED_LICENCES = ("CC0-1.0",)
+SCRIPT_DIR = Path(__file__).resolve().parent
 
 
 class InputError(Exception):
@@ -127,18 +140,24 @@ def read_recipe(path: Path) -> tuple[dict, str]:
     for key in ("seed", "samples"):
         if not isinstance(need(recipe["render"], key, "recipe.render"), int):
             raise InputError(f"recipe.render.{key} must be an integer")
-    parts = need(recipe["model"], "parts", "recipe.model")
-    if not isinstance(parts, list) or not parts:
-        raise InputError("recipe.model.parts must be a non-empty list")
-    ids = set()
-    for part in parts:
-        pid = need(part, "id", "a model part")
-        if pid in ids:
-            raise InputError(f"model part id {pid!r} is repeated")
-        ids.add(pid)
-        if need(part, "shape", f"part {pid}") not in SHAPES:
-            raise InputError(f"part {pid}: shape {part['shape']!r} is not one of {SHAPES}")
-        hex_to_linear(need(part, "color", f"part {pid}"))
+    model = recipe["model"]
+    if ("parts" in model) == ("profile" in model):
+        raise InputError("recipe.model must have exactly one of 'parts' or 'profile'")
+    if "parts" in model:
+        parts = model["parts"]
+        if not isinstance(parts, list) or not parts:
+            raise InputError("recipe.model.parts must be a non-empty list")
+        ids = set()
+        for part in parts:
+            pid = need(part, "id", "a model part")
+            if pid in ids:
+                raise InputError(f"model part id {pid!r} is repeated")
+            ids.add(pid)
+            if need(part, "shape", f"part {pid}") not in SHAPES:
+                raise InputError(f"part {pid}: shape {part['shape']!r} is not one of {SHAPES}")
+            hex_to_linear(need(part, "color", f"part {pid}"))
+    else:
+        need(model, "profileSha256", "recipe.model")
     slots = recipe["slots"]
     if not isinstance(slots, list) or not slots:
         raise InputError("recipe.slots must be a non-empty list")
@@ -159,11 +178,68 @@ def read_recipe(path: Path) -> tuple[dict, str]:
     return recipe, hashlib.sha256(raw).hexdigest()
 
 
-def parse_args() -> tuple[Path, Path]:
+# --- profile and kit files -----------------------------------------------------------------------------------------
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read_profile(recipe: dict, recipe_path: Path, kits_dir: Path) -> tuple[dict, str, list[dict]]:
+    """Load the recipe's character profile, check its sha256 against the recipe, and verify every kit file it names:
+    the kit's licence is on the allowlist, the file is the one the kit manifest pins, and the bytes on disk match."""
+    model = recipe["model"]
+    path = (recipe_path.parent / model["profile"]).resolve()
+    try:
+        raw = path.read_bytes()
+        profile = json.loads(raw)
+    except (OSError, ValueError) as e:
+        raise InputError(f"cannot read the profile {path}: {e}") from e
+    digest = hashlib.sha256(raw).hexdigest()
+    if digest != model["profileSha256"]:
+        raise InputError(f"profile {path.name} has sha256 {digest}, the recipe pins {model['profileSha256']}")
+    for key in ("schemaVersion", "id", "kitFiles", "models", "body", "palette", "regions", "clips", "pose"):
+        need(profile, key, "the profile")
+    if profile["schemaVersion"] != 1:
+        raise InputError(f"unsupported profile schema version {profile['schemaVersion']!r}")
+    try:
+        manifest = json.loads((SCRIPT_DIR / "kits.json").read_text())
+    except (OSError, ValueError) as e:
+        raise InputError(f"cannot read kits.json: {e}") from e
+    kits = {k["id"]: k for k in manifest["kits"]}
+    verified = []
+    for ref in profile["kitFiles"]:
+        kit = kits.get(ref["kit"])
+        if kit is None:
+            raise InputError(f"profile names kit {ref['kit']!r}, which kits.json does not list")
+        if kit["licence"]["spdx"] not in ALLOWED_LICENCES:
+            raise InputError(f"kit {kit['id']}: licence {kit['licence']['spdx']!r} is not on the allowlist {ALLOWED_LICENCES}")
+        pinned = next((f for f in kit["files"] if f["path"] == ref["path"]), None)
+        if pinned is None or pinned["sha256"] != ref["sha256"]:
+            raise InputError(f"profile file {ref['kit']}/{ref['path']} is not the file kits.json pins")
+        file = kits_dir / ref["kit"] / ref["path"]
+        if not file.is_file():
+            raise InputError(f"{file} is not staged: run tools/render/fetch-kits.sh")
+        if sha256_file(file) != ref["sha256"]:
+            raise InputError(f"{file} differs from its pinned sha256 {ref['sha256']}")
+        verified.append({"kit": ref["kit"], "path": ref["path"], "sha256": ref["sha256"]})
+    used = {(m["kit"], m["path"]) for m in [profile["models"]["body"], profile["models"]["animations"], *profile["models"].get("hair", [])]}
+    listed = {(r["kit"], r["path"]) for r in profile["kitFiles"]}
+    if not used <= listed:
+        raise InputError(f"profile models use kit files that kitFiles does not list: {sorted(used - listed)}")
+    for slot in recipe["slots"]:
+        if slot["clip"] not in profile["clips"]:
+            raise InputError(f"slot {slot['id']}: the profile has no clip {slot['clip']!r}")
+    return profile, digest, verified
+
+
+def parse_args() -> tuple[Path, Path, Path]:
     argv = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
-    if len(argv) != 4 or argv[0] != "--recipe" or argv[2] != "--out":
-        raise InputError("usage: -- --recipe <recipe.json> --out <dir>")
-    return Path(argv[1]), Path(argv[3])
+    pairs = dict(zip(argv[0::2], argv[1::2]))
+    if len(argv) % 2 or not set(pairs) <= {"--recipe", "--out", "--kits"} or "--recipe" not in pairs or "--out" not in pairs:
+        raise InputError("usage: -- --recipe <recipe.json> --out <dir> [--kits <deps/kits>]")
+    kits = Path(pairs["--kits"]) if "--kits" in pairs else SCRIPT_DIR.parent.parent / "deps" / "kits"
+    return Path(pairs["--recipe"]), Path(pairs["--out"]), kits
 
 
 def check_pin(recipe: dict) -> None:
@@ -342,6 +418,256 @@ class Rig:
             obj.hide_render = hidden
 
 
+def import_gltf(path: Path) -> list:
+    """Import a glTF/GLB and return the objects it created. Textures were never staged; nothing renders from an image."""
+    before = set(bpy.data.objects)
+    try:
+        bpy.ops.import_scene.gltf(filepath=str(path))
+    except RuntimeError as e:
+        raise InputError(f"glTF import failed for {path.name}: {e}") from e
+    for image in list(bpy.data.images):
+        bpy.data.images.remove(image)
+    return [o for o in bpy.data.objects if o not in before]
+
+
+class KitFigure:
+    """A kit character: the base-character body and hair skinned to its armature, posed from the animation library's
+    actions through the profile's clip map. The meshes are coloured per face by the bone that dominates their vertices
+    (the profile's regions), so the unlit albedo is flat colour fields; the lights supply the form at run time."""
+
+    def __init__(self, scene, cam, recipe: dict, profile: dict, kits_dir: Path):
+        self.scene, self.cam, self.profile = scene, cam, profile
+        self.cell = recipe["cell"]
+        self.palette = profile["palette"]
+        self.root = bpy.data.objects.new("figure", None)
+        scene.collection.objects.link(self.root)
+        models = profile["models"]
+
+        def kit_path(ref: dict) -> Path:
+            return kits_dir / ref["kit"] / ref["path"]
+
+        for o in import_gltf(kit_path(models["animations"])):  # only the actions are wanted
+            bpy.data.objects.remove(o, do_unlink=True)
+        objs = import_gltf(kit_path(models["body"]))
+        self.arm = next((o for o in objs if o.type == "ARMATURE"), None)
+        if self.arm is None:
+            raise InputError("the body model has no armature")
+        meshes = {o.name: o for o in objs if o.type == "MESH"}
+        body_cfg = models["body"]
+        if body_cfg["mesh"] not in meshes:
+            raise InputError(f"the body model has no mesh {body_cfg['mesh']!r} (it has {sorted(meshes)})")
+        self.body = meshes[body_cfg["mesh"]]
+        extras = {n: meshes[n] for n in body_cfg.get("extras", {}) if n in meshes}
+        for name, o in meshes.items():
+            if o is not self.body and name not in extras:
+                bpy.data.objects.remove(o, do_unlink=True)
+        self.meshes = [self.body, *extras.values()]
+        self.paint(self.body, profile["regions"])
+        for name, o in extras.items():
+            self.paint_flat(o, body_cfg["extras"][name])
+        for hair in models.get("hair", []):
+            self.meshes.append(self.add_hair(kit_path(hair), hair))
+        for att in profile.get("attachments", []):
+            self.meshes.append(self.add_attachment(att))
+
+        ad = self.arm.animation_data or self.arm.animation_data_create()
+        for track in list(ad.nla_tracks):
+            ad.nla_tracks.remove(track)
+        for o in [self.arm, *self.meshes]:
+            self.adopt(o)
+        self.arm.rotation_mode = "XYZ"
+        self.fit()
+
+    # -- construction --
+
+    def adopt(self, obj) -> None:
+        bpy.context.view_layer.update()  # matrix_world of a freshly built object is stale until then
+        world = obj.matrix_world.copy()
+        obj.parent = self.root
+        obj.matrix_world = world
+
+    def colour(self, key: str):
+        return hex_to_linear(self.palette.get(key, key))
+
+    def region_of_bone(self, bone: str, regions: list[dict]) -> int:
+        for index, region in enumerate(regions):
+            if any(fnmatch.fnmatchcase(bone, pat) for pat in region["bones"]):
+                return index
+        return len(regions)
+
+    def paint(self, obj, regions: list[dict]) -> None:
+        """One emission material per region; each face takes the region most of its vertices' dominant bones fall in."""
+        group_names = {g.index: g.name for g in obj.vertex_groups}
+        vertex_region = []
+        for v in obj.data.vertices:
+            bone = group_names[max(v.groups, key=lambda g: g.weight).group] if v.groups else "root"
+            vertex_region.append(self.region_of_bone(bone, regions))
+        obj.data.materials.clear()
+        for region in regions:
+            obj.data.materials.append(emission_material(f"albedo_{region['name']}", self.colour(region["color"])))
+        obj.data.materials.append(emission_material("albedo_default", self.colour(self.profile.get("defaultColor", "default"))))
+        for poly in obj.data.polygons:
+            votes: dict[int, int] = {}
+            for vi in poly.vertices:
+                votes[vertex_region[vi]] = votes.get(vertex_region[vi], 0) + 1
+            poly.material_index = max(votes, key=lambda k: (votes[k], -k))
+
+    def paint_flat(self, obj, colour_key: str) -> None:
+        obj.data.materials.clear()
+        obj.data.materials.append(emission_material(f"albedo_{obj.name}", self.colour(colour_key)))
+        for poly in obj.data.polygons:
+            poly.material_index = 0
+
+    def add_hair(self, path: Path, cfg: dict):
+        objs = import_gltf(path)
+        mesh = next((o for o in objs if o.type == "MESH" and o.name == cfg["mesh"]), None)
+        if mesh is None:
+            raise InputError(f"{path.name} has no mesh {cfg['mesh']!r}")
+        for mod in mesh.modifiers:
+            if mod.type == "ARMATURE":
+                mod.object = self.arm  # the same bone names: it follows the body's pose
+        for o in objs:
+            if o is not mesh:
+                bpy.data.objects.remove(o, do_unlink=True)
+        mesh.parent = None
+        self.paint_flat(mesh, cfg["color"])
+        return mesh
+
+    def add_attachment(self, att: dict):
+        """A primitive skinned rigidly to one bone, placed at the bone's rest head plus an offset in armature space."""
+        part = {"id": att["id"], "shape": att["shape"], "size": att.get("size", [1.0, 1.0, 1.0])}
+        obj = Rig.build_part(part)
+        bpy.context.scene.collection.objects.link(obj)
+        bone = self.arm.data.bones.get(att["bone"])
+        if bone is None:
+            raise InputError(f"attachment {att['id']}: the rig has no bone {att['bone']!r}")
+        loc = self.arm.matrix_world @ (bone.head_local + Vector(att.get("offset", [0.0, 0.0, 0.0])))
+        obj.location = loc
+        obj.rotation_euler = Euler([math.radians(a) for a in att.get("rotationDeg", [0.0, 0.0, 0.0])], "XYZ")
+        obj.data.materials.append(emission_material(f"albedo_{att['id']}", self.colour(att["color"])))
+        group = obj.vertex_groups.new(name=att["bone"])
+        group.add(list(range(len(obj.data.vertices))), 1.0, "REPLACE")
+        mod = obj.modifiers.new("Armature", "ARMATURE")
+        mod.object = self.arm
+        return obj
+
+    # -- posing --
+
+    def clip(self, name: str) -> dict:
+        return self.profile["clips"][name]
+
+    def sample(self, clip: dict, i: int, n: int) -> tuple[str, float]:
+        """Action name and (fractional) frame for sample i of n over the clip's segments, in order. A looping clip
+        omits its end so the last sample is one step before the first."""
+        segs = clip["segments"]
+        lengths = [abs(sg["end"] - sg["start"]) for sg in segs]
+        total = sum(lengths) or 1.0
+        t = total * (i / n if clip.get("loop") else i / max(n - 1, 1))
+        acc = 0.0
+        for sg, length in zip(segs, lengths):
+            if t <= acc + length + 1e-9 or sg is segs[-1]:
+                local = min(max(t - acc, 0.0), length)
+                return sg["action"], (sg["start"] + local if sg["end"] >= sg["start"] else sg["start"] - local)
+            acc += length
+        raise AssertionError("unreachable")
+
+    def set_time(self, action_name: str, frame: float) -> None:
+        action = bpy.data.actions.get(action_name)
+        if action is None:
+            raise InputError(f"the animation library has no action {action_name!r}")
+        ad = self.arm.animation_data or self.arm.animation_data_create()
+        ad.action = action
+        if hasattr(ad, "action_slot") and getattr(action, "slots", None):
+            ad.action_slot = action.slots[0]
+        whole = math.floor(frame)
+        self.scene.frame_set(whole, subframe=frame - whole)
+
+    def adjust(self) -> None:
+        """Applied after the animation is evaluated for a frame: the root's travel is removed (the simulation moves
+        the actor) and the profile's head and hand scales are set."""
+        body = self.profile["body"]
+        pol = self.profile["pose"]
+        if pol.get("pinRoot", True):
+            self.arm.pose.bones["root"].location = (0.0, 0.0, 0.0)
+        for names, key in ((("Head",), "headScale"), (("hand_l", "hand_r"), "handScale")):
+            f = body.get(key, 1.0)
+            for n in names:
+                self.arm.pose.bones[n].scale = (f, f, f)
+        bpy.context.view_layer.update()
+
+    def points(self) -> np.ndarray:
+        deps = bpy.context.evaluated_depsgraph_get()
+        out = []
+        for obj in self.meshes:
+            ev = obj.evaluated_get(deps)
+            mesh = ev.to_mesh()
+            try:
+                co = np.empty(len(mesh.vertices) * 3, dtype=np.float64)
+                mesh.vertices.foreach_get("co", co)
+            finally:
+                ev.to_mesh_clear()
+            m = np.array(ev.matrix_world, dtype=np.float64)
+            out.append(co.reshape(-1, 3) @ m[:3, :3].T + m[:3, 3])
+        return np.vstack(out)
+
+    def projected_px(self) -> tuple[float, float]:
+        ys = [world_to_camera_view(self.scene, self.cam, Vector(p)).y for p in self.points()]
+        return (min(ys) * self.cell["height"], max(ys) * self.cell["height"])
+
+    def anchor_world(self, anchor: str) -> Vector:
+        """The world point that stays at (0, 0): the pelvis, or the midpoint of the two feet."""
+        arm_eval = self.arm.evaluated_get(bpy.context.evaluated_depsgraph_get())
+        names = ("pelvis",) if anchor == "pelvis-xy" else ("foot_l", "foot_r")
+        pts = [arm_eval.matrix_world @ arm_eval.pose.bones[n].head for n in names]
+        return sum(pts, Vector((0.0, 0.0, 0.0))) / len(pts)
+
+    def place(self, yaw_deg: float) -> None:
+        """Turn the figure about the vertical axis through the profile's anchor, which stays at world (0, 0)."""
+        self.root.rotation_euler = Euler((0.0, 0.0, math.radians(yaw_deg)), "XYZ")
+        self.root.location = (0.0, 0.0, self.base_z)
+        bpy.context.view_layer.update()
+        anchor = self.profile["pose"].get("anchor", "feet-xy")
+        if anchor != "none":
+            p = self.anchor_world(anchor)
+            self.root.location = (-p.x + self.root.location.x, -p.y + self.root.location.y, self.base_z)
+            bpy.context.view_layer.update()
+
+    def first_pose(self) -> None:
+        first = self.profile["pose"]["fitClip"]
+        action, frame = self.sample(self.clip(first), 0, 1)
+        self.set_time(action, frame)
+        self.adjust()
+
+    def fit(self) -> None:
+        """Scale the figure so the standing pose is standingHeightPx tall in the render camera, then put its lowest
+        point on the ground; both measured on the first frame of pose.fitClip with the figure facing the camera."""
+        body = self.profile["body"]
+        prop = Vector((body.get("widthScale", 1.0), body.get("depthScale", 1.0), 1.0))
+        self.base_z = 0.0
+        self.root.scale = prop
+        self.first_pose()
+        self.place(0.0)
+        for _ in range(3):
+            lo, hi = self.projected_px()
+            k = body["standingHeightPx"] / (hi - lo)
+            self.root.scale = Vector([c * k for c in self.root.scale])
+            self.place(0.0)
+        zs = self.points()[:, 2]
+        self.base_z = -float(zs.min())
+        self.place(0.0)
+        lo, hi = self.projected_px()
+        self.facts = {"scale": [round(c, 5) for c in self.root.scale], "baseZ": round(self.base_z, 5), "heightPx": round(hi - lo, 3)}
+
+    def pose(self, slot: dict, frame: int, hidden: bool) -> None:
+        clip = self.clip(slot["clip"])
+        action, f = self.sample(clip, frame, slot["frames"])
+        self.set_time(action, f)
+        self.adjust()
+        self.place(FACING_YAW_DEG[slot.get("facing", "south")])
+        for obj in self.meshes:
+            obj.hide_render = hidden
+
+
 def render_pass(scene, path: Path, view_transform: str, override) -> None:
     scene.view_settings.view_transform = view_transform
     bpy.context.view_layer.material_override = override
@@ -349,10 +675,10 @@ def render_pass(scene, path: Path, view_transform: str, override) -> None:
     bpy.ops.render.render(write_still=True)
 
 
-def render_all(recipe: dict, recipe_sha: str, out_dir: Path) -> dict:
+def render_all(recipe: dict, recipe_sha: str, out_dir: Path, profile=None, profile_sha=None, kit_files=None, kits_dir=None) -> dict:
     scene = configure_scene(recipe)
     cam = make_camera(scene, recipe["camera"])
-    rig = Rig(scene, recipe["model"]["parts"])
+    rig = KitFigure(scene, cam, recipe, profile, kits_dir) if profile else Rig(scene, recipe["model"]["parts"])
     normal_mat = normal_override_material(cam)
     cell = recipe["cell"]
     pivot_view = world_to_camera_view(scene, cam, Vector(recipe["camera"]["pivotWorld"]))
@@ -391,6 +717,8 @@ def render_all(recipe: dict, recipe_sha: str, out_dir: Path) -> dict:
         "frames": frames,
         "renderMs": round((time.perf_counter() - started) * 1000.0, 1),
     }
+    if profile:
+        done["profile"] = {"id": profile["id"], "sha256": profile_sha, "kitFiles": kit_files, "figure": rig.facts}
     tmp = out_dir / (SENTINEL_NAME + ".tmp")
     tmp.write_text(json.dumps(done, indent=2, sort_keys=True) + "\n")
     os.replace(tmp, out_dir / SENTINEL_NAME)
@@ -400,8 +728,11 @@ def render_all(recipe: dict, recipe_sha: str, out_dir: Path) -> dict:
 def main() -> int:
     log("start", {"version": bpy.app.version_string, "buildHash": bpy.app.build_hash.decode()})
     try:
-        recipe_path, out_dir = parse_args()
+        recipe_path, out_dir, kits_dir = parse_args()
         recipe, recipe_sha = read_recipe(recipe_path)
+        profile = profile_sha = kit_files = None
+        if "profile" in recipe["model"]:
+            profile, profile_sha, kit_files = read_profile(recipe, recipe_path, kits_dir)
     except InputError as e:
         print(f"RENDER input error: {e}", flush=True)
         return EXIT_INPUT
@@ -410,7 +741,7 @@ def main() -> int:
         print(f"RENDER input error: output directory {out_dir} already exists", flush=True)
         return EXIT_INPUT
     try:
-        done = render_all(recipe, recipe_sha, out_dir)
+        done = render_all(recipe, recipe_sha, out_dir, profile, profile_sha, kit_files, kits_dir)
     except InputError as e:
         print(f"RENDER input error: {e}", flush=True)
         return EXIT_INPUT

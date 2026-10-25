@@ -23,6 +23,7 @@ import { deflateSync, inflateSync } from 'node:zlib';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SCHEMA_PATH = join(HERE, 'recipe.schema.json');
+export const PROFILE_SCHEMA_PATH = join(HERE, 'profile.schema.json');
 
 export class PostError extends Error {}
 
@@ -69,6 +70,10 @@ export function validateRecipe(recipe, schema = JSON.parse(readFileSync(SCHEMA_P
     }
   };
   walk(schema, recipe, 'recipe');
+  if (schema.$id?.endsWith('recipe.schema.json') && recipe?.model && typeof recipe.model === 'object') {
+    if (('parts' in recipe.model) === ('profile' in recipe.model)) errors.push('recipe.model: must have exactly one of "parts" or "profile"');
+    if ('profile' in recipe.model && !('profileSha256' in recipe.model)) errors.push('recipe.model: "profile" needs "profileSha256"');
+  }
   return errors;
 }
 
@@ -362,6 +367,7 @@ export function postProcess({ recipePath, rawDir, outDir }) {
     supersample: ss,
     blender: done.blender,
     recipe: { sha256: sha256(recipeBytes) },
+    ...(done.profile ? { profile: { id: done.profile.id, sha256: done.profile.sha256, kitFiles: done.profile.kitFiles } } : {}),
     inputs: done.frames.map((f) => ({ index: f.index, albedoSha256: f.albedoSha256, normalSha256: f.normalSha256 })),
     pages: pageRecords,
     frames,

@@ -1,0 +1,452 @@
+{
+  "schemaVersion": 1,
+  "id": "hero",
+  "title": "Hero (agent draft for owner tuning)",
+  "kitFiles": [
+    {
+      "kit": "universal-animation-library",
+      "path": "UAL1_Standard.glb",
+      "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.bin",
+      "sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.gltf",
+      "sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Hair_SimpleParted.bin",
+      "sha256": "ecd7c81959f3985d6254458a440daaaa18a8bfbb1dbe111c68a04a72374d54db"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Hair_SimpleParted.gltf",
+      "sha256": "fe0f354d7f95d83d38e15c60794dcc063fa4d60550706f3d7ba51491cdc07c56"
+    }
+  ],
+  "models": {
+    "body": {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.gltf",
+      "mesh": "SuperHero_Male",
+      "extras": {
+        "Eyes": "eyes",
+        "Eyebrows": "brow"
+      }
+    },
+    "animations": {
+      "kit": "universal-animation-library",
+      "path": "UAL1_Standard.glb"
+    },
+    "hair": [
+      {
+        "kit": "universal-base-characters",
+        "path": "Hair_SimpleParted.gltf",
+        "mesh": "Hair_SimpleParted",
+        "color": "hair"
+      }
+    ]
+  },
+  "body": {
+    "standingHeightPx": 128,
+    "widthScale": 1,
+    "depthScale": 1,
+    "headScale": 1,
+    "handScale": 1.15
+  },
+  "palette": {
+    "default": "#ff00ff",
+    "skin": "#d9a07c",
+    "hair": "#e0309c",
+    "eyes": "#10131a",
+    "brow": "#3a1a30",
+    "jacket": "#4a3a9c",
+    "trim": "#20e8ff",
+    "glove": "#1f2433",
+    "trousers": "#2d3552",
+    "boots": "#171b27",
+    "belt": "#ff2bd6",
+    "visor": "#20e8ff"
+  },
+  "defaultColor": "default",
+  "regions": [
+    {
+      "name": "head",
+      "color": "skin",
+      "bones": [
+        "Head",
+        "neck_01"
+      ]
+    },
+    {
+      "name": "gloves",
+      "color": "glove",
+      "bones": [
+        "hand_*",
+        "index_*",
+        "middle_*",
+        "pinky_*",
+        "ring_*",
+        "thumb_*"
+      ]
+    },
+    {
+      "name": "forearms",
+      "color": "skin",
+      "bones": [
+        "lowerarm_*"
+      ]
+    },
+    {
+      "name": "jacket",
+      "color": "jacket",
+      "bones": [
+        "spine_*",
+        "clavicle_*",
+        "upperarm_*"
+      ]
+    },
+    {
+      "name": "trousers",
+      "color": "trousers",
+      "bones": [
+        "pelvis",
+        "thigh_*",
+        "calf_*"
+      ]
+    },
+    {
+      "name": "boots",
+      "color": "boots",
+      "bones": [
+        "foot_*",
+        "ball_*"
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "id": "belt",
+      "shape": "cylinder",
+      "bone": "pelvis",
+      "offset": [
+        0,
+        0,
+        0.05
+      ],
+      "size": [
+        0.34,
+        0.25,
+        0.07
+      ],
+      "color": "belt"
+    },
+    {
+      "id": "visor",
+      "shape": "box",
+      "bone": "Head",
+      "offset": [
+        0,
+        -0.09,
+        0.1
+      ],
+      "size": [
+        0.19,
+        0.05,
+        0.045
+      ],
+      "color": "visor"
+    },
+    {
+      "id": "chest-stripe",
+      "shape": "box",
+      "bone": "spine_03",
+      "offset": [
+        0,
+        -0.12,
+        0
+      ],
+      "size": [
+        0.04,
+        0.03,
+        0.3
+      ],
+      "color": "trim"
+    }
+  ],
+  "pose": {
+    "fitClip": "idle",
+    "anchor": "feet-xy",
+    "pinRoot": true,
+    "facing": "east",
+    "note": "Sprites are rendered facing east; the game mirrors them for west. pinRoot removes the library's root travel; anchor holds the midpoint of the feet at the plane origin so the simulation moves the actor."
+  },
+  "clips": {
+    "idle": {
+      "status": "exact",
+      "ready": true,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Idle_Loop",
+          "start": 0,
+          "end": 60
+        }
+      ],
+      "proposal": {
+        "frames": 8,
+        "ms": 250
+      }
+    },
+    "walk": {
+      "status": "exact",
+      "ready": true,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Walk_Loop",
+          "start": 0,
+          "end": 32
+        }
+      ],
+      "proposal": {
+        "frames": 8,
+        "ms": 120
+      }
+    },
+    "run": {
+      "status": "exact",
+      "ready": false,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Jog_Fwd_Loop",
+          "start": 0,
+          "end": 22.4
+        }
+      ],
+      "proposal": {
+        "frames": 8,
+        "ms": 90
+      }
+    },
+    "hit1": {
+      "status": "substitute",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Punch_Jab",
+          "start": 0,
+          "end": 20.8
+        }
+      ],
+      "proposal": {
+        "frames": 6,
+        "ms": 60
+      }
+    },
+    "hit2": {
+      "status": "substitute",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Punch_Cross",
+          "start": 0,
+          "end": 24
+        }
+      ],
+      "proposal": {
+        "frames": 6,
+        "ms": 60
+      }
+    },
+    "hit3": {
+      "status": "gap",
+      "ready": false,
+      "loop": false,
+      "segments": [],
+      "handKey": "third strike (kick or hook); UAL2 3/4-hit combo clips are the expected source",
+      "proposal": {
+        "frames": 7,
+        "ms": 60
+      }
+    },
+    "jump": {
+      "status": "exact",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Jump_Start",
+          "start": 0,
+          "end": 32
+        },
+        {
+          "action": "Jump_Loop",
+          "start": 0,
+          "end": 60
+        },
+        {
+          "action": "Jump_Land",
+          "start": 0,
+          "end": 30.4
+        }
+      ],
+      "proposal": {
+        "frames": 6,
+        "ms": 100
+      }
+    },
+    "jumpkick": {
+      "status": "gap",
+      "ready": false,
+      "loop": false,
+      "segments": [],
+      "handKey": "leg extension over Jump_Loop",
+      "proposal": {
+        "frames": 5,
+        "ms": 80
+      }
+    },
+    "grab": {
+      "status": "gap",
+      "ready": false,
+      "loop": false,
+      "segments": [],
+      "handKey": "reach and hold; pose sources Interact, Push_Loop",
+      "proposal": {
+        "frames": 5,
+        "ms": 80
+      }
+    },
+    "throw": {
+      "status": "gap",
+      "ready": false,
+      "loop": false,
+      "segments": [],
+      "handKey": "lift and heave",
+      "proposal": {
+        "frames": 6,
+        "ms": 80
+      }
+    },
+    "hurt": {
+      "status": "exact",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Hit_Chest",
+          "start": 0,
+          "end": 8
+        }
+      ],
+      "proposal": {
+        "frames": 4,
+        "ms": 80
+      }
+    },
+    "knockdown": {
+      "status": "substitute",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Death01",
+          "start": 0,
+          "end": 57.6
+        }
+      ],
+      "proposal": {
+        "frames": 8,
+        "ms": 90
+      }
+    },
+    "getup": {
+      "status": "substitute",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Death01",
+          "start": 57.6,
+          "end": 0
+        }
+      ],
+      "proposal": {
+        "frames": 6,
+        "ms": 90
+      }
+    },
+    "dash": {
+      "status": "substitute",
+      "ready": false,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Sprint_Loop",
+          "start": 0,
+          "end": 16
+        }
+      ],
+      "proposal": {
+        "frames": 6,
+        "ms": 70
+      }
+    },
+    "special_knockback": {
+      "status": "substitute",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Spell_Simple_Enter",
+          "start": 0,
+          "end": 12.8
+        },
+        {
+          "action": "Spell_Simple_Shoot",
+          "start": 0,
+          "end": 12
+        },
+        {
+          "action": "Spell_Simple_Exit",
+          "start": 0,
+          "end": 10.4
+        }
+      ],
+      "proposal": {
+        "frames": 9,
+        "ms": 70
+      }
+    },
+    "special_dash": {
+      "status": "substitute",
+      "ready": false,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Sprint_Loop",
+          "start": 0,
+          "end": 16
+        },
+        {
+          "action": "Punch_Cross",
+          "start": 8,
+          "end": 24
+        }
+      ],
+      "proposal": {
+        "frames": 8,
+        "ms": 60
+      }
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/marcusrbrown/nr/tools/render/profile.schema.json",
+  "title": "nr character profile",
+  "description": "A character as an owner-tunable profile over the pinned CC0 kits (tools/render/kits.json): which kit files, body proportions, the retexture palette and per-bone colour regions, skinned attachments, and the clip map from game state to library actions. A recipe (recipe.schema.json) pins a profile by sha256; nr_render.py builds the figure from it. Palette values are '#rrggbb'; region and attachment colours name a palette key.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "kitFiles", "models", "body", "palette", "regions", "pose", "clips"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+    "title": { "type": "string" },
+    "kitFiles": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Every kit file the models read, with the sha256 kits.json pins; the renderer refuses a file that differs.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kit", "path", "sha256"],
+        "properties": {
+          "kit": { "type": "string" },
+          "path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "models": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["body", "animations"],
+      "properties": {
+        "body": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kit", "path", "mesh"],
+          "properties": {
+            "kit": { "type": "string" },
+            "path": { "type": "string" },
+            "mesh": { "type": "string", "description": "Name of the skinned body mesh object." },
+            "extras": { "type": "object", "description": "Other meshes of the file to keep (eyes, eyebrows): object name -> palette key.", "additionalProperties": { "type": "string" } }
+          }
+        },
+        "animations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kit", "path"],
+          "properties": { "kit": { "type": "string" }, "path": { "type": "string" } }
+        },
+        "hair": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kit", "path", "mesh", "color"],
+            "properties": { "kit": { "type": "string" }, "path": { "type": "string" }, "mesh": { "type": "string" }, "color": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "body": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["standingHeightPx"],
+      "properties": {
+        "standingHeightPx": { "type": "number", "minimum": 8, "description": "Height of the standing pose (fitClip frame 0) in the render camera, hair included." },
+        "widthScale": { "type": "number", "minimum": 0.1, "description": "Left-right scale relative to height." },
+        "depthScale": { "type": "number", "minimum": 0.1, "description": "Front-back scale relative to height." },
+        "headScale": { "type": "number", "minimum": 0.1 },
+        "handScale": { "type": "number", "minimum": 0.1 }
+      }
+    },
+    "palette": { "type": "object", "description": "Named sRGB colours. 'default' colours faces no region claims.", "additionalProperties": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" } },
+    "defaultColor": { "type": "string" },
+    "regions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered; a face takes the first region whose bone patterns (fnmatch) match the bone that dominates most of its vertices.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "color", "bones"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "bones": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        }
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "shape", "bone", "color"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+          "shape": { "enum": ["sphere", "box", "cylinder", "cone", "plane"] },
+          "bone": { "type": "string" },
+          "offset": { "$ref": "#/$defs/vec3", "description": "From the bone's rest head, in armature space (X the character's left, -Y forward, Z up)." },
+          "rotationDeg": { "$ref": "#/$defs/vec3" },
+          "size": { "$ref": "#/$defs/vec3" },
+          "color": { "type": "string" }
+        }
+      }
+    },
+    "pose": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fitClip"],
+      "properties": {
+        "fitClip": { "type": "string", "description": "Clip whose first frame fits the figure to standingHeightPx and puts its lowest point on the ground." },
+        "anchor": { "enum": ["feet-xy", "pelvis-xy", "none"], "description": "The point held at the plane origin each frame: the midpoint of the feet (the actor's ground position), the pelvis, or nothing." },
+        "pinRoot": { "type": "boolean", "description": "Zero the library's root-bone travel." },
+        "facing": { "enum": ["south", "east", "north", "west"] },
+        "note": { "type": "string" }
+      }
+    },
+    "clips": {
+      "type": "object",
+      "description": "Game state -> library actions. status mirrors docs/evidence/combat-slice/clip-audit.md; ready marks the clips the recipe may render.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["status", "ready", "loop", "segments"],
+        "properties": {
+          "status": { "enum": ["exact", "substitute", "gap"] },
+          "ready": { "type": "boolean" },
+          "loop": { "type": "boolean" },
+          "segments": {
+            "type": "array",
+            "description": "Played in order; frames are action frames at 24 fps; end < start plays in reverse. Empty for a gap awaiting a hand-keyed action.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["action", "start", "end"],
+              "properties": { "action": { "type": "string" }, "start": { "type": "number" }, "end": { "type": "number" } }
+            }
+          },
+          "handKey": { "type": "string" },
+          "proposal": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["frames", "ms"],
+            "properties": { "frames": { "type": "integer", "minimum": 1 }, "ms": { "type": "integer", "minimum": 1 } }
+          }
+        }
+      }
+    }
+  },
+  "$defs": { "vec3": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 } }
+}
