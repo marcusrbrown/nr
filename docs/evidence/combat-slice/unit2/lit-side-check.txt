@@ -1,0 +1,83 @@
+texels 2507; left 751 right 872 up 315 down 972; screen 1920x1080
+
+native-gl
+ horizontal  frame  D        push   body   missing
+             30    -3.11    -1.70  22.1   0
+             60    -3.49    -2.40  18.1   0
+             180   4.58     2.40   17.4   0
+             210   4.56     1.70   21.4   0
+             flat control D: 0.08, -0.05, 1.76, 2.35
+             swing S = D60-D180 -8.06 (flat -1.81), D30-D210 -7.66 (flat -2.26)
+             ratio swing 0: 4.46x
+             ratio swing 1: 3.38x
+ vertical    frame  D        push   body   missing
+             30    6.69     1.56   25.4   0
+             60    10.23    2.20   21.2   0
+             180   -19.57   -2.20  18.4   0
+             210   -22.12   -1.56  23.1   0
+             flat control D: 6.17, 6.24, 0.42, -0.02
+             swing S = D60-D180 29.80 (flat 5.82), D30-D210 28.82 (flat 6.19)
+             ratio swing 0: 5.12x
+             ratio swing 1: 4.65x
+
+cart-gl
+ horizontal  frame  D        push   body   missing
+             30    -3.11    -1.70  22.1   0
+             60    -3.49    -2.40  18.1   0
+             180   4.58     2.40   17.4   0
+             210   4.56     1.70   21.4   0
+             flat control D: 0.08, -0.05, 1.76, 2.35
+             swing S = D60-D180 -8.06 (flat -1.81), D30-D210 -7.66 (flat -2.26)
+             ratio swing 0: 4.46x
+             ratio swing 1: 3.38x
+ vertical    frame  D        push   body   missing
+             30    6.69     1.56   25.4   0
+             60    10.23    2.20   21.2   0
+             180   -19.57   -2.20  18.4   0
+             210   -22.12   -1.56  23.1   0
+             flat control D: 6.17, 6.24, 0.42, -0.02
+             swing S = D60-D180 29.80 (flat 5.82), D30-D210 28.82 (flat 6.19)
+             ratio swing 0: 5.12x
+             ratio swing 1: 4.65x
+
+cart-wgpu
+ horizontal  frame  D        push   body   missing
+             30    -3.10    -1.70  22.1   0
+             60    -3.48    -2.40  18.1   0
+             180   4.58     2.40   17.4   0
+             210   4.56     1.70   21.4   0
+             flat control D: 0.09, -0.05, 1.75, 2.35
+             swing S = D60-D180 -8.06 (flat -1.80), D30-D210 -7.66 (flat -2.27)
+             ratio swing 0: 4.48x
+             ratio swing 1: 3.38x
+ vertical    frame  D        push   body   missing
+             30    6.69     1.56   25.3   0
+             60    10.23    2.20   21.2   0
+             180   -19.57   -2.20  18.4   0
+             210   -22.12   -1.56  23.1   0
+             flat control D: 6.17, 6.24, 0.42, -0.02
+             swing S = D60-D180 29.80 (flat 5.82), D30-D210 28.82 (flat 6.19)
+             ratio swing 0: 5.12x
+             ratio swing 1: 4.66x
+
+native-wgpu
+ horizontal  frame  D        push   body   missing
+             30    -3.10    -1.70  22.1   0
+             60    -3.48    -2.40  18.1   0
+             180   4.58     2.40   17.4   0
+             210   4.56     1.70   21.4   0
+             flat control D: 0.09, -0.05, 1.75, 2.35
+             swing S = D60-D180 -8.06 (flat -1.80), D30-D210 -7.66 (flat -2.27)
+             ratio swing 0: 4.48x
+             ratio swing 1: 3.38x
+ vertical    frame  D        push   body   missing
+             30    6.69     1.56   25.3   0
+             60    10.23    2.20   21.2   0
+             180   -19.57   -2.20  18.4   0
+             210   -22.12   -1.56  23.1   0
+             flat control D: 6.17, 6.24, 0.42, -0.02
+             swing S = D60-D180 29.80 (flat 5.82), D30-D210 28.82 (flat 6.19)
+             ratio swing 0: 5.12x
+             ratio swing 1: 4.66x
+
+all checks passed

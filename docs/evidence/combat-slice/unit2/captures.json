@@ -1,0 +1,1264 @@
+{
+  "hosts": [
+    "native-gl",
+    "cart-gl",
+    "cart-wgpu",
+    "native-wgpu"
+  ],
+  "sets": [
+    "stage",
+    "solo",
+    "lit",
+    "bare"
+  ],
+  "runs": [
+    {
+      "host": "native-gl",
+      "app": "nr",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "stage-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr",
+      "frames": 120,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 120,
+      "file": "stage-native-gl-f120.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "stage-native-gl-f180.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr",
+      "frames": 240,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 240,
+      "file": "stage-native-gl-f240.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_solo_0",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_0-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_solo_1",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_1-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_solo_2",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_2-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h-native-gl-f30.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h-native-gl-f180.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h-native-gl-f210.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v-native-gl-f30.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v-native-gl-f180.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v-native-gl-f210.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h_flat-native-gl-f30.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h_flat-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h_flat-native-gl-f180.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h_flat-native-gl-f210.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v_flat-native-gl-f30.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v_flat-native-gl-f60.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v_flat-native-gl-f180.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v_flat-native-gl-f210.png"
+    },
+    {
+      "host": "native-gl",
+      "app": "nr_bare",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "bare-native-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "stage-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr",
+      "frames": 120,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 120,
+      "file": "stage-cart-gl-f120.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "stage-cart-gl-f180.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr",
+      "frames": 240,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 240,
+      "file": "stage-cart-gl-f240.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_solo_0",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_0-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_solo_1",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_1-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_solo_2",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_2-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h-cart-gl-f30.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h-cart-gl-f180.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h-cart-gl-f210.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v-cart-gl-f30.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v-cart-gl-f180.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v-cart-gl-f210.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h_flat-cart-gl-f30.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h_flat-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h_flat-cart-gl-f180.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_h_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h_flat-cart-gl-f210.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v_flat-cart-gl-f30.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v_flat-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v_flat-cart-gl-f180.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_lit_v_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v_flat-cart-gl-f210.png"
+    },
+    {
+      "host": "cart-gl",
+      "app": "nr_bare",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "bare-cart-gl-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "stage-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr",
+      "frames": 120,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 120,
+      "file": "stage-cart-wgpu-f120.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "stage-cart-wgpu-f180.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr",
+      "frames": 240,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 240,
+      "file": "stage-cart-wgpu-f240.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_solo_0",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_0-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_solo_1",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_1-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_solo_2",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_2-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h-cart-wgpu-f30.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h-cart-wgpu-f180.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h-cart-wgpu-f210.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v-cart-wgpu-f30.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v-cart-wgpu-f180.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v-cart-wgpu-f210.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h_flat-cart-wgpu-f30.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h_flat-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h_flat-cart-wgpu-f180.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h_flat-cart-wgpu-f210.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v_flat-cart-wgpu-f30.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v_flat-cart-wgpu-f60.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v_flat-cart-wgpu-f180.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v_flat-cart-wgpu-f210.png"
+    },
+    {
+      "host": "cart-wgpu",
+      "app": "nr_bare",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "bare-cart-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "stage-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr",
+      "frames": 120,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 120,
+      "file": "stage-native-wgpu-f120.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "stage-native-wgpu-f180.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr",
+      "frames": 240,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 240,
+      "file": "stage-native-wgpu-f240.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_solo_0",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_0-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_solo_1",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_1-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_solo_2",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "solo_2-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h-native-wgpu-f30.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h-native-wgpu-f180.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h-native-wgpu-f210.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v-native-wgpu-f30.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v-native-wgpu-f180.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v-native-wgpu-f210.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_h_flat-native-wgpu-f30.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_h_flat-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_h_flat-native-wgpu-f180.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_h_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_h_flat-native-wgpu-f210.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 30,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 30,
+      "file": "lit_v_flat-native-wgpu-f30.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "lit_v_flat-native-wgpu-f60.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 180,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 180,
+      "file": "lit_v_flat-native-wgpu-f180.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_lit_v_flat",
+      "frames": 210,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 210,
+      "file": "lit_v_flat-native-wgpu-f210.png"
+    },
+    {
+      "host": "native-wgpu",
+      "app": "nr_bare",
+      "frames": 60,
+      "ok": true,
+      "size": [
+        1920,
+        1080
+      ],
+      "missing": 0,
+      "ticks": 60,
+      "file": "bare-native-wgpu-f60.png"
+    }
+  ]
+}
