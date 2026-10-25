@@ -3,15 +3,16 @@ tick 15: idle step 1 walk step 2 (expected 1, 2)
 tick 16: idle step 1 walk step 2 (expected 1, 2)
 tick 7: idle step 0 walk step 0 (expected 0, 0)
 tick 8: idle step 0 walk step 1 (expected 0, 1)
-native-gl: capture 1920x1080; window 1920x1080 drawable 640x360 render 640x360 pixel_scale 3
-cart-gl: capture 1920x1080; window 1920x1080 drawable 640x360 render 640x360 pixel_scale 3
-cart-wgpu: capture 1920x1080; window 1920x1080 drawable 640x360 render 640x360 pixel_scale 3
-native-wgpu: capture 1920x1080; window 1920x1080 drawable 640x360 render 640x360 pixel_scale 3
-native-gl: 0 of 230400 3x3 blocks are not one colour
-native-gl: silhouette widths (scene px) 0:50 1:50 2:50; IoU with the projected atlas alpha 0.988 0.995 0.990
-cart-gl: silhouette widths (scene px) 0:50 1:50 2:50; IoU with the projected atlas alpha 0.988 0.995 0.990
-cart-wgpu: silhouette widths (scene px) 0:50 1:50 2:50; IoU with the projected atlas alpha 0.988 0.995 0.990
-native-wgpu: silhouette widths (scene px) 0:50 1:50 2:50; IoU with the projected atlas alpha 0.988 0.995 0.990
-native-gl: heroes 0-2 on atlas frame 4, hero 3 on frame 8
+native: capture 1920x1080; window 1920x1080 drawable 640x360 render 640x360 pixel_scale 3
+cart: capture 1920x1080; window 1920x1080 drawable 640x360 render 640x360 pixel_scale 3
+GL state runs: 9 apps on native and cart, drawable 640x360 at scale 3, cw.three.missing 0
+cart vs native, stage f60: identical pixels; sim state equal
+cart vs native, stage f120: identical pixels; sim state equal
+cart vs native, stage f180: identical pixels; sim state equal
+cart vs native, stage f240: identical pixels; sim state equal
+native: 0 of 230400 3x3 blocks are not one colour
+native: silhouette widths (scene px) 0:50 1:50 2:50; IoU with the projected atlas alpha 0.999 1.000 1.000
+cart: silhouette widths (scene px) 0:50 1:50 2:50; IoU with the projected atlas alpha 0.999 1.000 1.000
+native: heroes 0-2 on atlas frame 4, hero 3 on frame 8
 
 all checks passed

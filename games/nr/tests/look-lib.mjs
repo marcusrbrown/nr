@@ -67,3 +67,6 @@ export function frameTexels(atlas, frameIndex) {
   }
   return out;
 }
+
+/** Path stem of a capture: the native binary's set is <dir>/<name>-f<N>, the cart's the same under <dir>/cart/. */
+export const capBase = (dir, host, name, frames) => join(dir, host === 'cart' ? 'cart' : '.', `${name}-f${frames}`);

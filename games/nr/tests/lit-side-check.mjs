@@ -1,7 +1,7 @@
 // Checks that the lit side of a non-instanced hero follows a moving light, per host and per axis, from the captures
-// look-captures.mjs wrote (nr_lit_h / nr_lit_v and their flat-normal controls).
+// look-captures.mjs wrote (nr_lit_h / nr_lit_v and their flat-normal controls); hosts: native, cart (both WebGPU).
 //
-//   node games/nr/tests/lit-side-check.mjs --dir out/unit2/caps --hosts native-gl,cart-gl,cart-wgpu,native-wgpu \
+//   node games/nr/tests/lit-side-check.mjs --dir out/unit2/caps --hosts native,cart \
 //       [--min-ratio 2] [--report <file.json>]
 //
 // The hero is held on idle frame 0 at x = 0 under one light (intensity 20) on a sweep of 240 ticks: along x (h) or
@@ -10,8 +10,10 @@
 // and the class's mean luminance read. For the horizontal sweep D_h = lum(left-facing) - lum(right-facing); for the
 // vertical one D_v = lum(up-facing) - lum(down-facing).
 //
-//   1. sign(D) agrees with the light's side in every frame where the light is 0.5 or more off the hero's centre
-//      (a light to the hero's left lights left-facing texels more: D_h > 0; a light above: D_v > 0), with state
+//   1. sign(D - D_flat) agrees with the light's side in every frame where the light is 0.5 or more off the hero's
+//      centre (a light to the hero's left lights left-facing texels more: D_h > 0; a light above: D_v > 0), where
+//      D_flat is the same frame of the flat-normal control: the two classes' albedo differ, and the control, which has
+//      the same colours and lights, cancels that offset so what is left comes from the normal map; with state
 //      cw.three.missing == 0 and the body not dark;
 //   2. the swing S = D(frame 60) - D(frame 180) (and D(30) - D(210)) is negative for h (light right, then left) and
 //      positive for v (above, then below): albedo differences between classes cancel in S;
@@ -19,12 +21,12 @@
 //      so the response comes from the normal map.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { CAM, ROOT, camera, frameTexels, loadAtlas, lum, project, readImage, texelWorld } from './look-lib.mjs';
+import { CAM, ROOT, camera, capBase, frameTexels, loadAtlas, lum, project, readImage, texelWorld } from './look-lib.mjs';
 
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : d; };
 const DIR = resolve(ROOT, opt('dir', 'out/unit2/caps'));
-const HOSTS = opt('hosts', 'native-gl,cart-gl,cart-wgpu,native-wgpu').split(',');
+const HOSTS = opt('hosts', 'native,cart').split(',');
 const MIN_RATIO = +opt('min-ratio', 2);
 const FRAMES = [30, 60, 180, 210];
 const HERO = { x: 0, z: 0 };
@@ -51,7 +53,7 @@ function classLum(img, list) {
 }
 
 function measure(host, app, frames) {
-  const base = join(DIR, `${app}-${host}-f${frames}`);
+  const base = capBase(DIR, host, app, frames);
   const img = readImage(`${base}.png`);
   const state = JSON.parse(readFileSync(`${base}.json`, 'utf8'));
   const lp = state['nr.light_pos'].slice(0, 3);
@@ -71,21 +73,22 @@ for (const host of HOSTS) {
   console.log(`\n${host}`);
   for (const axis of ['h', 'v']) {
     const app = `nr_lit_${axis}`;
-    if (!existsSync(join(DIR, `lit_${axis}-${host}-f${FRAMES[0]}.png`))) { fail(`${host}: no ${app} captures in ${DIR}`); continue; }
+    if (!existsSync(`${capBase(DIR, host, `lit_${axis}`, FRAMES[0])}.png`)) { fail(`${host}: no ${app} captures in ${DIR}`); continue; }
     const rows = FRAMES.map((f) => measure(host, `lit_${axis}`, f));
     const flat = FRAMES.map((f) => measure(host, `lit_${axis}_flat`, f));
     const swing = (r) => [r[1].D - r[2].D, r[0].D - r[3].D];
     const S = swing(rows), Sf = swing(flat);
     report.hosts[host][axis] = { rows, flat, swing: S, flatSwing: Sf };
-    console.log(` ${axis === 'h' ? 'horizontal' : 'vertical  '}  frame  D        push   body   missing`);
-    for (const r of rows) console.log(`             ${String(r.frames).padEnd(5)} ${r.D.toFixed(2).padEnd(8)} ${r.push.toFixed(2).padEnd(6)} ${r.body.toFixed(1).padEnd(6)} ${r.missing}`);
+    console.log(` ${axis === 'h' ? 'horizontal' : 'vertical  '}  frame  D        D-flat   push   body   missing`);
     console.log(`             flat control D: ${flat.map((r) => r.D.toFixed(2)).join(', ')}`);
     console.log(`             swing S = D60-D180 ${S[0].toFixed(2)} (flat ${Sf[0].toFixed(2)}), D30-D210 ${S[1].toFixed(2)} (flat ${Sf[1].toFixed(2)})`);
-    for (const r of rows) {
-      if (Math.abs(r.push) >= PUSH_MIN && Math.sign(r.D) !== Math.sign(r.push)) fail(`${host} ${axis} f${r.frames}: D ${r.D.toFixed(2)} and push ${r.push.toFixed(2)} differ in sign`);
+    rows.forEach((r, i) => {
+      r.response = r.D - flat[i].D;
+      console.log(`             ${String(r.frames).padEnd(5)} ${r.D.toFixed(2).padEnd(8)} ${r.response.toFixed(2).padEnd(8)} ${r.push.toFixed(2).padEnd(6)} ${r.body.toFixed(1).padEnd(6)} ${r.missing}`);
+      if (Math.abs(r.push) >= PUSH_MIN && Math.sign(r.response) !== Math.sign(r.push)) fail(`${host} ${axis} f${r.frames}: D - D_flat ${r.response.toFixed(2)} and push ${r.push.toFixed(2)} differ in sign`);
       if (r.body < BODY_MIN) fail(`${host} ${axis} f${r.frames}: body luminance ${r.body.toFixed(1)} < ${BODY_MIN}`);
       if (r.missing !== 0) fail(`${host} ${axis} f${r.frames}: cw.three.missing ${r.missing}`);
-    }
+    });
     const want = axis === 'h' ? -1 : 1;
     S.forEach((s, i) => { if (Math.sign(s) !== want) fail(`${host} ${axis}: swing ${i} is ${s.toFixed(2)}, expected sign ${want}`); });
     S.forEach((s, i) => {

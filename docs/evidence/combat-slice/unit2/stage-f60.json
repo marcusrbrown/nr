@@ -48,16 +48,16 @@
   1.7999999523162842
  ],
  "nr.light_intensity": [
-  26,
-  26,
-  26,
+  28,
+  28,
+  28,
   0
  ],
  "nr.cam_x": 0,
  "nr.heroes": 4,
  "nr.lights": 4,
  "nr.ticks": 60,
- "nr.checksum": 1243730343,
+ "nr.checksum": 3491031303,
  "nr.lit_test": 0,
  "nr.flat_normals": 0,
  "nr.px": [

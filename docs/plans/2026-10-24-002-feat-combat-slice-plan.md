@@ -14,7 +14,7 @@ Build `games/nr/`: one street-block arena, one hero, grunts and a heavy, a speci
 
 ## Problem Frame
 
-The shipping-path spike proved the build, cart, gate and romdev loop; the lit-sprite spike proved that a normal-mapped alpha-tested plane under point lights renders identically on GL and WebGPU across native, Chromium and romdev with zero missing program states. Neither says what the game looks like. The art pipeline is the largest unproven cost: Panthea's route produced locomotion for one kit-rigged character and bakes a toon key light into its colour pass, so it cannot supply unlit albedo or normals. Camera, pixel density and lighting lock once art production starts (see origin: `docs/brainstorms/2026-10-24-combat-slice-requirements.md`).
+The shipping-path spike proved the build, cart, gate and romdev loop; the lit-sprite spike proved that a normal-mapped alpha-tested plane under point lights renders identically on GL and WebGPU across native, Chromium and romdev with zero missing program states. Neither says what the game looks like. The art pipeline is the largest unproven cost: Panthea's route produced locomotion for one kit-rigged character and bakes a toon key light into its colour pass, so it cannot supply unlit albedo or normals. Camera, pixel density and lighting are the current values every asset is rendered against; they stay open to tuning as the prototype develops, and a change re-renders the art (see origin: `docs/brainstorms/2026-10-24-combat-slice-requirements.md`).
 
 ## Requirements Trace
 
@@ -111,7 +111,7 @@ Numbering follows the origin document.
 - **Normals are plane-space**: the script transforms shading normals into the sprite plane's basis (screen-right, screen-up, toward camera), OpenGL green-up, and renormalises after downsampling. three.c's derivative tangent frame on a plane maps that basis directly; the lit spike proved the horizontal response only, so Unit 1 adds a vertical control (a flat-plane constancy check cannot detect a green flip).
 - **One plane geometry per atlas frame, one material per character**: three.c batching keys on geometry+material and the UV transform lives on the texture, so per-actor UV offsets cannot share a material. Pre-built per-frame geometries keep one material and texture pair per character; actors on the same frame still batch. Adds the non-instanced `standard+map+nearest+nmap+atest+l0300` row.
 - **Fixed light count**: 4 point lights always present — three arena neons plus one flash slot for the special (intensity 0 when idle) — so one program state (`l0400`, unproven by the lit spike which used `l0300`) covers the whole game; Unit 2 proves it.
-- **640×360 via `pixel_scale 3` (proposed, pending the Unit 2 check)**: logical 1920×1080 rendered at a third and nearest-upscaled. If the 3D window renderer ignores `pixel_scale`, the default becomes a 640×360 render target blitted up. Density is not locked until the check passes. A cart host that states a preferred size receives the low-res frame and scales itself, so the upscale check is per host.
+- **640×360 via `pixel_scale 3` (proposed, pending the Unit 2 check)**: logical 1920×1080 rendered at a third and nearest-upscaled. If the 3D window renderer ignores `pixel_scale`, the default becomes a 640×360 render target blitted up. The density is a proposal until the check passes, and stays open to tuning after it. A cart host that states a preferred size receives the low-res frame and scales itself, so the upscale check is per host.
 - **Add `cart-wgpu` beside `cart`**: the engine runner resolves GL carts from `build/cart` and dual GL+WebGPU carts from `build/cart-wgpu`, and the engine lock keeps `wasmcart` and `wasmcart-wgpu` as separate pins, so both targets stay. New lock rows: `cartwheel-sdk:cart-wgpu` (v0.15.1, sha256 `777167301a0afaf515ef78e1ca3514ceac3ff9f1c3eade7d92ced36e8d57d4a7`, verified against the GitHub release digest before the lock is written) and `wasmcart-wgpu` (engine pin v0.34.3 `cd233ea`, cross-checked like `wasmcart`). Dependency change approved by the owner at planning.
 - **Integer-ish deterministic sim separate from presentation**: positions in fixed-point or float with `-ffp-contract=off` and engine deterministic math only (as the spike), sim in `sim.c`, rendering in `main.c`; the whitelist + rolling checksum is the gate currency.
 - **Targeting**: alternate assignment on spawn; retarget on target death/leave. Grunts use `action2d`'s chase numbers as starting constants.
@@ -210,7 +210,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** Round-trip test green; three builds succeed; spike gates unchanged; ADR-0001 table regenerated (`gen-pins-table.mjs --check` passes); ADR-0002 written.
 
-- [ ] **Unit 2: Kits, hero profile, first clips, and the density lock**
+- [ ] **Unit 2: Kits, hero profile, first clips, and the density check**
 
 **Goal:** Pin the Quaternius kits, audit their clips, draft and tune the hero profile, render idle + walk through the pipeline, load it in a new `games/nr` app with the belt camera at 640×360, and produce the first look captures.
 
@@ -243,7 +243,7 @@ runtime tick (60 Hz, deterministic):
 - Edge case: hero at the far left and far right of the belt is undistorted (silhouette width within 2 px of centre).
 - Integration: native screenshot shows 3× nearest upscale (pixel runs of exactly 3); each cart host's output size matches the expectation recorded for it (host-scaled low-res frame or cart-scaled 1080p).
 
-**Verification:** Owner reviews the capture set via romdev livestream and the PNGs; density and lighting marked locked in ADR-0002 once approved. The camera lock waits for Unit 4's occlusion and scroll captures. This is the first look-gate checkpoint.
+**Verification:** Owner reviews the capture set via romdev livestream and the PNGs; ADR-0002 records the approved-for-now density and lighting values. The camera angle is tuned against Unit 4's occlusion and scroll captures. This is the first look-gate checkpoint.
 
 - [ ] **Unit 3: Full hero clip set and atlas budget**
 
@@ -290,7 +290,7 @@ runtime tick (60 Hz, deterministic):
 - Lights: `lights.json` drives colour, position, flicker/sweep pattern per light; deterministic via `cw_sincos`.
 - Camera: follows players' midpoint; clamps so both remain in frame; soft wall one screen ahead of the trailing player; never scrolls back past the current wave's left bound.
 - Occlusion: actors and arena geometry share the ground-y depth mapping; pillar in the play lane proves AE6.
-- Look captures: add the full belt scroll and the pillar occlusion frames to `look-captures.mjs`; camera angle/FOV tuned against them and then locked in ADR-0002.
+- Look captures: add the full belt scroll and the pillar occlusion frames to `look-captures.mjs`; camera angle/FOV tuned against them and the current values recorded in ADR-0002.
 
 **Patterns to follow:** spike `depth_z()` and `ordering-check.mjs`; bomberdude `world.c` for simple generated 3D set pieces.
 
@@ -301,7 +301,7 @@ runtime tick (60 Hz, deterministic):
 - Edge case: both players at the same x → camera centres on them with no jitter (x unchanged across 60 idle ticks).
 - Integration: `cw.three.missing == 0` with lights sweeping over the full belt on cart GL and WebGPU.
 
-**Verification:** Look captures regenerated with the arena (now the full R7 set minus enemies); owner review via livestream; camera locked in ADR-0002; program tables committed.
+**Verification:** Look captures regenerated with the arena (now the full R7 set minus enemies); owner review via livestream; camera values recorded in ADR-0002; program tables committed.
 
 - [ ] **Unit 5: Combat core — hero moveset and hit resolution**
 

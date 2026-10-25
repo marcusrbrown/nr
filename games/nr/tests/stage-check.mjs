@@ -1,6 +1,6 @@
 // Checks of the stage captures (look-captures.mjs) that need no light model:
 //
-//   node games/nr/tests/stage-check.mjs --dir out/unit2/caps --hosts native-gl,cart-gl,cart-wgpu,native-wgpu [--report <file.json>]
+//   node games/nr/tests/stage-check.mjs --dir out/unit2/caps --hosts native,cart [--report <file.json>]
 //
 //   frames       hero clip steps in the state follow the manifest's durations: step = floor(tick * 1000 / (ms * 60))
 //                (wrapped for a loop), at ticks 60..240 of the captures and across the idle clip's first boundary
@@ -12,19 +12,21 @@
 //                scene pixel (3 screen pixels); the far-left and far-right idle heroes' silhouette width is within 2
 //                scene pixels of the centre hero's, and the centre hero's silhouette overlaps the atlas alpha
 //                projected through the belt camera (IoU >= 0.8: the camera constants in look-lib.mjs match main.c)
-//   upscale      every 3x3 block of the native-gl stage capture is one colour (nearest-neighbour 3x)
-//   sizes        the capture size of each host, recorded; native-gl must be 1920x1080 with nr.px drawable 640x360
-//                (pixel_scale honoured); each cart host's size is reported with its nr.px so the expectation is on file
+//   upscale      every 3x3 block of the native stage capture (and of the cart's) is one colour (nearest-neighbour 3x)
+//   sizes        the capture size and nr.px of each host (and of the GL state runs in captures.json): 1920x1080 with a
+//                640x360 drawable at pixel_scale 3 everywhere, so native and cart present the same frame size
+//   equality     the cart's stage picture against the native's: size, identical pixels or how many differ, sim state
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { CAM, ROOT, camera, frameTexels, loadAtlas, project, readImage, texelWorld } from './look-lib.mjs';
+import { CAM, ROOT, camera, capBase, frameTexels, loadAtlas, project, readImage, texelWorld } from './look-lib.mjs';
 
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : d; };
 const DIR = resolve(ROOT, opt('dir', 'out/unit2/caps'));
-const HOSTS = opt('hosts', 'native-gl,cart-gl,cart-wgpu,native-wgpu').split(',');
-const state = (name) => JSON.parse(readFileSync(join(DIR, `${name}.json`), 'utf8'));
+const HOSTS = opt('hosts', 'native,cart').split(',');
+const state = (host, name, frames) => JSON.parse(readFileSync(`${capBase(DIR, host, name, frames)}.json`, 'utf8'));
+const picture = (host, name, frames) => readImage(`${capBase(DIR, host, name, frames)}.png`);
 
 let failed = 0;
 const fail = (m) => { failed++; console.log(`FAIL ${m}`); };
@@ -37,7 +39,7 @@ const stepAt = (clip, tick) => { const s = Math.floor((tick * 1000) / (clip.ms *
 const idle = clipOf('idle'), walk = clipOf('walk');
 for (const host of HOSTS) {
   for (const tick of [60, 120, 180, 240]) {
-    const st = state(`stage-${host}-f${tick}`);
+    const st = state(host, 'stage', tick);
     const want = [stepAt(idle, tick), stepAt(idle, tick), stepAt(idle, tick), stepAt(walk, tick)];
     const frames = [idle.first + want[0], idle.first + want[1], idle.first + want[2], walk.first + want[3]];
     const ok = JSON.stringify(st['nr.hero_step']) === JSON.stringify(want) && JSON.stringify(st['nr.hero_frame']) === JSON.stringify(frames) && st['nr.ticks'] === tick;
@@ -63,17 +65,32 @@ if (stepAt(idle, 14) !== 0 || stepAt(idle, 15) !== 1) fail('the idle boundary fo
 
 // ── sizes ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 for (const host of HOSTS) {
-  const img = readImage(join(DIR, `stage-${host}-f60.png`));
-  const px = state(`stage-${host}-f60`)['nr.px'];
+  const img = picture(host, 'stage', 60);
+  const px = state(host, 'stage', 60)['nr.px'];
   report.sizes[host] = { png: [img.w, img.h], px };
   console.log(`${host}: capture ${img.w}x${img.h}; window ${px[0]}x${px[1]} drawable ${px[2]}x${px[3]} render ${px[4]}x${px[5]} pixel_scale ${px[6]}`);
   if (px[6] !== 3 || px[2] !== 640 || px[3] !== 360) fail(`${host}: drawable ${px[2]}x${px[3]} pixel_scale ${px[6]}, expected 640x360 at 3`);
-  if (host === 'native-gl' && (img.w !== 1920 || img.h !== 1080)) fail(`native-gl capture is ${img.w}x${img.h}`);
+  if (img.w !== 1920 || img.h !== 1080) fail(`${host} capture is ${img.w}x${img.h}`);
+}
+
+// ── GL state runs and the cart against the native ──────────────────────────────────────────────────────────────────
+{
+  const caps = JSON.parse(readFileSync(join(DIR, 'captures.json'), 'utf8'));
+  report.gl = caps.gl.map((r) => ({ app: r.app, native: r['native-gl'].px, cart: r['cart-gl'].px, missing: [r['native-gl'].missing, r['cart-gl'].missing] }));
+  for (const r of caps.gl) for (const h of ['native-gl', 'cart-gl']) {
+    const px = r[h].px;
+    if (px[2] !== 640 || px[3] !== 360 || px[6] !== 3 || r[h].missing !== 0) fail(`${h} ${r.app}: drawable ${px[2]}x${px[3]} scale ${px[6]} missing ${r[h].missing}`);
+  }
+  console.log(`GL state runs: ${caps.gl.length} apps on native and cart, drawable 640x360 at scale 3, cw.three.missing 0`);
+  const stage = caps.runs.filter((r) => r.set === 'stage').map((r) => ({ frames: r.frames, ...r.hosts.cartVsNative }));
+  report.cartVsNative = stage;
+  for (const r of stage) console.log(`cart vs native, stage f${r.frames}: ${r.sameSize ? (r.identical ? 'identical pixels' : `${r.differingPixels} px differ, max channel diff ${r.maxChannelDiff}`) : 'sizes differ'}; sim state ${r.simStateEqual ? 'equal' : 'DIFFERS'}`);
+  for (const r of stage) if (!r.sameSize || !r.simStateEqual) fail(`cart vs native stage f${r.frames}: sameSize ${r.sameSize} simStateEqual ${r.simStateEqual}`);
 }
 
 // ── upscale ─────────────────────────────────────────────────────────────────────────────────────────────────────────
 {
-  const img = readImage(join(DIR, 'stage-native-gl-f60.png'));
+  const img = picture('native', 'stage', 60);
   let bad = 0;
   for (let by = 0; by < img.h / 3; by++) for (let bx = 0; bx < img.w / 3; bx++) {
     const o = (by * 3 * img.w + bx * 3) * 4;
@@ -83,8 +100,8 @@ for (const host of HOSTS) {
     }
   }
   report.upscale = { blocks: (img.w / 3) * (img.h / 3), mixedBlocks: bad };
-  console.log(`native-gl: ${bad} of ${(img.w / 3) * (img.h / 3)} 3x3 blocks are not one colour`);
-  if (bad) fail(`native-gl: ${bad} 3x3 blocks mix colours`);
+  console.log(`native: ${bad} of ${(img.w / 3) * (img.h / 3)} 3x3 blocks are not one colour`);
+  if (bad) fail(`native: ${bad} 3x3 blocks mix colours`);
 }
 
 // ── silhouettes ─────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -93,7 +110,7 @@ const cam = camera(0);
 const idleTick = 60, idleFrame = idle.first + stepAt(idle, idleTick);
 const texels = frameTexels(atlas, idleFrame);
 for (const host of HOSTS) {
-  const withHeroes = readImage(join(DIR, `stage-${host}-f60.png`)), bare = readImage(join(DIR, `bare-${host}-f60.png`));
+  const withHeroes = picture(host, 'stage', 60), bare = picture(host, 'bare', 60);
   const diff = (sx, sy) => { // scene pixel (sx, sy) differs between the two captures
     const o = (sy * 3 * withHeroes.w + sx * 3) * 4;
     return Math.abs(withHeroes.rgba[o] - bare.rgba[o]) + Math.abs(withHeroes.rgba[o + 1] - bare.rgba[o + 1]) + Math.abs(withHeroes.rgba[o + 2] - bare.rgba[o + 2]) > 6;
@@ -127,7 +144,7 @@ for (const host of HOSTS) {
 // ── distinct frames ─────────────────────────────────────────────────────────────────────────────────────────────────
 {
   const host = HOSTS[0];
-  const st = state(`stage-${host}-f60`);
+  const st = state(host, 'stage', 60);
   const frames = st['nr.hero_frame'];
   if (frames[0] === frames[3]) fail('the walking hero is on the idle frame');
   else console.log(`${host}: heroes 0-2 on atlas frame ${frames[0]}, hero 3 on frame ${frames[3]}`);

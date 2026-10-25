@@ -55,7 +55,8 @@
 #define GROUND_PX_BELOW_CENTRE 100.0f /* the centre lane's ground line, in scene pixels below the frame's centre */
 #define LANE_EPS 0.004f
 
-#define NEON_INTENSITY 26.0f
+#define NEON_INTENSITY 28.0f
+#define AMBIENT_COLOR 0x7482a8 /* the fill that lets a hero read between the neons; they still set the colour of the lit side */
 #define LIGHT_DISTANCE 14.0f
 #define LIGHT_DECAY 2.0f
 
@@ -224,18 +225,18 @@ static void build_scene(int w, int h) {
   place_camera();
 
   /* the street: drawn first and never in the depth buffer, so a hero's feet below its pivot are not cut by it */
-  t3_material *ground_mat = standard_material(0x23262e);
+  t3_material *ground_mat = standard_material(0x333847);
   ground_mat->depth_write = false;
   t3_mesh *ground = t3_mesh_new(t3_plane_geometry_new(30.0f, 9.0f, 1, 1), ground_mat);
   t3_object_set_rotation(ground, -1.5707963f, 0, 0);
   t3_object_set_position(ground, 0, 0, 0.5f);
   ground->base.render_order = -10;
   t3_object_add((t3_object *)S.scene, ground);
-  t3_mesh *wall = t3_mesh_new(t3_plane_geometry_new(30.0f, 10.0f, 1, 1), standard_material(0x1b1f35));
+  t3_mesh *wall = t3_mesh_new(t3_plane_geometry_new(30.0f, 10.0f, 1, 1), standard_material(0x2a3050));
   t3_object_set_position(wall, 0, 4.2f, -3.0f);
   t3_object_add((t3_object *)S.scene, wall);
 
-  t3_object_add((t3_object *)S.scene, t3_ambient_light_new(0x303844, 1.0f));
+  t3_object_add((t3_object *)S.scene, t3_ambient_light_new(AMBIENT_COLOR, 1.0f));
   for (int i = 0; i < LIGHTS; i++) {
     S.light[i] = t3_point_light_new(LIGHT_COLOR[i], 1.0f, LIGHT_DISTANCE, LIGHT_DECAY);
     t3_object_add((t3_object *)S.scene, S.light[i]);

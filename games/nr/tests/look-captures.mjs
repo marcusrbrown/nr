@@ -1,35 +1,41 @@
-// Captures the part of the look-gate capture set that exists at Unit 2 on every host, keeping the last frame and the
-// named debug state of every run:  <out>/<name>-<host>-f<frames>.png / .json
+// Captures the part of the look-gate capture set that exists at Unit 2: one set of pictures, taken on the native
+// binary and on the cart, both on WebGPU, plus a state-only run of every app on GL as a cheap gate.
 //
-//   CW_TEST_GPU=desktop node games/nr/tests/look-captures.mjs --out docs/evidence/combat-slice/unit2 \
-//       [--hosts native-gl,cart-gl,cart-wgpu,native-wgpu] [--only stage,solo,lit,bare]
+//   CW_TEST_GPU=desktop node games/nr/tests/look-captures.mjs --out out/unit2/caps [--publish docs/evidence/combat-slice/unit2]
 //
-// hosts:  native-gl    the native binary on GL (run-cart --host native)
-//         cart-gl      the GL cart (build/cart) in headless Chromium on GL
-//         cart-wgpu    the dual cart (build/cart-wgpu) in headless Chromium on WebGPU
-//         native-wgpu  the native binary with CW_GPU=webgpu (Dawn on Metal, SDL's offscreen driver)
-// sets:   stage  the stage: heroes on different frames (idle x3 sharing one frame, one walking), the neon lights
-//                moving; ticks 60, 120, 180, 240
-//         solo   one hero idle under only neon light 0, 1 or 2 (nr_solo_0..2); tick 60
-//         lit    the lit-side check's builds (nr_lit_h, nr_lit_v, and their flat-normal controls) at ticks 30, 60, 180, 210
-//         bare   the stage without heroes (nr_bare); tick 60 (the control for the silhouette checks)
+// The native binary (CW_GPU=webgpu, Dawn on Metal, SDL's offscreen driver) takes the set; the dual cart
+// (build/cart-wgpu) in headless Chromium on WebGPU takes the same set into <out>/cart/. The two are one content seen
+// by two hosts: for every capture <out>/captures.json records, in `hosts`, the cart's size against the native's, whether
+// the pixels are identical, how many differ and by how much at most, and whether the simulation state (tick, positions,
+// clip steps, lights, checksum) is equal. The GL runs (native binary on GL, GL cart in Chromium) write no pictures:
+// they run every app for 60 frames and record cw.three.missing, the output sizes and the state checksum under `gl`.
 //
-// Writes <out>/captures.json: every run with its host, app, frames, exit status, output size and the state's
-// cw.three.missing; and <out>/CHECKLIST.md: the owner's review checklist for these captures. Exits 1 when a run fails.
+// sets:  stage  heroes on different frames (three on one idle frame, one walking), the neon lights moving; ticks 60, 120, 180, 240
+//        solo   one hero idle under only neon light 0, 1 or 2 (nr_solo_*); tick 60
+//        lit    the lit-side check's builds (nr_lit_h, nr_lit_v and their flat-normal controls); ticks 30, 60, 180, 210
+//        bare   the stage without heroes (nr_bare), the control for the silhouette checks; tick 60
+//
+// File names: <set name>-f<tick>.png and .json, e.g. stage-f180.png, solo_1-f60.png, lit_h-f30.png.
+// --publish <dir> copies the review pictures (stage, solo) and their reduced states (nr.*, cw.three.*, cw.gpu.*) there,
+// with captures.json; the check inputs stay under --out.
+//
+// Exits 1 when a run fails, a GL run reports skipped program states, or a host differs from the native in simulation state.
 // romdev is not a host here; its capture runs in games/nr/tests/romdev-session.mjs.
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readImage } from './look-lib.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : d; };
 
-const OUT = resolve(ROOT, opt('out', 'docs/evidence/combat-slice/unit2'));
-const HOSTS = opt('hosts', 'native-gl,cart-gl,cart-wgpu,native-wgpu').split(',');
+const OUT = resolve(ROOT, opt('out', 'out/unit2/caps'));
+const PUBLISH = opt('publish') ? resolve(ROOT, opt('publish')) : null;
 const ONLY = opt('only', 'stage,solo,lit,bare').split(',');
-mkdirSync(OUT, { recursive: true });
+mkdirSync(join(OUT, 'cart'), { recursive: true });
+mkdirSync(join(OUT, 'gl'), { recursive: true });
 
 export const SETS = {
   stage: { apps: ['nr'], frames: [60, 120, 180, 240] },
@@ -37,8 +43,11 @@ export const SETS = {
   lit: { apps: ['nr_lit_h', 'nr_lit_v', 'nr_lit_h_flat', 'nr_lit_v_flat'], frames: [30, 60, 180, 210] },
   bare: { apps: ['nr_bare'], frames: [60] },
 };
+const nameOf = (app) => app.replace(/^nr_?/, '') || 'stage';
+const REVIEW = ['stage', 'solo'];
 
 const gpuEnv = () => ({ ...process.env, CW_PROJECT_ROOT: ROOT, CW_TEST_GPU: process.env.CW_TEST_GPU || 'desktop' });
+const input = 'games/nr/tests/input-idle.json';
 
 function nativeWgpu(app, base, frames) {
   const exe = join(ROOT, 'build/native/games/nr', app);
@@ -53,61 +62,86 @@ function nativeWgpu(app, base, frames) {
   return r;
 }
 
-function runHost(host, app, base, frames) {
-  const input = 'games/nr/tests/input-idle.json';
-  if (host === 'native-gl') return spawnSync('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', 'native', '--app', app, '--frames', String(frames), '--shot', `${base}.png`, '--state', `${base}.json`, '--gpu', 'gl', '--input', input], { cwd: ROOT, encoding: 'utf8', env: gpuEnv() });
-  if (host === 'cart-gl') return spawnSync('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', 'chromium', '--app', app, '--cart', join(ROOT, 'build/cart/carts', `${app}.wasc`), '--frames', String(frames), '--shot', `${base}.png`, '--state', `${base}.json`, '--gpu', 'gl', '--input', input], { cwd: ROOT, encoding: 'utf8', env: gpuEnv() });
-  if (host === 'cart-wgpu') return spawnSync('node', ['games/litspike/tests/chromium-wgpu.mjs', '--cart', join(ROOT, 'build/cart-wgpu/carts', `${app}.wasc`), '--frames', String(frames), '--shot', `${base}.png`, '--state', `${base}.json`, '--gpu', 'webgpu'], { cwd: ROOT, encoding: 'utf8', env: gpuEnv() });
-  if (host === 'native-wgpu') return nativeWgpu(app, base, frames);
-  throw new Error(`unknown host ${host}`);
-}
+const cartWgpu = (app, base, frames) => spawnSync('node', ['games/litspike/tests/chromium-wgpu.mjs', '--cart', join(ROOT, 'build/cart-wgpu/carts', `${app}.wasc`), '--frames', String(frames),
+  '--shot', `${base}.png`, '--state', `${base}.json`, '--gpu', 'webgpu'], { cwd: ROOT, encoding: 'utf8', env: gpuEnv() });
 
-function pngSize(path) {
-  const d = readFileSync(path);
-  return [d.readUInt32BE(16), d.readUInt32BE(20)];
+const glRun = (host, app, state) => spawnSync('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', host === 'native-gl' ? 'native' : 'chromium', '--app', app,
+  ...(host === 'cart-gl' ? ['--cart', join(ROOT, 'build/cart/carts', `${app}.wasc`)] : []), '--frames', '60', '--state', state, '--gpu', 'gl', '--input', input], { cwd: ROOT, encoding: 'utf8', env: gpuEnv() });
+
+const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
+const pngSize = (p) => { const d = readFileSync(p); return [d.readUInt32BE(16), d.readUInt32BE(20)]; };
+const SIM = ['nr.ticks', 'nr.hero_pos', 'nr.hero_clip', 'nr.hero_step', 'nr.hero_frame', 'nr.light_pos', 'nr.light_intensity', 'nr.cam_x', 'nr.checksum'];
+const simEqual = (a, b) => SIM.every((k) => JSON.stringify(a[k]) === JSON.stringify(b[k]));
+
+function comparePixels(a, b) {
+  const A = readImage(a), B = readImage(b);
+  if (A.w !== B.w || A.h !== B.h) return { sameSize: false };
+  let differing = 0, max = 0;
+  for (let i = 0; i < A.w * A.h; i++) {
+    let d = 0;
+    for (let c = 0; c < 4; c++) d = Math.max(d, Math.abs(A.rgba[i * 4 + c] - B.rgba[i * 4 + c]));
+    if (d) differing++;
+    if (d > max) max = d;
+  }
+  return { sameSize: true, identical: differing === 0, differingPixels: differing, maxChannelDiff: max };
 }
 
 const runs = [];
 let failed = 0;
-for (const host of HOSTS) {
-  for (const set of ONLY) {
-    for (const app of SETS[set].apps) {
-      for (const frames of SETS[set].frames) {
-        const name = `${app.replace(/^nr_?/, '') || 'stage'}`;
-        const base = join(OUT, `${name}-${host}-f${frames}`);
-        const r = runHost(host, app, base, frames);
-        const ok = r.status === 0 && existsSync(`${base}.png`) && existsSync(`${base}.json`);
-        const state = ok ? JSON.parse(readFileSync(`${base}.json`, 'utf8')) : null;
-        const row = { host, app, frames, ok, size: ok ? pngSize(`${base}.png`) : null, missing: state?.['cw.three.missing'] ?? null, ticks: state?.['nr.ticks'] ?? null,
-          file: `${name}-${host}-f${frames}.png` };
-        runs.push(row);
-        console.log(`${host.padEnd(11)} ${app.padEnd(14)} f${String(frames).padEnd(4)} ${ok ? `ok ${row.size.join('x')} missing ${row.missing} ticks ${row.ticks}` : `FAIL exit ${r.status} ${(r.stderr || r.stdout || '').slice(-300)}`}`);
-        if (!ok) failed++;
-      }
+for (const set of ONLY) {
+  for (const app of SETS[set].apps) {
+    for (const frames of SETS[set].frames) {
+      const name = nameOf(app);
+      const nat = join(OUT, `${name}-f${frames}`), cart = join(OUT, 'cart', `${name}-f${frames}`);
+      const rn = nativeWgpu(app, nat, frames), rc = cartWgpu(app, cart, frames);
+      const okN = rn.status === 0 && existsSync(`${nat}.png`) && existsSync(`${nat}.json`);
+      const okC = rc.status === 0 && existsSync(`${cart}.png`) && existsSync(`${cart}.json`);
+      const row = { set, app, frames, file: `${name}-f${frames}.png`, native: okN ? { size: pngSize(`${nat}.png`), missing: readJson(`${nat}.json`)['cw.three.missing'] } : null,
+        cart: okC ? { size: pngSize(`${cart}.png`), missing: readJson(`${cart}.json`)['cw.three.missing'] } : null };
+      if (okN && okC) {
+        row.hosts = { cartVsNative: { ...comparePixels(`${nat}.png`, `${cart}.png`), simStateEqual: simEqual(readJson(`${nat}.json`), readJson(`${cart}.json`)) } };
+        if (!row.hosts.cartVsNative.simStateEqual) failed++;
+      } else failed++;
+      runs.push(row);
+      const h = row.hosts?.cartVsNative;
+      console.log(`${app.padEnd(14)} f${String(frames).padEnd(4)} native ${okN ? `${row.native.size.join('x')} missing ${row.native.missing}` : `FAIL ${(rn.stderr || rn.stdout || '').slice(-200)}`} | cart ${okC ? `${row.cart.size.join('x')} missing ${row.cart.missing}` : `FAIL ${(rc.stderr || rc.stdout || '').slice(-200)}`}${h ? ` | cart vs native: ${h.sameSize ? (h.identical ? 'identical pixels' : `${h.differingPixels} px differ, max ${h.maxChannelDiff}`) : 'sizes differ'}, sim state ${h.simStateEqual ? 'equal' : 'DIFFERS'}` : ''}`);
     }
   }
 }
-writeFileSync(join(OUT, 'captures.json'), `${JSON.stringify({ hosts: HOSTS, sets: ONLY, runs }, null, 2)}\n`);
-writeFileSync(join(OUT, 'CHECKLIST.md'), `# Unit 2 look-gate checklist (owner review)
 
-Captures in this directory, per host (native-gl, cart-gl, cart-wgpu, native-wgpu): \`stage-<host>-f60|120|180|240.png\`
-(three heroes sharing one frame at the belt's left, centre and right, one walking a lane nearer; the three neon lights
-sweeping), \`solo_<n>-<host>-f60.png\` (the hero idle under only neon light n), \`lit_*\` (the lit-side check's builds),
-\`bare-<host>-f60.png\` (the stage without heroes).
+// ── GL: states only ─────────────────────────────────────────────────────────────────────────────────────────────────
+const gl = [];
+for (const set of ONLY) {
+  for (const app of SETS[set].apps) {
+    const row = { app };
+    for (const host of ['native-gl', 'cart-gl']) {
+      const state = join(OUT, 'gl', `${nameOf(app)}-${host}.json`);
+      const r = glRun(host, app, state);
+      if (r.status !== 0) { row[host] = { error: (r.stderr || r.stdout || '').slice(-200) }; failed++; continue; }
+      const st = readJson(state);
+      row[host] = { missing: st['cw.three.missing'], px: st['nr.px'], checksum: st['nr.checksum'], ticks: st['nr.ticks'], api: st['cw.gpu.api'] };
+      if (st['cw.three.missing'] !== 0) failed++;
+    }
+    const a = row['native-gl'], b = row['cart-gl'];
+    row.simChecksumEqual = !!a?.checksum && a.checksum === b?.checksum;
+    if (!row.simChecksumEqual) failed++;
+    gl.push(row);
+    console.log(`${app.padEnd(14)} GL  native missing ${a?.missing} cart missing ${b?.missing} checksum ${row.simChecksumEqual ? 'equal' : 'DIFFERS'}`);
+  }
+}
 
-Mark each when reviewed, and say what to tune in tools/render/profiles/hero.json or in the lights:
+const report = { hosts: { native: 'native binary on WebGPU (Dawn, Metal, offscreen)', cart: 'build/cart-wgpu in headless Chromium on WebGPU', gl: 'state-only: native binary on GL and build/cart in headless Chromium on GL' }, sets: ONLY, runs, gl };
+writeFileSync(join(OUT, 'captures.json'), `${JSON.stringify(report, null, 2)}\n`);
 
-- [ ] Hero silhouette reads at 640x360 scene resolution (head, arms, legs distinguishable)
-- [ ] Neon colour retexture: jacket, trim, gloves, boots, belt, visor read as intended
-- [ ] Hero height: ~128 scene px of a 360 px frame (the density lock)
-- [ ] Each neon light's colour reads on the hero's lit side (solo_0 magenta, solo_1 cyan, solo_2 amber)
-- [ ] Normal map reads as form shading, not noise, and the lit side follows the moving lights in stage-*-f60..240
-- [ ] Hero at the far left and far right of the belt is not visibly distorted
-- [ ] Nearest-neighbour 3x upscale looks crisp (no filtering seams) on the native captures
-- [ ] The cart captures show the same scene as native (host output sizes are in captures.json)
-- [ ] Ground and wall backdrop are placeholders; judge the hero, not the street
-
-The camera lock waits for Unit 4's occlusion and scroll captures.
-`);
-console.log(failed ? `${failed} run(s) failed` : `${runs.length} runs ok -> ${OUT}`);
+if (PUBLISH) {
+  mkdirSync(PUBLISH, { recursive: true });
+  const keep = (s) => Object.fromEntries(Object.entries(s).filter(([k]) => /^(nr\.|cw\.three\.|cw\.gpu\.)/.test(k)));
+  for (const r of runs.filter((x) => REVIEW.includes(x.set))) {
+    const base = r.file.replace(/\.png$/, '');
+    copyFileSync(join(OUT, r.file), join(PUBLISH, r.file));
+    writeFileSync(join(PUBLISH, `${base}.json`), `${JSON.stringify(keep(readJson(join(OUT, `${base}.json`))), null, 1)}\n`);
+  }
+  copyFileSync(join(OUT, 'captures.json'), join(PUBLISH, 'captures.json'));
+}
+console.log(failed ? `${failed} problem(s)` : `${runs.length} capture runs on 2 hosts and ${gl.length} GL state runs ok -> ${OUT}`);
 process.exit(failed ? 1 : 0);

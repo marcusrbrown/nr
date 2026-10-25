@@ -1,7 +1,7 @@
 {
   "frames": [
     {
-      "host": "native-gl",
+      "host": "native",
       "tick": 60,
       "step": [
         4,
@@ -24,7 +24,7 @@
       "ok": true
     },
     {
-      "host": "native-gl",
+      "host": "native",
       "tick": 120,
       "step": [
         0,
@@ -47,7 +47,7 @@
       "ok": true
     },
     {
-      "host": "native-gl",
+      "host": "native",
       "tick": 180,
       "step": [
         4,
@@ -70,7 +70,7 @@
       "ok": true
     },
     {
-      "host": "native-gl",
+      "host": "native",
       "tick": 240,
       "step": [
         0,
@@ -93,7 +93,7 @@
       "ok": true
     },
     {
-      "host": "cart-gl",
+      "host": "cart",
       "tick": 60,
       "step": [
         4,
@@ -116,7 +116,7 @@
       "ok": true
     },
     {
-      "host": "cart-gl",
+      "host": "cart",
       "tick": 120,
       "step": [
         0,
@@ -139,7 +139,7 @@
       "ok": true
     },
     {
-      "host": "cart-gl",
+      "host": "cart",
       "tick": 180,
       "step": [
         4,
@@ -162,191 +162,7 @@
       "ok": true
     },
     {
-      "host": "cart-gl",
-      "tick": 240,
-      "step": [
-        0,
-        0,
-        0,
-        1
-      ],
-      "frame": [
-        0,
-        0,
-        0,
-        9
-      ],
-      "want": [
-        0,
-        0,
-        0,
-        1
-      ],
-      "ok": true
-    },
-    {
-      "host": "cart-wgpu",
-      "tick": 60,
-      "step": [
-        4,
-        4,
-        4,
-        0
-      ],
-      "frame": [
-        4,
-        4,
-        4,
-        8
-      ],
-      "want": [
-        4,
-        4,
-        4,
-        0
-      ],
-      "ok": true
-    },
-    {
-      "host": "cart-wgpu",
-      "tick": 120,
-      "step": [
-        0,
-        0,
-        0,
-        0
-      ],
-      "frame": [
-        0,
-        0,
-        0,
-        8
-      ],
-      "want": [
-        0,
-        0,
-        0,
-        0
-      ],
-      "ok": true
-    },
-    {
-      "host": "cart-wgpu",
-      "tick": 180,
-      "step": [
-        4,
-        4,
-        4,
-        1
-      ],
-      "frame": [
-        4,
-        4,
-        4,
-        9
-      ],
-      "want": [
-        4,
-        4,
-        4,
-        1
-      ],
-      "ok": true
-    },
-    {
-      "host": "cart-wgpu",
-      "tick": 240,
-      "step": [
-        0,
-        0,
-        0,
-        1
-      ],
-      "frame": [
-        0,
-        0,
-        0,
-        9
-      ],
-      "want": [
-        0,
-        0,
-        0,
-        1
-      ],
-      "ok": true
-    },
-    {
-      "host": "native-wgpu",
-      "tick": 60,
-      "step": [
-        4,
-        4,
-        4,
-        0
-      ],
-      "frame": [
-        4,
-        4,
-        4,
-        8
-      ],
-      "want": [
-        4,
-        4,
-        4,
-        0
-      ],
-      "ok": true
-    },
-    {
-      "host": "native-wgpu",
-      "tick": 120,
-      "step": [
-        0,
-        0,
-        0,
-        0
-      ],
-      "frame": [
-        0,
-        0,
-        0,
-        8
-      ],
-      "want": [
-        0,
-        0,
-        0,
-        0
-      ],
-      "ok": true
-    },
-    {
-      "host": "native-wgpu",
-      "tick": 180,
-      "step": [
-        4,
-        4,
-        4,
-        1
-      ],
-      "frame": [
-        4,
-        4,
-        4,
-        9
-      ],
-      "want": [
-        4,
-        4,
-        4,
-        1
-      ],
-      "ok": true
-    },
-    {
-      "host": "native-wgpu",
+      "host": "cart",
       "tick": 240,
       "step": [
         0,
@@ -425,7 +241,7 @@
     }
   ],
   "sizes": {
-    "native-gl": {
+    "native": {
       "png": [
         1920,
         1080
@@ -441,39 +257,7 @@
         0
       ]
     },
-    "cart-gl": {
-      "png": [
-        1920,
-        1080
-      ],
-      "px": [
-        1920,
-        1080,
-        640,
-        360,
-        640,
-        360,
-        3,
-        0
-      ]
-    },
-    "cart-wgpu": {
-      "png": [
-        1920,
-        1080
-      ],
-      "px": [
-        1920,
-        1080,
-        640,
-        360,
-        640,
-        360,
-        3,
-        0
-      ]
-    },
-    "native-wgpu": {
+    "cart": {
       "png": [
         1920,
         1080
@@ -491,14 +275,14 @@
     }
   },
   "silhouette": {
-    "native-gl": [
+    "native": [
       {
         "hero": 0,
         "x": -3.9,
         "width": 50,
         "left": 50,
         "right": 99,
-        "iou": 0.9884046381447421
+        "iou": 0.9986399183951037
       },
       {
         "hero": 1,
@@ -506,7 +290,7 @@
         "width": 50,
         "left": 300,
         "right": 349,
-        "iou": 0.9948020791683326
+        "iou": 1
       },
       {
         "hero": 2,
@@ -514,17 +298,17 @@
         "width": 50,
         "left": 550,
         "right": 599,
-        "iou": 0.9900039984006398
+        "iou": 1
       }
     ],
-    "cart-gl": [
+    "cart": [
       {
         "hero": 0,
         "x": -3.9,
         "width": 50,
         "left": 50,
         "right": 99,
-        "iou": 0.9884046381447421
+        "iou": 0.9986399183951037
       },
       {
         "hero": 1,
@@ -532,7 +316,7 @@
         "width": 50,
         "left": 300,
         "right": 349,
-        "iou": 0.9948020791683326
+        "iou": 1
       },
       {
         "hero": 2,
@@ -540,64 +324,291 @@
         "width": 50,
         "left": 550,
         "right": 599,
-        "iou": 0.9900039984006398
-      }
-    ],
-    "cart-wgpu": [
-      {
-        "hero": 0,
-        "x": -3.9,
-        "width": 50,
-        "left": 50,
-        "right": 99,
-        "iou": 0.9884046381447421
-      },
-      {
-        "hero": 1,
-        "x": 0,
-        "width": 50,
-        "left": 300,
-        "right": 349,
-        "iou": 0.9948020791683326
-      },
-      {
-        "hero": 2,
-        "x": 3.9,
-        "width": 50,
-        "left": 550,
-        "right": 599,
-        "iou": 0.9900039984006398
-      }
-    ],
-    "native-wgpu": [
-      {
-        "hero": 0,
-        "x": -3.9,
-        "width": 50,
-        "left": 50,
-        "right": 99,
-        "iou": 0.9884046381447421
-      },
-      {
-        "hero": 1,
-        "x": 0,
-        "width": 50,
-        "left": 300,
-        "right": 349,
-        "iou": 0.9948020791683326
-      },
-      {
-        "hero": 2,
-        "x": 3.9,
-        "width": 50,
-        "left": 550,
-        "right": 599,
-        "iou": 0.9900039984006398
+        "iou": 1
       }
     ]
   },
   "upscale": {
     "blocks": 230400,
     "mixedBlocks": 0
-  }
+  },
+  "gl": [
+    {
+      "app": "nr",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_solo_0",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_solo_1",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_solo_2",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_lit_h",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_lit_v",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_lit_h_flat",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_lit_v_flat",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    },
+    {
+      "app": "nr_bare",
+      "native": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "cart": [
+        1920,
+        1080,
+        640,
+        360,
+        640,
+        360,
+        3,
+        0
+      ],
+      "missing": [
+        0,
+        0
+      ]
+    }
+  ],
+  "cartVsNative": [
+    {
+      "frames": 60,
+      "sameSize": true,
+      "identical": true,
+      "differingPixels": 0,
+      "maxChannelDiff": 0,
+      "simStateEqual": true
+    },
+    {
+      "frames": 120,
+      "sameSize": true,
+      "identical": true,
+      "differingPixels": 0,
+      "maxChannelDiff": 0,
+      "simStateEqual": true
+    },
+    {
+      "frames": 180,
+      "sameSize": true,
+      "identical": true,
+      "differingPixels": 0,
+      "maxChannelDiff": 0,
+      "simStateEqual": true
+    },
+    {
+      "frames": 240,
+      "sameSize": true,
+      "identical": true,
+      "differingPixels": 0,
+      "maxChannelDiff": 0,
+      "simStateEqual": true
+    }
+  ]
 }
