@@ -338,7 +338,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** `sim-check.mjs` green; determinism control fails as required; both players' actions visible in state.
 
-- [ ] **Unit 6: Enemies, waves, lives, targeting**
+- [x] **Unit 6: Enemies, waves, lives, targeting** (15908cc..9e283bc; players decided at tick 30, not tick 0; heavy cell 224)
 
 **Goal:** Grunt and heavy behaviour, spawn schedule for four waves, shared lives with respawn, alternate target assignment.
 
