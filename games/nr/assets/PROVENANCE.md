@@ -47,16 +47,17 @@ Blender 4.5.15 (build `5afeabba6097`, `scripts/deps.lock`), installed with `INST
 
 | Input | sha256 |
 | --- | --- |
-| `tools/render/recipes/heavy.json` | `484b2b6a3743ded1685ec88c86797c7506cf6edd6cee402b87600911d4a670b5` |
-| `tools/render/profiles/heavy.json` | `33d4efe173510cfa15412558e76ce35ab2d772aee66412210c3371bebb0b5f3c` |
-| `atlases/heavy.png` | `ec22ce77d35f35b79ab5cf20fe3c1db892a6581fe23d83f60f6d78cc27fc6b41` |
-| `atlases/heavy-n.png` | `97794c88cd036028ac995a749ea334f402e61670f030bc80fd3858ff3eccb640` |
-| `atlases/heavy.json` | `f08189c9e4110f159183b397054aff9204bd4e739a0d53dd8c1222885b20ad5f` |
+| `tools/render/recipes/heavy.json` | `ba3a1029e5f208c3aa3c6270c4fe68e3f001e176d0da3530b29638fbbe1da285` |
+| `tools/render/profiles/heavy.json` | `91b2ee0c040d0260e78fb3007034cacccea35a88ca5686bf8cd4daa62bce7567` |
+| `atlases/heavy.png` | `d5ef71aa1684da053c2a8b731aa06752fa0469b1e3ebaed027930383cbabc103` |
+| `atlases/heavy-n.png` | `76890c40d3e8cf2f1922457b88790885671fe172c2098a84202ada5505f8d405` |
+| `atlases/heavy.json` | `59640cb614df5aaad60ffbe15cdb8522c9287a049d35f505b79c2da4c66dc7bb` |
 
 Clips (27 frames, one 2016x672 page per sheet, 224x224 cells at the hero's 64 pixels per unit): idle (`Idle_FoldArms_Loop`),
 walk (`Walk_Loop`), attack (`Melee_Hook` then `Melee_Hook_Rec`), hurt (`Hit_Chest`) and stagger (`Hit_Head`). The body is
 the kit's Superhero mesh widened by the profile (`widthScale` 1.55, `depthScale` 1.3), with a helmet, chest plate,
-pauldrons, bracers, knee plates and back pack in a dark palette with a red-orange accent, and no hair mesh. The cell is wider
+pauldrons, bracers, knee plates and back pack in a steel palette (plates, helmet and boots set well above the street's value
+under the darkest neon, the armour lighter than the suit so its boundaries show) with a red-orange accent, and no hair mesh. The cell is wider
 than the hero's because the hook reaches 190 texels from its left edge.
 
 Actions used by the enemies, by file: `UAL1_Standard.glb` for `Idle_Loop`, `Walk_Loop`, `Punch_Jab`, `Hit_Chest` and
