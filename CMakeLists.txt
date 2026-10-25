@@ -5,3 +5,4 @@ find_package(cartwheel REQUIRED CONFIG)
 
 add_subdirectory(games/spike)
 add_subdirectory(games/litspike)
+add_subdirectory(games/nr)

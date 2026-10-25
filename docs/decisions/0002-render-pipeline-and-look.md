@@ -54,6 +54,13 @@ Measured cost, Cycles CPU, 1 sample: the 4-frame placeholder (192x256 supersampl
 - Lighting: four point lights always present (three arena neons and one flash slot, intensity 0 when idle), so one program state (`l0400`) covers the game; Unit 2 surveys it.
 - Atlas budget, frame counts per clip and the per-enemy allowance: set in Unit 3 from a measured hero set.
 
+### Measured in Unit 2 (still proposed; locks on owner approval)
+
+- `pixel_scale` is honoured by the 3D window renderer. `cw_drawable_size()` returns the scene target (640x360) under `.width 1920, .height 1080, .pixel_scale 3`, `cw_render3d_window_renderer` is built at that size, and the engine scales the scene up 3x with nearest filtering. No render-target blit is needed. Measured on all four hosts (`nr.px` in each capture's state, `docs/evidence/combat-slice/unit2/captures.json`): native GL, GL cart in headless Chromium, dual cart on WebGPU in headless Chromium, native WebGPU all report window 1920x1080, drawable 640x360, render 640x360, scale 3, and every capture is 1920x1080. `games/nr/tests/stage-check.mjs` finds no 3x3 block of the native capture that is not one colour. The engine does the upscale on every host measured, so no cart host presents a low-resolution frame for the host to scale.
+- Camera as built in `games/nr/main.c`: perspective, 18 degrees vertical FOV, pitched down 20 degrees (equal to the sprite render camera's elevation), placed so one world unit is 64 scene pixels at the centre lane and the centre lane's ground line is 100 scene pixels below the frame centre. A hero plane is rotated by the camera pitch, so it faces the camera and its plane-space normals are valid. The 128 px idle figure measures 128 +- 3 px in the atlas (`tools/render/tests/hero-profile.mjs`) and the projected atlas alpha overlaps the rendered silhouette at IoU 0.988 to 0.995 on all four hosts.
+- Per-frame plane geometry (UVs on the frame's rect, one material per character) puts heroes on different frames in one scene; heroes on a shared frame batch into the `instbig` row. Both `standard+map+nearest+nmap+atest+l0400` and its `instbig` row are reached by the stage; the row-removal controls (`games/nr/tests/programs-controls.mjs`) show each removal gives `cw.three.missing == 1` naming exactly that state.
+- Lit side: on a non-instanced hero the light-induced swing of the lit-side luminance difference is 3.4x to 5.1x the flat-normal control's, on both the horizontal and the vertical sweep, on all four hosts (`games/nr/tests/lit-side-check.mjs`).
+
 ## Consequences
 
 - Art is reproducible from a recipe and a pinned Blender; a Blender or kit change is a lock change and a re-render with hash comparison.

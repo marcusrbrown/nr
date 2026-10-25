@@ -1,0 +1,456 @@
+{
+  "schema": 1,
+  "name": "hero",
+  "cell": {
+    "width": 160,
+    "height": 160
+  },
+  "supersample": 4,
+  "blender": {
+    "buildHash": "5afeabba6097",
+    "version": "4.5.15"
+  },
+  "recipe": {
+    "sha256": "6ad47b52556f31a241dda759e00ee9e622e74a0e4d9319a32984ace65391fedf"
+  },
+  "profile": {
+    "id": "hero",
+    "sha256": "6a4f3428371c2b19dbc9033b828c261cbb5d8afa75ce66932bfb088a6bc5b49f",
+    "kitFiles": [
+      {
+        "kit": "universal-animation-library",
+        "path": "UAL1_Standard.glb",
+        "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997"
+      },
+      {
+        "kit": "universal-base-characters",
+        "path": "Superhero_Male_FullBody.bin",
+        "sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f"
+      },
+      {
+        "kit": "universal-base-characters",
+        "path": "Superhero_Male_FullBody.gltf",
+        "sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4"
+      },
+      {
+        "kit": "universal-base-characters",
+        "path": "Hair_SimpleParted.bin",
+        "sha256": "ecd7c81959f3985d6254458a440daaaa18a8bfbb1dbe111c68a04a72374d54db"
+      },
+      {
+        "kit": "universal-base-characters",
+        "path": "Hair_SimpleParted.gltf",
+        "sha256": "fe0f354d7f95d83d38e15c60794dcc063fa4d60550706f3d7ba51491cdc07c56"
+      }
+    ]
+  },
+  "inputs": [
+    {
+      "index": 0,
+      "albedoSha256": "39aa0308d38ba450082b4db1926a2b38fe3969927096b6340aa929607827dd7d",
+      "normalSha256": "2be4676df2c32d00ac1e611292627397ba96e8974f8722250ef3618851526c31"
+    },
+    {
+      "index": 1,
+      "albedoSha256": "cf1f37121a15e489af1442b0e14a0e31d27aaad331932e828c663cece0b7e2c1",
+      "normalSha256": "14eb9441f1c715a23a3bda7c1692d9ecf18cc7d2e6214540eda0e0aab58d8e59"
+    },
+    {
+      "index": 2,
+      "albedoSha256": "06d34a94be5190f48009b87f127bdd55e104352209479fdf87ef4fd5b50232e7",
+      "normalSha256": "2eacaafde0355f4f705ff10cd6948b743cf58333f1000209029c4399e9da0453"
+    },
+    {
+      "index": 3,
+      "albedoSha256": "1ac399f66239593fc60bd60d13b36bd0e0174f3a198464cabb8f5988c18fc18a",
+      "normalSha256": "136a53b52b269a2efa8f76e6f8b596c07f99bffa7f911a3150e94003427c294e"
+    },
+    {
+      "index": 4,
+      "albedoSha256": "5403fed2242429be8902c2e0bb2a0b5ce7bc2a5c171ad57a4c1fcfee508e90cf",
+      "normalSha256": "e006bc5359935fcc3bbbe2de873881405d7ce8c356c676cadea0992c40c90221"
+    },
+    {
+      "index": 5,
+      "albedoSha256": "5df54d26d16549b1f782008b42235c6ff1bb2595cdcaff9d92eab33f5ee35387",
+      "normalSha256": "433193f400eff1a8931837b3dc09b2b2f9c3600b678783b3444469f28109270b"
+    },
+    {
+      "index": 6,
+      "albedoSha256": "a329cd92974c2d965793a5cfdaaf7092ca06088d0912568231a188da7d6d6ffe",
+      "normalSha256": "7f20a0db782ad4cd118980cf0f97360bee261a6fddca05adca4a3bc70ebf1607"
+    },
+    {
+      "index": 7,
+      "albedoSha256": "344691abea9b1fc43dbf100634cf7c86280253c615b288517c46a93f5b0af5d4",
+      "normalSha256": "80588a46b1e453c529834531a35ed92bdad334edd16a0e471f1efa94acfef947"
+    },
+    {
+      "index": 8,
+      "albedoSha256": "8ba2d3d1ef8224f0f56b86de38fe7dbede3935c49da473743c652bfc6f2eddd2",
+      "normalSha256": "efac927b7f84fc83059e00fc11af87ad207205eab02daf0d373006d5432a67e2"
+    },
+    {
+      "index": 9,
+      "albedoSha256": "51981aaa13549d651d2e3e5e497f0c93302fd24cc3fa9dfb2eaa3115887d68d8",
+      "normalSha256": "64cefc44ca4201c5135bb9e0112090e546fba065b6481d9eca50e986ebe14c76"
+    },
+    {
+      "index": 10,
+      "albedoSha256": "987b39dc5894d767927b782ab368a8f459f7dc9b85a908ea98b216d64eca276d",
+      "normalSha256": "acb119c12f616bd151b8d32a3760e8937dd4c8eb606b978b65fec3909d634990"
+    },
+    {
+      "index": 11,
+      "albedoSha256": "ddab5a9afddf9fee5a4a09269c1a57c9cc92711ba931f0edb155b5d38c7e59b1",
+      "normalSha256": "08b460108b207ff630c1bfdfc81e0f43b575731e73f916abe3406c3ac11e3512"
+    },
+    {
+      "index": 12,
+      "albedoSha256": "44f7c6be79760cbac060c165343908d9a3deaebb04e1eb34713d8527e035faf3",
+      "normalSha256": "78feb5d4ec9314ebd284c85132d1f5ba6db37e7d4a6f1919f4207a0b1995e8db"
+    },
+    {
+      "index": 13,
+      "albedoSha256": "cb0d103f233b55314103826e2e06066ac061f7b9c7abbad533de97e7cb43e52a",
+      "normalSha256": "1bd214fcf6f8e9e19093bb7672a182e19c859e6a12549e2be62c995b87bb46ed"
+    },
+    {
+      "index": 14,
+      "albedoSha256": "60fca6e95ecc6bdfd3a9623dc62687ae723b7fe90f60c279ca55f40aa71eb5a2",
+      "normalSha256": "eeb2acb2936a30ae9f911df199a4b535da6f83f0ab7a32089b9c57536c5f744e"
+    },
+    {
+      "index": 15,
+      "albedoSha256": "988222f34474ed579ca0d6fb4da8302fdf29f4c6c807816b45b83bacb8a8bfb4",
+      "normalSha256": "f9e7888fadb76b588189fdd18cd9cbe8bbb4fc8c6bc5ea246c23f92197958793"
+    }
+  ],
+  "pages": [
+    {
+      "index": 0,
+      "width": 1920,
+      "height": 320,
+      "colour": {
+        "file": "hero.png",
+        "sha256": "9d708e617c69e0e3219752472fd2f9ac59fce5ab414c43bea2294dd259974391",
+        "pixelsSha256": "fcf9cf9dc81d9714f154b906a4741d0c47b3db2dab3c1a242d2b7bba5821f250"
+      },
+      "normal": {
+        "file": "hero-n.png",
+        "sha256": "99ec9a0b20f5e6e6fc8a8f38bf6eef561ad8d4289d747ee6366af59da61090e2",
+        "pixelsSha256": "6910b11fcade93c87fddbb0d409e6cb12508e0843c81a30c92d06996e33a33f4"
+      }
+    }
+  ],
+  "frames": [
+    {
+      "index": 0,
+      "clip": "idle",
+      "clipFrame": 0,
+      "page": 0,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 1,
+      "clip": "idle",
+      "clipFrame": 1,
+      "page": 0,
+      "rect": {
+        "x": 160,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 2,
+      "clip": "idle",
+      "clipFrame": 2,
+      "page": 0,
+      "rect": {
+        "x": 320,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 3,
+      "clip": "idle",
+      "clipFrame": 3,
+      "page": 0,
+      "rect": {
+        "x": 480,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 4,
+      "clip": "idle",
+      "clipFrame": 4,
+      "page": 0,
+      "rect": {
+        "x": 640,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 5,
+      "clip": "idle",
+      "clipFrame": 5,
+      "page": 0,
+      "rect": {
+        "x": 800,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 6,
+      "clip": "idle",
+      "clipFrame": 6,
+      "page": 0,
+      "rect": {
+        "x": 960,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 7,
+      "clip": "idle",
+      "clipFrame": 7,
+      "page": 0,
+      "rect": {
+        "x": 1120,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 250,
+      "empty": false
+    },
+    {
+      "index": 8,
+      "clip": "walk",
+      "clipFrame": 0,
+      "page": 0,
+      "rect": {
+        "x": 1280,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    },
+    {
+      "index": 9,
+      "clip": "walk",
+      "clipFrame": 1,
+      "page": 0,
+      "rect": {
+        "x": 1440,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    },
+    {
+      "index": 10,
+      "clip": "walk",
+      "clipFrame": 2,
+      "page": 0,
+      "rect": {
+        "x": 1600,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    },
+    {
+      "index": 11,
+      "clip": "walk",
+      "clipFrame": 3,
+      "page": 0,
+      "rect": {
+        "x": 1760,
+        "y": 0,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    },
+    {
+      "index": 12,
+      "clip": "walk",
+      "clipFrame": 4,
+      "page": 0,
+      "rect": {
+        "x": 0,
+        "y": 160,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    },
+    {
+      "index": 13,
+      "clip": "walk",
+      "clipFrame": 5,
+      "page": 0,
+      "rect": {
+        "x": 160,
+        "y": 160,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    },
+    {
+      "index": 14,
+      "clip": "walk",
+      "clipFrame": 6,
+      "page": 0,
+      "rect": {
+        "x": 320,
+        "y": 160,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    },
+    {
+      "index": 15,
+      "clip": "walk",
+      "clipFrame": 7,
+      "page": 0,
+      "rect": {
+        "x": 480,
+        "y": 160,
+        "w": 160,
+        "h": 160
+      },
+      "pivot": {
+        "x": 80,
+        "y": 144
+      },
+      "ms": 120,
+      "empty": false
+    }
+  ],
+  "clips": [
+    {
+      "name": "idle",
+      "slot": "idle",
+      "first": 0,
+      "count": 8,
+      "facing": "east",
+      "ms": 250,
+      "loop": true
+    },
+    {
+      "name": "walk",
+      "slot": "walk",
+      "first": 8,
+      "count": 8,
+      "facing": "east",
+      "ms": 120,
+      "loop": true
+    }
+  ]
+}

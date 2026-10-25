@@ -1,0 +1,4 @@
+# r186 program states nr draws (cmake/programs.cmake, tools/programs.mjs)
+standard+l0400
+standard+map+nearest+instbig+nmap+atest+l0400
+standard+map+nearest+nmap+atest+l0400

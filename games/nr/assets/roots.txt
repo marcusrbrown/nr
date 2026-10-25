@@ -1,0 +1,5 @@
+# What nr ships (cwpack packs only what these reach). Atlases are kept as they are (texture.format defaults to keep):
+# the sheets and manifests are the output of tools/render.
+atlases/hero.png
+atlases/hero-n.png
+atlases/hero.json
