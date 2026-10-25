@@ -13,7 +13,7 @@
     {
       "name": "manifest: the normal sheet is the hero's (pixel hash)",
       "ok": true,
-      "detail": "52e7ff4d596ffb8b"
+      "detail": "26374ad5235bc2cb"
     },
     {
       "name": "colour sheets: same size",
@@ -28,7 +28,7 @@
     {
       "name": "colour sheets: every differing texel is player 1's accent in hero.png and player 2's in hero-p2.png",
       "ok": true,
-      "detail": "31343 opaque texels and 17388 dilated transparent ones, 1 colour pair(s): 255,43,214>31,232,255 x48731; wanted 255,43,214>31,232,255"
+      "detail": "31291 opaque texels and 16765 dilated transparent ones, 1 colour pair(s): 255,43,214>31,232,255 x48056; wanted 255,43,214>31,232,255"
     },
     {
       "name": "the accents are the HUD's: PINK (player 1) and CYAN (player 2) of ui.c",
@@ -38,7 +38,7 @@
     {
       "name": "the accent covers a visible share of the figure",
       "ok": true,
-      "detail": "10.67% of the opaque texels of the sheet"
+      "detail": "10.79% of the opaque texels of the sheet"
     },
     {
       "name": "budget: the three atlases and the variant fit 64 MiB decoded",
@@ -49,7 +49,7 @@
   "pairs": [
     [
       "255,43,214>31,232,255",
-      48731
+      48056
     ]
   ],
   "budgetMiB": 45.4921875

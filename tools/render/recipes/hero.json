@@ -15,7 +15,7 @@
   },
   "render": { "seed": 1, "samples": 1 },
   "atlas": { "pageSize": 2048, "dilate": 2 },
-  "model": { "profile": "../profiles/hero.json", "profileSha256": "ed1477fa48405d010845aa0dcff3d903fe9713f1acd22d6b1b6390380ef87879" },
+  "model": { "profile": "../profiles/hero.json", "profileSha256": "4f1e9cb5f79d6d3ffa2e355696bb73116abc50ca01e6d30de4ee128a0193c476" },
   "slots": [
     { "id": "idle", "clip": "idle", "frames": 8, "facing": "east", "ms": 250, "loop": true },
     { "id": "walk", "clip": "walk", "frames": 8, "facing": "east", "ms": 120, "loop": true },

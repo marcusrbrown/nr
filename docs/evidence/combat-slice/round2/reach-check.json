@@ -126,10 +126,10 @@
       },
       {
         "clip": "special_knockback",
-        "right": 1.015625,
-        "rightFrame": 6,
-        "left": 0.421875,
-        "leftFrame": 6
+        "right": 0.765625,
+        "rightFrame": 3,
+        "left": 0.328125,
+        "leftFrame": 7
       },
       {
         "clip": "special_dash",

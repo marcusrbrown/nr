@@ -662,9 +662,10 @@ static void layout_dummies(void) {
 
 /* The look scene (NR_LOOK): real grunts and a heavy that stand still, facing the heroes (who come from the left). A grunt
  * keeps its two hit points unless the scene gives it more. Station 1 is the dash special's lane (two grunts and the heavy
- * in a file from the heroes' start); station 2 a crowd round one point for the radius special; station 3 a grunt a short
- * step from the pillar, which stops its knockback so a whole combo stays in contact (it has six hit points: the combo's
- * three hits take four). */
+ * in a file from the heroes' start); station 2 is the radius special where the dash ends: three grunts and the heavy ahead
+ * of it, and one grunt behind it each side of the dash's lane (a larger lane than the dash's box reaches), so the special
+ * reaches enemies on every side; station 3 is a grunt a short step from the pillar, which stops its knockback so a whole
+ * combo stays in contact (it has six hit points: the combo's three hits take four). */
 #if NR_LOOK
 static void look_enemy(int32_t kind, float x, float lane, int32_t hp) {
   int id = nr_sim_spawn_enemy(&S.sim, kind, x, lane);
@@ -681,6 +682,8 @@ static void layout_look(void) {
   look_enemy(NR_KIND_GRUNT, 6.2f, 0.1f, 0);
   look_enemy(NR_KIND_GRUNT, 5.6f, -0.3f, 0);
   look_enemy(NR_KIND_GRUNT, 10.3f, 0.45f, 6);
+  look_enemy(NR_KIND_GRUNT, 2.6f, 1.55f, 0);
+  look_enemy(NR_KIND_GRUNT, 3.3f, -0.9f, 0);
 }
 #endif
 

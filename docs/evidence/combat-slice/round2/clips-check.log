@@ -1,4 +1,4 @@
-PASS provenance: manifest names this recipe and profile: recipe 365e95c19299, profile ed1477fa4840
+PASS provenance: manifest names this recipe and profile: recipe eef2ab8a6c28, profile 4f1e9cb5f79d
 PASS provenance: sheet hashes: 2 sheet(s) match the manifest
 PASS clips: the 14 ready clips are in the atlas in recipe order, the gaps are not: 14 clips; placeholders: jumpkick, grab
 PASS clips: manifest clips match the recipe slots
@@ -12,4 +12,4 @@ PASS budget: the committed hero set and the planned three-character set fit: her
 PASS contact sheets written: contact.png 5824x8124: 14 rows, 4x nearest, cell crop (11, 16) 149x144, pivot in magenta
 
 ok: 12 of 12 checks
-artifacts: /Users/mrbrown/src/github.com/marcusrbrown/nr/out/round2/clips-check
+artifacts: /Users/mrbrown/src/github.com/marcusrbrown/nr/out/round2/clips3

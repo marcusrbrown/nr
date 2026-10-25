@@ -615,19 +615,9 @@
       "loop": false,
       "segments": [
         {
-          "action": "Spell_Simple_Enter",
-          "start": 0.0,
-          "end": 12.8
-        },
-        {
-          "action": "Spell_Simple_Shoot",
-          "start": 0.0,
-          "end": 12.0
-        },
-        {
-          "action": "Spell_Simple_Exit",
-          "start": 0.0,
-          "end": 10.4
+          "action": "NinjaJump_Land",
+          "start": 2.0,
+          "end": 24.0
         }
       ],
       "proposal": {

@@ -16,7 +16,7 @@ hero
   knockdown          right 1.14 (frame 7)  left 1.00 (frame 6)
   getup              right 1.16 (frame 0)  left 1.02 (frame 0)
   dash               right 0.81 (frame 5)  left 0.83 (frame 2)
-  special_knockback  right 1.02 (frame 6)  left 0.42 (frame 6)
+  special_knockback  right 0.77 (frame 3)  left 0.33 (frame 7)
   special_dash       right 1.19 (frame 2)  left 0.95 (frame 0)
 grunt
   idle               right 0.38 (frame 1)  left 0.30 (frame 0)

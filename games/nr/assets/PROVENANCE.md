@@ -8,11 +8,11 @@ The manifest `hero.json` records the recipe, profile and per-frame payload hashe
 
 | Input | sha256 |
 | --- | --- |
-| `tools/render/recipes/hero.json` | `365e95c19299c76716fde13e3fc7af776530cf81d3ce86f2da9639c89083baa3` |
-| `tools/render/profiles/hero.json` | `ed1477fa48405d010845aa0dcff3d903fe9713f1acd22d6b1b6390380ef87879` |
-| `atlases/hero.png` | `1dbb9fbc96c22eff84dce0ddbb35dbb93930bb16f3214ea1768201b21c4be934` |
-| `atlases/hero-n.png` | `31a68391ac36877f5d5e66e611b9fd41a0aaf6fadeca668603daac4232b722f6` |
-| `atlases/hero.json` | `903ddeee52d0c38063e4e3420be7310a0e43635892121351e92d67683ff5b062` |
+| `tools/render/recipes/hero.json` | `eef2ab8a6c28acb6d410208887fa24ae4269937bc49609b6557ff41bb3c15c10` |
+| `tools/render/profiles/hero.json` | `4f1e9cb5f79d6d3ffa2e355696bb73116abc50ca01e6d30de4ee128a0193c476` |
+| `atlases/hero.png` | `cdabeb058e51a7cd272a5a0e353a9ff52a6d88838e6fa57cb058c18d08c070a0` |
+| `atlases/hero-n.png` | `00534efd682bfe77f8cd4e4b8db29300f1a423690e3a5dd610b3683ec83e144f` |
+| `atlases/hero.json` | `0aa259258ac1c1a4b7a215878e79d7f8f926878ec5d30a6c5c818939305fa3c5` |
 
 The atlas holds 14 clips and 96 frames on one 1920x1280 page per sheet: idle, walk, run, hit1, hit2, hit3, jump, throw,
 hurt, knockdown, getup, dash, special_knockback and special_dash. Rendered twice from this recipe and profile, the
@@ -31,9 +31,9 @@ colour sheet over `hero-n.png` and the normal sheet of this render is not kept. 
 
 | Input | sha256 |
 | --- | --- |
-| `tools/render/recipes/hero-p2.json` | `910aa3f5ecef2c8514105e54dec25e53a4c0db5a9d40a87e07478d9b075dbf9f` |
-| `atlases/hero-p2.png` | `50d718a25d757971ee9f13451d8c1f6e909bac05a4f2a9b212585e36a16aebbe` |
-| `atlases/hero-p2.json` | `e1c92e9d5468d65dfeccbed452afabdac64c1378be58ec18bc0c20c49ffb570f` |
+| `tools/render/recipes/hero-p2.json` | `b6feffebbcff9c088172eb235b167d7554fa61e1b7509fd0c06326404507f8e5` |
+| `atlases/hero-p2.png` | `83f217e742f77f185f6e64086e799c60af2406157b7a0d73349b1ee82afeda61` |
+| `atlases/hero-p2.json` | `6d36e4358f92bec3496a47bfc066ae648112e63d5b5e4aa49d368e03da5b9a78` |
 
 ## atlases/grunt.png, grunt-n.png, grunt.json
 
@@ -100,8 +100,8 @@ and any file whose sha256 differs from `tools/render/kits.json`. The rendered sp
 
 Actions used, by file: `UAL1_Standard.glb` for idle, walk, run, hit1, hit2, jump, hurt and dash (`Idle_Loop`,
 `Walk_Loop`, `Jog_Fwd_Loop`, `Punch_Jab`, `Punch_Cross`, `Jump_Start`/`Jump_Loop`/`Jump_Land`, `Hit_Chest`,
-`Sprint_Loop`) and for special_knockback (`Spell_Simple_Enter`/`Shoot`/`Exit`); `UAL2_Standard.glb` for hit3
-(`Melee_Hook`, `Melee_Hook_Rec`), throw (`OverhandThrow`), knockdown (`Hit_Knockback`), getup (`LayToIdle`) and
+`Sprint_Loop`); `UAL2_Standard.glb` for hit3
+(`Melee_Hook`, `Melee_Hook_Rec`), special_knockback (`NinjaJump_Land`, frames 2 to 24), throw (`OverhandThrow`), knockdown (`Hit_Knockback`), getup (`LayToIdle`) and
 special_dash (`Slide_Start`/`Loop`/`Exit`). `UAL2_Standard_RM.glb` (root motion) and `Mannequin_F.*` are pinned and
 audited, not used.
 
@@ -113,7 +113,8 @@ refuses them and the atlas has no frames for them. The owner hand-keys them in B
 files.
 
 Derived from library actions (the owner's accepted picks, `docs/evidence/combat-slice/clip-audit.md`): special_knockback
-is the three Spell_Simple actions in sequence; special_dash is the three Slide actions in sequence; hit3 is
+is the landing crouch of `NinjaJump_Land` (the hand to the ground, read as an area attack from the side; the earlier
+Spell_Simple actions pointed one arm forward); special_dash is the three Slide actions in sequence; hit3 is
 `Melee_Hook` followed by `Melee_Hook_Rec`; jump is take-off, air loop and landing in sequence. hit1, hit2 and dash are
 single library actions standing in for a role the kits do not name.
 

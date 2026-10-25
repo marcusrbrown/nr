@@ -47,7 +47,7 @@ Frame rate: 24 fps. glTF carries no cyclic flag; a `_Loop` suffix is the library
 | knockdown | exact match | `Hit_Knockback` (21 f @ 24 fps, UAL2_Standard.glb) | UAL2, 21 frames, from a standing recoil to lying on the floor (head 0.15 above it). |
 | getup | exact match | `LayToIdle` (38 f @ 24 fps, UAL2_Standard.glb) | UAL2, 38 frames, from the floor pose Hit_Knockback ends in to standing. |
 | dash | usable substitute | `Sprint_Loop` (17 f @ 24 fps, UAL1_Standard.glb) | 17-frame loop. Sword_Dash (39 frames) and Shield_Dash (27 frames) are dashes by name but armed; Roll (36 frames) is the evasive alternative. |
-| special_knockback | usable substitute | `Spell_Simple_Enter` (14 f @ 24 fps, UAL1_Standard.glb), `Spell_Simple_Shoot` (13 f @ 24 fps, UAL1_Standard.glb), `Spell_Simple_Exit` (11 f @ 24 fps, UAL1_Standard.glb) | Derived: the three spell actions in sequence, shown as a radial blast. Owner call: a cast gesture standing in for a shove-everything-away move. |
+| special_knockback | usable substitute | `NinjaJump_Land` (31 f @ 24 fps, UAL2_Standard.glb) | Derived: `NinjaJump_Land` from frame 2 to frame 24, the landing crouch with a hand to the ground. Look-gate review: the Spell_Simple actions point one arm forward and read as a directed push; the crouch reads as an area attack from the side. |
 | special_dash | usable substitute | `Slide_Start` (21 f @ 24 fps, UAL2_Standard.glb), `Slide_Loop` (49 f @ 24 fps, UAL2_Standard.glb), `Slide_Exit` (13 f @ 24 fps, UAL2_Standard.glb) | Derived: the three slide actions in sequence. A slide tackle (pelvis 0.05 above the floor in the loop) as the dash special. |
 
 8 exact, 6 usable substitute, 2 gap of 16.

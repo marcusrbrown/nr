@@ -127,12 +127,10 @@
         "slot": "special_knockback",
         "status": "substitute",
         "actions": [
-          "Spell_Simple_Enter",
-          "Spell_Simple_Shoot",
-          "Spell_Simple_Exit"
+          "NinjaJump_Land"
         ],
-        "note": "Owner call: a cast gesture standing in for a shove-everything-away move.",
-        "derived": "the three spell actions in sequence, shown as a radial blast"
+        "note": "Look-gate review: the Spell_Simple actions point one arm forward and read as a directed push; the landing crouch with a hand to the ground reads as an area attack from the side.",
+        "derived": "NinjaJump_Land from frame 2 to frame 24 (the airborne first frame is skipped)"
       },
       {
         "slot": "special_dash",
