@@ -266,7 +266,7 @@
  "nr.cleared": 0,
  "nr.wave_phase": 1,
  "nr.demo": 0,
- "nr.sim_checksum": 3631468272,
+ "nr.sim_checksum": 1312767442,
  "nr.events": [
   60,
   12,
@@ -7957,7 +7957,7 @@
  "nr.players": 2,
  "nr.lights": 4,
  "nr.ticks": 1600,
- "nr.checksum": 3536840394,
+ "nr.checksum": 1513657627,
  "nr.lit_test": 0,
  "nr.flat_normals": 0,
  "nr.arena": 1,
