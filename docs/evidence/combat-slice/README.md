@@ -302,6 +302,16 @@ The leader's soft wall is 7.6 units ahead of the trailing player (was 9.1).
 responds by -0.01 with the accents recoloured); its swing ratios, which decide, are as before. The control carts of `controls.mjs` are cached
 under `out/`; the cache is now invalidated by any newer source or asset of the game (a stale cache ran the previous sim and failed 8 controls).
 
+### romdev session `nr-look`
+
+`games/nr/tests/romdev-look.mjs`, one session, `build/cart-wgpu/carts/nr_look.wasc` with `loadMedia wgpu:true` (`gpu: webgpu`, adapter apple
+metal-3, apple-m1-pro), a deterministic clock. For each combat capture (hit 2 at tick 264, hit 3 at 280, the radius special at 124, the dash
+special at 49) `input-look.json` plays as `input{sequence}` steps counting the frame `loadMedia` ran, the screenshot is pixel-identical to the
+committed capture (0 pixels differ), the `nr.*` and `cw.three.*` state equals native's (`cw.three.missing_states` is not compared: the host's
+state does not carry the byte field), `cw.three.missing` 0, `cw.gpu.api` 2, no WebGPU errors. The session ends with `nr.wasc` loaded on the title
+(tick 1, phase title, no players, `nr.demo` 0) and alive: `romdev/left-at-title.png`; `host{op:play}` was not called. Artifacts:
+`round2/romdev/` (`session-summary.json`, `events.ndjson`, the four screenshots).
+
 ### Atlas budget
 
 Decoded: hero 18.75 MiB, grunt 7.03, heavy 10.34 = 36.12 MiB for the three atlases (unchanged), plus player 2's colour sheet 9.38 MiB =

@@ -1,0 +1,91 @@
+{
+  "session": "nr-look",
+  "startedAt": "2026-10-25T21:01:58.844Z",
+  "captures": [
+    {
+      "name": "combat-hit2",
+      "tick": 264,
+      "ticks": 264,
+      "checksum": 2613370699,
+      "differingFields": [],
+      "differingPixels": 0,
+      "missing": 0,
+      "cw.gpu.api": 2,
+      "cw.gpu.errors": 0,
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "apple-m1-pro",
+        "description": "Metal driver on macOS Version 15.7.9 (Build 24G830)",
+        "featureLevel": "compatibility",
+        "powerPreference": null
+      }
+    },
+    {
+      "name": "combat-hit3",
+      "tick": 280,
+      "ticks": 280,
+      "checksum": 1989440792,
+      "differingFields": [],
+      "differingPixels": 0,
+      "missing": 0,
+      "cw.gpu.api": 2,
+      "cw.gpu.errors": 0,
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "apple-m1-pro",
+        "description": "Metal driver on macOS Version 15.7.9 (Build 24G830)",
+        "featureLevel": "compatibility",
+        "powerPreference": null
+      }
+    },
+    {
+      "name": "combat-radius-special",
+      "tick": 124,
+      "ticks": 124,
+      "checksum": 1829676817,
+      "differingFields": [],
+      "differingPixels": 0,
+      "missing": 0,
+      "cw.gpu.api": 2,
+      "cw.gpu.errors": 0,
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "apple-m1-pro",
+        "description": "Metal driver on macOS Version 15.7.9 (Build 24G830)",
+        "featureLevel": "compatibility",
+        "powerPreference": null
+      }
+    },
+    {
+      "name": "combat-dash-special",
+      "tick": 49,
+      "ticks": 49,
+      "checksum": 476142775,
+      "differingFields": [],
+      "differingPixels": 0,
+      "missing": 0,
+      "cw.gpu.api": 2,
+      "cw.gpu.errors": 0,
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "apple-m1-pro",
+        "description": "Metal driver on macOS Version 15.7.9 (Build 24G830)",
+        "featureLevel": "compatibility",
+        "powerPreference": null
+      }
+    }
+  ],
+  "leftAt": {
+    "gpu": "webgpu",
+    "phase": 0,
+    "ticks": 1,
+    "players": 0,
+    "demo": 0,
+    "at": "2026-10-25T21:02:02.651Z"
+  },
+  "ok": true
+}
