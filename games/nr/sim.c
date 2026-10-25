@@ -535,7 +535,7 @@ static void update_actor(nr_sim *s, int i, const nr_input *in) {
       } else if (a->kind == NR_KIND_DUMMY) {
         for (int k = 0; k < a->strike_count; k++)
           if (a->strike[k].tick == s->ticks) enter(s, i, a->strike[k].state);
-      } else {
+      } else if (!s->passive) {
         enemy_ai(s, i);
       }
       break;
@@ -939,7 +939,7 @@ void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
    * stay in the frame the same way */
   for (int i = 0; i < s->actor_count; i++) {
     nr_actor *a = &s->actor[i];
-    if (!a->present || a->kind == NR_KIND_DUMMY || a->state == NR_ST_DEAD) continue;
+    if (!a->present || a->kind == NR_KIND_DUMMY || a->state == NR_ST_DEAD || (s->passive && !is_hero(a))) continue;
     float h = nr_sim_view_half(s, a->lane), x = clampf(a->x, s->cam_x - h, s->cam_x + h);
     if (arena_blocked(s->arena, x, a->lane)) a->x = before[i];
     else a->x = x;

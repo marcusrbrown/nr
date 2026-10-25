@@ -1,6 +1,7 @@
 # One source tree, several apps. `nr` is the game. The others are the checks' builds, all from the same sources:
 #   nr_waves                  the waves with no title, upgrade pause or HUD: players decided on tick 30 (the Unit 6 scripts)
 #   nr_dummies                the street block with the test dummies in place of the waves (the combat checks)
+#   nr_look                   the street block with real grunts and a heavy standing still in three stations (the look gate's combat captures)
 #   nr_bot                    nr_waves with both players played by the bot from the first tick
 #   nr_bot1                   the same with only player 0 a bot, fighting only the enemies that chase it (player 1 is the pad's)
 #   nr_botfull                nr (title, HUD, upgrade pause) with both players played by the bot from the first tick: it joins, picks the dash with player 2
@@ -26,7 +27,7 @@ option(NR_PERF_CONTROL "Spin NR_PERF_CONTROL_MS per actor per frame (budget cont
 set(NR_PERF_CONTROL_MS 0.5 CACHE STRING "Milliseconds the control build spins per actor per frame")
 option(NR_EXTRA_LIGHT "Add a fifth point light to the scene (missing-state control build)" OFF)
 
-set(NR_APPS nr nr_waves nr_dummies nr_bot nr_bot1 nr_botfull nr_botsolo nr_stress nr_arena_bare nr_stage nr_lit_h nr_lit_v nr_lit_h_flat nr_lit_v_flat nr_lit_h_left nr_lit_v_left nr_lit_h_left_flat nr_lit_v_left_flat nr_solo_0 nr_solo_1 nr_solo_2 nr_bare)
+set(NR_APPS nr nr_waves nr_dummies nr_look nr_bot nr_bot1 nr_botfull nr_botsolo nr_stress nr_arena_bare nr_stage nr_lit_h nr_lit_v nr_lit_h_flat nr_lit_v_flat nr_lit_h_left nr_lit_v_left nr_lit_h_left_flat nr_lit_v_left_flat nr_solo_0 nr_solo_1 nr_solo_2 nr_bare)
 set(previous "")
 foreach(app ${NR_APPS})
   set(lit 0)
@@ -35,6 +36,7 @@ foreach(app ${NR_APPS})
   set(legacy 1)
   set(face 1)
   set(dummies 0)
+  set(look 0)
   set(bot_mask 0)
   set(bot_focus 0)
   set(no_title 0)
@@ -55,6 +57,9 @@ foreach(app ${NR_APPS})
   elseif(app STREQUAL "nr_dummies")
     set(legacy 0)
     set(dummies 1)
+  elseif(app STREQUAL "nr_look")
+    set(legacy 0)
+    set(look 1)
   elseif(app STREQUAL "nr_bot")
     set(legacy 0)
     set(no_title 1)
@@ -87,7 +92,7 @@ foreach(app ${NR_APPS})
   endif()
   cw_add_app(${app} SOURCES main.c anim.c arena.c json.c sim.c ui.c waves.c PACK ${NR_ASSETS} PROGRAMS ${NR_PROGRAMS})
   target_compile_definitions(${app} PRIVATE NR_LIT_TEST=${lit} NR_FLAT_NORMALS=${flat} NR_NO_HEROES=${bare}
-    NR_STAGE_LEGACY=${legacy} NR_LIT_FACE=${face} NR_DUMMIES=${dummies} NR_BOT_MASK=${bot_mask} NR_BOT_FOCUS=${bot_focus} NR_NO_TITLE=${no_title} NR_STRESS=${stress}
+    NR_STAGE_LEGACY=${legacy} NR_LIT_FACE=${face} NR_DUMMIES=${dummies} NR_LOOK=${look} NR_BOT_MASK=${bot_mask} NR_BOT_FOCUS=${bot_focus} NR_NO_TITLE=${no_title} NR_STRESS=${stress}
     NR_REVERSE_DEPTH=$<BOOL:${NR_REVERSE_DEPTH}> NR_PERF=$<BOOL:${NR_PERF}> NR_PERF_CONTROL=$<BOOL:${NR_PERF_CONTROL}>
     NR_PERF_CONTROL_MS=${NR_PERF_CONTROL_MS} NR_EXTRA_LIGHT=$<BOOL:${NR_EXTRA_LIGHT}>)
   target_compile_options(${app} PRIVATE -ffp-contract=off -Wall -Wextra)

@@ -35,6 +35,9 @@
  *   NR_DUMMIES: the street block with the test dummies (layout_dummies) in place of the waves: the combat checks.
  *   NR_BOT_MASK: the players (bit 0 player 0, bit 1 player 1) the bot plays from the first tick; NR_BOT_FOCUS makes a
  *     bot fight only the enemies that chase it.
+ *   NR_LOOK: the street block with real grunts and a heavy that stand still (sim.passive) at three stations along the street, and
+ *     the two players: the look gate's combat captures (input-look.json takes player 1 through a combo against the pillar, the
+ *     radius special and the dash special). Plays on the combat checks' rules (hold_alt, no waves).
  *   NR_NO_TITLE: the fight begins on the first tick with no title, no upgrade pause and no HUD (the Unit 6 builds).
  *   NR_STAGE_LEGACY: the look checkpoint's stage (a plain street, four fixed actors, no input); the lit-side and
  *     silhouette checks measure on it. NR_LIT_TEST implies it.
@@ -99,6 +102,9 @@
 #ifndef NR_DUMMIES
 #define NR_DUMMIES 0
 #endif
+#ifndef NR_LOOK
+#define NR_LOOK 0
+#endif
 #ifndef NR_BOT_MASK
 #define NR_BOT_MASK 0
 #endif
@@ -125,7 +131,7 @@
 #endif
 #define NR_PERF_RING 1024
 #define NR_ARENA (NR_LIT_TEST == 0 && NR_STAGE_LEGACY == 0)
-#define NR_UI (NR_ARENA && !NR_DUMMIES && !NR_NO_TITLE) /* the game: a title, the HUD, the upgrade pause, the end screens */
+#define NR_UI (NR_ARENA && !NR_DUMMIES && !NR_LOOK && !NR_NO_TITLE) /* the game: a title, the HUD, the upgrade pause, the end screens */
 
 #define ACTORS (NR_LIT_TEST ? 1 : NR_ARENA ? NR_SIM_MAX_ACTORS : 4) /* the actors the state publishes */
 #define CHARS 3 /* hero, grunt, heavy */
@@ -648,13 +654,42 @@ static void layout_dummies(void) {
 }
 #endif
 
-/* A fresh simulation: the street with the dummies (NR_DUMMIES), or with the waves. */
+/* The look scene (NR_LOOK): real grunts and a heavy that stand still, facing the heroes (who come from the left). A grunt
+ * keeps its two hit points unless the scene gives it more. Station 1 is the dash special's lane (two grunts and the heavy
+ * in a file from the heroes' start); station 2 a crowd round one point for the radius special; station 3 a grunt a short
+ * step from the pillar, which stops its knockback so a whole combo stays in contact (it has six hit points: the combo's
+ * three hits take four). */
+#if NR_LOOK
+static void look_enemy(int32_t kind, float x, float lane, int32_t hp) {
+  int id = nr_sim_spawn_enemy(&S.sim, kind, x, lane);
+  if (id < 0) return;
+  S.sim.actor[id].facing = -1;
+  if (hp > 0) S.sim.actor[id].hp = hp;
+}
+
+static void layout_look(void) {
+  look_enemy(NR_KIND_GRUNT, 1.7f, 0.6f, 0);
+  look_enemy(NR_KIND_GRUNT, 3.0f, 0.5f, 0);
+  look_enemy(NR_KIND_HEAVY, 5.2f, 0.5f, 0);
+  look_enemy(NR_KIND_GRUNT, 5.9f, 0.9f, 0);
+  look_enemy(NR_KIND_GRUNT, 6.2f, 0.1f, 0);
+  look_enemy(NR_KIND_GRUNT, 5.6f, -0.3f, 0);
+  look_enemy(NR_KIND_GRUNT, 10.3f, 0.45f, 6);
+}
+#endif
+
+/* A fresh simulation: the street with the dummies (NR_DUMMIES), the look scene (NR_LOOK) or the waves. */
 static void start_sim(void) {
   nr_sim_init(&S.sim, &S.ar, S.view);
 #if NR_DUMMIES
   S.sim.waves_on = 0;
   S.sim.hold_alt = 1;
   layout_dummies();
+#elif NR_LOOK
+  S.sim.waves_on = 0;
+  S.sim.hold_alt = 1;
+  S.sim.passive = 1;
+  layout_look();
 #else
   S.sim.log_moves = 0;
 #if NR_STRESS

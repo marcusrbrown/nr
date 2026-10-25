@@ -1,0 +1,23 @@
+[
+  {"frame":1,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":40,"buttons":["l","north"],"pad2":{"buttons":[]}},
+  {"frame":42,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":70,"buttons":[],"pad2":{"buttons":["right"]}},
+  {"frame":100,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":110,"buttons":["north"],"pad2":{"buttons":[]}},
+  {"frame":112,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":150,"buttons":[],"pad2":{"buttons":["right"]}},
+  {"frame":152,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":156,"buttons":[],"pad2":{"buttons":["right"]}},
+  {"frame":160,"buttons":["right"],"pad2":{"buttons":["right"]}},
+  {"frame":162,"buttons":[],"pad2":{"buttons":["right"]}},
+  {"frame":166,"buttons":["right"],"pad2":{"buttons":["right"]}},
+  {"frame":210,"buttons":[],"pad2":{"buttons":["right"]}},
+  {"frame":215,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":240,"buttons":["west"],"pad2":{"buttons":[]}},
+  {"frame":242,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":256,"buttons":["west"],"pad2":{"buttons":[]}},
+  {"frame":258,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":272,"buttons":["west"],"pad2":{"buttons":[]}},
+  {"frame":274,"buttons":[],"pad2":{"buttons":[]}}
+]

@@ -183,6 +183,7 @@ typedef struct {
   int32_t joins, ignored_starts;   /* start presses that joined a player mid-run / that did nothing */
   int32_t sfx_count[NR_SFX_COUNT], sfx_tick[NR_SFX_COUNT]; /* sounds asked for, and the tick of the last of each */
   int32_t log_moves;               /* log a hero's walk, run and idle-after-walk entries too */
+  int32_t passive;                 /* the enemies of the waves' kinds stand where they spawn, never swing and are not held in the frame (the look scene); not in the checksum */
   uint32_t checksum;
   int32_t events[NR_EVENT_CAP][NR_EVENT_FIELDS];
   int32_t event_count, events_dropped;
