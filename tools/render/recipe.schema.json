@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/marcusrbrown/nr/tools/render/recipe.schema.json",
+  "title": "nr render recipe",
+  "description": "Input of tools/render/nr_render.py and tools/render/post.mjs: one character (or control) rendered to colour and normal atlases. The recipe pins the Blender release and build; nr_render.py exits 11 on a mismatch.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "name", "blender", "cell", "supersample", "camera", "render", "model", "slots"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$", "description": "Atlas basename: <name>.png, <name>-n.png, <name>.json" },
+    "blender": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "buildHash"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "buildHash": { "type": "string", "pattern": "^[0-9a-f]{12}$" }
+      }
+    },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "description": "Target frame size in pixels; every frame occupies one full cell, so a pivot is the same cell offset in every frame of the sheet.",
+      "properties": {
+        "width": { "type": "integer", "minimum": 8, "maximum": 1024 },
+        "height": { "type": "integer", "minimum": 8, "maximum": 1024 }
+      }
+    },
+    "supersample": { "type": "integer", "minimum": 1, "maximum": 8, "description": "Render at cell * supersample, then downsample in post.mjs." },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projection", "elevationDeg", "azimuthDeg", "distance", "target", "pivotWorld"],
+      "description": "Azimuth 0 puts the camera at -Y looking toward +Y, elevation raises it above the XY plane; Z is up. A model faces -Y (south) by default.",
+      "properties": {
+        "projection": { "enum": ["orthographic", "perspective"] },
+        "elevationDeg": { "type": "number", "minimum": -89, "maximum": 89 },
+        "azimuthDeg": { "type": "number" },
+        "distance": { "type": "number", "minimum": 0.1 },
+        "target": { "$ref": "#/$defs/vec3" },
+        "orthoHeight": { "type": "number", "minimum": 0.001, "description": "Visible height in world units (orthographic)." },
+        "fovDeg": { "type": "number", "minimum": 1, "maximum": 170, "description": "Vertical field of view (perspective)." },
+        "pivotWorld": { "$ref": "#/$defs/vec3", "description": "World point whose projection is the frame pivot (the actor's ground anchor)." },
+        "clip": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "start": { "type": "number", "minimum": 0.001 }, "end": { "type": "number", "minimum": 0.01 } }
+        }
+      }
+    },
+    "render": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seed", "samples"],
+      "properties": {
+        "seed": { "type": "integer", "minimum": 0 },
+        "samples": { "type": "integer", "minimum": 1, "maximum": 4096 }
+      }
+    },
+    "atlas": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pageSize": { "type": "integer", "minimum": 8, "maximum": 8192, "description": "Maximum page width and height in pixels (default 2048)." },
+        "dilate": { "type": "integer", "minimum": 0, "maximum": 8, "description": "Passes of alpha-edge colour dilation into transparent texels (default 2)." }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parts"],
+      "properties": {
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "shape", "color"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+              "shape": { "enum": ["sphere", "box", "cylinder", "cone", "plane"] },
+              "size": { "$ref": "#/$defs/vec3", "description": "Extents along the part's X, Y, Z (a unit-diameter primitive is scaled by it)." },
+              "location": { "$ref": "#/$defs/vec3" },
+              "rotationDeg": { "$ref": "#/$defs/vec3" },
+              "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "sRGB albedo." },
+              "smooth": { "type": "boolean", "description": "Smooth shading; default true for spheres." },
+              "motion": {
+                "type": "object",
+                "description": "Per clip name: offset = amplitude * sin(2 pi (cycles * t + phase)), t = frame / frames.",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": { "$ref": "#/$defs/vec3" },
+                    "rotationDeg": { "$ref": "#/$defs/vec3" },
+                    "cycles": { "type": "number" },
+                    "phase": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "slots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "clip", "frames"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+          "clip": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+          "frames": { "type": "integer", "minimum": 1, "maximum": 256 },
+          "facing": { "enum": ["south", "east", "north", "west"] },
+          "ms": { "type": "integer", "minimum": 1, "description": "Frame duration in milliseconds." },
+          "loop": { "type": "boolean" },
+          "hideFrames": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "Frame indexes rendered with the model hidden (an empty frame)." }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "vec3": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 }
+  }
+}

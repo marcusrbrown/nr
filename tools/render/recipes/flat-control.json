@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "name": "flat-control",
+  "blender": { "version": "4.5.15", "buildHash": "5afeabba6097" },
+  "cell": { "width": 32, "height": 32 },
+  "supersample": 4,
+  "camera": {
+    "projection": "orthographic",
+    "elevationDeg": 0,
+    "azimuthDeg": 0,
+    "distance": 10,
+    "target": [0, 0, 0],
+    "orthoHeight": 2,
+    "pivotWorld": [0, 0, -0.8]
+  },
+  "render": { "seed": 1, "samples": 1 },
+  "atlas": { "pageSize": 2048, "dilate": 2 },
+  "model": {
+    "parts": [
+      { "id": "plane", "shape": "plane", "size": [1.6, 1.6, 1], "location": [0, 0, 0], "rotationDeg": [90, 0, 0], "color": "#808080" }
+    ]
+  },
+  "slots": [
+    { "id": "flat", "clip": "flat", "frames": 1, "facing": "south", "ms": 100 }
+  ]
+}

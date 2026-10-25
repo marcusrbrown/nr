@@ -2,10 +2,12 @@
 # Build the project against the prebuilt Cartwheel SDKs fetched by scripts/fetch-deps.sh,
 # one build tree per target (build/<target>):
 #
-#   native   build/native   host SDK (deps/cartwheel-sdk/macos-arm64), Apple clang
-#   cart     build/cart     cart SDK (deps/cartwheel-sdk/cart), wasi-sdk + Binaryen from deps/
+#   native      build/native      host SDK (deps/cartwheel-sdk/macos-arm64), Apple clang
+#   cart        build/cart        GL cart SDK (deps/cartwheel-sdk/cart), wasi-sdk + Binaryen from deps/
+#   cart-wgpu   build/cart-wgpu   dual GL + WebGPU cart SDK (deps/cartwheel-sdk/cart-wgpu), same toolchain
 #
 #   scripts/build.sh                          native and cart
+#   TARGETS="native cart cart-wgpu" scripts/build.sh   all three
 #   TARGETS="native" scripts/build.sh         one target
 #   BUILD_TYPE=Debug scripts/build.sh         CMake build type (default Release)
 #   CW_CART_DEV=1 scripts/build.sh            cart from the SDK's non-LTO libraries, no wasm-opt (fast dev carts)
@@ -28,15 +30,15 @@ for t in ${TARGETS:-native cart}; do
     native)
       cmake -S "$ROOT" -B "$ROOT/build/native" -G Ninja -DCMAKE_BUILD_TYPE="$BT" \
         -Dcartwheel_DIR="$SDK/macos-arm64/lib/cmake/cartwheel" >/dev/null ;;
-    cart)
-      [ -d "$SDK/cart" ] || die "deps/cartwheel-sdk/cart missing: run scripts/fetch-deps.sh"
+    cart|cart-wgpu)
+      [ -d "$SDK/$t" ] || die "deps/cartwheel-sdk/$t missing: run scripts/fetch-deps.sh"
       [ -x "$ROOT/deps/wasi-sdk/bin/clang" ] || die "deps/wasi-sdk missing: run scripts/fetch-deps.sh"
-      cmake -S "$ROOT" -B "$ROOT/build/cart" -G Ninja -DCMAKE_BUILD_TYPE="$BT" \
-        -DCMAKE_TOOLCHAIN_FILE="$SDK/cart/cmake/cart.cmake" \
-        -Dcartwheel_DIR="$SDK/cart/lib/cmake/cartwheel" \
+      cmake -S "$ROOT" -B "$ROOT/build/$t" -G Ninja -DCMAKE_BUILD_TYPE="$BT" \
+        -DCMAKE_TOOLCHAIN_FILE="$SDK/$t/cmake/cart.cmake" \
+        -Dcartwheel_DIR="$SDK/$t/lib/cmake/cartwheel" \
         -DCW_CWPACK="$SDK/macos-arm64/bin/cwpack" \
         ${CW_CART_DEV:+-DCW_CART_DEV=ON} >/dev/null ;;
-    *) die "unknown target '$t' (native, cart)" ;;
+    *) die "unknown target '$t' (native, cart, cart-wgpu)" ;;
   esac
   ninja -C "$ROOT/build/$t"
   ninja -C "$ROOT/build/$t" -t cleandead >/dev/null # outputs of targets that no longer exist

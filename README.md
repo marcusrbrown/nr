@@ -18,7 +18,7 @@ Neon Rebellion is a cyberpunk belt-scroll beat 'em up: Streets of Rage meets Gua
 
 ## Licence
 
-Code: MIT (`LICENSE`). Art: CC-BY-4.0 (`LICENSES/CC-BY-4.0.txt`).
+Code: MIT (`LICENSE`). Art: CC-BY-4.0 (`LICENSES/CC-BY-4.0.txt`). The Blender render script `tools/render/nr_render.py`: GPL-3.0-or-later (`LICENSES/GPL-3.0-or-later.txt`).
 
 ## Docs
 

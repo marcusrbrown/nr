@@ -4,6 +4,10 @@
 #   required (exit 1 if any is missing): clang, cmake, ninja, node
 #   recorded when present, never fatal:  git, bun, docker, romdev (/healthz at $ROMDEV_URL)
 #
+# The Blender install (deps/blender, from scripts/fetch-deps.sh) is recorded with its version string; a version that
+# differs from the lock's pin is reported on stderr. A romdev whose webgpu-node module does not load is reported with
+# its repair command (the WebGPU leg of the romdev gates cannot run until it is repaired).
+#
 # tuple.json carries the host tools' versions, the romdev host's reported versions, the pins from
 # scripts/deps.lock, and what scripts/fetch-deps.sh has installed under deps/.
 set -uo pipefail
@@ -75,6 +79,13 @@ export TUPLE_OS_VERSION="$(command -v sw_vers >/dev/null && sw_vers -productVers
 export TUPLE_WASI_CLANG="" TUPLE_BINARYEN=""
 [ -x "$ROOT/deps/wasi-sdk/bin/clang" ] && TUPLE_WASI_CLANG="$(first_line "$ROOT/deps/wasi-sdk/bin/clang" --version)"
 [ -x "$ROOT/deps/binaryen/bin/wasm-opt" ] && TUPLE_BINARYEN="$(first_line "$ROOT/deps/binaryen/bin/wasm-opt" --version)"
+export TUPLE_BLENDER="" TUPLE_BLENDER_BUILD=""
+BLENDER_BIN="$ROOT/deps/blender/Blender.app/Contents/MacOS/Blender"
+if [ -x "$BLENDER_BIN" ]; then
+  blender_out="$("$BLENDER_BIN" --version 2>&1)"
+  TUPLE_BLENDER="$(printf '%s\n' "$blender_out" | sed -n '1p')"
+  TUPLE_BLENDER_BUILD="$(printf '%s\n' "$blender_out" | sed -n 's/^[[:space:]]*build hash: //p')"
+fi
 
 mkdir -p "$ROOT/build"
 node --input-type=module -e '
@@ -94,6 +105,12 @@ const glLoads = () => {
   const r = e.TUPLE_ROMDEV_ROOT;
   if (!r) return null;
   const p = spawnSync(process.execPath, ["--input-type=module", "-e", "await import(\"webgl-node\")"], { cwd: join(r, "node_modules", "webgl-node"), encoding: "utf8" });
+  return p.status === 0;
+};
+const webgpuLoads = () => {
+  const r = e.TUPLE_ROMDEV_ROOT;
+  if (!r) return null;
+  const p = spawnSync(process.execPath, ["--input-type=module", "-e", "await import(\"webgpu-node\")"], { cwd: join(r, "node_modules", "webgpu-node"), encoding: "utf8" });
   return p.status === 0;
 };
 const sdk = (t) => { const m = jsonFile(join(deps, "cartwheel-sdk", t, "manifest.json")); return m && { version: m.version, commit: m.commit, build_type: m.build_type, toolchains: m.toolchains, version_stamp: version(join(deps, "cartwheel-sdk", t, ".version")) }; };
@@ -119,6 +136,7 @@ const tuple = {
     wasmcart_runtime_source: e.TUPLE_ROMDEV_ROOT ? "node_modules/wasmcart of the process listening on the romdev port" : null,
     wasmcart_runtime_note: "not reported by /healthz or /openapi.json; a loaded cart reports only its ABI via wasm{op:info}",
     gl_module_loads: glLoads(),
+    webgpu_module_loads: webgpuLoads(),
   },
   installed: {
     engine: existsSync(join(deps, "cartwheel-engine", ".git")) ? git(join(deps, "cartwheel-engine"), "rev-parse", "HEAD") : null,
@@ -126,8 +144,10 @@ const tuple = {
     wasmcart: existsSync(join(deps, "cartwheel-engine", "deps", "wasmcart", ".git")) ? git(join(deps, "cartwheel-engine", "deps", "wasmcart"), "rev-parse", "HEAD") : null,
     sdk_macos_arm64: sdk("macos-arm64"),
     sdk_cart: sdk("cart"),
+    sdk_cart_wgpu: sdk("cart-wgpu"),
     wasi_sdk_clang: some(e.TUPLE_WASI_CLANG),
     binaryen: some(e.TUPLE_BINARYEN),
+    blender: e.TUPLE_BLENDER ? { version: e.TUPLE_BLENDER, build_hash: some(e.TUPLE_BLENDER_BUILD), version_stamp: version(join(deps, "blender", ".version")) } : null,
   },
   pins: JSON.parse(e.TUPLE_PINS),
 };
@@ -137,4 +157,20 @@ process.stdout.write(JSON.stringify(tuple, null, 2) + "\n");
 echo "preflight: required tools present (clang, cmake, ninja, node)"
 echo "preflight: docker: ${TUPLE_DOCKER_CLIENT:-unavailable}"
 if [ -n "$TUPLE_ROMDEV_HEALTH" ]; then echo "preflight: romdev: $TUPLE_ROMDEV_HEALTH"; else echo "preflight: romdev: unavailable at $ROMDEV_URL"; fi
+if [ -z "$TUPLE_BLENDER" ]; then
+  echo "preflight: blender: not installed (run scripts/fetch-deps.sh)" >&2
+else
+  echo "preflight: blender: $TUPLE_BLENDER"
+  blender_pin="$(awk '$1 == "blender:macos-arm64" { print $3; exit }' "$ROOT/scripts/deps.lock")"
+  case "$TUPLE_BLENDER" in
+    "Blender $blender_pin "*) ;;
+    *) echo "preflight: blender: installed '$TUPLE_BLENDER' differs from the lock's pin $blender_pin (run FORCE=1 scripts/fetch-deps.sh)" >&2 ;;
+  esac
+fi
+if [ -n "$TUPLE_ROMDEV_HEALTH" ]; then
+  webgpu_ok="$(node -e 'const t=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));console.log(t.romdev.webgpu_module_loads)' "$OUT")"
+  if [ "$webgpu_ok" != "true" ]; then
+    echo "preflight: romdev webgpu-node does not load: WebGPU carts fall back to GL. Repair: cd <romdev install>/node_modules/native-dawn && node scripts/install.mjs, then restart romdev (docs/solutions/integration-issues/romdev-gles-node-linux-binary-on-macos-2026-10-24.md)" >&2
+  fi
+fi
 echo "preflight: wrote ${OUT#"$ROOT"/}"

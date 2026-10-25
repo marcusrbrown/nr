@@ -15,8 +15,11 @@ cartwheel-engine   https://github.com/monteslu/cartwheel-engine.git   v0.15.1   
 # it equals the GitHub release asset digest for the tarball.
 #   macos-arm64: Darwin-executable (clang + static libs, bin/cwpack, programs.mjs, three.c tools)
 #   cart:        target-only wasm32-wasip1-threads libraries (ThinLTO bitcode), wasmcart-pack, import checker
+#   cart-wgpu:   the same plus emdawnwebgpu and wasmcart-wgpu; builds the dual (GL + WebGPU) carts.
+#                Its sha256 is the GitHub release asset digest (`gh release view v0.15.1 -R monteslu/cartwheel-engine --json assets`).
 cartwheel-sdk:macos-arm64 https://github.com/monteslu/cartwheel-engine/releases/download/v0.15.1/cartwheel-sdk-0.15.1-macos-arm64.tar.gz v0.15.1 7615869aa000b97dd37a54964b358e28a1ebbc7a5c1290a342840257424df047
 cartwheel-sdk:cart        https://github.com/monteslu/cartwheel-engine/releases/download/v0.15.1/cartwheel-sdk-0.15.1-cart.tar.gz        v0.15.1 00780dcbed82517aea76784c64a91415ca913d7af6fd39966b5c5de7843d950b
+cartwheel-sdk:cart-wgpu   https://github.com/monteslu/cartwheel-engine/releases/download/v0.15.1/cartwheel-sdk-0.15.1-cart-wgpu.tar.gz   v0.15.1 777167301a0afaf515ef78e1ca3514ceac3ff9f1c3eade7d92ced36e8d57d4a7
 
 # three.c as pinned by the engine's scripts/deps.lock at v0.15.1 (0.186.18, three.js r186).
 # fetch-deps.sh aborts if the engine's own lock names a different commit.
@@ -24,6 +27,11 @@ three.c            https://github.com/monteslu/three.c.git             main     
 
 # wasmcart as pinned by the engine's scripts/deps.lock at v0.15.1: the reference hosts run-cart.mjs drives (Chromium).
 wasmcart           https://github.com/wasmcart/wasmcart.git            v0.34.3   cd233ea13c5656634898a925c214e3aea0558884
+
+# wasmcart-wgpu: the engine's separate pin for the WebGPU tier's hosts (deps/wasmcart-wgpu: wgpu-wasi kit, webgpu-node host),
+# the host run-cart.mjs uses for dual carts. Same repository and commit as wasmcart at v0.15.1; fetch-deps.sh checks it
+# against the engine's lock like wasmcart.
+wasmcart-wgpu      https://github.com/wasmcart/wasmcart.git            v0.34.3   cd233ea13c5656634898a925c214e3aea0558884
 
 # Cart toolchain for Darwin arm64 (Darwin-executable). The engine's lock pins the x86_64-linux builds of
 # the same versions (wasi-sdk 33.0, Binaryen 123); the cart SDK's own fetch script cannot fetch these on macOS.
@@ -33,6 +41,11 @@ wasmcart           https://github.com/wasmcart/wasmcart.git            v0.34.3  
 # Binaryen sha256: the release's binaryen-version_123-arm64-macos.tar.gz.sha256 asset.
 wasi-sdk:darwin-arm64  https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-33/wasi-sdk-33.0-arm64-macos.tar.gz            33.0  85c997a2665ead91673b5bb88b7d0df3fc8900df3bfa244f720d478187bbdc78
 binaryen:darwin-arm64  https://github.com/WebAssembly/binaryen/releases/download/version_123/binaryen-version_123-arm64-macos.tar.gz    123   74428be348c1a09863e7b642a1fa948cabf8ec9561052233d8288e941951725b
+
+# Blender 4.5 LTS, the render pipeline's renderer (tools/render); 4.5.15 is the latest 4.5.x on 2026-10-24.
+# sha256: the line for blender-4.5.15-macos-arm64.dmg in https://download.blender.org/release/Blender4.5/blender-4.5.15.sha256.
+# fetch-deps.sh mounts the dmg, copies Blender.app into deps/blender and detaches it.
+blender:macos-arm64  https://download.blender.org/release/Blender4.5/blender-4.5.15-macos-arm64.dmg  4.5.15  bfbc0bda099d1ab7aef0992a584f872f58bed9bb491210ad45f9ca071aa2e688
 
 # romdev: observed on this host, not installed by the project (MCP server, http://localhost:7331).
 observed:romdev    http://localhost:7331   0.150.2   -

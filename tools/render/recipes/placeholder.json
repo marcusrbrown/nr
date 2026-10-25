@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "name": "placeholder",
+  "blender": { "version": "4.5.15", "buildHash": "5afeabba6097" },
+  "cell": { "width": 48, "height": 64 },
+  "supersample": 4,
+  "camera": {
+    "projection": "orthographic",
+    "elevationDeg": 20,
+    "azimuthDeg": 0,
+    "distance": 10,
+    "target": [0, 0, 1.0],
+    "orthoHeight": 2.4,
+    "pivotWorld": [0, 0, 0]
+  },
+  "render": { "seed": 1, "samples": 1 },
+  "atlas": { "pageSize": 2048, "dilate": 2 },
+  "model": {
+    "parts": [
+      { "id": "legs", "shape": "box", "size": [0.4, 0.25, 0.7], "location": [0, 0, 0.35], "color": "#3a3f5c" },
+      { "id": "torso", "shape": "cylinder", "size": [0.5, 0.3, 0.7], "location": [0, 0, 1.05], "color": "#d6336c", "smooth": true },
+      { "id": "head", "shape": "sphere", "size": [0.38, 0.38, 0.38], "location": [0, 0, 1.6], "color": "#f2c9a0" },
+      {
+        "id": "arm",
+        "shape": "box",
+        "size": [0.14, 0.14, 0.55],
+        "location": [-0.34, 0, 1.05],
+        "color": "#f2c9a0",
+        "motion": { "idle": { "location": [0, 0, 0.04], "rotationDeg": [25, 0, 0], "cycles": 1 } }
+      }
+    ]
+  },
+  "slots": [
+    { "id": "idle", "clip": "idle", "frames": 4, "facing": "east", "ms": 120, "loop": true }
+  ]
+}
