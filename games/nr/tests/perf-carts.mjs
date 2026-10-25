@@ -15,8 +15,8 @@
 // are the memory the host allocated, not what the cart touched) and, on chromium, the memory the cart's data fills: the pages
 // (4 KiB) of linear memory holding any non-zero byte and the end of the highest non-zero byte, at the title, after the warm-up
 // and at the end. Linear memory never shrinks and a page the cart wrote stays non-zero unless it wrote zeros over it, so the
-// end value is a lower bound of the touched high-water mark; the decoded atlas sheets are allocated at init, so the title
-// value already holds them. `stats` through the debug channel reports the engine's own tags (mem_total, mem_peak) and is
+// end value is a lower bound of the touched high-water mark. The title sample is taken when the cart is loaded, before its first
+// frame runs init (which decodes the atlas sheets), so the after-warm-up and end samples are the ones that hold the game's data. `stats` through the debug channel reports the engine's own tags (mem_total, mem_peak) and is
 // recorded on romdev.
 import { createServer } from 'node:http';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -69,11 +69,11 @@ async function runRomdev(n) {
     await romdevCall(session, 'wasm', { op: 'info' });
     callMs.push(performance.now() - t0);
   }
-  const stats = (await romdevCall(session, 'wasm', { op: 'command', text: 'stats' })).reply;
+  const engine = (await romdevCall(session, 'wasm', { op: 'command', text: 'stats' })).reply;
   const st = await romdevCall(session, 'wasm', { op: 'debugState' });
   const ticks = (st.fields.find((f) => f.name === 'nr.ticks') || {}).value;
   await romdevCall(session, 'host', { op: 'shutdown' }).catch(() => {});
-  return { run: n, frame_ms: stats(frameMs), call_overhead_ms: stats(callMs), heapBytes: { atTitle: heapTitle, afterWarmup: heapWarm, end: heapEnd }, engineMem: { mem_total: stats.mem_total, mem_peak: stats.mem_peak, mem: stats.mem }, ticksFinal: ticks, adapter: loaded.gpuAdapter, series: frameMs };
+  return { run: n, frame_ms: stats(frameMs), call_overhead_ms: stats(callMs), heapBytes: { atTitle: heapTitle, afterWarmup: heapWarm, end: heapEnd }, engineMem: { mem_total: engine.mem_total, mem_peak: engine.mem_peak, mem: engine.mem }, ticksFinal: ticks, adapter: loaded.gpuAdapter, series: frameMs };
 }
 
 // ── chromium ──────────────────────────────────────────────────────────
