@@ -1,0 +1,343 @@
+{
+  "results": [
+    {
+      "name": "title",
+      "ok": true,
+      "detail": "with nobody pressing start the title holds at tick 120 (phase 0, players 0, lives 0; both pads are connected, so the tick-30 presence rule is not applied); start from pad 1 at tick 21 joins player 1 (pool 3), from pad 2 at 41 joins player 2 (pool 6); a start from a player that is in begins the fight at 61 with 2 players and 6 lives",
+      "joins": [
+        {
+          "tick": 21,
+          "kind": "JOIN",
+          "actor": 0,
+          "a": 3,
+          "b": 0
+        },
+        {
+          "tick": 41,
+          "kind": "JOIN",
+          "actor": 1,
+          "a": 6,
+          "b": 0
+        }
+      ],
+      "begin": {
+        "tick": 61,
+        "kind": "BEGIN",
+        "actor": -1,
+        "a": 2,
+        "b": 6
+      },
+      "artifact": "ui-report.json"
+    },
+    {
+      "name": "AE2 upgrade",
+      "ok": true,
+      "detail": "the pause begins at tick 729 (wave 2's last kill); a pick at +10 is inside the 30-tick lockout and does nothing; start from player 2 (in) at +5 is ignored (1 logged); player 2 picks the dash at +40; the heroes' next specials, at +100 (player 1) and +140 (player 2), are both special_dash (2 dash, 0 knockback); in the full run 6 dash specials and 0 knockback specials follow the pick to the end of the arena",
+      "pauseTick": 729,
+      "picks": [
+        {
+          "tick": 769,
+          "kind": "PICK",
+          "actor": 1,
+          "a": 1,
+          "b": 40
+        }
+      ],
+      "ignored": [
+        {
+          "tick": 734,
+          "kind": "START_IGNORED",
+          "actor": 1,
+          "a": 0,
+          "b": 0
+        }
+      ],
+      "dash": [
+        {
+          "tick": 829,
+          "kind": "ENTER",
+          "actor": 0,
+          "a": "SPECIAL_DASH",
+          "b": 0
+        },
+        {
+          "tick": 869,
+          "kind": "ENTER",
+          "actor": 1,
+          "a": "SPECIAL_DASH",
+          "b": 0
+        }
+      ],
+      "knockbackAfterPick": 0,
+      "artifact": "upgrade-events.json"
+    },
+    {
+      "name": "pause",
+      "ok": true,
+      "detail": "between ticks 735 and 758 of the pause (phase 2) every position, hp, state, state tick, the rng, the camera, the wave phase and the lives are unchanged; only the tick counter moved",
+      "artifact": "upgrade-events.json"
+    },
+    {
+      "name": "same frame",
+      "ok": true,
+      "detail": "player 1 presses left and player 2 right on tick 769: one pick, by player 1 (the lower port), special 0 (knockback); player 2's special at +140 is SPECIAL_KNOCKBACK",
+      "picks": [
+        {
+          "tick": 769,
+          "kind": "PICK",
+          "actor": 0,
+          "a": 0,
+          "b": 40
+        }
+      ],
+      "specials": [
+        {
+          "tick": 829,
+          "kind": "ENTER",
+          "actor": 0,
+          "a": "SPECIAL_KNOCKBACK",
+          "b": 0
+        },
+        {
+          "tick": 869,
+          "kind": "ENTER",
+          "actor": 1,
+          "a": "SPECIAL_KNOCKBACK",
+          "b": 0
+        }
+      ],
+      "artifact": "ui-report.json"
+    },
+    {
+      "name": "joiner in pause",
+      "ok": true,
+      "detail": "player 1 alone reaches the pause at tick 704; pad 2 starts at +20 and joins (pool 6, players 2) while the pause stays up (phase 2 at +30); player 1 picks the dash at +60 (1 pick); the joiner's special at +100 is SPECIAL_DASH; the pause entered 1 time(s), so the joiner got no second prompt",
+      "pauseTick": 704,
+      "joins": [
+        {
+          "tick": 21,
+          "kind": "JOIN",
+          "actor": 0,
+          "a": 3,
+          "b": 0
+        },
+        {
+          "tick": 724,
+          "kind": "JOIN",
+          "actor": 1,
+          "a": 6,
+          "b": 2
+        }
+      ],
+      "picks": [
+        {
+          "tick": 764,
+          "kind": "PICK",
+          "actor": 0,
+          "a": 1,
+          "b": 60
+        }
+      ],
+      "artifact": "ui-report.json"
+    },
+    {
+      "name": "AE3 mid-fight join",
+      "ok": true,
+      "detail": "solo, 3 lives; pad 2 starts at tick 200: player 2 stands at x -0.109 (left edge of the frame: camera 4.200 - half-width 4.709 + 0.4 = -0.109), the pool goes 3 -> 6 (+3), players 1 -> 2; the 6 spawns after it target 0,1,0,1,0,1 (3 to player 1, 3 to player 2)",
+      "joins": [
+        {
+          "tick": 200,
+          "kind": "JOIN",
+          "actor": 1,
+          "a": 6,
+          "b": 1
+        }
+      ],
+      "spawnTargets": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "x": -0.10875853896141052,
+      "want": -0.10875792720778887,
+      "artifact": "join-events.json"
+    },
+    {
+      "name": "no duplicate",
+      "ok": true,
+      "detail": "start from pad 2 again at tick 260 and from pad 1 at 280 (both in) join nobody: 2 joins in all (player 1 at the title, player 2 once), 2 starts logged as ignored (actors 1,0), players 2, mid-run joins 1",
+      "ignored": [
+        {
+          "tick": 260,
+          "kind": "START_IGNORED",
+          "actor": 1,
+          "a": 0,
+          "b": 0
+        },
+        {
+          "tick": 280,
+          "kind": "START_IGNORED",
+          "actor": 0,
+          "a": 0,
+          "b": 0
+        }
+      ],
+      "artifact": "join-events.json"
+    },
+    {
+      "name": "full run",
+      "ok": true,
+      "detail": "245 script entries, 2300 ticks, title to the clear screen (phase 3) twice: 55 nr.* fields byte-identical (sha256 43160c4ee2d76ddf), checksum 1637854936 both times and the screenshot identical; the bot's own run ends on 1637854936, the same; 491 events, 0 dropped, cw.three.missing 0",
+      "checksum": [
+        1637854936,
+        1637854936,
+        1637854936
+      ],
+      "whitelistSha256": "43160c4ee2d76ddf3ba569de3f5ed496ecaabd55c3baaba3751e15e6d21a0a9a",
+      "artifact": "full-determinism.json"
+    },
+    {
+      "name": "clear -> title",
+      "ok": true,
+      "detail": "the clear screen at tick 2401 (phase 3) ignores start; back at 2402 returns to the title: phase 0, players 0, lives 0, wave 0, cleared 0, the tick counter on at 2450",
+      "artifact": "ui-report.json"
+    },
+    {
+      "name": "game over",
+      "ok": true,
+      "detail": "solo and idle: the pool empties and the game is over at tick 3449; the start at 4300 is refused (counted 1, logged) and nothing moves; back at 4400 returns to the title (phase 0, the tick counter on at 4450); a start at 4500 joins a new player 1 (players 1, lives 3)",
+      "gameOverTick": 3449,
+      "artifact": "ui-report.json"
+    },
+    {
+      "name": "glyphs",
+      "ok": true,
+      "detail": "a profiler trace of each screen: the control sees 95 text.glyph_bake zones in frame 0 (the preload), and the title (80 frames traced), the fight (60), the upgrade screen (60) and the clear screen (90) bake 0, 0, 0, 0 after it; glyphs missing 0, render2d atlas pages 1",
+      "windows": [
+        {
+          "label": "frame 0 (control)",
+          "start": 0,
+          "frames": 4,
+          "bakeZones": 95,
+          "afterFrame0": 0,
+          "perFrame": {
+            "0": 95
+          }
+        },
+        {
+          "label": "title and joins",
+          "start": 1,
+          "frames": 80,
+          "bakeZones": 0,
+          "afterFrame0": 0,
+          "perFrame": {}
+        },
+        {
+          "label": "fight",
+          "start": 400,
+          "frames": 60,
+          "bakeZones": 0,
+          "afterFrame0": 0,
+          "perFrame": {}
+        },
+        {
+          "label": "upgrade pause",
+          "start": 730,
+          "frames": 60,
+          "bakeZones": 0,
+          "afterFrame0": 0,
+          "perFrame": {}
+        },
+        {
+          "label": "clear screen",
+          "start": 2200,
+          "frames": 90,
+          "bakeZones": 0,
+          "afterFrame0": 0,
+          "perFrame": {}
+        }
+      ],
+      "artifact": "glyph-bakes.json"
+    },
+    {
+      "name": "sound",
+      "ok": true,
+      "detail": "hit asked 63x, last at tick 2164, 53 voices; grab asked 12x, last at tick 1710, 12 voices; special asked 6x, last at tick 2127, 5 voices; hurt asked 13x, last at tick 2073, 8 voices; confirm asked 4x, last at tick 780, 4 voices; a voice was created (1); per-sound voice caps hit 3, grab 2, special 2, hurt 3, confirm 2",
+      "counts": [
+        63,
+        12,
+        6,
+        13,
+        4
+      ],
+      "ticks": [
+        2164,
+        1710,
+        2127,
+        2073,
+        780
+      ],
+      "played": [
+        53,
+        12,
+        5,
+        8,
+        4
+      ],
+      "voiceCaps": {
+        "HIT": {
+          "file": "hit.wav",
+          "maxVoices": 3
+        },
+        "GRAB": {
+          "file": "grab.wav",
+          "maxVoices": 2
+        },
+        "SPECIAL": {
+          "file": "special.wav",
+          "maxVoices": 2
+        },
+        "HURT": {
+          "file": "hurt.wav",
+          "maxVoices": 3
+        },
+        "CONFIRM": {
+          "file": "confirm.wav",
+          "maxVoices": 2
+        }
+      },
+      "artifact": "ui-report.json"
+    }
+  ],
+  "constants": {
+    "LIVES": 3,
+    "LOCKOUT": 30,
+    "PRESENCE": 30,
+    "MARGIN": 0.4
+  },
+  "voiceCaps": {
+    "HIT": {
+      "file": "hit.wav",
+      "maxVoices": 3
+    },
+    "GRAB": {
+      "file": "grab.wav",
+      "maxVoices": 2
+    },
+    "SPECIAL": {
+      "file": "special.wav",
+      "maxVoices": 2
+    },
+    "HURT": {
+      "file": "hurt.wav",
+      "maxVoices": 3
+    },
+    "CONFIRM": {
+      "file": "confirm.wav",
+      "maxVoices": 2
+    }
+  }
+}

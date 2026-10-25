@@ -1,0 +1,48 @@
+{
+  "windows": [
+    {
+      "label": "frame 0 (control)",
+      "start": 0,
+      "frames": 4,
+      "bakeZones": 95,
+      "afterFrame0": 0,
+      "perFrame": {
+        "0": 95
+      }
+    },
+    {
+      "label": "title and joins",
+      "start": 1,
+      "frames": 80,
+      "bakeZones": 0,
+      "afterFrame0": 0,
+      "perFrame": {}
+    },
+    {
+      "label": "fight",
+      "start": 400,
+      "frames": 60,
+      "bakeZones": 0,
+      "afterFrame0": 0,
+      "perFrame": {}
+    },
+    {
+      "label": "upgrade pause",
+      "start": 730,
+      "frames": 60,
+      "bakeZones": 0,
+      "afterFrame0": 0,
+      "perFrame": {}
+    },
+    {
+      "label": "clear screen",
+      "start": 2200,
+      "frames": 90,
+      "bakeZones": 0,
+      "afterFrame0": 0,
+      "perFrame": {}
+    }
+  ],
+  "glyphsMissing": 0,
+  "atlasPages": 1
+}

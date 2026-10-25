@@ -1,0 +1,8 @@
+{
+  sil7: 18162,
+  sil8: 18450,
+  overlapPx: 5652,
+  overlapShows7Exactly: 5652,
+  overlapShows8Exactly: 0,
+  overlapMixed: 0
+}

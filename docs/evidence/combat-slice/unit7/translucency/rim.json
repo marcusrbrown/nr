@@ -1,0 +1,72 @@
+[
+  {
+    "edgeDistancePx": "1-3",
+    "pixels": 2785,
+    "litLuma": 91.7,
+    "flatLuma": 110.8,
+    "ratio": 0.828
+  },
+  {
+    "edgeDistancePx": "4-6",
+    "pixels": 2300,
+    "litLuma": 93.7,
+    "flatLuma": 104.5,
+    "ratio": 0.897
+  },
+  {
+    "edgeDistancePx": "7-9",
+    "pixels": 2151,
+    "litLuma": 91.1,
+    "flatLuma": 99,
+    "ratio": 0.92
+  },
+  {
+    "edgeDistancePx": "10-12",
+    "pixels": 1817,
+    "litLuma": 88.7,
+    "flatLuma": 94.9,
+    "ratio": 0.934
+  },
+  {
+    "edgeDistancePx": "13-15",
+    "pixels": 1663,
+    "litLuma": 86.3,
+    "flatLuma": 91.8,
+    "ratio": 0.94
+  },
+  {
+    "edgeDistancePx": "16-18",
+    "pixels": 1562,
+    "litLuma": 88.7,
+    "flatLuma": 93.3,
+    "ratio": 0.951
+  },
+  {
+    "edgeDistancePx": "19-21",
+    "pixels": 1310,
+    "litLuma": 85.8,
+    "flatLuma": 91.3,
+    "ratio": 0.94
+  },
+  {
+    "edgeDistancePx": "22-24",
+    "pixels": 873,
+    "litLuma": 90.5,
+    "flatLuma": 98.6,
+    "ratio": 0.918
+  },
+  {
+    "edgeDistancePx": "25-27",
+    "pixels": 755,
+    "litLuma": 82.3,
+    "flatLuma": 91.5,
+    "ratio": 0.9
+  },
+  {
+    "edgeDistancePx": "28-30",
+    "pixels": 2946,
+    "litLuma": 97.2,
+    "flatLuma": 107.8,
+    "ratio": 0.901
+  }
+]

@@ -1,0 +1,247 @@
+{
+  "hosts": [
+    "native-wgpu",
+    "cart-wgpu",
+    "native-gl",
+    "cart-gl"
+  ],
+  "compared": [
+    "nr.ticks",
+    "nr.hero_pos",
+    "nr.hero_clip",
+    "nr.hero_step",
+    "nr.hero_frame",
+    "nr.light_pos",
+    "nr.light_intensity",
+    "nr.cam_x",
+    "nr.cam_left",
+    "nr.checksum",
+    "nr.sim_checksum",
+    "nr.actor_y",
+    "nr.actor_vy",
+    "nr.actor_state",
+    "nr.actor_state_tick",
+    "nr.actor_hp",
+    "nr.actor_facing",
+    "nr.actor_team",
+    "nr.actor_invuln",
+    "nr.actor_kind",
+    "nr.actor_target",
+    "nr.actor_away",
+    "nr.actor_present",
+    "nr.rng",
+    "nr.wave",
+    "nr.lives",
+    "nr.input_count",
+    "nr.event_count",
+    "nr.events",
+    "nr.events_dropped",
+    "nr.game_over",
+    "nr.start_refused",
+    "nr.upgrade_ready",
+    "nr.cleared",
+    "nr.wave_phase",
+    "nr.players",
+    "nr.phase",
+    "nr.special_variant",
+    "nr.pick_player",
+    "nr.joins",
+    "nr.ignored_starts",
+    "nr.sfx_count",
+    "nr.sfx_tick"
+  ],
+  "runs": [
+    {
+      "name": "full",
+      "app": "nr",
+      "input": "games/nr/tests/input-2p-full.json",
+      "frames": 2300,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "bot-full",
+      "app": "nr_botfull",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 2300,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 1637854936,
+          "ticks": 2300,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "upgrade",
+      "app": "nr",
+      "input": "games/nr/tests/input-upgrade.json",
+      "frames": 989,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 3196666525,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 3196666525,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 3196666525,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 3196666525,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "upgrade-tie",
+      "app": "nr",
+      "input": "games/nr/tests/input-upgrade-tie.json",
+      "frames": 989,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 3663298555,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 3663298555,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 3663298555,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 3663298555,
+          "ticks": 989,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "upgrade-join",
+      "app": "nr",
+      "input": "games/nr/tests/input-upgrade-join.json",
+      "frames": 924,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 339417132,
+          "ticks": 924,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 339417132,
+          "ticks": 924,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 339417132,
+          "ticks": 924,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 339417132,
+          "ticks": 924,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "join-mid",
+      "app": "nr",
+      "input": "games/nr/tests/input-join-mid.json",
+      "frames": 800,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 1670758902,
+          "ticks": 800,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 1670758902,
+          "ticks": 800,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 1670758902,
+          "ticks": 800,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 1670758902,
+          "ticks": 800,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    }
+  ]
+}

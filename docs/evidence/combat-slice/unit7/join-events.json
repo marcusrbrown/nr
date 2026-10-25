@@ -1,0 +1,110 @@
+{
+  "joinTick": 200,
+  "events": [
+    {
+      "tick": 21,
+      "kind": "JOIN",
+      "actor": 0,
+      "a": 3,
+      "b": 0
+    },
+    {
+      "tick": 61,
+      "kind": "PHASE",
+      "actor": -1,
+      "a": 1,
+      "b": 0
+    },
+    {
+      "tick": 122,
+      "kind": "SPAWN",
+      "actor": 2,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 143,
+      "kind": "SPAWN",
+      "actor": 3,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 166,
+      "kind": "SPAWN",
+      "actor": 4,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 193,
+      "kind": "SPAWN",
+      "actor": 5,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 200,
+      "kind": "JOIN",
+      "actor": 1,
+      "a": 6,
+      "b": 1
+    },
+    {
+      "tick": 260,
+      "kind": "START_IGNORED",
+      "actor": 1,
+      "a": 0,
+      "b": 0
+    },
+    {
+      "tick": 280,
+      "kind": "START_IGNORED",
+      "actor": 0,
+      "a": 0,
+      "b": 0
+    },
+    {
+      "tick": 430,
+      "kind": "SPAWN",
+      "actor": 2,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 457,
+      "kind": "SPAWN",
+      "actor": 3,
+      "a": 2,
+      "b": 1
+    },
+    {
+      "tick": 480,
+      "kind": "SPAWN",
+      "actor": 4,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 504,
+      "kind": "SPAWN",
+      "actor": 5,
+      "a": 2,
+      "b": 1
+    },
+    {
+      "tick": 530,
+      "kind": "SPAWN",
+      "actor": 6,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 548,
+      "kind": "SPAWN",
+      "actor": 7,
+      "a": 2,
+      "b": 1
+    }
+  ]
+}

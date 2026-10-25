@@ -1,0 +1,147 @@
+{
+  "pauseTick": 729,
+  "events": [
+    {
+      "tick": 729,
+      "kind": "LAND",
+      "actor": 6,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 729,
+      "kind": "DEAD",
+      "actor": 6,
+      "a": 0,
+      "b": 0
+    },
+    {
+      "tick": 729,
+      "kind": "ENTER",
+      "actor": 6,
+      "a": "KNOCKDOWN",
+      "b": 0
+    },
+    {
+      "tick": 729,
+      "kind": "WAVE_END",
+      "actor": -1,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 729,
+      "kind": "UPGRADE",
+      "actor": -1,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 729,
+      "kind": "PHASE",
+      "actor": -1,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 734,
+      "kind": "START_IGNORED",
+      "actor": 1,
+      "a": 0,
+      "b": 0
+    },
+    {
+      "tick": 769,
+      "kind": "PICK",
+      "actor": 1,
+      "a": 1,
+      "b": 40
+    },
+    {
+      "tick": 769,
+      "kind": "PHASE",
+      "actor": -1,
+      "a": 1,
+      "b": 0
+    },
+    {
+      "tick": 812,
+      "kind": "ENTER",
+      "actor": 6,
+      "a": "DEAD",
+      "b": 0
+    },
+    {
+      "tick": 829,
+      "kind": "ENTER",
+      "actor": 0,
+      "a": "SPECIAL_DASH",
+      "b": 0
+    },
+    {
+      "tick": 835,
+      "kind": "SKIP_TEAM",
+      "actor": 0,
+      "a": 1,
+      "b": 0
+    },
+    {
+      "tick": 858,
+      "kind": "ENTER",
+      "actor": 0,
+      "a": "IDLE",
+      "b": 0
+    },
+    {
+      "tick": 869,
+      "kind": "ENTER",
+      "actor": 1,
+      "a": "SPECIAL_DASH",
+      "b": 0
+    },
+    {
+      "tick": 880,
+      "kind": "SKIP_TEAM",
+      "actor": 1,
+      "a": 0,
+      "b": 0
+    },
+    {
+      "tick": 898,
+      "kind": "ENTER",
+      "actor": 1,
+      "a": "IDLE",
+      "b": 0
+    },
+    {
+      "tick": 919,
+      "kind": "WAVE_BEGIN",
+      "actor": -1,
+      "a": 3,
+      "b": 7
+    },
+    {
+      "tick": 920,
+      "kind": "SPAWN",
+      "actor": 2,
+      "a": 2,
+      "b": 0
+    },
+    {
+      "tick": 942,
+      "kind": "SPAWN",
+      "actor": 3,
+      "a": 2,
+      "b": 1
+    },
+    {
+      "tick": 967,
+      "kind": "SPAWN",
+      "actor": 4,
+      "a": 2,
+      "b": 0
+    }
+  ],
+  "fullRunDashAfterPick": 6,
+  "fullRunKnockbackAfterPick": 0
+}

@@ -1,0 +1,3 @@
+grunt: distinct alpha values [0,255], opaque texels 56409, partial-alpha texels 0, normal texels under opaque colour with alpha != 255: 0, normal length 0.994..1.006
+hero: distinct alpha values [0,255], opaque texels 293719, partial-alpha texels 0, normal texels under opaque colour with alpha != 255: 0, normal length 0.993..1.006
+heavy: distinct alpha values [0,255], opaque texels 145919, partial-alpha texels 0, normal texels under opaque colour with alpha != 255: 0, normal length 0.993..1.007

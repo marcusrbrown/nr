@@ -1,0 +1,134 @@
+{
+  "input": "games/nr/tests/input-2p-full.json",
+  "compared": [
+    "nr.ticks",
+    "nr.hero_pos",
+    "nr.hero_clip",
+    "nr.hero_step",
+    "nr.hero_frame",
+    "nr.cam_x",
+    "nr.checksum",
+    "nr.sim_checksum",
+    "nr.actor_state",
+    "nr.actor_hp",
+    "nr.actor_present",
+    "nr.rng",
+    "nr.wave",
+    "nr.lives",
+    "nr.event_count",
+    "nr.events",
+    "nr.phase",
+    "nr.special_variant",
+    "nr.pick_player",
+    "nr.joins",
+    "nr.sfx_count",
+    "nr.sfx_tick",
+    "nr.players"
+  ],
+  "rows": [
+    {
+      "name": "title",
+      "frame": 30,
+      "phase": 0,
+      "wave": 0,
+      "lives": 3,
+      "missing": [
+        0,
+        0
+      ],
+      "glyphsMissing": [
+        0,
+        0
+      ],
+      "stateEqual": true,
+      "size": [
+        1920,
+        1080,
+        1920,
+        1080
+      ],
+      "pixelsDiffering": 0,
+      "maxChannelDiff": 0,
+      "share": 0,
+      "ok": true
+    },
+    {
+      "name": "hud-fight",
+      "frame": 1000,
+      "phase": 1,
+      "wave": 3,
+      "lives": 6,
+      "missing": [
+        0,
+        0
+      ],
+      "glyphsMissing": [
+        0,
+        0
+      ],
+      "stateEqual": true,
+      "size": [
+        1920,
+        1080,
+        1920,
+        1080
+      ],
+      "pixelsDiffering": 0,
+      "maxChannelDiff": 0,
+      "share": 0,
+      "ok": true
+    },
+    {
+      "name": "upgrade",
+      "frame": 765,
+      "phase": 2,
+      "wave": 2,
+      "lives": 6,
+      "missing": [
+        0,
+        0
+      ],
+      "glyphsMissing": [
+        0,
+        0
+      ],
+      "stateEqual": true,
+      "size": [
+        1920,
+        1080,
+        1920,
+        1080
+      ],
+      "pixelsDiffering": 0,
+      "maxChannelDiff": 0,
+      "share": 0,
+      "ok": true
+    },
+    {
+      "name": "clear",
+      "frame": 2250,
+      "phase": 3,
+      "wave": 4,
+      "lives": 4,
+      "missing": [
+        0,
+        0
+      ],
+      "glyphsMissing": [
+        0,
+        0
+      ],
+      "stateEqual": true,
+      "size": [
+        1920,
+        1080,
+        1920,
+        1080
+      ],
+      "pixelsDiffering": 0,
+      "maxChannelDiff": 0,
+      "share": 0,
+      "ok": true
+    }
+  ]
+}

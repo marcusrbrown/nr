@@ -1,0 +1,6 @@
+{
+  backgroundBothRuns: 1914588,
+  actorPixelsIdenticalOverWhiteAndBlack: 159012,
+  actorPixelsDiffering: 0,
+  maxChannelDiff: 0
+}

@@ -30,7 +30,7 @@ const NATIVE = resolve(ROOT, opt('native-state', 'out/unit6/sim/waves-t2700.json
 const DEMO_FRAMES = 2600; // the bot's run clears wave 4 at tick 2374 and starts the street again after a rest (BOT_REST in main.c)
 const LIVE_SECONDS = +opt('live-seconds', 120);
 const FRAMES = 2700;
-const CART = resolve(ROOT, 'build/cart-wgpu/carts/nr.wasc');
+const CART = resolve(ROOT, 'build/cart-wgpu/carts/nr_waves.wasc');
 const SCRIPT = JSON.parse(readFileSync(join(ROOT, 'games/nr/tests/input-waves.json'), 'utf8'));
 const SHOTS = [450, 990, 1600, 2050];
 mkdirSync(OUT, { recursive: true });
