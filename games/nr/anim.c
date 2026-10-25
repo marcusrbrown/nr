@@ -169,6 +169,23 @@ const nr_clip_slot nr_hero_clips[NR_HERO_CLIP_COUNT] = {
   [NR_HERO_SPECIAL_DASH] = { "special_dash", false },
 };
 
+const nr_clip_slot nr_grunt_clips[NR_GRUNT_CLIP_COUNT] = {
+  [NR_GRUNT_IDLE] = { "idle", false },
+  [NR_GRUNT_WALK] = { "walk", false },
+  [NR_GRUNT_ATTACK] = { "attack", false },
+  [NR_GRUNT_HURT] = { "hurt", false },
+  [NR_GRUNT_KNOCKDOWN] = { "knockdown", false },
+  [NR_GRUNT_GETUP] = { "getup", false },
+};
+
+const nr_clip_slot nr_heavy_clips[NR_HEAVY_CLIP_COUNT] = {
+  [NR_HEAVY_IDLE] = { "idle", false },
+  [NR_HEAVY_WALK] = { "walk", false },
+  [NR_HEAVY_ATTACK] = { "attack", false },
+  [NR_HEAVY_HURT] = { "hurt", false },
+  [NR_HEAVY_STAGGER] = { "stagger", false },
+};
+
 bool nr_clips_resolve(const nr_atlas *a, const nr_clip_slot *table, int count, int *index_out) {
   bool ok = true;
   for (int i = 0; i < count; i++) {

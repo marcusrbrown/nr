@@ -1,0 +1,594 @@
+{
+  "schemaVersion": 1,
+  "id": "heavy",
+  "title": "Heavy (agent draft for owner tuning)",
+  "kitFiles": [
+    {
+      "kit": "universal-animation-library",
+      "path": "UAL1_Standard.glb",
+      "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997"
+    },
+    {
+      "kit": "universal-animation-library-2",
+      "path": "UAL2_Standard.glb",
+      "sha256": "8cee20ab1bc55130092447e810e26df22dd2803eccc54f52137a7d54d7ab88a8"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.bin",
+      "sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.gltf",
+      "sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4"
+    }
+  ],
+  "models": {
+    "body": {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.gltf",
+      "mesh": "SuperHero_Male",
+      "extras": {
+        "Eyes": "eyes",
+        "Eyebrows": "brow"
+      }
+    },
+    "animations": [
+      {
+        "kit": "universal-animation-library",
+        "path": "UAL1_Standard.glb"
+      },
+      {
+        "kit": "universal-animation-library-2",
+        "path": "UAL2_Standard.glb"
+      }
+    ]
+  },
+  "body": {
+    "standingHeightPx": 136,
+    "widthScale": 1.55,
+    "depthScale": 1.3,
+    "headScale": 0.86,
+    "handScale": 1.5
+  },
+  "palette": {
+    "default": "#ff00ff",
+    "skin": "#7a5340",
+    "eyes": "#0b0d14",
+    "brow": "#1d1610",
+    "suit": "#343846",
+    "suitHi": "#474c5e",
+    "plate": "#1d2029",
+    "plateHi": "#3b4052",
+    "hot": "#ff5a1f",
+    "hotDim": "#d23c14",
+    "boots": "#0e0f13",
+    "sole": "#3a3d48",
+    "helm": "#1d2029",
+    "visor": "#ff7a2e",
+    "pack": "#2a2d3a"
+  },
+  "defaultColor": "default",
+  "regions": [
+    {
+      "name": "head",
+      "color": "skin",
+      "bones": [
+        "Head",
+        "neck_01"
+      ]
+    },
+    {
+      "name": "gauntlets",
+      "color": "plate",
+      "bones": [
+        "hand_*",
+        "index_*",
+        "middle_*",
+        "pinky_*",
+        "ring_*",
+        "thumb_*"
+      ]
+    },
+    {
+      "name": "forearms",
+      "color": "suit",
+      "bones": [
+        "lowerarm_*"
+      ]
+    },
+    {
+      "name": "boots",
+      "color": "boots",
+      "bones": [
+        "foot_*",
+        "ball_*"
+      ]
+    },
+    {
+      "name": "boot-shafts",
+      "color": "sole",
+      "bones": [
+        "calf_*"
+      ],
+      "heightRange": [
+        0,
+        0.16
+      ]
+    },
+    {
+      "name": "yoke",
+      "color": "suitHi",
+      "bones": [
+        "spine_03",
+        "clavicle_*"
+      ]
+    },
+    {
+      "name": "torso",
+      "color": "suit",
+      "bones": [
+        "spine_*",
+        "upperarm_*"
+      ]
+    },
+    {
+      "name": "legs",
+      "color": "suit",
+      "bones": [
+        "pelvis",
+        "thigh_*",
+        "calf_*"
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "id": "chest-plate",
+      "shape": "box",
+      "bone": "spine_03",
+      "offset": [
+        0,
+        -0.07,
+        0.03
+      ],
+      "size": [
+        0.3,
+        0.16,
+        0.26
+      ],
+      "color": "plate"
+    },
+    {
+      "id": "chest-core",
+      "shape": "box",
+      "bone": "spine_03",
+      "offset": [
+        0,
+        -0.15,
+        0.03
+      ],
+      "size": [
+        0.1,
+        0.02,
+        0.12
+      ],
+      "color": "hot"
+    },
+    {
+      "id": "belly-plate",
+      "shape": "box",
+      "bone": "spine_01",
+      "offset": [
+        0,
+        -0.06,
+        0.04
+      ],
+      "size": [
+        0.27,
+        0.13,
+        0.17
+      ],
+      "color": "plateHi"
+    },
+    {
+      "id": "belt",
+      "shape": "cylinder",
+      "bone": "pelvis",
+      "offset": [
+        0,
+        -0.016,
+        0.075
+      ],
+      "size": [
+        0.4,
+        0.3,
+        0.07
+      ],
+      "color": "hotDim"
+    },
+    {
+      "id": "pauldron-r",
+      "shape": "sphere",
+      "bone": "upperarm_r",
+      "offset": [
+        -0.03,
+        0.01,
+        0.06
+      ],
+      "size": [
+        0.25,
+        0.23,
+        0.17
+      ],
+      "color": "plate"
+    },
+    {
+      "id": "pauldron-l",
+      "shape": "sphere",
+      "bone": "upperarm_l",
+      "offset": [
+        0.03,
+        0.01,
+        0.06
+      ],
+      "size": [
+        0.25,
+        0.23,
+        0.17
+      ],
+      "color": "plate"
+    },
+    {
+      "id": "pauldron-trim-r",
+      "shape": "cylinder",
+      "bone": "upperarm_r",
+      "offset": [
+        -0.03,
+        0.01,
+        0
+      ],
+      "size": [
+        0.24,
+        0.22,
+        0.03
+      ],
+      "color": "hot"
+    },
+    {
+      "id": "pauldron-trim-l",
+      "shape": "cylinder",
+      "bone": "upperarm_l",
+      "offset": [
+        0.03,
+        0.01,
+        0
+      ],
+      "size": [
+        0.24,
+        0.22,
+        0.03
+      ],
+      "color": "hot"
+    },
+    {
+      "id": "bracer-r",
+      "shape": "cylinder",
+      "bone": "lowerarm_r",
+      "offset": [
+        0,
+        0,
+        -0.07
+      ],
+      "size": [
+        0.12,
+        0.12,
+        0.17
+      ],
+      "color": "plateHi"
+    },
+    {
+      "id": "bracer-l",
+      "shape": "cylinder",
+      "bone": "lowerarm_l",
+      "offset": [
+        0,
+        0,
+        -0.07
+      ],
+      "size": [
+        0.12,
+        0.12,
+        0.17
+      ],
+      "color": "plateHi"
+    },
+    {
+      "id": "bracer-band-r",
+      "shape": "cylinder",
+      "bone": "lowerarm_r",
+      "offset": [
+        0,
+        0,
+        -0.14
+      ],
+      "size": [
+        0.125,
+        0.125,
+        0.03
+      ],
+      "color": "hot"
+    },
+    {
+      "id": "bracer-band-l",
+      "shape": "cylinder",
+      "bone": "lowerarm_l",
+      "offset": [
+        0,
+        0,
+        -0.14
+      ],
+      "size": [
+        0.125,
+        0.125,
+        0.03
+      ],
+      "color": "hot"
+    },
+    {
+      "id": "thigh-r",
+      "shape": "cylinder",
+      "bone": "thigh_r",
+      "offset": [
+        0,
+        -0.004,
+        -0.215
+      ],
+      "size": [
+        0.26,
+        0.28,
+        0.42
+      ],
+      "color": "suit"
+    },
+    {
+      "id": "thigh-l",
+      "shape": "cylinder",
+      "bone": "thigh_l",
+      "offset": [
+        0,
+        -0.004,
+        -0.215
+      ],
+      "size": [
+        0.26,
+        0.28,
+        0.42
+      ],
+      "color": "suit"
+    },
+    {
+      "id": "shin-r",
+      "shape": "cylinder",
+      "bone": "calf_r",
+      "offset": [
+        0,
+        0.03,
+        -0.16
+      ],
+      "size": [
+        0.19,
+        0.2,
+        0.3
+      ],
+      "color": "suit"
+    },
+    {
+      "id": "shin-l",
+      "shape": "cylinder",
+      "bone": "calf_l",
+      "offset": [
+        0,
+        0.03,
+        -0.16
+      ],
+      "size": [
+        0.19,
+        0.2,
+        0.3
+      ],
+      "color": "suit"
+    },
+    {
+      "id": "knee-r",
+      "shape": "box",
+      "bone": "calf_r",
+      "offset": [
+        0,
+        -0.02,
+        0
+      ],
+      "size": [
+        0.22,
+        0.2,
+        0.13
+      ],
+      "color": "plate"
+    },
+    {
+      "id": "knee-l",
+      "shape": "box",
+      "bone": "calf_l",
+      "offset": [
+        0,
+        -0.02,
+        0
+      ],
+      "size": [
+        0.22,
+        0.2,
+        0.13
+      ],
+      "color": "plate"
+    },
+    {
+      "id": "helm",
+      "shape": "sphere",
+      "bone": "Head",
+      "offset": [
+        0,
+        -0.005,
+        0.1
+      ],
+      "size": [
+        0.19,
+        0.2,
+        0.17
+      ],
+      "color": "helm"
+    },
+    {
+      "id": "visor",
+      "shape": "box",
+      "bone": "Head",
+      "offset": [
+        0,
+        -0.1,
+        0.1
+      ],
+      "size": [
+        0.15,
+        0.03,
+        0.04
+      ],
+      "color": "visor"
+    },
+    {
+      "id": "pack",
+      "shape": "box",
+      "bone": "spine_02",
+      "offset": [
+        0,
+        0.2,
+        0.11
+      ],
+      "size": [
+        0.3,
+        0.16,
+        0.3
+      ],
+      "color": "pack"
+    },
+    {
+      "id": "pack-vent",
+      "shape": "box",
+      "bone": "spine_02",
+      "offset": [
+        0,
+        0.285,
+        0.14
+      ],
+      "size": [
+        0.2,
+        0.02,
+        0.1
+      ],
+      "color": "hot"
+    }
+  ],
+  "pose": {
+    "fitClip": "idle",
+    "anchor": "pelvis-xy",
+    "pinRoot": true,
+    "facing": "east",
+    "note": "Sprites are rendered facing east; the game mirrors them for west about the plane origin. pinRoot removes the library's root travel; anchor holds the pelvis at the plane origin so the simulation moves the actor and a figure lying on the floor stays inside the cell on both sides of it (a feet anchor puts the knocked-down body 124 px to one side of the origin)."
+  },
+  "clips": {
+    "idle": {
+      "status": "substitute",
+      "ready": true,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Idle_FoldArms_Loop",
+          "start": 0,
+          "end": 60
+        }
+      ],
+      "proposal": {
+        "frames": 4,
+        "ms": 600
+      }
+    },
+    "walk": {
+      "status": "substitute",
+      "ready": true,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Walk_Loop",
+          "start": 0,
+          "end": 32
+        }
+      ],
+      "proposal": {
+        "frames": 6,
+        "ms": 230
+      }
+    },
+    "attack": {
+      "status": "substitute",
+      "ready": true,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Melee_Hook",
+          "start": 0,
+          "end": 11.2
+        },
+        {
+          "action": "Melee_Hook_Rec",
+          "start": 0,
+          "end": 14.4
+        }
+      ],
+      "proposal": {
+        "frames": 8,
+        "ms": 130
+      }
+    },
+    "hurt": {
+      "status": "exact",
+      "ready": true,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Hit_Chest",
+          "start": 0,
+          "end": 8
+        }
+      ],
+      "proposal": {
+        "frames": 4,
+        "ms": 80
+      }
+    },
+    "stagger": {
+      "status": "substitute",
+      "ready": true,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Hit_Head",
+          "start": 0,
+          "end": 10.4
+        }
+      ],
+      "proposal": {
+        "frames": 5,
+        "ms": 70
+      }
+    }
+  }
+}

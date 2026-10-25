@@ -65,6 +65,12 @@ typedef struct {
 
 extern const nr_clip_slot nr_hero_clips[NR_HERO_CLIP_COUNT];
 
+/* The grunt's and the heavy's clips, in the order of tools/render/recipes/grunt.json and heavy.json. */
+typedef enum { NR_GRUNT_IDLE, NR_GRUNT_WALK, NR_GRUNT_ATTACK, NR_GRUNT_HURT, NR_GRUNT_KNOCKDOWN, NR_GRUNT_GETUP, NR_GRUNT_CLIP_COUNT } nr_grunt_clip;
+typedef enum { NR_HEAVY_IDLE, NR_HEAVY_WALK, NR_HEAVY_ATTACK, NR_HEAVY_HURT, NR_HEAVY_STAGGER, NR_HEAVY_CLIP_COUNT } nr_heavy_clip;
+extern const nr_clip_slot nr_grunt_clips[NR_GRUNT_CLIP_COUNT];
+extern const nr_clip_slot nr_heavy_clips[NR_HEAVY_CLIP_COUNT];
+
 /* Fills `index_out[i]` with the atlas clip index of `table[i]` (-1 for a gap slot). Returns false and reports through
  * cw_error when a slot that is not a gap has no clip in the atlas or a gap slot has one. */
 bool nr_clips_resolve(const nr_atlas *a, const nr_clip_slot *table, int count, int *index_out);

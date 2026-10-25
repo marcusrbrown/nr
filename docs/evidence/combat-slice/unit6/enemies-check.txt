@@ -1,0 +1,19 @@
+PASS grunt: provenance: manifest names this recipe and profile: recipe 692f3760d325, profile 62c13d1c9f19
+PASS grunt: provenance: sheet hashes: 2 sheet(s) match the manifest
+PASS grunt: clips: the atlas has the character's clips, in recipe order, drawn on the audited actions: idle 4x500ms, walk 5x190ms, attack 5x70ms, hurt 4x80ms, knockdown 5x144ms, getup 4x135ms
+PASS grunt: clips: anim.c names the same clips: 6 slots
+PASS grunt: frames: at least 4 per clip, contiguous, the pivot inside every rect, no silhouette within 3 px of a cell edge: 6 clips, 27 frames of 160x160, pivot (80, 144); silhouettes inside x 26-143, from y 27
+PASS grunt: pages: one page of at most 2048 square, rects inside it, the normal rects match the colour rects: 1920x480, 27 frames (allowance 27)
+PASS grunt: state table: the sim.c lengths follow the clips: attack 21 (clip 21), hurt 19 (clip 19.2), knockdown 43 (clip 43.2), getup 32 (clip 32.4)
+PASS grunt: contact sheets written: contact-grunt.png 2772x3196: 6 rows, 4x nearest, pivot in magenta
+PASS heavy: provenance: manifest names this recipe and profile: recipe 484b2b6a3743, profile 33d4efe17351
+PASS heavy: provenance: sheet hashes: 2 sheet(s) match the manifest
+PASS heavy: clips: the atlas has the character's clips, in recipe order, drawn on the audited actions: idle 4x600ms, walk 6x230ms, attack 8x130ms, hurt 4x80ms, stagger 5x70ms
+PASS heavy: clips: anim.c names the same clips: 5 slots
+PASS heavy: frames: at least 4 per clip, contiguous, the pivot inside every rect, no silhouette within 3 px of a cell edge: 5 clips, 27 frames of 224x224, pivot (112, 176); silhouettes inside x 33-219, from y 44
+PASS heavy: pages: one page of at most 2048 square, rects inside it, the normal rects match the colour rects: 2016x672, 27 frames (allowance 38)
+PASS heavy: state table: the sim.c lengths follow the clips: heavy_attack 62 (clip 62.4), hurt 19 (clip 19.2)
+PASS heavy: contact sheets written: contact-heavy.png 6456x3144: 5 rows, 4x nearest, pivot in magenta
+PASS budget: hero, grunt and heavy fit 64 MiB decoded: hero 96 frames 18.75 MiB, grunt 27 frames 7.03, heavy 27 frames 10.34: total 36.12 MiB; with the hero's planned 106 frames 38.46 MiB; load peak (one more sheet decoding) 49.01 of 64 MiB
+
+ok: 17 of 17 checks

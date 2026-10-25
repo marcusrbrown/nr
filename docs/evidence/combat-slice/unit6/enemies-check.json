@@ -1,0 +1,237 @@
+{
+  "characters": {
+    "grunt": {
+      "frames": 27,
+      "cell": {
+        "width": 160,
+        "height": 160
+      },
+      "pages": [
+        {
+          "index": 0,
+          "width": 1920,
+          "height": 480,
+          "colour": 3686400,
+          "normal": 3686400
+        }
+      ],
+      "decodedBytes": 7372800,
+      "clips": [
+        {
+          "clip": "idle",
+          "first": 0,
+          "frames": 4,
+          "ms": 500,
+          "loop": true,
+          "durationMs": 2000
+        },
+        {
+          "clip": "walk",
+          "first": 4,
+          "frames": 5,
+          "ms": 190,
+          "loop": true,
+          "durationMs": 950
+        },
+        {
+          "clip": "attack",
+          "first": 9,
+          "frames": 5,
+          "ms": 70,
+          "loop": false,
+          "durationMs": 350
+        },
+        {
+          "clip": "hurt",
+          "first": 14,
+          "frames": 4,
+          "ms": 80,
+          "loop": false,
+          "durationMs": 320
+        },
+        {
+          "clip": "knockdown",
+          "first": 18,
+          "frames": 5,
+          "ms": 144,
+          "loop": false,
+          "durationMs": 720
+        },
+        {
+          "clip": "getup",
+          "first": 23,
+          "frames": 4,
+          "ms": 135,
+          "loop": false,
+          "durationMs": 540
+        }
+      ],
+      "pngBytes": 253374
+    },
+    "heavy": {
+      "frames": 27,
+      "cell": {
+        "width": 224,
+        "height": 224
+      },
+      "pages": [
+        {
+          "index": 0,
+          "width": 2016,
+          "height": 672,
+          "colour": 5419008,
+          "normal": 5419008
+        }
+      ],
+      "decodedBytes": 10838016,
+      "clips": [
+        {
+          "clip": "idle",
+          "first": 0,
+          "frames": 4,
+          "ms": 600,
+          "loop": true,
+          "durationMs": 2400
+        },
+        {
+          "clip": "walk",
+          "first": 4,
+          "frames": 6,
+          "ms": 230,
+          "loop": true,
+          "durationMs": 1380
+        },
+        {
+          "clip": "attack",
+          "first": 10,
+          "frames": 8,
+          "ms": 130,
+          "loop": false,
+          "durationMs": 1040
+        },
+        {
+          "clip": "hurt",
+          "first": 18,
+          "frames": 4,
+          "ms": 80,
+          "loop": false,
+          "durationMs": 320
+        },
+        {
+          "clip": "stagger",
+          "first": 22,
+          "frames": 5,
+          "ms": 70,
+          "loop": false,
+          "durationMs": 350
+        }
+      ],
+      "pngBytes": 428265
+    }
+  },
+  "checks": [
+    {
+      "name": "grunt: provenance: manifest names this recipe and profile",
+      "ok": true,
+      "detail": "recipe 692f3760d325, profile 62c13d1c9f19"
+    },
+    {
+      "name": "grunt: provenance: sheet hashes",
+      "ok": true,
+      "detail": "2 sheet(s) match the manifest"
+    },
+    {
+      "name": "grunt: clips: the atlas has the character's clips, in recipe order, drawn on the audited actions",
+      "ok": true,
+      "detail": "idle 4x500ms, walk 5x190ms, attack 5x70ms, hurt 4x80ms, knockdown 5x144ms, getup 4x135ms"
+    },
+    {
+      "name": "grunt: clips: anim.c names the same clips",
+      "ok": true,
+      "detail": "6 slots"
+    },
+    {
+      "name": "grunt: frames: at least 4 per clip, contiguous, the pivot inside every rect, no silhouette within 3 px of a cell edge",
+      "ok": true,
+      "detail": "6 clips, 27 frames of 160x160, pivot (80, 144); silhouettes inside x 26-143, from y 27"
+    },
+    {
+      "name": "grunt: pages: one page of at most 2048 square, rects inside it, the normal rects match the colour rects",
+      "ok": true,
+      "detail": "1920x480, 27 frames (allowance 27)"
+    },
+    {
+      "name": "grunt: state table: the sim.c lengths follow the clips",
+      "ok": true,
+      "detail": "attack 21 (clip 21), hurt 19 (clip 19.2), knockdown 43 (clip 43.2), getup 32 (clip 32.4)"
+    },
+    {
+      "name": "grunt: contact sheets written",
+      "ok": true,
+      "detail": "contact-grunt.png 2772x3196: 6 rows, 4x nearest, pivot in magenta"
+    },
+    {
+      "name": "heavy: provenance: manifest names this recipe and profile",
+      "ok": true,
+      "detail": "recipe 484b2b6a3743, profile 33d4efe17351"
+    },
+    {
+      "name": "heavy: provenance: sheet hashes",
+      "ok": true,
+      "detail": "2 sheet(s) match the manifest"
+    },
+    {
+      "name": "heavy: clips: the atlas has the character's clips, in recipe order, drawn on the audited actions",
+      "ok": true,
+      "detail": "idle 4x600ms, walk 6x230ms, attack 8x130ms, hurt 4x80ms, stagger 5x70ms"
+    },
+    {
+      "name": "heavy: clips: anim.c names the same clips",
+      "ok": true,
+      "detail": "5 slots"
+    },
+    {
+      "name": "heavy: frames: at least 4 per clip, contiguous, the pivot inside every rect, no silhouette within 3 px of a cell edge",
+      "ok": true,
+      "detail": "5 clips, 27 frames of 224x224, pivot (112, 176); silhouettes inside x 33-219, from y 44"
+    },
+    {
+      "name": "heavy: pages: one page of at most 2048 square, rects inside it, the normal rects match the colour rects",
+      "ok": true,
+      "detail": "2016x672, 27 frames (allowance 38)"
+    },
+    {
+      "name": "heavy: state table: the sim.c lengths follow the clips",
+      "ok": true,
+      "detail": "heavy_attack 62 (clip 62.4), hurt 19 (clip 19.2)"
+    },
+    {
+      "name": "heavy: contact sheets written",
+      "ok": true,
+      "detail": "contact-heavy.png 6456x3144: 5 rows, 4x nearest, pivot in magenta"
+    },
+    {
+      "name": "budget: hero, grunt and heavy fit 64 MiB decoded",
+      "ok": true,
+      "detail": "hero 96 frames 18.75 MiB, grunt 27 frames 7.03, heavy 27 frames 10.34: total 36.12 MiB; with the hero's planned 106 frames 38.46 MiB; load peak (one more sheet decoding) 49.01 of 64 MiB"
+    }
+  ],
+  "budget": {
+    "limitMiB": 64,
+    "heroFrames": 96,
+    "heroPlannedFrames": 106,
+    "bytes": {
+      "hero": 19660800,
+      "grunt": 7372800,
+      "heavy": 10838016
+    },
+    "heroPlannedBytes": 22118400,
+    "totalBytes": 37871616,
+    "totalMiB": 36.1171875,
+    "plannedBytes": 40329216,
+    "plannedMiB": 38.4609375,
+    "largestSheetBytes": 11059200,
+    "loadPeakMiB": 49.0078125
+  },
+  "ok": true
+}

@@ -3,5 +3,11 @@
 atlases/hero.png
 atlases/hero-n.png
 atlases/hero.json
+atlases/grunt.png
+atlases/grunt-n.png
+atlases/grunt.json
+atlases/heavy.png
+atlases/heavy-n.png
+atlases/heavy.json
 arena/layout.json
 arena/lights.json

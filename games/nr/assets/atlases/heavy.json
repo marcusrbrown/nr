@@ -1,0 +1,731 @@
+{
+  "schema": 1,
+  "name": "heavy",
+  "cell": {
+    "width": 224,
+    "height": 224
+  },
+  "supersample": 4,
+  "blender": {
+    "buildHash": "5afeabba6097",
+    "version": "4.5.15"
+  },
+  "recipe": {
+    "sha256": "484b2b6a3743ded1685ec88c86797c7506cf6edd6cee402b87600911d4a670b5"
+  },
+  "profile": {
+    "id": "heavy",
+    "sha256": "33d4efe173510cfa15412558e76ce35ab2d772aee66412210c3371bebb0b5f3c",
+    "kitFiles": [
+      {
+        "kit": "universal-animation-library",
+        "path": "UAL1_Standard.glb",
+        "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997"
+      },
+      {
+        "kit": "universal-animation-library-2",
+        "path": "UAL2_Standard.glb",
+        "sha256": "8cee20ab1bc55130092447e810e26df22dd2803eccc54f52137a7d54d7ab88a8"
+      },
+      {
+        "kit": "universal-base-characters",
+        "path": "Superhero_Male_FullBody.bin",
+        "sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f"
+      },
+      {
+        "kit": "universal-base-characters",
+        "path": "Superhero_Male_FullBody.gltf",
+        "sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4"
+      }
+    ]
+  },
+  "inputs": [
+    {
+      "index": 0,
+      "albedoSha256": "932ec613219f7fefb700ec6c4501fd7f84fa8d91e58d1ea5cd3a8a1dc654e0f2",
+      "normalSha256": "661f2397ae8ced2d257a3a963fcfcb2c3fc52353d2be48474f2f126d198229b2"
+    },
+    {
+      "index": 1,
+      "albedoSha256": "9b71bf56a1529d1286bcaa19db88ecfd84225e303af806c7de934f53bfba20e2",
+      "normalSha256": "92023c4932dd00505da935082bd8fd88545edd29fea32292a7dc2116a282d73c"
+    },
+    {
+      "index": 2,
+      "albedoSha256": "da0970ac594b3e4714eb04c0f10b9414b9e9c5c6f4146a485e46c7b116042f95",
+      "normalSha256": "707e64cc3efba079a66b0468a5b613f5a83688e5f16037c66fe94635c727ba25"
+    },
+    {
+      "index": 3,
+      "albedoSha256": "7d6d283e01ec74b7bdc4a5d581acc37e6aec057715d323708bb2974a31b4f850",
+      "normalSha256": "af7538d9eadd69cb467c56ca72564c4e8cc70e7ac925d0adf1f45311be653b73"
+    },
+    {
+      "index": 4,
+      "albedoSha256": "e0bfbc545fdfcade7dd9a597f5e6bbad38b0e1b456941e42880220f853b4256a",
+      "normalSha256": "3adcf8c57687514b5d66bef61b8b5eb96f2b7c91b408fd6b40a6afe6ca493db1"
+    },
+    {
+      "index": 5,
+      "albedoSha256": "f1c379a296b962cbf795a33db748a836e5a701a83ce463d028b8a0762adfbfa4",
+      "normalSha256": "fc53788d0a6515fecee1b7d45970f4252c93951c9c5bba20dc34b74fce44c105"
+    },
+    {
+      "index": 6,
+      "albedoSha256": "5268c4e3d64f1a9a87f49d546a7412e0de0c3aaa80cb88d0158e278e799e921e",
+      "normalSha256": "d2676795f9a0f7b325dcd50e216c0c5ff3522326a7aa7c03e795cdef8386189e"
+    },
+    {
+      "index": 7,
+      "albedoSha256": "e5c5bf21b68c3e30ccdba40f4154b07a9f1c688837db03a1dd16773cf4590956",
+      "normalSha256": "ab613c57ebdff7eefc54016721828e6db616e086c900f773015bec6b8b291713"
+    },
+    {
+      "index": 8,
+      "albedoSha256": "c5f74c28a97a13c3b64f426a25c42c6f50bc9002842a3afac853132ccd2c7816",
+      "normalSha256": "d13519409dbfb30353c2ee6b3f285f29e890566a763f181fad99f7dfcfccdbbb"
+    },
+    {
+      "index": 9,
+      "albedoSha256": "e931ca40a12e5d2d0be7bf4ba6fcdb09f16c2d4a1e35b245819a9801cf775f8d",
+      "normalSha256": "58fb232d22d2d3b980bd786285c51888c71d553ee4364490bb22140f1d963224"
+    },
+    {
+      "index": 10,
+      "albedoSha256": "9deba9fab6f43766f6c2c9f8095a007ea4a5ef71b3386f46e9be9822ee48e37f",
+      "normalSha256": "910462405d5b2be7e058529e4ee1b16a8635b014a674073ba7057c86d926e112"
+    },
+    {
+      "index": 11,
+      "albedoSha256": "833176c7dcb423cd245d81a5a27f281943420df32a824ed64185d38f13cea0a3",
+      "normalSha256": "0b1f57e8e3fd47787fe60fd319b6410ce66ac2e1a9b4d12bba112a8986531fb7"
+    },
+    {
+      "index": 12,
+      "albedoSha256": "c7a5a4dd5eac1e7583baa13bafa745d5b59176f9cae33c935f2283d168cdd95a",
+      "normalSha256": "2724e6a7a1632c4756be387ff97177348614f00735e24fe6fcff3108fc23831d"
+    },
+    {
+      "index": 13,
+      "albedoSha256": "c8fed9a82cff769e50283fb616fe08b3d6f51ecdba359a7a472cafe7506a7c09",
+      "normalSha256": "b5f69e805c7ba766aac687bc17d03b0516fbca9ee05a58bb90e067d08e530d9f"
+    },
+    {
+      "index": 14,
+      "albedoSha256": "7eee52874184f81ff623ae09ff7acb83d3d284d8c25c4d1c1e89e3af55babc93",
+      "normalSha256": "2f374fa01d18f6112c7480d8ec964feb7a1851cac43cba7bcf3ee8ac7404fdc1"
+    },
+    {
+      "index": 15,
+      "albedoSha256": "dc21c923a84a47f8883dbddc47c1c4f0dbbd0aaf4166d452c5cfdc2004e43123",
+      "normalSha256": "e26714913e461ce92dfcfa7f56edc2b102107ff8d3e0f8bc19eb9d5f7cc04af5"
+    },
+    {
+      "index": 16,
+      "albedoSha256": "5f7bc8c146043f29dc5ddbd90982800d88b26ef2d01f410453b1619eedd29110",
+      "normalSha256": "a13bcc76b034751da14189669268185d076d7ef688eafe0e92bae1065072638c"
+    },
+    {
+      "index": 17,
+      "albedoSha256": "3e08ce6fbd381d6bd633313bbd88d99b27c0075b206314f6f2452422266a5f18",
+      "normalSha256": "67329bc5e71da43b6a8c2c556f8ee8a8013401104c84ff6febe9d9cd11bd4f49"
+    },
+    {
+      "index": 18,
+      "albedoSha256": "834a0d1f36e52c69c2e85ce12fee7e2c1cc37198ed49cb4cc9b4cc16605254c8",
+      "normalSha256": "79e4fd49f480a09e6494c0cc8a06b1ed330bdb70a1936038862970a77999993f"
+    },
+    {
+      "index": 19,
+      "albedoSha256": "80f6c50c985ecd44b6dd67187f678b82318b2298371e09999ff851a79a8e56ad",
+      "normalSha256": "8bcd1d8c6b04dd6afed353d77f09da51c1cffc747528c0b2af5275cc3fb1a7e9"
+    },
+    {
+      "index": 20,
+      "albedoSha256": "a68e2ff942c9b325032dc7eacf251fe4fc5fb07a2b81a67cc2453e4d0547119d",
+      "normalSha256": "5d039525978e0d1fd9cef72f7791b3c19d30dea98545d0dc75beb0c9a996b40e"
+    },
+    {
+      "index": 21,
+      "albedoSha256": "9e15cb74b35e0972b98623035ce2890ee63264a6972c14e00b7a4adb7c255cc2",
+      "normalSha256": "644773fcda97af00ec631d1f947088549549f1d95a604dfed3e6a22cb6c39b87"
+    },
+    {
+      "index": 22,
+      "albedoSha256": "517d8db01fe3440087faab18ae7ef914de74e44bd00004099772cb965bd1b1a8",
+      "normalSha256": "9c595c6fa6348200494478fd80f7b6c03ebe6f5f44bdbc3d06c63c09a34df21a"
+    },
+    {
+      "index": 23,
+      "albedoSha256": "0b8bbc5a596ff6378e6fdc187c2b83ece3c9a93c6dbb78fcd9190bd02bfa3502",
+      "normalSha256": "b0acf36687d6aacd6188cee0795faf4dbbfc359874be5168299c0a2eeb8b29c9"
+    },
+    {
+      "index": 24,
+      "albedoSha256": "7ef61dc93ce61cac3673408b66b191924d9f295f6497e479137bb1cec57e61ff",
+      "normalSha256": "1b21197c750d7c58277e5fe487db2252c561aacb4790cec0f5d9c56d944a9d2c"
+    },
+    {
+      "index": 25,
+      "albedoSha256": "dcda7531b47e5e98e9a5c0c802f474952becd4500139ac61dae522e23f38f5cc",
+      "normalSha256": "7d654d3f8ea2e20d1910cea958c3ae9a7a28dc854b67619ac959514535ac87f5"
+    },
+    {
+      "index": 26,
+      "albedoSha256": "9e15cb74b35e0972b98623035ce2890ee63264a6972c14e00b7a4adb7c255cc2",
+      "normalSha256": "644773fcda97af00ec631d1f947088549549f1d95a604dfed3e6a22cb6c39b87"
+    }
+  ],
+  "pages": [
+    {
+      "index": 0,
+      "width": 2016,
+      "height": 672,
+      "colour": {
+        "file": "heavy.png",
+        "sha256": "ec22ce77d35f35b79ab5cf20fe3c1db892a6581fe23d83f60f6d78cc27fc6b41",
+        "pixelsSha256": "f6e13af0da86fb82badc6d0131cd000d4cc01d2706dca1e10ff4b766fef814ab"
+      },
+      "normal": {
+        "file": "heavy-n.png",
+        "sha256": "97794c88cd036028ac995a749ea334f402e61670f030bc80fd3858ff3eccb640",
+        "pixelsSha256": "0abba7f96c8c9eb43734e9fde6d60d8386bfcb4bf532f0cf67cc3183392ca664"
+      }
+    }
+  ],
+  "frames": [
+    {
+      "index": 0,
+      "clip": "idle",
+      "clipFrame": 0,
+      "page": 0,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 600,
+      "empty": false
+    },
+    {
+      "index": 1,
+      "clip": "idle",
+      "clipFrame": 1,
+      "page": 0,
+      "rect": {
+        "x": 224,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 600,
+      "empty": false
+    },
+    {
+      "index": 2,
+      "clip": "idle",
+      "clipFrame": 2,
+      "page": 0,
+      "rect": {
+        "x": 448,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 600,
+      "empty": false
+    },
+    {
+      "index": 3,
+      "clip": "idle",
+      "clipFrame": 3,
+      "page": 0,
+      "rect": {
+        "x": 672,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 600,
+      "empty": false
+    },
+    {
+      "index": 4,
+      "clip": "walk",
+      "clipFrame": 0,
+      "page": 0,
+      "rect": {
+        "x": 896,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 230,
+      "empty": false
+    },
+    {
+      "index": 5,
+      "clip": "walk",
+      "clipFrame": 1,
+      "page": 0,
+      "rect": {
+        "x": 1120,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 230,
+      "empty": false
+    },
+    {
+      "index": 6,
+      "clip": "walk",
+      "clipFrame": 2,
+      "page": 0,
+      "rect": {
+        "x": 1344,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 230,
+      "empty": false
+    },
+    {
+      "index": 7,
+      "clip": "walk",
+      "clipFrame": 3,
+      "page": 0,
+      "rect": {
+        "x": 1568,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 230,
+      "empty": false
+    },
+    {
+      "index": 8,
+      "clip": "walk",
+      "clipFrame": 4,
+      "page": 0,
+      "rect": {
+        "x": 1792,
+        "y": 0,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 230,
+      "empty": false
+    },
+    {
+      "index": 9,
+      "clip": "walk",
+      "clipFrame": 5,
+      "page": 0,
+      "rect": {
+        "x": 0,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 230,
+      "empty": false
+    },
+    {
+      "index": 10,
+      "clip": "attack",
+      "clipFrame": 0,
+      "page": 0,
+      "rect": {
+        "x": 224,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 11,
+      "clip": "attack",
+      "clipFrame": 1,
+      "page": 0,
+      "rect": {
+        "x": 448,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 12,
+      "clip": "attack",
+      "clipFrame": 2,
+      "page": 0,
+      "rect": {
+        "x": 672,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 13,
+      "clip": "attack",
+      "clipFrame": 3,
+      "page": 0,
+      "rect": {
+        "x": 896,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 14,
+      "clip": "attack",
+      "clipFrame": 4,
+      "page": 0,
+      "rect": {
+        "x": 1120,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 15,
+      "clip": "attack",
+      "clipFrame": 5,
+      "page": 0,
+      "rect": {
+        "x": 1344,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 16,
+      "clip": "attack",
+      "clipFrame": 6,
+      "page": 0,
+      "rect": {
+        "x": 1568,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 17,
+      "clip": "attack",
+      "clipFrame": 7,
+      "page": 0,
+      "rect": {
+        "x": 1792,
+        "y": 224,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 130,
+      "empty": false
+    },
+    {
+      "index": 18,
+      "clip": "hurt",
+      "clipFrame": 0,
+      "page": 0,
+      "rect": {
+        "x": 0,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 80,
+      "empty": false
+    },
+    {
+      "index": 19,
+      "clip": "hurt",
+      "clipFrame": 1,
+      "page": 0,
+      "rect": {
+        "x": 224,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 80,
+      "empty": false
+    },
+    {
+      "index": 20,
+      "clip": "hurt",
+      "clipFrame": 2,
+      "page": 0,
+      "rect": {
+        "x": 448,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 80,
+      "empty": false
+    },
+    {
+      "index": 21,
+      "clip": "hurt",
+      "clipFrame": 3,
+      "page": 0,
+      "rect": {
+        "x": 672,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 80,
+      "empty": false
+    },
+    {
+      "index": 22,
+      "clip": "stagger",
+      "clipFrame": 0,
+      "page": 0,
+      "rect": {
+        "x": 896,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 70,
+      "empty": false
+    },
+    {
+      "index": 23,
+      "clip": "stagger",
+      "clipFrame": 1,
+      "page": 0,
+      "rect": {
+        "x": 1120,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 70,
+      "empty": false
+    },
+    {
+      "index": 24,
+      "clip": "stagger",
+      "clipFrame": 2,
+      "page": 0,
+      "rect": {
+        "x": 1344,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 70,
+      "empty": false
+    },
+    {
+      "index": 25,
+      "clip": "stagger",
+      "clipFrame": 3,
+      "page": 0,
+      "rect": {
+        "x": 1568,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 70,
+      "empty": false
+    },
+    {
+      "index": 26,
+      "clip": "stagger",
+      "clipFrame": 4,
+      "page": 0,
+      "rect": {
+        "x": 1792,
+        "y": 448,
+        "w": 224,
+        "h": 224
+      },
+      "pivot": {
+        "x": 112,
+        "y": 176
+      },
+      "ms": 70,
+      "empty": false
+    }
+  ],
+  "clips": [
+    {
+      "name": "idle",
+      "slot": "idle",
+      "first": 0,
+      "count": 4,
+      "facing": "east",
+      "ms": 600,
+      "loop": true
+    },
+    {
+      "name": "walk",
+      "slot": "walk",
+      "first": 4,
+      "count": 6,
+      "facing": "east",
+      "ms": 230,
+      "loop": true
+    },
+    {
+      "name": "attack",
+      "slot": "attack",
+      "first": 10,
+      "count": 8,
+      "facing": "east",
+      "ms": 130,
+      "loop": false
+    },
+    {
+      "name": "hurt",
+      "slot": "hurt",
+      "first": 18,
+      "count": 4,
+      "facing": "east",
+      "ms": 80,
+      "loop": false
+    },
+    {
+      "name": "stagger",
+      "slot": "stagger",
+      "first": 22,
+      "count": 5,
+      "facing": "east",
+      "ms": 70,
+      "loop": false
+    }
+  ]
+}

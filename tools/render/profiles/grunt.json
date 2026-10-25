@@ -1,0 +1,401 @@
+{
+  "schemaVersion": 1,
+  "id": "grunt",
+  "title": "Grunt (agent draft for owner tuning)",
+  "kitFiles": [
+    {
+      "kit": "universal-animation-library",
+      "path": "UAL1_Standard.glb",
+      "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997"
+    },
+    {
+      "kit": "universal-animation-library-2",
+      "path": "UAL2_Standard.glb",
+      "sha256": "8cee20ab1bc55130092447e810e26df22dd2803eccc54f52137a7d54d7ab88a8"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.bin",
+      "sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.gltf",
+      "sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Hair_Long.bin",
+      "sha256": "268fd531d2c2ac321783d36fcf106d15c5c76e8923eec2c8704d5fe9de953589"
+    },
+    {
+      "kit": "universal-base-characters",
+      "path": "Hair_Long.gltf",
+      "sha256": "27e2c63e8f98c79fb600268ffcc92b36c621b8653b5a7dcbadb08328f3f887a9"
+    }
+  ],
+  "models": {
+    "body": {
+      "kit": "universal-base-characters",
+      "path": "Superhero_Male_FullBody.gltf",
+      "mesh": "SuperHero_Male",
+      "extras": {
+        "Eyes": "eyes",
+        "Eyebrows": "brow"
+      }
+    },
+    "animations": [
+      {
+        "kit": "universal-animation-library",
+        "path": "UAL1_Standard.glb"
+      },
+      {
+        "kit": "universal-animation-library-2",
+        "path": "UAL2_Standard.glb"
+      }
+    ],
+    "hair": [
+      {
+        "kit": "universal-base-characters",
+        "path": "Hair_Long.gltf",
+        "mesh": "Hair_Long",
+        "color": "hair"
+      }
+    ]
+  },
+  "body": {
+    "standingHeightPx": 120,
+    "widthScale": 0.86,
+    "depthScale": 0.9,
+    "headScale": 1,
+    "handScale": 1
+  },
+  "palette": {
+    "default": "#ff00ff",
+    "skin": "#c98e6b",
+    "hair": "#2a2118",
+    "eyes": "#0b0d14",
+    "brow": "#1d1610",
+    "hoodie": "#5c616b",
+    "hoodieHi": "#454a53",
+    "hood": "#3d4149",
+    "trim": "#a8ff2e",
+    "wrap": "#a8ff2e",
+    "jeans": "#364766",
+    "jeansHi": "#4a5d82",
+    "sneaker": "#d9d6c8",
+    "sole": "#8a867a",
+    "belt": "#1a1c22",
+    "cap": "#14161c",
+    "pocket": "#2a3650"
+  },
+  "defaultColor": "default",
+  "regions": [
+    {
+      "name": "head",
+      "color": "skin",
+      "bones": [
+        "Head",
+        "neck_01"
+      ]
+    },
+    {
+      "name": "wraps",
+      "color": "wrap",
+      "bones": [
+        "hand_*",
+        "index_*",
+        "middle_*",
+        "pinky_*",
+        "ring_*",
+        "thumb_*"
+      ]
+    },
+    {
+      "name": "forearms",
+      "color": "skin",
+      "bones": [
+        "lowerarm_*"
+      ]
+    },
+    {
+      "name": "sneakers",
+      "color": "sneaker",
+      "bones": [
+        "foot_*",
+        "ball_*"
+      ]
+    },
+    {
+      "name": "ankle",
+      "color": "sole",
+      "bones": [
+        "calf_*"
+      ],
+      "heightRange": [
+        0,
+        0.08
+      ]
+    },
+    {
+      "name": "yoke",
+      "color": "hoodieHi",
+      "bones": [
+        "spine_03",
+        "clavicle_*"
+      ]
+    },
+    {
+      "name": "hoodie",
+      "color": "hoodie",
+      "bones": [
+        "spine_*",
+        "upperarm_*"
+      ]
+    },
+    {
+      "name": "jeans",
+      "color": "jeans",
+      "bones": [
+        "pelvis",
+        "thigh_*",
+        "calf_*"
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "id": "belt",
+      "shape": "cylinder",
+      "bone": "pelvis",
+      "offset": [
+        0,
+        -0.016,
+        0.075
+      ],
+      "size": [
+        0.34,
+        0.25,
+        0.04
+      ],
+      "color": "belt"
+    },
+    {
+      "id": "sleeve-stripe-r",
+      "shape": "cylinder",
+      "bone": "upperarm_r",
+      "offset": [
+        0,
+        0,
+        -0.1
+      ],
+      "size": [
+        0.095,
+        0.095,
+        0.03
+      ],
+      "color": "trim"
+    },
+    {
+      "id": "sleeve-stripe-l",
+      "shape": "cylinder",
+      "bone": "upperarm_l",
+      "offset": [
+        0,
+        0,
+        -0.1
+      ],
+      "size": [
+        0.095,
+        0.095,
+        0.03
+      ],
+      "color": "trim"
+    },
+    {
+      "id": "jean-r",
+      "shape": "cylinder",
+      "bone": "thigh_r",
+      "offset": [
+        0,
+        -0.004,
+        -0.215
+      ],
+      "size": [
+        0.17,
+        0.19,
+        0.42
+      ],
+      "color": "jeans"
+    },
+    {
+      "id": "jean-l",
+      "shape": "cylinder",
+      "bone": "thigh_l",
+      "offset": [
+        0,
+        -0.004,
+        -0.215
+      ],
+      "size": [
+        0.17,
+        0.19,
+        0.42
+      ],
+      "color": "jeans"
+    },
+    {
+      "id": "jean-shin-r",
+      "shape": "cylinder",
+      "bone": "calf_r",
+      "offset": [
+        0,
+        0.03,
+        -0.16
+      ],
+      "size": [
+        0.12,
+        0.13,
+        0.3
+      ],
+      "color": "jeans"
+    },
+    {
+      "id": "jean-shin-l",
+      "shape": "cylinder",
+      "bone": "calf_l",
+      "offset": [
+        0,
+        0.03,
+        -0.16
+      ],
+      "size": [
+        0.12,
+        0.13,
+        0.3
+      ],
+      "color": "jeans"
+    },
+    {
+      "id": "pocket-r",
+      "shape": "box",
+      "bone": "thigh_r",
+      "offset": [
+        -0.085,
+        0,
+        -0.17
+      ],
+      "size": [
+        0.03,
+        0.13,
+        0.12
+      ],
+      "color": "pocket"
+    }
+  ],
+  "pose": {
+    "fitClip": "idle",
+    "anchor": "pelvis-xy",
+    "pinRoot": true,
+    "facing": "east",
+    "note": "Sprites are rendered facing east; the game mirrors them for west about the plane origin. pinRoot removes the library's root travel; anchor holds the pelvis at the plane origin so the simulation moves the actor and a figure lying on the floor stays inside the cell on both sides of it (a feet anchor puts the knocked-down body 124 px to one side of the origin)."
+  },
+  "clips": {
+    "idle": {
+      "status": "exact",
+      "ready": true,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Idle_Loop",
+          "start": 0,
+          "end": 60
+        }
+      ],
+      "proposal": {
+        "frames": 4,
+        "ms": 500
+      }
+    },
+    "walk": {
+      "status": "exact",
+      "ready": true,
+      "loop": true,
+      "segments": [
+        {
+          "action": "Walk_Loop",
+          "start": 0,
+          "end": 32
+        }
+      ],
+      "proposal": {
+        "frames": 5,
+        "ms": 190
+      }
+    },
+    "attack": {
+      "status": "substitute",
+      "ready": true,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Punch_Jab",
+          "start": 0,
+          "end": 20.8
+        }
+      ],
+      "proposal": {
+        "frames": 5,
+        "ms": 70
+      }
+    },
+    "hurt": {
+      "status": "exact",
+      "ready": true,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Hit_Chest",
+          "start": 0,
+          "end": 8
+        }
+      ],
+      "proposal": {
+        "frames": 4,
+        "ms": 80
+      }
+    },
+    "knockdown": {
+      "status": "exact",
+      "ready": true,
+      "loop": false,
+      "segments": [
+        {
+          "action": "Hit_Knockback",
+          "start": 0,
+          "end": 20
+        }
+      ],
+      "proposal": {
+        "frames": 5,
+        "ms": 144
+      }
+    },
+    "getup": {
+      "status": "exact",
+      "ready": true,
+      "loop": false,
+      "segments": [
+        {
+          "action": "LayToIdle",
+          "start": 0,
+          "end": 36.8
+        }
+      ],
+      "proposal": {
+        "frames": 4,
+        "ms": 135
+      }
+    }
+  }
+}
