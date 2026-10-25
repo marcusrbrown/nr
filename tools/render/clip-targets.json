@@ -1,38 +1,235 @@
 {
   "schemaVersion": 1,
-  "note": "Judgement table behind docs/evidence/combat-slice/clip-audit.md. status: exact = an action that names this role in the library's own vocabulary; substitute = a different action usable for the role (derived says how); gap = nothing usable in the audited kits. Every action named here must exist in the audit or tools/render/audit-clips.py fails (stale table).",
+  "note": "Judgement table behind docs/evidence/combat-slice/clip-audit.md. status: exact = an action that names this role in the library's own vocabulary; substitute = a different action usable for the role (derived says how); gap = nothing usable in the audited kits. Every action named here must exist in the audit or tools/render/audit-clips.py fails (stale table). Pelvis and head heights at the first, middle and last frame of the knockdown and getup actions were measured in Blender: Hit_Knockback ends on the floor (pelvis 0.06, head 0.15) and LayToIdle starts there (0.04, 0.09) and ends standing.",
   "characters": {
     "hero": [
-      { "slot": "idle", "status": "exact", "actions": ["Idle_Loop"], "note": "61 frames at 24 fps, loops." },
-      { "slot": "walk", "status": "exact", "actions": ["Walk_Loop"], "note": "33 frames, loops." },
-      { "slot": "run", "status": "exact", "actions": ["Jog_Fwd_Loop"], "note": "Sprint_Loop is the faster alternative." },
-      { "slot": "hit1", "status": "substitute", "actions": ["Punch_Jab"], "note": "A single jab; the library has no combo-named hit." },
-      { "slot": "hit2", "status": "substitute", "actions": ["Punch_Cross"], "note": "A single cross." },
-      { "slot": "hit3", "status": "gap", "actions": [], "nearest": ["Sword_Attack"], "note": "No third punch. Sword_Attack is a weapon swing. UAL2's separate 3/4-hit combo clips are the expected source and are not in the audited set." },
-      { "slot": "jump", "status": "exact", "actions": ["Jump_Start", "Jump_Loop", "Jump_Land"], "note": "Three actions: take-off, air loop, landing." },
-      { "slot": "jump kick", "status": "gap", "actions": [], "nearest": ["Jump_Loop", "Punch_Cross"], "note": "No kick of any kind. Hand-key a leg extension over Jump_Loop." },
-      { "slot": "grab", "status": "gap", "actions": [], "nearest": ["Interact", "Push_Loop"], "note": "Interact (reach) and Push_Loop (arms forward) are pose sources for a hand-keyed grab-and-hold." },
-      { "slot": "throw", "status": "gap", "actions": [], "nearest": ["Roll"], "note": "Nothing throws. Hand-key a lift-and-heave." },
-      { "slot": "hurt", "status": "exact", "actions": ["Hit_Chest"], "note": "9 frames; Hit_Head (11 frames) is the head variant." },
-      { "slot": "knockdown", "status": "substitute", "actions": ["Death01"], "note": "A fall to the floor, 59 frames; cut to the fall and hold the last pose." },
-      { "slot": "getup", "status": "substitute", "actions": ["Death01"], "derived": "Death01 played in reverse from the floor pose", "note": "No get-up action." },
-      { "slot": "dash", "status": "substitute", "actions": ["Sprint_Loop"], "note": "17-frame loop; Roll (36 frames) is the evasive alternative." },
-      { "slot": "special_knockback", "status": "substitute", "actions": ["Spell_Simple_Enter", "Spell_Simple_Shoot", "Spell_Simple_Exit"], "derived": "the three spell actions in sequence, shown as a radial blast", "note": "Owner call: a cast gesture standing in for a shove-everything-away move." },
-      { "slot": "special_dash", "status": "substitute", "actions": ["Sprint_Loop", "Punch_Cross"], "derived": "Sprint_Loop sped up, ending on the Punch_Cross strike frames", "note": "Two actions joined by hand." }
+      {
+        "slot": "idle",
+        "status": "exact",
+        "actions": [
+          "Idle_Loop"
+        ],
+        "note": "61 frames at 24 fps, loops."
+      },
+      {
+        "slot": "walk",
+        "status": "exact",
+        "actions": [
+          "Walk_Loop"
+        ],
+        "note": "33 frames, loops."
+      },
+      {
+        "slot": "run",
+        "status": "exact",
+        "actions": [
+          "Jog_Fwd_Loop"
+        ],
+        "note": "Sprint_Loop is the faster alternative."
+      },
+      {
+        "slot": "hit1",
+        "status": "substitute",
+        "actions": [
+          "Punch_Jab"
+        ],
+        "note": "A single jab; neither library names a combo hit. Hit 1 to 3 are three distinct unarmed strikes (jab, cross, hook)."
+      },
+      {
+        "slot": "hit2",
+        "status": "substitute",
+        "actions": [
+          "Punch_Cross"
+        ],
+        "note": "A single cross."
+      },
+      {
+        "slot": "hit3",
+        "status": "substitute",
+        "actions": [
+          "Melee_Hook",
+          "Melee_Hook_Rec"
+        ],
+        "note": "UAL2's unarmed hook (12 frames) plus its recovery (15 frames) as the combo finisher. Armed alternatives, not used: Sword_Regular_A/B/C and Sword_Regular_Combo."
+      },
+      {
+        "slot": "jump",
+        "status": "exact",
+        "actions": [
+          "Jump_Start",
+          "Jump_Loop",
+          "Jump_Land"
+        ],
+        "note": "Three actions: take-off, air loop, landing. UAL2's NinjaJump_Start, NinjaJump_Idle_Loop and NinjaJump_Land are an alternative set."
+      },
+      {
+        "slot": "jump kick",
+        "status": "gap",
+        "actions": [],
+        "note": "No action in either library is a kick. Hand-key a leg extension over the air pose.",
+        "nearest": [
+          "NinjaJump_Idle_Loop",
+          "Jump_Loop",
+          "Melee_Hook"
+        ]
+      },
+      {
+        "slot": "grab",
+        "status": "gap",
+        "actions": [],
+        "note": "Interact (reach) and Push_Loop (arms forward) are pose sources for a hand-keyed grab-and-hold.",
+        "nearest": [
+          "Interact",
+          "Push_Loop"
+        ]
+      },
+      {
+        "slot": "throw",
+        "status": "exact",
+        "actions": [
+          "OverhandThrow"
+        ],
+        "note": "UAL2, 33 frames."
+      },
+      {
+        "slot": "hurt",
+        "status": "exact",
+        "actions": [
+          "Hit_Chest"
+        ],
+        "note": "9 frames; Hit_Head (11 frames) is the head variant."
+      },
+      {
+        "slot": "knockdown",
+        "status": "exact",
+        "actions": [
+          "Hit_Knockback"
+        ],
+        "note": "UAL2, 21 frames, from a standing recoil to lying on the floor (head 0.15 above it)."
+      },
+      {
+        "slot": "getup",
+        "status": "exact",
+        "actions": [
+          "LayToIdle"
+        ],
+        "note": "UAL2, 38 frames, from the floor pose Hit_Knockback ends in to standing."
+      },
+      {
+        "slot": "dash",
+        "status": "substitute",
+        "actions": [
+          "Sprint_Loop"
+        ],
+        "note": "17-frame loop. Sword_Dash (39 frames) and Shield_Dash (27 frames) are dashes by name but armed; Roll (36 frames) is the evasive alternative."
+      },
+      {
+        "slot": "special_knockback",
+        "status": "substitute",
+        "actions": [
+          "Spell_Simple_Enter",
+          "Spell_Simple_Shoot",
+          "Spell_Simple_Exit"
+        ],
+        "note": "Owner call: a cast gesture standing in for a shove-everything-away move.",
+        "derived": "the three spell actions in sequence, shown as a radial blast"
+      },
+      {
+        "slot": "special_dash",
+        "status": "substitute",
+        "actions": [
+          "Slide_Start",
+          "Slide_Loop",
+          "Slide_Exit"
+        ],
+        "note": "A slide tackle (pelvis 0.05 above the floor in the loop) as the dash special.",
+        "derived": "the three slide actions in sequence"
+      }
     ],
     "grunt": [
-      { "slot": "idle", "status": "exact", "actions": ["Idle_Loop"], "note": "" },
-      { "slot": "walk", "status": "exact", "actions": ["Walk_Loop"], "note": "" },
-      { "slot": "attack", "status": "substitute", "actions": ["Punch_Jab"], "note": "" },
-      { "slot": "hurt", "status": "exact", "actions": ["Hit_Chest"], "note": "" },
-      { "slot": "knockdown", "status": "substitute", "actions": ["Death01"], "note": "Cut to the fall." }
+      {
+        "slot": "idle",
+        "status": "exact",
+        "actions": [
+          "Idle_Loop"
+        ],
+        "note": ""
+      },
+      {
+        "slot": "walk",
+        "status": "exact",
+        "actions": [
+          "Walk_Loop"
+        ],
+        "note": ""
+      },
+      {
+        "slot": "attack",
+        "status": "substitute",
+        "actions": [
+          "Punch_Jab"
+        ],
+        "note": ""
+      },
+      {
+        "slot": "hurt",
+        "status": "exact",
+        "actions": [
+          "Hit_Chest"
+        ],
+        "note": ""
+      },
+      {
+        "slot": "knockdown",
+        "status": "exact",
+        "actions": [
+          "Hit_Knockback"
+        ],
+        "note": "Ends on the floor; hold the last pose."
+      }
     ],
     "heavy": [
-      { "slot": "idle", "status": "substitute", "actions": ["Idle_Loop"], "note": "Slowed; Sword_Idle (41 frames) is an armed stance." },
-      { "slot": "walk", "status": "substitute", "actions": ["Walk_Loop"], "note": "Slowed and widened by the profile." },
-      { "slot": "attack", "status": "substitute", "actions": ["Punch_Cross"], "note": "Slowed windup." },
-      { "slot": "hurt", "status": "exact", "actions": ["Hit_Chest"], "note": "" },
-      { "slot": "stagger", "status": "substitute", "actions": ["Hit_Head"], "note": "Held on its last pose until the stagger ends." }
+      {
+        "slot": "idle",
+        "status": "substitute",
+        "actions": [
+          "Idle_FoldArms_Loop"
+        ],
+        "note": "UAL2's arms-folded stance reads as a heavy's; Idle_Loop slowed is the plain alternative."
+      },
+      {
+        "slot": "walk",
+        "status": "substitute",
+        "actions": [
+          "Walk_Loop"
+        ],
+        "note": "Slowed and widened by the profile."
+      },
+      {
+        "slot": "attack",
+        "status": "substitute",
+        "actions": [
+          "Melee_Hook",
+          "Melee_Hook_Rec"
+        ],
+        "note": "Slowed windup; Sword_Heavy_Combo is armed."
+      },
+      {
+        "slot": "hurt",
+        "status": "exact",
+        "actions": [
+          "Hit_Chest"
+        ],
+        "note": ""
+      },
+      {
+        "slot": "stagger",
+        "status": "substitute",
+        "actions": [
+          "Hit_Head"
+        ],
+        "note": "Held on its last pose until the stagger ends."
+      }
     ]
   }
 }

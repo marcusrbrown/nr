@@ -28,6 +28,7 @@ EXIT_OK = 0
 EXIT_SCRIPT_ERROR = 1
 EXIT_INPUT = 12
 ANIMATION_SUFFIXES = (".glb", ".gltf")
+ROOT_MOTION_SUFFIX = "_RM.glb"  # a root-motion copy of a library: same action names, so it is audited but never indexed
 
 
 class InputError(Exception):
@@ -112,6 +113,8 @@ STATUS_LABEL = {"exact": "exact match", "substitute": "usable substitute", "gap"
 def action_index(files: list[dict]) -> dict[str, tuple[dict, dict]]:
     index: dict[str, tuple[dict, dict]] = {}
     for f in files:
+        if f["path"].endswith(ROOT_MOTION_SUFFIX):
+            continue
         for a in f["actions"]:
             index.setdefault(a["name"], (f, a))
     return index
@@ -147,7 +150,7 @@ def render_markdown(data: dict, manifest: dict, targets: dict) -> str:
     pinned = {k["id"]: k for k in manifest["kits"]}
     unaudited = [k["id"] for k in manifest["kits"] if not any(f["kit"] == k["id"] for f in files)]
     for kit in manifest["kits"]:
-        held = sum(len(f["actions"]) for f in files if f["kit"] == kit["id"])
+        held = sum(len(f["actions"]) for f in files if f["kit"] == kit["id"] and not f["path"].endswith(ROOT_MOTION_SUFFIX))
         if kit.get("advertisedActions") and held:
             lines.append("")
             lines.append(f"`{kit['id']}`: the pack page advertises {kit['advertisedActions']} animations; the pinned Standard (free) file holds {held}.")
@@ -184,6 +187,11 @@ def render_markdown(data: dict, manifest: dict, targets: dict) -> str:
 
     for f in files:
         if not f["actions"]:
+            continue
+        if f["path"].endswith(ROOT_MOTION_SUFFIX):
+            twin = next((g for g in files if g["kit"] == f["kit"] and g["path"] == f["path"][: -len(ROOT_MOTION_SUFFIX)] + ".glb"), None)
+            same = twin is not None and [a["name"] for a in twin["actions"]] == [a["name"] for a in f["actions"]]
+            lines += [f"## Actions in `{f['kit']}/{f['path']}`", "", ("The same action names, in the same order, as `" + twin["path"] + "` (the root-motion variant of that file); not indexed and not listed again." if same else "A root-motion file whose actions differ from its twin: listed in the kit table only."), ""]
             continue
         lines += [f"## Actions in `{f['kit']}/{f['path']}`", "", "| Action | Frames | Seconds | Range |", "| --- | ---: | ---: | --- |"]
         for a in f["actions"]:
