@@ -262,12 +262,12 @@ Regenerate:
 
 ## Round 2: the look-gate review
 
-`look/REVIEW-oracle.md` (HEAD 600cf0a) found six things. Each is fixed in its own commit; the table lists finding, fix, and the captures
+`look/REVIEW-oracle.md` (HEAD 600cf0a) found six things; its second pass ("Round 2 review" in that file) left two open, fixed in Round 3 below. Each is fixed in its own commit; the table lists finding, fix, and the captures
 before (the 600cf0a set, in git history) and after (`look/`). The decisions and numbers are in ADR-0002 ("Round 2"). One machine, as above.
 
 | # | Finding | Fix | Captures (before > after) |
 | --- | --- | --- | --- |
-| 1 | The combat captures used dummies, and hit 3 and the contact tick were missing | `nr_look`: real grunts and a heavy that stand still, three stations, `input-look.json`; contact tick chosen inside the active window and asserted from state | `combat-hit2` (dummies, tick 49 of `input-combat`) > `combat-hit2` (real grunt, `input-look` 264); new `combat-hit3` (280); `combat-radius-special` > same name (124); `combat-dash-special` > same name (49) |
+| 1 | The combat captures used dummies, and hit 3 and the contact tick were missing | `nr_look`: real grunts and a heavy that stand still, three stations, `input-look.json`; contact tick chosen inside the active window and asserted from state | `combat-hit2` (dummies, tick 49 of `input-combat`) > `combat-hit2` (real grunt, `input-look` 264); new `combat-hit3` (280); `combat-radius-special` > same name (Round 3: 128); `combat-dash-special` > same name (49) |
 | 2 | The heavy's plates, gauntlets and boots sat on the street under the darkest neon | `heavy.json` palette values and trim coverage raised, ambient untouched; re-pinned, re-rendered, reinstalled | `heavy-windup`, `heavy-staggered`, `wave4-crowd`: boots 8.4 > 76.8 against a street ring of 26.4 > 70.7 (windup); `round2/heavy-contrast.txt` |
 | 3 | P1 and P2 could not be mapped to the HUD's magenta and cyan | `hero-p2` atlas: the same render with `hair`, `trim`, `glove` overridden to the HUD's cyan; the hero's accents are the HUD's magenta; player 2 draws the second colour sheet over the hero's geometry and normals | every capture with both players: `scroll-f061`, `combat-hit2`, `wave4-crowd`, `heavy-staggered`, `hud`; `round2/hero-variant-check.txt` |
 | 4 | The camera clamp's silhouette allowance was a fixed 0.45 | `CAMERA_ALLOWANCE` 1.2, the hero's widest frame (1.188, `special_dash`), from `reach-check`; FOV and pitch unchanged | `scroll-f232`, `scroll-f640` (the leash holds a whole hero at the edge); `round2/reach-check.txt` |
@@ -276,6 +276,27 @@ before (the 600cf0a set, in git history) and after (`look/`). The decisions and 
 
 The wave captures moved to ticks that still show their state under the new leash: `grunt-airborne` 450 > 424, `heavy-windup` 990 > 935,
 `wave4-crowd` 1600 > 1560, `heavy-staggered` 2050 > 1910.
+
+### Round 3: the second review
+
+| Finding | Fix | Captures (before > after) |
+| --- | --- | --- |
+| `upgrade.png` taken after the pick, showing gameplay (blocking) | tick 700 of the pause (667 to 718): `nr.phase` 2, `nr.pick_player` -1, both options visible; phase and fact assertions on `title`, `hud`, `upgrade` and `clear`, and a control that requires wrong-screen ticks to be rejected | `upgrade` (tick 765) > `upgrade` (tick 700) |
+| `combat-radius-special.png` reads directed, not area | `special_knockback` clip is the `NinjaJump_Land` landing crouch (frames 2 to 24) in `hero.json`, re-pinned, hero and hero-p2 re-rendered; `nr_look` has enemies on both sides (two more grunts), capture at tick 18 (frame 4) with every enemy six ticks into its reaction | `combat-radius-special` (tick 124, frame 3 of the one-arm point) > `combat-radius-special` (tick 128) |
+
+Assertions added to `look-set.mjs`: title (phase 0, 1 player, wave 0), hud (phase 1, 2 players, wave 3, not cleared, not game over), upgrade (phase 2,
+`pick_player` -1, `special_variant` 0, wave 2, `upgrade_ready` 1), clear (phase 3, cleared, not game over, wave 4), radius special (hero in `special_knockback`
+tick 18 drawing step 4, six enemies in stagger or hurt, at least 2 on each side of the hero, one state tick among them). `look-set.mjs --control`
+(`round2/look-set-control.log`): the upgrade at tick 765 is rejected (phase 1, pick 1, variant 1), the title at 1000, the clear at 1000 and the hud at 700 likewise.
+`heavy-staggered.png` changed too: its hero is in the special. Goldens: **unchanged** (`goldens.mjs` reports the same five checksums; `goldens.json` is not
+in the diff), because the simulation does not read the clip. Runs: `round2/gates/gate-all.log` (exit 0, 23 entries `ok`: the ten nr entries, `nr-strict`,
+`nr-wgpu`, `nr-controls`), `round2/look-set.log` (26 captures, cart pixel-identical to native, 43 fields equal), `round2/ui-check.log` (12 scenarios),
+`round2/sim-check.log` (27 `ok`), `round2/clips-check.log`, `round2/render-tests.log` (22), `reach-check` and `hero-variant-check` (45.49 MiB). The
+session `nr-look` (`round2/romdev/`) took the four combat captures and the upgrade on `build/cart-wgpu` with WebGPU: 0 differing pixels against native, state
+equal, `cw.three.missing` 0, then left `nr.wasc` at the title; `host{op:play}` was not called.
+
+Not verified in Round 3: the owner's checklist; whether the landing crouch reads as an area attack on the owner's eye (it is a one-pose substitute, the
+clip is not a designed shockwave).
 
 ### Simulation, goldens and gates
 

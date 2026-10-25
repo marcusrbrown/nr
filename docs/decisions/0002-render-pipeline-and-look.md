@@ -162,9 +162,20 @@ The combat captures are taken on `nr_look` (`NR_LOOK` in `main.c`): the street b
 (`sim.passive`: they react to hits and never act, are not held in the frame, and the flag is outside the checksum), three stations
 along the street played by `input-look.json`. A combo state's hit lands on its tick 4, when the UAL jab, cross and hook clips still draw
 the wind-up, so the capture takes tick 8 of the state: clip frame 2, the extension (0.86 units from the pivot for hit 2, 1.08 for hit 3),
-inside the active ticks 4 to 12 with the grunt already reacting. The radius special tests on ticks 12 to 15 and tick 14 draws frame 3
-(0.98 of the clip's widest, 1.02); the dash special's frame 2 is its widest (1.19). `look-set.mjs` asserts these from the native run's
+inside the active ticks 4 to 12 with the grunt already reacting. The radius special hits on tick 12 of its state; its capture is tick 18 (frame 4), when every enemy is six ticks into its reaction.
+The dash special's frame 2 is its widest (1.19). `look-set.mjs` asserts these from the native run's
 state before it keeps a picture. The wave captures moved to the ticks that still show their state under the Round 2 leash.
+
+### Round 2 review (the Oracle's second pass)
+
+The review found two items still open. `upgrade.png` was taken at tick 765, after the pick (`nr.pick_player` 1), so it showed gameplay: it is now
+tick 700 of the pause (667 to 718), and every screen capture asserts its phase (title, fight, upgrade, clear) and the facts of its state before a
+picture is kept, with a control that feeds the assertions the wrong ticks. `combat-radius-special.png` read as a directed push: the clip was three
+Spell_Simple actions (one arm pointing forward) and the scene had the enemies on one side. `special_knockback` in `hero.json` is now
+`NinjaJump_Land` frames 2 to 24 (UAL2: the landing crouch with a hand to the ground, which reads as an area attack from the side), the hero
+profile re-pinned and the hero and `hero-p2` atlases re-rendered and installed (96 frames, same cell, pivots and reach; 45.49 MiB budget unchanged);
+`nr_look` has two more grunts behind the hero outside the dash's lane, so the special reaches enemies on every side. The simulation does not read
+the clip: the goldens are unchanged. The clip-audit's special_knockback row records the replaced owner pick.
 
 ### Heavy palette (finding 2)
 

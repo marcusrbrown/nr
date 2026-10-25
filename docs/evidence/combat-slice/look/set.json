@@ -411,10 +411,10 @@
     },
     {
       "name": "combat-radius-special",
-      "what": "the radius special among real grunts and the heavy, tick 14 of the state (frame 3)",
+      "what": "the radius special with real grunts and the heavy on both sides of the hero, all reacting from one tick (the hit lands on tick 12), tick 18 of the state (frame 4, the crouch)",
       "app": "nr_look",
       "input": "games/nr/tests/input-look.json",
-      "tick": 124,
+      "tick": 128,
       "file": "combat-radius-special.png",
       "nativeMissing": 0,
       "cartMissing": 0,
@@ -451,7 +451,7 @@
     },
     {
       "name": "title",
-      "what": "the title screen",
+      "what": "the title screen, player 1 in",
       "app": "nr",
       "input": "games/nr/tests/input-2p-full.json",
       "tick": 30,
@@ -471,7 +471,7 @@
     },
     {
       "name": "hud",
-      "what": "the fight with the HUD",
+      "what": "the fight with the HUD, wave 3, both players",
       "app": "nr",
       "input": "games/nr/tests/input-2p-full.json",
       "tick": 1000,
@@ -491,10 +491,10 @@
     },
     {
       "name": "upgrade",
-      "what": "the upgrade choice screen",
+      "what": "the upgrade choice screen: the pause after wave 2, 33 ticks in, no pick made",
       "app": "nr",
       "input": "games/nr/tests/input-2p-full.json",
-      "tick": 765,
+      "tick": 700,
       "file": "upgrade.png",
       "nativeMissing": 0,
       "cartMissing": 0,

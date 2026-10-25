@@ -1,0 +1,5 @@
+rejected upgrade at tick 765: phase 1, not 2; nr.pick_player is 1, not -1; nr.special_variant is 1, not 0
+rejected title at tick 1000: phase 1, not 0; nr.players is 2, not 1; nr.wave is 3, not 0
+rejected clear at tick 1000: phase 1, not 3; nr.cleared is 0, not 1; nr.wave is 3, not 4
+rejected hud at tick 700: phase 2, not 1; nr.wave is 2, not 3
+4 wrong-screen captures rejected

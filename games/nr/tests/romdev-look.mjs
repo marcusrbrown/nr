@@ -1,10 +1,10 @@
-// romdev run of the look gate's combat captures on the dual cart with WebGPU (build/cart-wgpu/carts/nr_look.wasc), one
+// romdev run of the look gate's combat captures and the upgrade choice on the dual cart with WebGPU (build/cart-wgpu/carts), one
 // `x-romdev-session` (nr-look) carrying every call.
 //
 //   node games/nr/tests/romdev-look.mjs [--out out/round2/romdev] [--publish docs/evidence/combat-slice/round2/romdev]
 //
-// For each combat capture of look-set.mjs (hit 2, hit 3, the radius special, the dash special): loadMedia with a deterministic clock,
-// input-look.json as input{sequence} steps counting the frame loadMedia already ran, a screenshot at the capture's tick, and the debug
+// For each of those captures of look-set.mjs (hit 2, hit 3, the radius special, the dash special on nr_look; the upgrade choice on nr): loadMedia with a deterministic clock,
+// the capture's input script as input{sequence} steps counting the frame loadMedia already ran, a screenshot at the capture's tick, and the debug
 // state. The state's nr.* and cw.three.* fields must equal the native run's (look/<name>.json, which look-set.mjs kept), cw.three.missing
 // 0 (the host's state does not carry the byte field naming the states, so `cw.three.missing_states` is not compared), cw.gpu.api 2 with no WebGPU errors, and the screenshot pixel-identical to the committed capture. The session ends with the full game
 // (build/cart-wgpu/carts/nr.wasc) loaded on the title, nothing playing: host{op:play} is never called.
@@ -23,8 +23,10 @@ const OUT = resolve(ROOT, opt('out', 'out/round2/romdev'));
 const PUBLISH = opt('publish') ? resolve(ROOT, opt('publish')) : null;
 const LOOK = join(ROOT, 'docs/evidence/combat-slice/look');
 const CARTS = join(ROOT, 'build/cart-wgpu/carts');
-const SCRIPT = JSON.parse(readFileSync(join(ROOT, 'games/nr/tests/input-look.json'), 'utf8'));
-const CAPTURES = [['combat-hit2', 264], ['combat-hit3', 280], ['combat-radius-special', 124], ['combat-dash-special', 49]];
+const script = (f) => JSON.parse(readFileSync(join(ROOT, 'games/nr/tests', f), 'utf8'));
+// [capture, cart, script, tick]: the combat captures on nr_look and the upgrade choice on the full game
+const CAPTURES = [['combat-hit2', 'nr_look', 'input-look.json', 264], ['combat-hit3', 'nr_look', 'input-look.json', 280], ['combat-radius-special', 'nr_look', 'input-look.json', 128],
+  ['combat-dash-special', 'nr_look', 'input-look.json', 49], ['upgrade', 'nr', 'input-2p-full.json', 700]];
 mkdirSync(OUT, { recursive: true });
 
 const log = (event, data = {}) => { const l = JSON.stringify({ event, ...data }); console.log(l); appendFileSync(join(OUT, 'events.ndjson'), `${l}\n`); };
@@ -43,10 +45,10 @@ function pixelsDiffering(a, b) {
 const summary = { session: SESSION, startedAt: new Date().toISOString(), captures: [] };
 try {
   log('romdev', await (await fetch(`${BASE}/healthz`)).json());
-  for (const [name, tick] of CAPTURES) {
-    const loaded = await call('loadMedia', { platform: 'wasmcart', path: join(CARTS, 'nr_look.wasc'), wgpu: true, deterministicSeed: 1, deterministicStepMs: 16.6667 });
+  for (const [name, cart, scriptName, tick] of CAPTURES) {
+    const loaded = await call('loadMedia', { platform: 'wasmcart', path: join(CARTS, `${cart}.wasc`), wgpu: true, deterministicSeed: 1, deterministicStepMs: 16.6667 });
     if (!loaded.loaded || loaded.gpu !== 'webgpu') fail(`loadMedia reported gpu ${JSON.stringify(loaded.gpu)}`);
-    await call('input', { op: 'sequence', steps: sequenceSteps(SCRIPT, 2, tick) });
+    await call('input', { op: 'sequence', steps: sequenceSteps(script(scriptName), 2, tick) });
     const shot = join(OUT, `${name}.png`);
     await call('frame', { op: 'screenshot', path: shot });
     const st = stateOf(await call('wasm', { op: 'debugState' }));

@@ -3,8 +3,9 @@
 // captures; for each, <out>/set.json records the cart's size against the native's, the number of differing pixels, and whether
 // the whitelisted simulation state (games/nr/tests/brawler.mjs FIELDS) is equal. The pictures kept are the native ones.
 //
-//   CW_TEST_GPU=desktop node games/nr/tests/look-set.mjs [--out docs/evidence/combat-slice/look] [--work out/unit8/look] [--only name,name]
-//   --only takes some of the captures (a prefix of a name selects it) and leaves set.json alone.
+//   CW_TEST_GPU=desktop node games/nr/tests/look-set.mjs [--out docs/evidence/combat-slice/look] [--work out/unit8/look] [--only name,name] [--control]
+//   --only takes some of the captures (a prefix of a name selects it) and leaves set.json alone. --control takes the screens at a
+//   wrong tick and requires their phase assertions to reject them.
 //
 // The set (file: what it shows):
 //   idle-light-0/1/2   the hero idle under only neon light 0, 1 or 2 (nr_solo_*), tick 60
@@ -16,13 +17,15 @@
 //                      winding up (935, tick 8 of its attack), the wave 4 crowd (1560: grunts, the heavy and both players), the heavy
 //                      staggered (1910, tick 5 of the stagger)
 //   combat-*           the moveset against real grunts and a heavy that stand still (nr_look, input-look.json): hit2 and hit3 of one combo
-//                      on a grunt backed against the pillar (ticks 264 and 280, tick 8 of each state), the radius special (124, tick 14)
+//                      on a grunt backed against the pillar (ticks 264 and 280, tick 8 of each state), the radius special (128, tick 18)
 //                      and the dash special (49, tick 9). The hit lands on tick 4 of a combo state, when the clip is still drawing the
 //                      wind-up; tick 8 is the clip's frame 2, its reach (0.86 and 1.08 units), inside the state's active ticks 4 to 12,
-//                      with the grunt in its reaction. The radius special tests on ticks 12 to 15: tick 14 shows frame 3 (0.98 of the
-//                      clip's widest 1.02, which falls after the active ticks); the dash special's frame 2 is its widest, 1.19.
+//                      with the grunt in its reaction. The radius special hits on tick 12 of its state, all enemies at once; tick 18
+//                      (clip frame 4, the crouch with a hand to the ground) has every enemy six ticks into its reaction, pushed outward on
+//                      both sides of the hero; the dash special's frame 2 is its widest, 1.19.
 //                      Each is asserted from the native run's state (actor states, ticks, frames) before the picture is kept.
-//   title, hud, upgrade, clear  the full game on input-2p-full.json: ticks 30, 1000, 765, 2164
+//   title, hud, upgrade, clear  the full game on input-2p-full.json: ticks 30, 1000, 700, 2164. The upgrade pause runs from tick 667 to the pick at 718;
+//                      tick 700 is past the 30-tick grace period and before any pick. Each screen's phase and facts are asserted from the native run's state.
 // The owner's checklist (CHECKLIST.md) stays unfilled here: it is theirs.
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -46,13 +49,30 @@ const ST = { HURT: 10, KNOCKDOWN: 11, STAGGER: 21 };
 const HERO = loadAtlas('hero').manifest;
 /** What a combat capture must show in the native run's state: player 0 in `state` on tick `tick` of it, drawing `step` of the
  * clip `clip`, and each [actor, state] of the enemies reacting. Returns the problems found. */
-function combat(clip, state, tick, step, enemies) {
+function combat(clip, state, tick, step, enemies, { sides = null } = {}) {
   return (st) => {
     const out = [], c = HERO.clips.find((k) => k.name === clip);
     if (st['nr.actor_state'][0] !== state || st['nr.actor_state_tick'][0] !== tick) out.push(`player 0 is in state ${st['nr.actor_state'][0]} tick ${st['nr.actor_state_tick'][0]}, not ${state} tick ${tick}`);
     if (st['nr.hero_frame'][0] !== c.first + step) out.push(`player 0 draws frame ${st['nr.hero_frame'][0]}, not ${clip} step ${step} (${c.first + step})`);
     for (const [actor, want] of enemies) if (st['nr.actor_state'][actor] !== want) out.push(`actor ${actor} is in state ${st['nr.actor_state'][actor]}, not ${want}`);
     if (st['nr.actor_kind'][2] !== 2 || st['nr.actor_kind'][8] !== 2) out.push('the enemies are not grunts');
+    if (sides) { // an area attack: the listed enemies stand on both sides of the hero and entered their reaction on one tick
+      const x = (i) => st['nr.hero_pos'][i * 3], ticks = new Set(sides.map((i) => st['nr.actor_state_tick'][i]));
+      const left = sides.filter((i) => x(i) < x(0) - 0.5), right = sides.filter((i) => x(i) > x(0) + 0.5);
+      if (left.length < 2 || right.length < 2) out.push(`enemies on the hero's left ${left.length}, right ${right.length}: both sides need at least 2`);
+      if (ticks.size !== 1) out.push(`the enemies react on different ticks (state ticks ${[...ticks].join(', ')})`);
+    }
+    return out;
+  };
+}
+const PH = { TITLE: 0, FIGHT: 1, UPGRADE: 2, CLEAR: 3 };
+/** What a screen capture must show in the native run's state: the phase (nr_phase) and the facts that tell the screen from its
+ * neighbours. `facts` maps a state field to the value it must have. Returns the problems found. */
+function screen(phase, facts = {}) {
+  return (st) => {
+    const out = [];
+    if (st['nr.phase'] !== phase) out.push(`phase ${st['nr.phase']}, not ${phase}`);
+    for (const [k, want] of Object.entries(facts)) if (JSON.stringify(st[k]) !== JSON.stringify(want)) out.push(`${k} is ${JSON.stringify(st[k])}, not ${JSON.stringify(want)}`);
     return out;
   };
 }
@@ -77,12 +97,12 @@ const CAPTURES = [
   ['heavy-staggered', 'nr_waves', `${T}input-waves.json`, 1910, 'wave 4: the heavy staggered'],
   ['combat-hit2', 'nr_look', LOOK, 264, 'the combo: hit 2 on a real grunt, tick 8 of the state (frame 2, the extension)', combat('hit2', 4, 8, 2, [[8, ST.HURT]])],
   ['combat-hit3', 'nr_look', LOOK, 280, 'the combo: hit 3 on the same grunt, backed against the pillar, tick 8 of the state', combat('hit3', 5, 8, 2, [[8, ST.KNOCKDOWN]])],
-  ['combat-radius-special', 'nr_look', LOOK, 124, 'the radius special among real grunts and the heavy, tick 14 of the state (frame 3)', combat('special_knockback', 14, 14, 3, [[4, ST.STAGGER], [5, ST.HURT], [6, ST.HURT], [7, ST.HURT]])],
+  ['combat-radius-special', 'nr_look', LOOK, 128, 'the radius special with real grunts and the heavy on both sides of the hero, all reacting from one tick (the hit lands on tick 12), tick 18 of the state (frame 4, the crouch)', combat('special_knockback', 14, 18, 4, [[4, ST.STAGGER], [5, ST.HURT], [6, ST.HURT], [7, ST.HURT], [9, ST.HURT], [10, ST.HURT]], { sides: [4, 5, 6, 7, 9, 10] })],
   ['combat-dash-special', 'nr_look', LOOK, 49, 'the dash special into real grunts, tick 9 of the state (frame 2, the widest)', combat('special_dash', 15, 9, 2, [[2, ST.KNOCKDOWN]])],
-  ['title', 'nr', `${T}input-2p-full.json`, 30, 'the title screen'],
-  ['hud', 'nr', `${T}input-2p-full.json`, 1000, 'the fight with the HUD'],
-  ['upgrade', 'nr', `${T}input-2p-full.json`, 765, 'the upgrade choice screen'],
-  ['clear', 'nr', `${T}input-2p-full.json`, 2164, 'the clear screen'],
+  ['title', 'nr', `${T}input-2p-full.json`, 30, 'the title screen, player 1 in', screen(PH.TITLE, { 'nr.players': 1, 'nr.wave': 0 })],
+  ['hud', 'nr', `${T}input-2p-full.json`, 1000, 'the fight with the HUD, wave 3, both players', screen(PH.FIGHT, { 'nr.players': 2, 'nr.wave': 3, 'nr.cleared': 0, 'nr.game_over': 0 })],
+  ['upgrade', 'nr', `${T}input-2p-full.json`, 700, 'the upgrade choice screen: the pause after wave 2, 33 ticks in, no pick made', screen(PH.UPGRADE, { 'nr.pick_player': -1, 'nr.special_variant': 0, 'nr.wave': 2, 'nr.upgrade_ready': 1 })],
+  ['clear', 'nr', `${T}input-2p-full.json`, 2164, 'the clear screen', screen(PH.CLEAR, { 'nr.cleared': 1, 'nr.game_over': 0, 'nr.wave': 4 })],
 ];
 
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
@@ -98,6 +118,22 @@ function pixels(a, b) {
     if (d > max) max = d;
   }
   return { sameSize: true, width: A.w, height: A.h, identical: differing === 0, differingPixels: differing, maxChannelDiff: max };
+}
+
+if (argv.includes('--control')) {
+  // the screen assertions must reject a wrong screen: the upgrade capture taken at tick 765 (after the pick) and the title at tick 1000
+  const wrong = [['upgrade', 765], ['title', 1000], ['clear', 1000], ['hud', 700]];
+  let bad = 0;
+  for (const [name, tick] of wrong) {
+    const [, app, input, , , expect] = CAPTURES.find((c) => c[0] === name);
+    const r = nativeWgpu(app, join(WORK, `control-${name}`), tick, { input, inputDir: join(WORK, 'input') });
+    if (r.status !== 0) { bad++; console.log(`control ${name} t${tick}: native run failed`); continue; }
+    const problems = expect(readJson(join(WORK, `control-${name}.json`)));
+    console.log(`${problems.length ? 'rejected' : 'NOT REJECTED'} ${name} at tick ${tick}: ${problems.join('; ') || 'no problem found'}`);
+    if (!problems.length) bad++;
+  }
+  console.log(bad ? `${bad} control(s) failed` : `${wrong.length} wrong-screen captures rejected`);
+  process.exit(bad ? 1 : 0);
 }
 
 const set = [];

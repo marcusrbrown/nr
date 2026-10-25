@@ -29,19 +29,23 @@ Regenerate: `CW_TEST_GPU=desktop node games/nr/tests/look-set.mjs`.
 | `heavy-staggered.png` | wave 4: the heavy staggered (tick 5 of the stagger) | `nr_waves`, `input-waves.json`, tick 1910 | identical pixels, state equal, 43 fields |
 | `combat-hit2.png` | the combo: hit 2 on a real grunt backed against the pillar, tick 8 of the state (clip frame 2, the extension, 0.86 units from the pivot) | `nr_look`, `input-look.json`, tick 264 | identical pixels, state equal, 43 fields |
 | `combat-hit3.png` | the combo: hit 3 on the same grunt, tick 8 of the state (clip frame 2, 1.08 units) | `nr_look`, `input-look.json`, tick 280 | identical pixels, state equal, 43 fields |
-| `combat-radius-special.png` | the radius special among three real grunts, the heavy and a grunt on the ground, tick 14 of the state (clip frame 3) | `nr_look`, `input-look.json`, tick 124 | identical pixels, state equal, 43 fields |
+| `combat-radius-special.png` | the radius special with real grunts and the heavy on both sides of the hero, all hit on one tick and pushed outward, tick 18 of the state (clip frame 4, the landing crouch with a hand to the ground) | `nr_look`, `input-look.json`, tick 128 | identical pixels, state equal, 43 fields |
 | `combat-dash-special.png` | the dash special into real grunts, tick 9 of the state (clip frame 2, its widest reach, 1.19 units) | `nr_look`, `input-look.json`, tick 49 | identical pixels, state equal, 43 fields |
 | `title.png` | the title screen | `nr`, `input-2p-full.json`, tick 30 | identical pixels, state equal, 43 fields |
 | `hud.png` | the fight with the HUD | `nr`, `input-2p-full.json`, tick 1000 | identical pixels, state equal, 43 fields |
-| `upgrade.png` | the upgrade choice screen | `nr`, `input-2p-full.json`, tick 765 | identical pixels, state equal, 43 fields |
+| `upgrade.png` | the upgrade choice screen with both options, the pause after wave 2, no pick made | `nr`, `input-2p-full.json`, tick 700 | identical pixels, state equal, 43 fields |
 | `clear.png` | the clear screen | `nr`, `input-2p-full.json`, tick 2164 | identical pixels, state equal, 43 fields |
 
 Combat captures (`nr_look`, `games/nr/main.c` `NR_LOOK`): the street block with real grunts and a heavy that stand still
 (`sim.passive`: they take hits and react, and never swing or move on their own), three stations along the street, played by
 `input-look.json` (written by `gen-input-look.mjs`). The tick of each capture is chosen inside the state's active window as the
 tick whose clip frame shows the reach: a combo state's hit lands on tick 4, when the clip still draws the wind-up; tick 8 is
-frame 2, the extension, inside the active ticks 4 to 12. The radius special tests on ticks 12 to 15 and tick 14 shows frame 3
-(0.98 of the clip's widest 1.02); the dash special's frame 2 is its widest. `look-set.mjs` asserts the player's state, state tick and
-drawn frame and each enemy's reaction from the native run before it keeps a picture. Player 1 wears magenta, player 2 cyan.
+frame 2, the extension, inside the active ticks 4 to 12. The radius special hits on tick 12 of its state, every enemy at once, and tick 18 (frame 4) has all six enemies six ticks into their reaction, pushed away on
+both sides of the hero; the dash special's frame 2 is its widest. `look-set.mjs` asserts the player's state, state tick and
+drawn frame and each enemy's reaction from the native run before it keeps a picture; the radius special also requires at least two enemies on each side of the hero reacting on the same state tick. Player 1 wears magenta, player 2 cyan.
+
+Screen captures (`title`, `hud`, `upgrade`, `clear`) assert the phase and the facts that tell the screen from its neighbours before a picture is
+kept: the upgrade choice is the pause from tick 667 to the pick at 718; tick 700 is past its 30-tick grace period, `nr.phase` 2, `nr.pick_player` -1,
+`nr.special_variant` 0. `look-set.mjs --control` takes the screens at wrong ticks (the upgrade at 765, after the pick) and requires each to be rejected.
 
 Not in the set: the two hand-keyed clips (`jumpkick`, `grab`) that are gaps in the atlas.

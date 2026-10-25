@@ -14,3 +14,12 @@ Findings, ranked, each with its tunable:
 6. Title prompt "PRESS START AGAIN TO FIGHT" has weaker contrast than decoration (`title.png`). Tunable: text colour or backing opacity.
 
 Not judged from stills: animation timing, camera smoothness, flicker comfort, ordering during jumps, audio. Captures were viewed at 1024×576 previews of the 1920×1080 originals.
+
+## Round 2 review
+
+Verdict: **NOT MET**. Blocking: `upgrade.png` was captured after the choice (`nr.pick_player` 1, `nr.special_variant` 1), so it shows gameplay. Partly resolved: `combat-radius-special.png` reads as directed rather than area. Resolved: heavy contrast (2), player identity (3), camera allowance (4), static arena depth (5), title prompt contrast (6). Checklist: 24 yes, 2 no (combo/specials read; upgrade screen), plus the look-gate line.
+
+Fixes (Round 3, HEAD f9a0bed onward; evidence in `docs/evidence/combat-slice/README.md`, "Round 2"):
+
+1. `upgrade.png` (blocking): the capture is tick 700 of `input-2p-full.json`, inside the upgrade pause (`nr.phase` 2, entered at tick 667, ended by the pick at 718), past the 30-tick grace period and before any pick (`nr.pick_player` -1, `nr.special_variant` 0, wave 2). Both option cards are on screen. `look-set.mjs` asserts the phase and facts of every screen capture before keeping it (title: phase 0, one player in; hud: fight, wave 3, two players; upgrade: phase 2, no pick; clear: phase 3, cleared), and `look-set.mjs --control` takes the screens at wrong ticks (the upgrade at 765, the title at 1000, the clear at 1000, the hud at 700) and requires each to be rejected.
+2. `combat-radius-special.png` (partly): the clip is now the landing crouch of `NinjaJump_Land` (hand to the ground) instead of the one-arm point of the Spell_Simple actions, and the `nr_look` scene has grunts and the heavy on both sides of the hero. The capture is tick 18 of the special, six ticks after the hit that lands on all six enemies at once; the assertion requires at least two enemies reacting on each side of the hero on one state tick. hero.json was changed, re-pinned, and the hero and hero-p2 atlases re-rendered and installed.

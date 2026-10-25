@@ -18,10 +18,10 @@ wave4-crowd              nr_waves       t1560  cart vs native: identical pixels,
 heavy-staggered          nr_waves       t1910  cart vs native: identical pixels, state equal, missing 0/0
 combat-hit2              nr_look        t264   cart vs native: identical pixels, state equal, missing 0/0
 combat-hit3              nr_look        t280   cart vs native: identical pixels, state equal, missing 0/0
-combat-radius-special    nr_look        t124   cart vs native: identical pixels, state equal, missing 0/0
+combat-radius-special    nr_look        t128   cart vs native: identical pixels, state equal, missing 0/0
 combat-dash-special      nr_look        t49    cart vs native: identical pixels, state equal, missing 0/0
 title                    nr             t30    cart vs native: identical pixels, state equal, missing 0/0
 hud                      nr             t1000  cart vs native: identical pixels, state equal, missing 0/0
-upgrade                  nr             t765   cart vs native: identical pixels, state equal, missing 0/0
+upgrade                  nr             t700   cart vs native: identical pixels, state equal, missing 0/0
 clear                    nr             t2164  cart vs native: identical pixels, state equal, missing 0/0
 26 captures: cart pixel-identical to native with equal state -> /Users/mrbrown/src/github.com/marcusrbrown/nr/docs/evidence/combat-slice/look

@@ -23,7 +23,7 @@ note under it (what to tune in `tools/render/profiles/`, `games/nr/assets/arena/
 - [ ] The grunt reads against the street, in the air and on the ground (`grunt-airborne.png`, `wave4-crowd.png`)
 - [ ] The heavy reads as the heavy, wound up and staggered (`heavy-windup.png`, `heavy-staggered.png`)
 - [ ] Both players and a heavy in one frame are separable (`wave4-crowd.png`)
-- [ ] The combo and the specials read beside real enemies: hits 2 and 3 landing on a grunt, the radius special among grunts and the heavy, the dash special at full reach (`combat-hit2.png`, `combat-hit3.png`, `combat-radius-special.png`, `combat-dash-special.png`)
+- [ ] The combo and the specials read beside real enemies: hits 2 and 3 landing on a grunt, the radius special with enemies on both sides of the hero, the dash special at full reach (`combat-hit2.png`, `combat-hit3.png`, `combat-radius-special.png`, `combat-dash-special.png`)
 - [ ] Player 1 (magenta) and player 2 (cyan) are told apart on the street and match the HUD's colours (`scroll-f061.png`, `combat-hit2.png`, `wave4-crowd.png`, `hud.png`)
 - [ ] The heavy's plates, helmet, gauntlets and boots separate from the street under the darkest neon (`heavy-windup.png`, `heavy-staggered.png`, `combat-radius-special.png`)
 
@@ -47,7 +47,7 @@ note under it (what to tune in `tools/render/profiles/`, `games/nr/assets/arena/
 
 - [ ] The title screen reads, and the prompt "PRESS START AGAIN TO FIGHT" is legible over the hero and the street (`title.png`)
 - [ ] The HUD in the fight reads (`hud.png`)
-- [ ] The upgrade choice screen reads and both options are clear (`upgrade.png`)
+- [ ] The upgrade choice screen reads and both options are clear (`upgrade.png`: the choice phase itself, before any pick)
 - [ ] The clear screen reads (`clear.png`)
 
 ## Both hosts
