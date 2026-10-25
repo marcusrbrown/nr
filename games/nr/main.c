@@ -45,6 +45,15 @@
  *   NR_NO_HEROES: the actors are not drawn; the control for measuring their silhouettes and for the ordering check.
  *   NR_FLAT_NORMALS: the actors' normal map is flat; the control build of the lit-side check.
  *   NR_REVERSE_DEPTH: the actors' depth mapping is inverted (arena.c); the control build of the ordering check.
+ *   NR_STRESS: the last wave's population with no waves and no title: 8 grunts, a heavy and both heroes (invulnerable, idle) on
+ *     the street, every actor shown on a frame of its own that advances every 6 ticks, so each draws as its own non-instanced
+ *     plane. The perf measurement scene.
+ *   NR_PERF: reads one pixel back after every frame so each frame includes its GPU work, and publishes the wall time of every
+ *     frame (nr.perf_ms); the measurement build, GL only, outside the simulation.
+ *   NR_PERF_CONTROL: spins NR_PERF_CONTROL_MS per actor per frame in the render callback; the control build that must exceed
+ *     the frame budget.
+ *   NR_DROP_LIGHT: the fourth point light is not added to the scene, so every lit draw is a three-light (l0300) program
+ *     state; the control build of the missing-state predicate.
  *
  * The state hosts compare (tick, phase, every actor's position, jump, state and hp, the rng, lives, wave, camera, input
  * count, the special, the sounds asked for, checksum) and the program states three.c skipped are published as debug
@@ -52,12 +61,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "anim.h"
 #include "arena.h"
 #include "cartwheel/audio.h"
 #include "cartwheel/core.h"
 #include "cartwheel/debug.h"
+#if NR_PERF
+#include "cartwheel/gl.h"
+#endif
 #include "cartwheel/input.h"
 #include "cartwheel/math.h"
 #include "cartwheel/platform.h"
@@ -94,6 +107,22 @@
 #ifndef NR_NO_TITLE
 #define NR_NO_TITLE 0
 #endif
+#ifndef NR_STRESS
+#define NR_STRESS 0
+#endif
+#ifndef NR_PERF
+#define NR_PERF 0
+#endif
+#ifndef NR_PERF_CONTROL
+#define NR_PERF_CONTROL 0
+#endif
+#ifndef NR_PERF_CONTROL_MS
+#define NR_PERF_CONTROL_MS 0.5
+#endif
+#ifndef NR_DROP_LIGHT
+#define NR_DROP_LIGHT 0
+#endif
+#define NR_PERF_RING 1024
 #define NR_ARENA (NR_LIT_TEST == 0 && NR_STAGE_LEGACY == 0)
 #define NR_UI (NR_ARENA && !NR_DUMMIES && !NR_NO_TITLE) /* the game: a title, the HUD, the upgrade pause, the end screens */
 
@@ -165,6 +194,10 @@ static struct {
   int32_t demo;               /* set by a host: 1 plays the combat script (demo_combat.inc), 2 the bot */
   int32_t events[NR_EVENT_CAP * NR_EVENT_FIELDS];
   int32_t event_count, events_dropped;
+#if NR_PERF
+  float perf_ms[NR_PERF_RING]; /* wall ms from the end of one frame's render to the end of the next's */
+  int32_t perf_n;
+#endif
 #if NR_BOT_MASK
   int32_t bot_log[BOT_LOG * 2]; /* { tick, mask of player 0 | mask of player 1 << 16 } at every tick a mask changed */
   int32_t bot_log_count;
@@ -549,6 +582,13 @@ static void fill_ui(void) {
 
 static void publish_sim(void) {
   for (int i = 0; i < ACTORS; i++) pose_actor(i);
+#if NR_STRESS
+  /* every actor on a frame of its own atlas that no other actor of that atlas shows, moving on every 6 ticks */
+  for (int i = 0; i < ACTORS; i++) {
+    const nr_atlas *at = &S.atlas[char_of(S.sim.actor[i].kind)];
+    S.frame[i] = (i * 3 + S.sim.ticks / 6) % at->frame_count;
+  }
+#endif
   S.ticks = S.sim.ticks;
   S.cam_x = S.sim.cam_x;
   S.cam_left = S.sim.cam_left;
@@ -578,6 +618,16 @@ static void publish_sim(void) {
   S.events_dropped = S.sim.events_dropped;
 }
 
+#if NR_STRESS
+/* The last wave's population: eight grunts spread across the frame and the heavy, a mix of lanes and sides. */
+static void layout_stress(void) {
+  static const float X[8] = { -4.2f, -3.0f, -1.8f, 1.9f, 3.0f, 4.2f, -0.6f, 0.9f };
+  static const float LANE[8] = { -1.2f, 0.9f, -0.3f, 1.4f, -1.0f, 0.3f, 1.5f, -1.5f };
+  for (int i = 0; i < 8; i++) nr_sim_spawn_enemy(&S.sim, NR_KIND_GRUNT, X[i], LANE[i]);
+  nr_sim_spawn_enemy(&S.sim, NR_KIND_HEAVY, 2.4f, 0.0f);
+}
+#endif
+
 /* The test dummies: stand-ins for enemies that stand still. Actor 2 stands in front of the pillar; 3 takes the combo
  * and the throw; 4 cannot be grabbed; 5 and 6 stand together for the radius special; 7 stands left of the street's
  * start, facing right, and swings on a schedule (a hit, a hit inside the invulnerability the first one gives, then a
@@ -606,6 +656,10 @@ static void start_sim(void) {
   layout_dummies();
 #else
   S.sim.log_moves = 0;
+#if NR_STRESS
+  S.sim.waves_on = 0;
+  layout_stress();
+#endif
 #if NR_UI
   nr_sim_enter_title(&S.sim);
 #endif
@@ -664,7 +718,10 @@ static void step_sim(void) {
   (void)end_tick;
 #endif
   for (int p = 0; p < NR_PLAYERS; p++) {
-    if (S.demo == 1 && NR_DUMMIES) demo_input(p, &in[p]);
+    if (NR_STRESS) {
+      in[p] = (nr_input){ .connected = true }; /* both heroes stand idle, and nothing the enemies do can hurt them */
+      S.sim.actor[p].invuln = 1000;
+    } else if (S.demo == 1 && NR_DUMMIES) demo_input(p, &in[p]);
     else if (bot_on(p)) bot_input(p, &in[p]);
     else read_input(p, &in[p]);
   }
@@ -776,6 +833,14 @@ static void fixed_update(void *user, double dt) {
 
 /* ── scene ─────────────────────────────────────────────────────────── */
 
+#if NR_PERF || NR_PERF_CONTROL
+static double wall_ms(void) {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return (double)ts.tv_sec * 1000.0 + (double)ts.tv_nsec * 1e-6;
+}
+#endif
+
 /* The character an actor is drawn with: the grunts and heavies of the street block have their own, everything else
  * (the heroes, the dummies, the legacy stage's actors) is the hero. */
 static int char_of_actor(int i) {
@@ -808,6 +873,9 @@ static void build_scene(int w, int h) {
 #if NR_ARENA
   arena_build(&S.ar, S.scene, S.light);
   S.solids = S.ar.solid_count;
+#if NR_DROP_LIGHT
+  t3_object_remove((t3_object *)S.scene, S.light[LIGHTS - 1]);
+#endif
 #else
   /* the street: drawn first and never in the depth buffer, so a hero's feet below its pivot are not cut by it */
   t3_material *ground_mat = standard_material(0x333847);
@@ -847,6 +915,10 @@ static void sync_scene(void) {
   cw_sincos(S.pitch, &sp, &cp);
   place_camera();
   for (int i = 0; i < ACTORS; i++) {
+#if NR_PERF_CONTROL
+    for (double end = wall_ms() + NR_PERF_CONTROL_MS; wall_ms() < end;) {
+    }
+#endif
     int shown = char_of_actor(i);
     const nr_atlas *at = &S.atlas[shown];
     float right = ((float)at->cell_w * 0.5f - at->pivot_x) / PPU;
@@ -921,6 +993,10 @@ static void register_debug(void) {
   cw_debug_i32("nr.ui_atlas_pages", &S.ui_atlas_pages);
   cw_debug_i32("nr.ui_glyphs_missing", &S.ui_glyphs_missing);
   cw_debug_u32("nr.sim_checksum", &S.sim_checksum);
+#if NR_PERF
+  cw_debug_f32_array("nr.perf_ms", S.perf_ms, NR_PERF_RING);
+  cw_debug_i32("nr.perf_n", &S.perf_n);
+#endif
   cw_debug_field("nr.events", S.events, CW_DBG_I32, NR_EVENT_CAP * NR_EVENT_FIELDS);
   cw_debug_i32("nr.event_count", &S.event_count);
   cw_debug_i32("nr.events_dropped", &S.events_dropped);
@@ -1065,6 +1141,14 @@ static void render(void *user, double alpha) {
   ui_draw(&S.ui);
   S.ui_atlas_pages = ui_atlas_pages();
   S.ui_glyphs_missing = ui_glyphs_missing();
+#endif
+#if NR_PERF
+  static double last;
+  uint8_t px[4];
+  glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
+  double now = wall_ms();
+  if (last > 0 && S.perf_n < NR_PERF_RING) S.perf_ms[S.perf_n++] = (float)(now - last);
+  last = now;
 #endif
 }
 

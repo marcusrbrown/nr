@@ -1,0 +1,231 @@
+{
+  "schema": 1,
+  "note": "native GL final state of each brawler-gate script; games/nr/tests/goldens.mjs --write regenerates it",
+  "scripts": {
+    "2p-full": {
+      "app": "nr",
+      "input": "games/nr/tests/input-2p-full.json",
+      "frames": 2164,
+      "checksum": 3853076974,
+      "final": {
+        "nr.ticks": 2164,
+        "nr.input_count": 1203,
+        "nr.phase": 3,
+        "nr.wave": 4,
+        "nr.cleared": 1,
+        "nr.game_over": 0,
+        "nr.lives": 4,
+        "nr.players": 2,
+        "nr.joins": 0,
+        "nr.special_variant": 1,
+        "nr.actor_hp": [
+          9,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "nr.actor_state": [
+          3,
+          3,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18
+        ],
+        "nr.sim_checksum": 2841677422
+      }
+    },
+    "waves": {
+      "app": "nr_waves",
+      "input": "games/nr/tests/input-waves.json",
+      "frames": 2374,
+      "checksum": 2932405792,
+      "final": {
+        "nr.ticks": 2374,
+        "nr.input_count": 1615,
+        "nr.phase": 1,
+        "nr.wave": 4,
+        "nr.cleared": 1,
+        "nr.game_over": 0,
+        "nr.lives": 4,
+        "nr.players": 2,
+        "nr.joins": 0,
+        "nr.special_variant": 0,
+        "nr.actor_hp": [
+          3,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1
+        ],
+        "nr.actor_state": [
+          5,
+          1,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18
+        ],
+        "nr.sim_checksum": 1164827956
+      }
+    },
+    "combat": {
+      "app": "nr_dummies",
+      "input": "games/nr/tests/input-combat.json",
+      "frames": 658,
+      "checksum": 1835212864,
+      "final": {
+        "nr.ticks": 658,
+        "nr.input_count": 314,
+        "nr.phase": 1,
+        "nr.wave": 0,
+        "nr.cleared": 0,
+        "nr.game_over": 0,
+        "nr.lives": 6,
+        "nr.players": 2,
+        "nr.joins": 0,
+        "nr.special_variant": 0,
+        "nr.actor_hp": [
+          12,
+          9,
+          96,
+          5,
+          9,
+          11,
+          11,
+          99,
+          10,
+          0,
+          0
+        ],
+        "nr.actor_state": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "nr.sim_checksum": 3856465417
+      }
+    },
+    "join-mid": {
+      "app": "nr",
+      "input": "games/nr/tests/input-join-mid.json",
+      "frames": 800,
+      "checksum": 1670758902,
+      "final": {
+        "nr.ticks": 800,
+        "nr.input_count": 307,
+        "nr.phase": 1,
+        "nr.wave": 2,
+        "nr.cleared": 0,
+        "nr.game_over": 0,
+        "nr.lives": 6,
+        "nr.players": 2,
+        "nr.joins": 1,
+        "nr.special_variant": 0,
+        "nr.actor_hp": [
+          8,
+          8,
+          0,
+          2,
+          -1,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ],
+        "nr.actor_state": [
+          0,
+          0,
+          18,
+          0,
+          18,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "nr.sim_checksum": 1697955339
+      }
+    },
+    "upgrade": {
+      "app": "nr",
+      "input": "games/nr/tests/input-upgrade.json",
+      "frames": 989,
+      "checksum": 3196666525,
+      "final": {
+        "nr.ticks": 989,
+        "nr.input_count": 430,
+        "nr.phase": 1,
+        "nr.wave": 3,
+        "nr.cleared": 0,
+        "nr.game_over": 0,
+        "nr.lives": 6,
+        "nr.players": 2,
+        "nr.joins": 0,
+        "nr.special_variant": 1,
+        "nr.actor_hp": [
+          10,
+          10,
+          2,
+          2,
+          2,
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "nr.actor_state": [
+          0,
+          0,
+          1,
+          1,
+          1,
+          18,
+          18,
+          18,
+          0,
+          0,
+          0
+        ],
+        "nr.sim_checksum": 2713987517
+      }
+    }
+  }
+}

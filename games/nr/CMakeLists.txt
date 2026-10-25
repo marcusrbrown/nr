@@ -6,6 +6,7 @@
 #   nr_botfull                nr (title, HUD, upgrade pause) with both players played by the bot from the first tick: it joins, picks the dash with player 2
 #                             and presses back at the end (input-2p-full.json is its buttons)
 #   nr_botsolo                nr with only player 0 a bot: it joins and begins alone, so a hand-written pad 2 can join later
+#   nr_stress                 the last wave's population (8 grunts, a heavy, both heroes) on distinct frames, no waves, no title: the perf scene
 #   nr_arena_bare             the street block with the test dummies, none of its actors drawn (the control for the ordering check)
 #   nr_stage                  the look checkpoint's plain stage: four fixed actors, no input
 #   nr_bare                   that stage without its actors (the control for measuring their silhouettes)
@@ -19,8 +20,13 @@ set(NR_PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/programs/nr.txt CACHE FILEPATH "thre
 
 # Control build: invert the actors' depth mapping (the ordering check must fail on it).
 option(NR_REVERSE_DEPTH "Invert the actor depth mapping (control build)" OFF)
+# Measurement and control builds (outside the simulation; the tests build them into out/)
+option(NR_PERF "Read a pixel back every frame and publish per-frame wall times (measurement build, GL)" OFF)
+option(NR_PERF_CONTROL "Spin NR_PERF_CONTROL_MS per actor per frame (budget control build)" OFF)
+set(NR_PERF_CONTROL_MS 0.5 CACHE STRING "Milliseconds the control build spins per actor per frame")
+option(NR_DROP_LIGHT "Leave the fourth point light out of the scene (missing-state control build)" OFF)
 
-set(NR_APPS nr nr_waves nr_dummies nr_bot nr_bot1 nr_botfull nr_botsolo nr_arena_bare nr_stage nr_lit_h nr_lit_v nr_lit_h_flat nr_lit_v_flat nr_lit_h_left nr_lit_v_left nr_lit_h_left_flat nr_lit_v_left_flat nr_solo_0 nr_solo_1 nr_solo_2 nr_bare)
+set(NR_APPS nr nr_waves nr_dummies nr_bot nr_bot1 nr_botfull nr_botsolo nr_stress nr_arena_bare nr_stage nr_lit_h nr_lit_v nr_lit_h_flat nr_lit_v_flat nr_lit_h_left nr_lit_v_left nr_lit_h_left_flat nr_lit_v_left_flat nr_solo_0 nr_solo_1 nr_solo_2 nr_bare)
 set(previous "")
 foreach(app ${NR_APPS})
   set(lit 0)
@@ -32,6 +38,7 @@ foreach(app ${NR_APPS})
   set(bot_mask 0)
   set(bot_focus 0)
   set(no_title 0)
+  set(stress 0)
   if(app MATCHES "^nr_lit_h")
     set(lit 1)
   elseif(app MATCHES "^nr_lit_v")
@@ -63,6 +70,10 @@ foreach(app ${NR_APPS})
     set(no_title 1)
     set(bot_mask 1)
     set(bot_focus 1)
+  elseif(app STREQUAL "nr_stress")
+    set(legacy 0)
+    set(no_title 1)
+    set(stress 1)
   elseif(app STREQUAL "nr_arena_bare")
     set(legacy 0)
     set(bare 1)
@@ -76,7 +87,9 @@ foreach(app ${NR_APPS})
   endif()
   cw_add_app(${app} SOURCES main.c anim.c arena.c json.c sim.c ui.c waves.c PACK ${NR_ASSETS} PROGRAMS ${NR_PROGRAMS})
   target_compile_definitions(${app} PRIVATE NR_LIT_TEST=${lit} NR_FLAT_NORMALS=${flat} NR_NO_HEROES=${bare}
-    NR_STAGE_LEGACY=${legacy} NR_LIT_FACE=${face} NR_DUMMIES=${dummies} NR_BOT_MASK=${bot_mask} NR_BOT_FOCUS=${bot_focus} NR_NO_TITLE=${no_title} NR_REVERSE_DEPTH=$<BOOL:${NR_REVERSE_DEPTH}>)
+    NR_STAGE_LEGACY=${legacy} NR_LIT_FACE=${face} NR_DUMMIES=${dummies} NR_BOT_MASK=${bot_mask} NR_BOT_FOCUS=${bot_focus} NR_NO_TITLE=${no_title} NR_STRESS=${stress}
+    NR_REVERSE_DEPTH=$<BOOL:${NR_REVERSE_DEPTH}> NR_PERF=$<BOOL:${NR_PERF}> NR_PERF_CONTROL=$<BOOL:${NR_PERF_CONTROL}>
+    NR_PERF_CONTROL_MS=${NR_PERF_CONTROL_MS} NR_DROP_LIGHT=$<BOOL:${NR_DROP_LIGHT}>)
   target_compile_options(${app} PRIVATE -ffp-contract=off -Wall -Wextra)
   # the apps run cwpack on the same manifest and share its import cache: one at a time
   if(previous)
