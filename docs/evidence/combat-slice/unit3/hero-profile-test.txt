@@ -1,0 +1,20 @@
+✔ the hero profile and recipe validate against their schemas
+✔ every kit file the profile names is a CC0 kit file kits.json pins, and the recipe pins this profile
+✔ the recipe renders every ready clip once and no gap, with the profile's loop flag and at least 4 frames
+✔ the recipe renders only ready clips, and every clip of the map names real actions with the audit status
+✔ hero atlas: identical hashes on two runs, 128 px tall, pivot on the ground, centred, green-up normals
+✔ a kit file that differs from its pinned sha256 exits 12 and writes nothing
+✔ an unstaged kit exits 12 naming fetch-kits.sh
+✔ a recipe that pins another profile hash exits 12 naming both
+✔ a slot naming a clip the profile lacks exits 12
+✔ every ready clip of the profile renders (its actions bind and pose the figure), the gaps are refused
+✔ a hero set wider than one page continues on the next page and the manifest records each frame's page
+✔ a normal sheet rect that differs from its colour rect, or a pivot outside its rect, fails naming the frame
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+exit 0

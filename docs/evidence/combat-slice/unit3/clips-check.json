@@ -1,0 +1,313 @@
+{
+  "ok": true,
+  "atlas": {
+    "frames": 96,
+    "cell": {
+      "width": 160,
+      "height": 160
+    },
+    "pages": [
+      {
+        "index": 0,
+        "width": 1920,
+        "height": 1280,
+        "bytes": 19660800
+      }
+    ],
+    "bytes": 19660800,
+    "mib": 18.75
+  },
+  "budget": {
+    "totalMiB": 64,
+    "heroPlannedExtraFrames": 10,
+    "gruntShare": 0.25,
+    "heavyShare": 0.35,
+    "pageSize": 2048,
+    "planned": {
+      "hero": {
+        "frames": 106,
+        "bytes": 22118400
+      },
+      "grunt": {
+        "frames": 27,
+        "bytes": 7372800
+      },
+      "heavy": {
+        "frames": 38,
+        "bytes": 9830400
+      }
+    },
+    "plannedTotalBytes": 39321600,
+    "plannedTotalMiB": 37.5,
+    "largestSheetBytes": 11059200,
+    "loadPeakMiB": 48.046875
+  },
+  "clips": [
+    {
+      "clip": "idle",
+      "first": 0,
+      "frames": 8,
+      "ms": 250,
+      "loop": true,
+      "durationMs": 2000,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1638400,
+      "sheetKiB": 1600
+    },
+    {
+      "clip": "walk",
+      "first": 8,
+      "frames": 8,
+      "ms": 120,
+      "loop": true,
+      "durationMs": 960,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1638400,
+      "sheetKiB": 1600
+    },
+    {
+      "clip": "run",
+      "first": 16,
+      "frames": 8,
+      "ms": 90,
+      "loop": true,
+      "durationMs": 720,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1638400,
+      "sheetKiB": 1600
+    },
+    {
+      "clip": "hit1",
+      "first": 24,
+      "frames": 6,
+      "ms": 60,
+      "loop": false,
+      "durationMs": 360,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1228800,
+      "sheetKiB": 1200
+    },
+    {
+      "clip": "hit2",
+      "first": 30,
+      "frames": 6,
+      "ms": 60,
+      "loop": false,
+      "durationMs": 360,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1228800,
+      "sheetKiB": 1200
+    },
+    {
+      "clip": "hit3",
+      "first": 36,
+      "frames": 7,
+      "ms": 60,
+      "loop": false,
+      "durationMs": 420,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1433600,
+      "sheetKiB": 1400
+    },
+    {
+      "clip": "jump",
+      "first": 43,
+      "frames": 6,
+      "ms": 100,
+      "loop": false,
+      "durationMs": 600,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1228800,
+      "sheetKiB": 1200
+    },
+    {
+      "clip": "throw",
+      "first": 49,
+      "frames": 6,
+      "ms": 80,
+      "loop": false,
+      "durationMs": 480,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1228800,
+      "sheetKiB": 1200
+    },
+    {
+      "clip": "hurt",
+      "first": 55,
+      "frames": 4,
+      "ms": 80,
+      "loop": false,
+      "durationMs": 320,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 819200,
+      "sheetKiB": 800
+    },
+    {
+      "clip": "knockdown",
+      "first": 59,
+      "frames": 8,
+      "ms": 90,
+      "loop": false,
+      "durationMs": 720,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1638400,
+      "sheetKiB": 1600
+    },
+    {
+      "clip": "getup",
+      "first": 67,
+      "frames": 6,
+      "ms": 90,
+      "loop": false,
+      "durationMs": 540,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1228800,
+      "sheetKiB": 1200
+    },
+    {
+      "clip": "dash",
+      "first": 73,
+      "frames": 6,
+      "ms": 70,
+      "loop": true,
+      "durationMs": 420,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1228800,
+      "sheetKiB": 1200
+    },
+    {
+      "clip": "special_knockback",
+      "first": 79,
+      "frames": 9,
+      "ms": 70,
+      "loop": false,
+      "durationMs": 630,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1843200,
+      "sheetKiB": 1800
+    },
+    {
+      "clip": "special_dash",
+      "first": 88,
+      "frames": 8,
+      "ms": 60,
+      "loop": false,
+      "durationMs": 480,
+      "pages": [
+        0
+      ],
+      "sheetBytes": 1638400,
+      "sheetKiB": 1600
+    }
+  ],
+  "checks": [
+    {
+      "name": "provenance: manifest names this recipe and profile",
+      "ok": true,
+      "detail": "recipe 13af28929f0d, profile ecef1347ea52"
+    },
+    {
+      "name": "provenance: sheet hashes",
+      "ok": true,
+      "detail": "2 sheet(s) match the manifest"
+    },
+    {
+      "name": "clips: the 14 ready clips are in the atlas in recipe order, the gaps are not",
+      "ok": true,
+      "detail": "14 clips; placeholders: jumpkick, grab"
+    },
+    {
+      "name": "clips: manifest clips match the recipe slots",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "clips: anim.c names the same clips, with the gaps marked",
+      "ok": true,
+      "detail": "16 slots, 2 gaps"
+    },
+    {
+      "name": "frames: every clip has at least 4 frames, contiguous, and every pivot is inside its rect",
+      "ok": true,
+      "detail": "14 clips, 96 frames, pivot (80, 144) in every 160x160 rect"
+    },
+    {
+      "name": "frames: no silhouette within 3 px of its cell edge (a clipped pose)",
+      "ok": true,
+      "detail": "all frames inside x 15-155 of 160"
+    },
+    {
+      "name": "pages: rects inside their pages; the multi-page placement recorded",
+      "ok": true,
+      "detail": "1 page(s): 0: 1920x1280; clips crossing a page: none"
+    },
+    {
+      "name": "rects: each frame's normal rect has its colour rect's alpha",
+      "ok": true,
+      "detail": "96 frames"
+    },
+    {
+      "name": "rects: a normal rect that differs from its colour rect fails naming the frame (control)",
+      "ok": true,
+      "detail": "frame 5 (idle 5): the normal sheet's rect differs from the colour sheet's at texel (85, 22): alpha 0 against 255"
+    },
+    {
+      "name": "budget: the committed hero set and the planned three-character set fit",
+      "ok": true,
+      "detail": "hero 96 frames 18.75 MiB; planned hero 106 21.09, grunt 27 7.03, heavy 38 9.38; total 37.50 of 64 MiB"
+    },
+    {
+      "name": "contact sheets written",
+      "ok": true,
+      "detail": "contact.png 5824x8124: 14 rows, 4x nearest, cell crop (11, 16) 149x144, pivot in magenta"
+    }
+  ],
+  "contact": {
+    "file": "contact.png",
+    "width": 5824,
+    "height": 8124,
+    "scale": 4,
+    "rows": [
+      "idle",
+      "walk",
+      "run",
+      "hit1",
+      "hit2",
+      "hit3",
+      "jump",
+      "throw",
+      "hurt",
+      "knockdown",
+      "getup",
+      "dash",
+      "special_knockback",
+      "special_dash"
+    ]
+  }
+}

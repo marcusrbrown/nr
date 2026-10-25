@@ -359,6 +359,7 @@ export function postProcess({ recipePath, rawDir, outDir }) {
   });
 
   verifyLayout({ frames, pages: pageRecords }, stage);
+  verifyRects({ frames, pages: pageRecords }, stage);
 
   const manifest = {
     schema: 1,
@@ -395,6 +396,36 @@ export function verifyLayout(manifest, dir) {
     const pg = manifest.pages[f.page];
     if (!pg || f.rect.x < 0 || f.rect.y < 0 || f.rect.x + f.rect.w > pg.width || f.rect.y + f.rect.h > pg.height) {
       throw new PostError(`frame ${f.index} (${f.clip} ${f.clipFrame}): rect ${JSON.stringify(f.rect)} is outside page ${f.page}`);
+    }
+    if (!f.pivot || f.pivot.x < 0 || f.pivot.y < 0 || f.pivot.x > f.rect.w || f.pivot.y > f.rect.h) {
+      throw new PostError(`frame ${f.index} (${f.clip} ${f.clipFrame}): pivot ${JSON.stringify(f.pivot)} is outside its ${f.rect.w}x${f.rect.h} rect`);
+    }
+  }
+}
+
+/**
+ * The normal sheet holds every frame in the colour sheet's rect: inside each frame's rect the two sheets have the same
+ * alpha, a frame marked empty has no opaque texel in either, and any other frame has some in both. A mismatch fails
+ * naming the frame and the first texel that differs.
+ */
+export function verifyRects(manifest, dir) {
+  const sheets = manifest.pages.map((pg) => ({ colour: decodePng(readFileSync(join(dir, pg.colour.file))), normal: decodePng(readFileSync(join(dir, pg.normal.file))) }));
+  for (const f of manifest.frames) {
+    const { colour, normal } = sheets[f.page];
+    const label = `frame ${f.index} (${f.clip} ${f.clipFrame})`;
+    let opaqueColour = 0, opaqueNormal = 0;
+    for (let y = 0; y < f.rect.h; y++) {
+      for (let x = 0; x < f.rect.w; x++) {
+        const o = ((f.rect.y + y) * colour.width + f.rect.x + x) * 4 + 3;
+        if (colour.data[o] !== normal.data[o]) {
+          throw new PostError(`${label}: the normal sheet's rect differs from the colour sheet's at texel (${x}, ${y}): alpha ${normal.data[o]} against ${colour.data[o]}`);
+        }
+        if (colour.data[o] === 255) opaqueColour++;
+        if (normal.data[o] === 255) opaqueNormal++;
+      }
+    }
+    if (f.empty ? opaqueColour + opaqueNormal > 0 : opaqueColour === 0 || opaqueNormal === 0) {
+      throw new PostError(`${label}: marked ${f.empty ? 'empty' : 'visible'} but its rect holds ${opaqueColour} opaque colour and ${opaqueNormal} opaque normal texels`);
     }
   }
 }

@@ -265,6 +265,46 @@ int nr_clip_index(const nr_atlas *a, const char *name) {
   return -1;
 }
 
+const nr_clip_slot nr_hero_clips[NR_HERO_CLIP_COUNT] = {
+  [NR_HERO_IDLE] = { "idle", false },
+  [NR_HERO_WALK] = { "walk", false },
+  [NR_HERO_RUN] = { "run", false },
+  [NR_HERO_HIT1] = { "hit1", false },
+  [NR_HERO_HIT2] = { "hit2", false },
+  [NR_HERO_HIT3] = { "hit3", false },
+  [NR_HERO_JUMP] = { "jump", false },
+  [NR_HERO_JUMPKICK] = { "jumpkick", true },
+  [NR_HERO_GRAB] = { "grab", true },
+  [NR_HERO_THROW] = { "throw", false },
+  [NR_HERO_HURT] = { "hurt", false },
+  [NR_HERO_KNOCKDOWN] = { "knockdown", false },
+  [NR_HERO_GETUP] = { "getup", false },
+  [NR_HERO_DASH] = { "dash", false },
+  [NR_HERO_SPECIAL_KNOCKBACK] = { "special_knockback", false },
+  [NR_HERO_SPECIAL_DASH] = { "special_dash", false },
+};
+
+bool nr_clips_resolve(const nr_atlas *a, const nr_clip_slot *table, int count, int *index_out) {
+  bool ok = true;
+  for (int i = 0; i < count; i++) {
+    int at = nr_clip_index(a, table[i].name);
+    if (table[i].gap) {
+      if (at >= 0) {
+        cw_error("anim: clip %s is a gap slot but the atlas holds it", table[i].name);
+        ok = false;
+      }
+      index_out[i] = -1;
+    } else {
+      if (at < 0) {
+        cw_error("anim: clip %s is not in the atlas", table[i].name);
+        ok = false;
+      }
+      index_out[i] = at;
+    }
+  }
+  return ok;
+}
+
 int nr_clip_step_at(const nr_atlas *a, int clip, int32_t ticks) {
   const nr_clip *c = &a->clips[clip];
   if (ticks < 0) ticks = 0;

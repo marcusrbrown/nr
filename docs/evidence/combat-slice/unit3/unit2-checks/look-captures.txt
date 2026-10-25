@@ -1,0 +1,34 @@
+nr             f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr             f120  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr             f180  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr             f240  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_solo_0      f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_solo_1      f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_solo_2      f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h       f30   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h       f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h       f180  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h       f210  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v       f30   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v       f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v       f180  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v       f210  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h_flat  f30   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h_flat  f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h_flat  f180  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_h_flat  f210  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v_flat  f30   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v_flat  f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v_flat  f180  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_lit_v_flat  f210  native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr_bare        f60   native 1920x1080 missing 0 | cart 1920x1080 missing 0 | cart vs native: identical pixels, sim state equal
+nr             GL  native missing 0 cart missing 0 checksum equal
+nr_solo_0      GL  native missing 0 cart missing 0 checksum equal
+nr_solo_1      GL  native missing 0 cart missing 0 checksum equal
+nr_solo_2      GL  native missing 0 cart missing 0 checksum equal
+nr_lit_h       GL  native missing 0 cart missing 0 checksum equal
+nr_lit_v       GL  native missing 0 cart missing 0 checksum equal
+nr_lit_h_flat  GL  native missing 0 cart missing 0 checksum equal
+nr_lit_v_flat  GL  native missing 0 cart missing 0 checksum equal
+nr_bare        GL  native missing 0 cart missing 0 checksum equal
+24 capture runs on 2 hosts and 9 GL state runs ok 

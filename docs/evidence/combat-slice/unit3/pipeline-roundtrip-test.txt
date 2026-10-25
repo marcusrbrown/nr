@@ -1,0 +1,21 @@
+✔ every committed recipe validates against the schema (4.4025ms)
+✔ placeholder: 4 frames render to colour sheet, normal sheet and manifest, identically on a second run (1693.294083ms)
+✔ flat-plane control: the normal sheet is uniform (0.5, 0.5, 1) within 1/255 (562.789625ms)
+✔ vertical control: green > 0.5 on top-facing texels, < 0.5 on bottom-facing ones, red follows screen x (597.843417ms)
+✔ a frame with zero visible pixels is marked empty, not an error (724.879542ms)
+✔ Blender version mismatch: exit 11, names expected and found, no outputs (980.451625ms)
+✔ input errors exit 12; an existing output directory is refused (1005.285917ms)
+✔ post.mjs refuses a raw directory without its sentinel or rendered from another recipe (1697.110917ms)
+✔ normals are averaged as vectors and renormalised (0.176667ms)
+✔ dilation copies colour and normal into transparent edge texels and leaves alpha 0 (0.179917ms)
+✔ a clip longer than one page continues on page 2 and the manifest records the page (803.263542ms)
+✔ verifyLayout fails naming the frame whose rect leaves its page, and a sheet size mismatch (1281.638875ms)
+✔ fetch-deps.sh: a tampered cart-wgpu sha256 in the lock aborts and leaves no partial directory (1745.270417ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+exit 0

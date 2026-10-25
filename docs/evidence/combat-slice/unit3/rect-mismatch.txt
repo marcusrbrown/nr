@@ -1,0 +1,2 @@
+fails: frame 5 (idle 5): the normal sheet's rect differs from the colour sheet's at texel (85, 22): alpha 0 against 255
+fails: frame 3 (idle 3): pivot {"x":80,"y":400} is outside its 160x160 rect

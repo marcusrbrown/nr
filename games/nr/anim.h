@@ -42,6 +42,26 @@ bool nr_atlas_load(nr_atlas *a, const char *name, float pixels_per_unit, bool fl
 /* Index of a clip by name, or -1. */
 int nr_clip_index(const nr_atlas *a, const char *name);
 
+/* The hero's clips by role, in the order of tools/render/recipes/hero.json with the unrendered ones in place. A slot with
+ * `gap` set has no frames in the atlas: the owner hand-keys it (profile clip not ready) and the render refuses it, so
+ * its index resolves to -1 until the entry is cleared here and the clip is rendered. */
+typedef enum {
+  NR_HERO_IDLE, NR_HERO_WALK, NR_HERO_RUN, NR_HERO_HIT1, NR_HERO_HIT2, NR_HERO_HIT3, NR_HERO_JUMP, NR_HERO_JUMPKICK,
+  NR_HERO_GRAB, NR_HERO_THROW, NR_HERO_HURT, NR_HERO_KNOCKDOWN, NR_HERO_GETUP, NR_HERO_DASH, NR_HERO_SPECIAL_KNOCKBACK,
+  NR_HERO_SPECIAL_DASH, NR_HERO_CLIP_COUNT
+} nr_hero_clip;
+
+typedef struct {
+  const char *name;
+  bool gap;
+} nr_clip_slot;
+
+extern const nr_clip_slot nr_hero_clips[NR_HERO_CLIP_COUNT];
+
+/* Fills `index_out[i]` with the atlas clip index of `table[i]` (-1 for a gap slot). Returns false and reports through
+ * cw_error when a slot that is not a gap has no clip in the atlas or a gap slot has one. */
+bool nr_clips_resolve(const nr_atlas *a, const nr_clip_slot *table, int count, int *index_out);
+
 /* The atlas frame of a clip `ticks` fixed ticks (60 Hz) after it started: a looping clip wraps, a one-shot holds its
  * last frame. Integer arithmetic only: frame k starts at the first tick whose elapsed time reaches k * ms. */
 int nr_clip_frame_at(const nr_atlas *a, int clip, int32_t ticks);

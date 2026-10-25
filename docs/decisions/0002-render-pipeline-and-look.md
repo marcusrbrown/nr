@@ -52,7 +52,7 @@ Measured cost, Cycles CPU, 1 sample: the 4-frame placeholder (192x256 supersampl
 - Sprite render camera: fixed orthographic camera at 20 degrees elevation, azimuth 0 (placeholder recipe); the game's belt camera is a fixed-angle perspective camera. The elevation, the ortho height that makes a hero 128 px tall, and the plane tilt are tuned in Unit 2 against the 128 px target and in Unit 4 against the occlusion captures.
 - Density: 640x360 virtual resolution through `pixel_scale 3` on a 1920x1080 logical frame, hero about 128 px tall. Unit 2 checks that the 3D window renderer honours `pixel_scale` and each cart host's output size; if it does not, a 640x360 render target blitted up replaces it.
 - Lighting: four point lights always present (three arena neons and one flash slot, intensity 0 when idle), so one program state (`l0400`) covers the game; Unit 2 surveys it.
-- Atlas budget, frame counts per clip and the per-enemy allowance: set in Unit 3 from a measured hero set.
+- Atlas budget, frame counts per clip and the per-enemy allowance: set in Unit 3 from the measured hero set (below).
 
 ### Measured in Unit 2 (current values, open to tuning)
 
@@ -61,6 +61,48 @@ Measured cost, Cycles CPU, 1 sample: the 4-frame placeholder (192x256 supersampl
 - Per-frame plane geometry (UVs on the frame's rect, one material per character) puts heroes on different frames in one scene; heroes on a shared frame batch into the `instbig` row. Both `standard+map+nearest+nmap+atest+l0400` and its `instbig` row are reached by the stage; the row-removal controls (`games/nr/tests/programs-controls.mjs`) show each removal gives `cw.three.missing == 1` naming exactly that state.
 - Lit side: on a non-instanced hero the light-induced swing of the lit-side luminance difference is 3.3x to 3.7x the flat-normal control's on the horizontal sweep and 7.6x to 8.9x on the vertical sweep, on native and cart (`games/nr/tests/lit-side-check.mjs`); its per-frame sign check subtracts the flat control's difference, which carries the albedo offset between the classes.
 - Fill light: ambient 0x7482a8 plus the three neons (intensity 28) and a flash slot at intensity 0; the neons still set the colour of the lit side (`solo_*` captures).
+
+### Atlas budget (Unit 3)
+
+Measured on the full hero set: 14 clips, 96 frames, 160x160 cells, one 1920x1280 page per sheet. Per-clip frame counts,
+render times and sheet sizes are in `docs/evidence/combat-slice/README.md`; the checks are `games/nr/tests/clips-check.mjs`
+and `tools/render/tests/hero-profile.mjs`.
+
+- Cost of a frame: 160 x 160 x 4 bytes = 100 KiB of decoded RGBA per sheet, 200 KiB for the colour and normal pair.
+  `anim.c` keeps one decoded copy of each sheet (`t3_texture.pixels`) and decodes one sheet at a time, so memory is the
+  sum of the sheets' decoded sizes plus the largest sheet during a load.
+- Budget: all colour and normal sheets of the three characters total at most **64 MiB** decoded, each character on one
+  page of at most 2048 x 2048 (144 cells), against the 128 MiB wasm. The engine's `mem_total` is 8.3 MB
+  (`docs/evidence/shipping-path-spike/README.md`), so the budget plus the load peak leaves the rest of the wasm to the
+  engine, three.c geometry and audio.
+- Allowance: the hero is planned at 106 frames (96 rendered plus 5 for the hand-keyed `jumpkick` and 5 for `grab`); the
+  grunt is allowed 25 % of that (27 frames, 5 clips) and the heavy 35 % (38 frames, 5 clips).
+
+| Character | Frames | Page | Pair MiB |
+| --- | ---: | --- | ---: |
+| hero (96 now, 106 planned) | 96 / 106 | 1920x1280 / 1920x1440 | 18.75 / 21.09 |
+| grunt | 27 | 1920x480 | 7.03 |
+| heavy | 38 | 1920x640 | 9.38 |
+| total, planned | 171 | | 37.50 |
+
+The planned total leaves 26.5 MiB of the budget unused; with the largest sheet (10.5 MiB) held during a load the peak is
+48.0 MiB. A character past its frame cap or past 144 frames has frames cut, or moves to a second page (the packer places
+it there and records the page; the loader reads one page per character today). The frame counts below needed no cut.
+
+- Frame counts per clip are the profile's `proposal` values: idle 8, walk 8, run 8, hit1 6, hit2 6, hit3 7, jump 6,
+  throw 6, hurt 4, knockdown 8, getup 6, dash 6, special_knockback 9, special_dash 8. Every clip has at least 4 frames.
+  Playback time per clip is `frames x ms` (60 to 250 ms a frame, 320 ms to 2 s a clip).
+- Render cost (the origin's hi-bit cost question): Cycles CPU, 1 sample, supersample 4, two passes: 139 ms per frame on
+  the development Mac (13.1 to 13.6 s for the 96 frames, about 20 s with Blender's start-up and post-processing). The
+  planned hero, grunt and heavy sets (171 frames) are about 24 s of rendering.
+- Pose anchor: the hero profile anchors the pelvis at the plane origin (`pose.anchor: pelvis-xy`). A feet anchor put the
+  knocked-down body 124 px to one side of the origin, outside a 160 px cell centred on it (the plane mirrors about the
+  origin, so the cell is symmetric); the pelvis anchor keeps every frame of the 14 clips within x 15 to 155 and y 20 to 156
+  of the cell.
+- Reproducibility: the full-set render, post-processed twice, gives identical manifests and identical colour and normal
+  sheets (and a third time for the committed install) on this machine.
+- Clip table: `games/nr/anim.c` names the hero's 16 clip slots; `jumpkick` and `grab` are gap slots (the profile marks
+  them not ready with a `handKey` note, the renderer refuses them with exit 12) until the owner hand-keys them.
 
 ## Consequences
 

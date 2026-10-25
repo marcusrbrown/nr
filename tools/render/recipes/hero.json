@@ -15,9 +15,21 @@
   },
   "render": { "seed": 1, "samples": 1 },
   "atlas": { "pageSize": 2048, "dilate": 2 },
-  "model": { "profile": "../profiles/hero.json", "profileSha256": "b16a646b353e1ed813ef11237c8a63a6594fee5d45a3d98f2201d325bc02e33e" },
+  "model": { "profile": "../profiles/hero.json", "profileSha256": "ecef1347ea52e6b977b3cc804ecf1359f115cc8be4e99cea94c17c92ceff33b6" },
   "slots": [
     { "id": "idle", "clip": "idle", "frames": 8, "facing": "east", "ms": 250, "loop": true },
-    { "id": "walk", "clip": "walk", "frames": 8, "facing": "east", "ms": 120, "loop": true }
+    { "id": "walk", "clip": "walk", "frames": 8, "facing": "east", "ms": 120, "loop": true },
+    { "id": "run", "clip": "run", "frames": 8, "facing": "east", "ms": 90, "loop": true },
+    { "id": "hit1", "clip": "hit1", "frames": 6, "facing": "east", "ms": 60, "loop": false },
+    { "id": "hit2", "clip": "hit2", "frames": 6, "facing": "east", "ms": 60, "loop": false },
+    { "id": "hit3", "clip": "hit3", "frames": 7, "facing": "east", "ms": 60, "loop": false },
+    { "id": "jump", "clip": "jump", "frames": 6, "facing": "east", "ms": 100, "loop": false },
+    { "id": "throw", "clip": "throw", "frames": 6, "facing": "east", "ms": 80, "loop": false },
+    { "id": "hurt", "clip": "hurt", "frames": 4, "facing": "east", "ms": 80, "loop": false },
+    { "id": "knockdown", "clip": "knockdown", "frames": 8, "facing": "east", "ms": 90, "loop": false },
+    { "id": "getup", "clip": "getup", "frames": 6, "facing": "east", "ms": 90, "loop": false },
+    { "id": "dash", "clip": "dash", "frames": 6, "facing": "east", "ms": 70, "loop": true },
+    { "id": "special_knockback", "clip": "special_knockback", "frames": 9, "facing": "east", "ms": 70, "loop": false },
+    { "id": "special_dash", "clip": "special_dash", "frames": 8, "facing": "east", "ms": 60, "loop": false }
   ]
 }

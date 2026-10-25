@@ -1,0 +1,42 @@
+{
+  "recipe": "tools/render/recipes/hero.json",
+  "identical": true,
+  "runs": [
+    {
+      "manifestSha256": "45cb1b49513383e59daed2d14485393eb6eaaf457c89d70fca078ac52b996ee5",
+      "inputsSha256": "b23c40eb38f8dd23c33686f9778ef3dd84828702120a16ff6a6d72e5a5f7399a",
+      "pages": [
+        {
+          "colour": {
+            "file": "hero.png",
+            "sha256": "920b7ca292249feed69485f72cf249cd21afdb9d0ada6f4190d6f83db5f083f7",
+            "pixelsSha256": "dd2b8f5cc5b9221d89067da4c66f53007f2f09d1a4c99358f30f6b2f0fa611a9"
+          },
+          "normal": {
+            "file": "hero-n.png",
+            "sha256": "31a68391ac36877f5d5e66e611b9fd41a0aaf6fadeca668603daac4232b722f6",
+            "pixelsSha256": "52e7ff4d596ffb8bf079caae43eaeb8d8043783e782918f3ef0a60bf360c9059"
+          }
+        }
+      ]
+    },
+    {
+      "manifestSha256": "45cb1b49513383e59daed2d14485393eb6eaaf457c89d70fca078ac52b996ee5",
+      "inputsSha256": "b23c40eb38f8dd23c33686f9778ef3dd84828702120a16ff6a6d72e5a5f7399a",
+      "pages": [
+        {
+          "colour": {
+            "file": "hero.png",
+            "sha256": "920b7ca292249feed69485f72cf249cd21afdb9d0ada6f4190d6f83db5f083f7",
+            "pixelsSha256": "dd2b8f5cc5b9221d89067da4c66f53007f2f09d1a4c99358f30f6b2f0fa611a9"
+          },
+          "normal": {
+            "file": "hero-n.png",
+            "sha256": "31a68391ac36877f5d5e66e611b9fd41a0aaf6fadeca668603daac4232b722f6",
+            "pixelsSha256": "52e7ff4d596ffb8bf079caae43eaeb8d8043783e782918f3ef0a60bf360c9059"
+          }
+        }
+      ]
+    }
+  ]
+}

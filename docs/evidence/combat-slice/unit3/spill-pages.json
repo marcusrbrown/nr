@@ -1,0 +1,85 @@
+{
+  "pageSize": 640,
+  "pages": [
+    {
+      "index": 0,
+      "width": 640,
+      "height": 640,
+      "colour": "hero.png",
+      "normal": "hero-n.png"
+    },
+    {
+      "index": 1,
+      "width": 640,
+      "height": 640,
+      "colour": "hero.1.png",
+      "normal": "hero.1-n.png"
+    },
+    {
+      "index": 2,
+      "width": 640,
+      "height": 640,
+      "colour": "hero.2.png",
+      "normal": "hero.2-n.png"
+    },
+    {
+      "index": 3,
+      "width": 640,
+      "height": 640,
+      "colour": "hero.3.png",
+      "normal": "hero.3-n.png"
+    },
+    {
+      "index": 4,
+      "width": 640,
+      "height": 640,
+      "colour": "hero.4.png",
+      "normal": "hero.4-n.png"
+    },
+    {
+      "index": 5,
+      "width": 640,
+      "height": 640,
+      "colour": "hero.5.png",
+      "normal": "hero.5-n.png"
+    }
+  ],
+  "spilledClips": [
+    {
+      "clip": "hit2",
+      "first": 30,
+      "count": 6,
+      "pages": [
+        1,
+        2
+      ]
+    },
+    {
+      "clip": "jump",
+      "first": 43,
+      "count": 6,
+      "pages": [
+        2,
+        3
+      ]
+    },
+    {
+      "clip": "knockdown",
+      "first": 59,
+      "count": 8,
+      "pages": [
+        3,
+        4
+      ]
+    },
+    {
+      "clip": "special_knockback",
+      "first": 79,
+      "count": 9,
+      "pages": [
+        4,
+        5
+      ]
+    }
+  ]
+}

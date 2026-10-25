@@ -1,0 +1,188 @@
+{
+  "recipe": "tools/render/recipes/hero.json",
+  "cell": {
+    "width": 160,
+    "height": 160
+  },
+  "frames": 96,
+  "runs": [
+    {
+      "wallMs": 13245.9,
+      "clips": [
+        {
+          "clip": "idle",
+          "frames": 8,
+          "wallMs": 1101.5,
+          "wallMsPerFrame": 137.7
+        },
+        {
+          "clip": "walk",
+          "frames": 8,
+          "wallMs": 1032.8,
+          "wallMsPerFrame": 129.1
+        },
+        {
+          "clip": "run",
+          "frames": 8,
+          "wallMs": 1131.4,
+          "wallMsPerFrame": 141.4
+        },
+        {
+          "clip": "hit1",
+          "frames": 6,
+          "wallMs": 961,
+          "wallMsPerFrame": 160.2
+        },
+        {
+          "clip": "hit2",
+          "frames": 6,
+          "wallMs": 820.5,
+          "wallMsPerFrame": 136.8
+        },
+        {
+          "clip": "hit3",
+          "frames": 7,
+          "wallMs": 986,
+          "wallMsPerFrame": 140.9
+        },
+        {
+          "clip": "jump",
+          "frames": 6,
+          "wallMs": 769.7,
+          "wallMsPerFrame": 128.3
+        },
+        {
+          "clip": "throw",
+          "frames": 6,
+          "wallMs": 816.4,
+          "wallMsPerFrame": 136.1
+        },
+        {
+          "clip": "hurt",
+          "frames": 4,
+          "wallMs": 549.4,
+          "wallMsPerFrame": 137.4
+        },
+        {
+          "clip": "knockdown",
+          "frames": 8,
+          "wallMs": 1135.4,
+          "wallMsPerFrame": 141.9
+        },
+        {
+          "clip": "getup",
+          "frames": 6,
+          "wallMs": 773.6,
+          "wallMsPerFrame": 128.9
+        },
+        {
+          "clip": "dash",
+          "frames": 6,
+          "wallMs": 861.7,
+          "wallMsPerFrame": 143.6
+        },
+        {
+          "clip": "special_knockback",
+          "frames": 9,
+          "wallMs": 1117.1,
+          "wallMsPerFrame": 124.1
+        },
+        {
+          "clip": "special_dash",
+          "frames": 8,
+          "wallMs": 1072.7,
+          "wallMsPerFrame": 134.1
+        }
+      ]
+    },
+    {
+      "wallMs": 13764,
+      "clips": [
+        {
+          "clip": "idle",
+          "frames": 8,
+          "wallMs": 1036.7,
+          "wallMsPerFrame": 129.6
+        },
+        {
+          "clip": "walk",
+          "frames": 8,
+          "wallMs": 1062.6,
+          "wallMsPerFrame": 132.8
+        },
+        {
+          "clip": "run",
+          "frames": 8,
+          "wallMs": 1253.7,
+          "wallMsPerFrame": 156.7
+        },
+        {
+          "clip": "hit1",
+          "frames": 6,
+          "wallMs": 917.7,
+          "wallMsPerFrame": 153
+        },
+        {
+          "clip": "hit2",
+          "frames": 6,
+          "wallMs": 819.1,
+          "wallMsPerFrame": 136.5
+        },
+        {
+          "clip": "hit3",
+          "frames": 7,
+          "wallMs": 1010.1,
+          "wallMsPerFrame": 144.3
+        },
+        {
+          "clip": "jump",
+          "frames": 6,
+          "wallMs": 803.2,
+          "wallMsPerFrame": 133.9
+        },
+        {
+          "clip": "throw",
+          "frames": 6,
+          "wallMs": 857.6,
+          "wallMsPerFrame": 142.9
+        },
+        {
+          "clip": "hurt",
+          "frames": 4,
+          "wallMs": 551.8,
+          "wallMsPerFrame": 138
+        },
+        {
+          "clip": "knockdown",
+          "frames": 8,
+          "wallMs": 1070.5,
+          "wallMsPerFrame": 133.8
+        },
+        {
+          "clip": "getup",
+          "frames": 6,
+          "wallMs": 844.2,
+          "wallMsPerFrame": 140.7
+        },
+        {
+          "clip": "dash",
+          "frames": 6,
+          "wallMs": 901.4,
+          "wallMsPerFrame": 150.2
+        },
+        {
+          "clip": "special_knockback",
+          "frames": 9,
+          "wallMs": 1273.6,
+          "wallMsPerFrame": 141.5
+        },
+        {
+          "clip": "special_dash",
+          "frames": 8,
+          "wallMs": 1231.6,
+          "wallMsPerFrame": 154
+        }
+      ]
+    }
+  ]
+}

@@ -374,10 +374,10 @@
   ],
   "pose": {
     "fitClip": "idle",
-    "anchor": "feet-xy",
+    "anchor": "pelvis-xy",
     "pinRoot": true,
     "facing": "east",
-    "note": "Sprites are rendered facing east; the game mirrors them for west. pinRoot removes the library's root travel; anchor holds the midpoint of the feet at the plane origin so the simulation moves the actor."
+    "note": "Sprites are rendered facing east; the game mirrors them for west about the plane origin. pinRoot removes the library's root travel; anchor holds the pelvis at the plane origin so the simulation moves the actor and a figure lying on the floor stays inside the cell on both sides of it (a feet anchor puts the knocked-down body 124 px to one side of the origin)."
   },
   "clips": {
     "idle": {

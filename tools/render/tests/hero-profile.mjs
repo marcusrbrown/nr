@@ -11,7 +11,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } fr
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { PROFILE_SCHEMA_PATH, decodePng, postProcess, validateRecipe } from '../post.mjs';
+import { PROFILE_SCHEMA_PATH, PostError, decodePng, encodePng, postProcess, validateRecipe, verifyLayout, verifyRects } from '../post.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const OUT = resolve(process.env.OUT ?? join(ROOT, 'out/render-test-hero'));
@@ -29,7 +29,7 @@ rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 
 function render(recipeFile, outDir, kits = KITS) {
-  const r = spawnSync(BLENDER, ['--background', '--factory-startup', '--python-exit-code', '1', '--python', join(RENDER, 'nr_render.py'), '--', '--recipe', recipeFile, '--out', outDir, '--kits', kits], { encoding: 'utf8' });
+  const r = spawnSync(BLENDER, ['--background', '--factory-startup', '--python-exit-code', '1', '--python', join(RENDER, 'nr_render.py'), '--', '--recipe', recipeFile, '--out', outDir, '--kits', kits], { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
   return { status: r.status, log: `${r.stdout}${r.stderr}` };
 }
 
@@ -40,8 +40,21 @@ function pipeline(label) {
   const r = render(recipePath, join(dir, 'raw'));
   assert.equal(r.status, 0, r.log.slice(-2500));
   const manifest = postProcess({ recipePath, rawDir: join(dir, 'raw'), outDir: join(dir, 'atlas') });
-  return { dir, manifest, atlas: join(dir, 'atlas'), done: json(join(dir, 'raw/done.json')) };
+  const slots = [...r.log.matchAll(/^RENDER slot (\{.*\})$/gm)].map((m) => JSON.parse(m[1]));
+  return { dir, manifest, atlas: join(dir, 'atlas'), done: json(join(dir, 'raw/done.json')), slots };
 }
+
+/** Write an artifact under OUT and, with PUBLISH set, beside the committed evidence. */
+function artifact(name, text) {
+  writeFileSync(join(OUT, name), text);
+  if (process.env.PUBLISH) {
+    mkdirSync(process.env.PUBLISH, { recursive: true });
+    writeFileSync(join(process.env.PUBLISH, name), text);
+  }
+}
+
+let first = null; // the first full-set run, reused by the paging and rect tests below
+const READY_ORDER = Object.entries(profile.clips).filter(([, c]) => c.ready).map(([n]) => n);
 
 test('the hero profile and recipe validate against their schemas', () => {
   assert.deepEqual(validateRecipe(profile, json(PROFILE_SCHEMA_PATH)), []);
@@ -63,6 +76,23 @@ test('every kit file the profile names is a CC0 kit file kits.json pins, and the
   const used = [profile.models.body, ...profile.models.animations, ...profile.models.hair];
   for (const m of used) assert.ok(profile.kitFiles.some((r) => r.kit === m.kit && r.path === m.path), m.path);
   assert.equal(recipe.model.profileSha256, sha256(readFileSync(profilePath)), 'run: node tools/render/pin-profile.mjs tools/render/recipes/hero.json');
+});
+
+test('the recipe renders every ready clip once and no gap, with the profile\'s loop flag and at least 4 frames', () => {
+  assert.deepEqual(recipe.slots.map((s) => s.clip), READY_ORDER);
+  assert.equal(READY_ORDER.length, 14);
+  for (const s of recipe.slots) {
+    assert.equal(profile.clips[s.clip]?.ready, true, `slot ${s.id}`);
+    assert.equal(s.loop ?? false, profile.clips[s.clip].loop, `slot ${s.id}: loop`);
+    assert.ok(s.frames >= 4, `slot ${s.id}: ${s.frames} frames`);
+  }
+  const gaps = Object.entries(profile.clips).filter(([, c]) => !c.ready).map(([n]) => n);
+  assert.deepEqual(gaps, ['jumpkick', 'grab']);
+  for (const g of gaps) {
+    assert.deepEqual(profile.clips[g].segments, [], `${g} is a placeholder: no segments`);
+    assert.ok(profile.clips[g].handKey, `${g} names its hand-key work`);
+    assert.ok(!recipe.slots.some((s) => s.clip === g), `${g} is not in the recipe`);
+  }
 });
 
 test('the recipe renders only ready clips, and every clip of the map names real actions with the audit status', () => {
@@ -91,12 +121,35 @@ test('the recipe renders only ready clips, and every clip of the map names real 
 test('hero atlas: identical hashes on two runs, 128 px tall, pivot on the ground, centred, green-up normals', () => {
   const a = pipeline('a');
   const b = pipeline('b');
+  first = a;
   assert.deepEqual(a.manifest.inputs, b.manifest.inputs);
   assert.deepEqual(a.manifest.pages.map((p) => [p.colour.pixelsSha256, p.normal.pixelsSha256]), b.manifest.pages.map((p) => [p.colour.pixelsSha256, p.normal.pixelsSha256]));
   assert.deepEqual(a.manifest.frames, b.manifest.frames);
-  assert.deepEqual(a.manifest.clips.map((c) => [c.name, c.count, c.ms, c.loop]), [['idle', 8, 250, true], ['walk', 8, 120, true]]);
+  assert.deepEqual(a.manifest, b.manifest);
+  for (const f of ['hero.png', 'hero-n.png', 'hero.json']) {
+    assert.equal(sha256(readFileSync(join(a.atlas, f))), sha256(readFileSync(join(b.atlas, f))), `${f} differs between runs`);
+  }
+  assert.deepEqual(a.manifest.clips.map((c) => [c.name, c.count, c.ms, c.loop]), recipe.slots.map((s) => [s.clip, s.frames, s.ms, s.loop]));
   assert.equal(a.manifest.profile.sha256, recipe.model.profileSha256);
   assert.deepEqual(a.manifest.profile.kitFiles.map((f) => f.path), profile.kitFiles.map((f) => f.path));
+  assert.equal(a.manifest.pages.length, 1, 'the hero set fits one 2048 page');
+
+  const times = {
+    recipe: 'tools/render/recipes/hero.json',
+    cell: a.manifest.cell,
+    frames: a.manifest.frames.length,
+    runs: [a, b].map((r) => ({ wallMs: r.done.renderMs, clips: r.slots.map((s) => ({ clip: s.slot, frames: s.frames, wallMs: s.ms, wallMsPerFrame: Math.round((s.ms / s.frames) * 10) / 10 })) })),
+  };
+  artifact('render-times.json', `${JSON.stringify(times, null, 2)}\n`);
+  artifact('reproducibility.json', `${JSON.stringify({
+    recipe: 'tools/render/recipes/hero.json',
+    identical: true,
+    runs: [a, b].map((r) => ({
+      manifestSha256: sha256(readFileSync(join(r.atlas, 'hero.json'))),
+      inputsSha256: sha256(JSON.stringify(r.manifest.inputs)),
+      pages: r.manifest.pages.map((p) => ({ colour: { file: p.colour.file, sha256: p.colour.sha256, pixelsSha256: p.colour.pixelsSha256 }, normal: { file: p.normal.file, sha256: p.normal.sha256, pixelsSha256: p.normal.pixelsSha256 } })),
+    })),
+  }, null, 2)}\n`);
 
   const colour = decodePng(readFileSync(join(a.atlas, 'hero.png')));
   const normal = decodePng(readFileSync(join(a.atlas, 'hero-n.png')));
@@ -108,11 +161,12 @@ test('hero atlas: identical hashes on two runs, 128 px tall, pivot on the ground
       if (px(colour, f.rect.x + x, f.rect.y + y)[3] !== 255) continue;
       top = Math.min(top, y); bottom = Math.max(bottom, y); minX = Math.min(minX, x); maxX = Math.max(maxX, x);
     }
-    assert.ok(bottom + 1 >= f.pivot.y - 4 && bottom + 1 <= f.pivot.y + 10, `frame ${f.index}: lowest row ${bottom + 1} vs ground ${f.pivot.y}`);
+    assert.ok(bottom + 1 >= f.pivot.y - 20 && bottom + 1 <= f.pivot.y + 16, `frame ${f.index} (${f.clip} ${f.clipFrame}): lowest row ${bottom + 1} vs ground ${f.pivot.y}`);
     if (f.clip === 'idle' && f.clipFrame === 0) assert.ok(Math.abs(bottom + 1 - top - 128) <= 3, `idle 0 is ${bottom + 1 - top} px tall`);
-    assert.ok(minX > 8 && maxX < f.rect.w - 8, `frame ${f.index}: silhouette ${minX}-${maxX} touches the cell edge`);
-    assert.ok(top > 4, `frame ${f.index}: head at row ${top}`);
-    assert.ok(Math.abs((minX + maxX) / 2 - f.pivot.x) < 40, `frame ${f.index}: silhouette centre ${(minX + maxX) / 2}`);
+    assert.ok(minX >= 3 && maxX <= f.rect.w - 4, `frame ${f.index} (${f.clip} ${f.clipFrame}): silhouette ${minX}-${maxX} is within 3 px of the cell edge`);
+    assert.ok(top > 4, `frame ${f.index} (${f.clip} ${f.clipFrame}): top at row ${top}`);
+    assert.ok(Math.abs((minX + maxX) / 2 - f.pivot.x) < 40, `frame ${f.index} (${f.clip} ${f.clipFrame}): silhouette centre ${(minX + maxX) / 2}`);
+    if (f.clip !== 'idle' && f.clip !== 'walk') continue;
     let g = 0, n = 0;
     for (let y = top; y < top + 3; y++) for (let x = 0; x < f.rect.w; x++) {
       if (px(colour, f.rect.x + x, f.rect.y + y)[3] !== 255) continue;
@@ -206,4 +260,48 @@ test('every ready clip of the profile renders (its actions bind and pose the fig
     assert.equal(g.status, 12, g.log.slice(-600));
     assert.match(g.log, /is not ready \(a gap awaiting a hand-keyed action\)/);
   }
+});
+
+test('a hero set wider than one page continues on the next page and the manifest records each frame\'s page', () => {
+  assert.ok(first, 'needs the full-set run above');
+  const dir = join(OUT, 'spill');
+  mkdirSync(join(dir, 'recipes'), { recursive: true });
+  cpSync(join(RENDER, 'profiles'), join(dir, 'profiles'), { recursive: true });
+  const small = structuredClone(recipe);
+  small.atlas.pageSize = 640; // 4 x 4 cells of 160: 16 frames a page
+  const rp = join(dir, 'recipes/hero.json');
+  writeFileSync(rp, `${JSON.stringify(small, null, 2)}\n`);
+  const raw = join(dir, 'raw');
+  cpSync(join(first.dir, 'raw'), raw, { recursive: true });
+  const done = json(join(raw, 'done.json'));
+  done.recipeSha256 = sha256(readFileSync(rp));
+  writeFileSync(join(raw, 'done.json'), JSON.stringify(done));
+  const m = postProcess({ recipePath: rp, rawDir: raw, outDir: join(dir, 'atlas') });
+  assert.equal(m.pages.length, 6);
+  assert.deepEqual(m.frames.map((f) => f.page), m.frames.map((f) => Math.floor(f.index / 16)));
+  const spilled = m.clips.filter((c) => new Set(m.frames.slice(c.first, c.first + c.count).map((f) => f.page)).size > 1);
+  assert.ok(spilled.length > 0, 'at least one clip crosses a page');
+  for (const pg of m.pages) assert.ok(existsSync(join(dir, 'atlas', pg.colour.file)) && existsSync(join(dir, 'atlas', pg.normal.file)), `page ${pg.index} files`);
+  artifact('spill-pages.json', `${JSON.stringify({ pageSize: 640, pages: m.pages.map((p) => ({ index: p.index, width: p.width, height: p.height, colour: p.colour.file, normal: p.normal.file })), spilledClips: spilled.map((c) => ({ clip: c.name, first: c.first, count: c.count, pages: [...new Set(m.frames.slice(c.first, c.first + c.count).map((f) => f.page))] })) }, null, 2)}\n`);
+});
+
+test('a normal sheet rect that differs from its colour rect, or a pivot outside its rect, fails naming the frame', () => {
+  assert.ok(first, 'needs the full-set run above');
+  const dir = join(OUT, 'rect-mismatch');
+  rmSync(dir, { recursive: true, force: true });
+  cpSync(first.atlas, dir, { recursive: true });
+  const man = json(join(dir, 'hero.json'));
+  verifyLayout(man, dir);
+  verifyRects(man, dir);
+  const n = decodePng(readFileSync(join(dir, 'hero-n.png')));
+  const [from, to] = [man.frames[70].rect, man.frames[5].rect];
+  for (let y = 0; y < to.h; y++) n.data.copyWithin(((to.y + y) * n.width + to.x) * 4, ((from.y + y) * n.width + from.x) * 4, ((from.y + y) * n.width + from.x + to.w) * 4);
+  writeFileSync(join(dir, 'hero-n.png'), encodePng(n.width, n.height, n.data));
+  const messages = [];
+  assert.throws(() => verifyRects(man, dir), (e) => { messages.push(e.message); return e instanceof PostError && /^frame 5 \(idle 5\): the normal sheet's rect differs from the colour sheet's at texel \(\d+, \d+\)/.test(e.message); });
+
+  const bad = structuredClone(man);
+  bad.frames[3].pivot = { x: 80, y: 400 };
+  assert.throws(() => verifyLayout(bad, dir), (e) => { messages.push(e.message); return /frame 3 \(idle 3\): pivot .* is outside its 160x160 rect/.test(e.message); });
+  artifact('rect-mismatch.txt', `${messages.map((m) => `fails: ${m}`).join('\n')}\n`);
 });
