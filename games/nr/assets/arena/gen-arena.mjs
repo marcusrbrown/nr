@@ -69,6 +69,23 @@ for (let i = 0; i < shops.length - 1; i++) {
   box(`column-${String(i).padStart(2, '0')}`, 'near', x, 1.5, -2.2, 0.5, 3.0, 0.5, 0x4a5062);
 }
 
+// returns and value steps on the shop fronts, so the street reads depth without the camera moving: a dark plinth and a
+// light cornice that stand proud of the facade (their end faces and undersides are lit differently from the facade), a pilaster
+// at each end of every shop that projects 0.25 (its side face turns to the camera on either side of the screen), and a frame,
+// mullions and a sill that break the window into panes. Nothing here draws from rand(), so the layout above is unchanged; every
+// piece stays behind the colonnade's front (z -1.95) and an actor's head (z -2.37 at the back lane), is not a blocker, and stands at its
+// own depth: no face of it lies in the plane of an overlapping face of another solid facing the same way (games/nr/tests/depth-check.mjs).
+shops.forEach((s, i) => {
+  const n = String(i).padStart(2, '0'), wx = s.cx - s.w * 0.12, ww = s.w * 0.42;
+  box(`shop-${n}-plinth`, 'near', s.cx, 0.22, FACE_Z + 0.06, s.w, 0.44, 0.12, 0x171a26);
+  box(`shop-${n}-cornice`, 'near', s.cx, 2.76, FACE_Z + 0.12, s.w + 0.2, 0.14, 0.28, 0x565d78);
+  for (const side of [-1, 1]) box(`shop-${n}-pilaster-${side < 0 ? 'l' : 'r'}`, 'near', s.cx + side * (s.w / 2 - 0.15), 1.35, FACE_Z + 0.125, 0.26, 2.66, 0.25, 0x434a64);
+  box(`shop-${n}-frame`, 'near', wx, 1.2, FACE_Z + 0.01, ww + 0.16, 1.11, 0.04, 0x3a4058);
+  box(`shop-${n}-mullion-v`, 'near', wx, 1.2, FACE_Z + 0.04, 0.05, 0.93, 0.08, 0x1c2030);
+  box(`shop-${n}-mullion-h`, 'near', wx, 1.2, FACE_Z + 0.04, ww - 0.04, 0.05, 0.1, 0x1c2030);
+  box(`shop-${n}-sill`, 'near', wx, 0.68, FACE_Z + 0.17, ww + 0.2, 0.08, 0.3, 0x5d6480);
+});
+
 // far layer: buildings behind the shop fronts, facade plane z = -5.5. The belt camera looks 20 degrees down, so the
 // top of the frame at this depth is y 3.33: the buildings stop at 2.75 to 3.4 and what shows above the lower ones is the
 // mid and skyline layers behind them.
@@ -124,18 +141,24 @@ for (let x = -18, i = 0; x < 38; i++) {
   if (rand() < 0.5) box(`skyline-${n}-aerial`, 'backdrop', r3(cx + w * 0.2), h + 0.2, SKY_Z, 0.04, 0.4, 0.04, 0x0b0e1a, { emissive: 0x141a3c, intensity: 0.55 });
   for (let k = 0; k < 5; k++) {
     if (rand() < 0.45) continue;
-    box(`skyline-${n}-window-${k}`, 'backdrop', r3(cx - w * 0.38 + rand() * w * 0.76), r3(0.2 + rand() * (h - 0.35)), SKY_Z + 0.62, 0.18, 0.2, 0.03, 0x0a0c14, { emissive: pick(WINDOW), intensity: 1.2 });
+    box(`skyline-${n}-window-${k}`, 'backdrop', r3(cx - w * 0.38 + rand() * w * 0.76), r3(0.2 + rand() * (h - 0.35)), SKY_Z + 0.62 + k * 0.012, 0.18, 0.2, 0.03, 0x0a0c14, { emissive: pick(WINDOW), intensity: 1.2 }); // k * 0.012: windows of one tower overlap, so each stands at its own depth
   }
   x += w + r3(0.1 + Math.floor(rand() * 5) / 10);
 }
 // the skyline's reference: a tower of its own behind the far row's gap, with a window of a colour used nowhere else
-box('skyline-ref', 'backdrop', SKY_REF_X, 0.65, SKY_Z, 1.4, 1.3, 1.2, 0x0b0e1a, { emissive: 0x141a3c, intensity: 0.55 });
+box('skyline-ref', 'backdrop', SKY_REF_X, 0.65, SKY_Z - 0.02, 1.4, 1.3, 1.2, 0x0b0e1a, { emissive: 0x141a3c, intensity: 0.55 }); // 0.02 behind skyline-12, which it overlaps
 box('skyline-ref-window', 'backdrop', SKY_REF_X, 0.95, SKY_Z + 0.62, 0.22, 0.24, 0.03, 0x0a0c14, { emissive: REF.skyWindow, intensity: 1.0 });
 
 // play lane: the pillar. Its front face is at z = PILLAR_Z + d / 2.
 const P = { x: 12.0, z: -0.15, w: 1.2, h: 3.2, d: 0.5 };
 box('pillar', 'play', P.x, P.h / 2, P.z, P.w, P.h, P.d, 0x6a7080, { blocks: true });
 box('pillar-band', 'play', P.x, 2.5, P.z, P.w + 0.04, 0.14, P.d + 0.04, 0x101010, { emissive: REF.pillarBand, intensity: 1.2 });
+
+// the pillar's plinth and capital stand proud of its shaft (0.4 each side in z, 0.15 in x) and its shaft has two panel lines; the
+// plinth's front (z 0.25) is behind the nearest an actor can stand (lane 0.9), the capital is above an actor's head, and neither blocks
+box('pillar-plinth', 'play', P.x, 0.15, P.z, P.w + 0.3, 0.3, 0.8, 0x474d60);
+box('pillar-capital', 'play', P.x, 3.31, P.z, P.w + 0.3, 0.22, 0.8, 0x8a90a4);
+for (const k of [-1, 1]) box(`pillar-groove-${k < 0 ? 'l' : 'r'}`, 'play', P.x + k * 0.33, 1.375, P.z + P.d / 2 + 0.0075, 0.08, 2.05, 0.015, 0x3a4052);
 
 const layout = {
   bounds: { x_min: X_MIN, x_max: X_MAX, lane_min: LANE_MIN, lane_max: LANE_MAX, street_x_min: -5, street_x_max: 25 },

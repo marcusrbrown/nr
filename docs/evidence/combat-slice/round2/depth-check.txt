@@ -1,0 +1,2 @@
+PASS no two coplanar same-facing faces overlap: 274 boxes and planes, 943 faces, eps 0.004; 0 tie(s)
+nearest overlapping same-facing pair beyond eps: 0.0100

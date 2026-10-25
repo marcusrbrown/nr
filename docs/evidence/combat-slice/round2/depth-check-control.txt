@@ -1,0 +1,3 @@
+PASS control: the planted tie is found: 275 boxes and planes, 944 faces, eps 0.004; 1 tie(s)
+  haze-1 / haze-2-control: z+ at -15.950 / -15.950, area 18
+nearest overlapping same-facing pair beyond eps: 0.0100
