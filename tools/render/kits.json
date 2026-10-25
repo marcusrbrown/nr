@@ -101,7 +101,8 @@
         "date": "2026-10-24",
         "source": "marcusrbrown/panthea@9556db8 tools/render/kits/universal-animation-library",
         "note": "First fetch on 2026-10-24 staged these bytes from the owner's marcusrbrown/panthea checkout (tools/render/kits/..., the owner's earlier download of the same Standard pack), not from itch.io; every sha256 equals the one that checkout's tools/render/kits.json records. Re-download from downloadPage and run fetch-kits.sh --from <dir> to confirm against upstream."
-      }
+      },
+      "advertisedActions": "120+"
     },
     {
       "id": "universal-animation-library-2",
@@ -122,7 +123,8 @@
         "sha256": null
       },
       "notes": "Not yet downloaded: no file is pinned. First fetch: download the Standard pack from downloadPage, then run tools/render/fetch-kits.sh --from <dir> --kit universal-animation-library-2 --pin and commit kits.json. The licence file name above is assumed from UAL1's pack and is corrected at that point if it differs.",
-      "files": []
+      "files": [],
+      "advertisedActions": "130+"
     }
   ]
 }

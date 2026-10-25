@@ -3,6 +3,8 @@
 #
 #   tools/render/render-all.sh                      every recipe in tools/render/recipes/
 #   tools/render/render-all.sh placeholder hero     the named recipes
+#   tools/render/render-all.sh --audit              clip audit of the staged kits (tools/render/audit-clips.py) ->
+#                                                   docs/evidence/combat-slice/clip-audit.md, <OUT>/audit/clip-audit.json
 #   OUT=<dir> tools/render/render-all.sh ...        output root (default out/render)
 #
 # Per recipe <name>: <OUT>/<name>/raw (nr_render.py frames + done.json), <OUT>/<name>/atlas (sheets + manifest),
@@ -23,6 +25,16 @@ case "$("$BLENDER" --version 2>&1 | sed -n '1p')" in
   "Blender $PIN "*) ;;
   *) die "installed Blender is not the locked $PIN: run FORCE=1 scripts/fetch-deps.sh" ;;
 esac
+
+if [ "${1:-}" = "--audit" ]; then
+  mkdir -p "$OUT/audit"
+  "$BLENDER" --background --factory-startup --python-exit-code 1 --python "$RENDER/audit-clips.py" -- \
+    --kits "$ROOT/deps/kits" --manifest "$RENDER/kits.json" --targets "$RENDER/clip-targets.json" \
+    --out "$OUT/audit/clip-audit.json" --md "$ROOT/docs/evidence/combat-slice/clip-audit.md" > "$OUT/audit/blender.log" 2>&1 || {
+    rc=$?; tail -n 20 "$OUT/audit/blender.log" >&2; die "audit: Blender exited $rc"; }
+  grep -E '^AUDIT ' "$OUT/audit/blender.log"
+  exit 0
+fi
 
 if [ "$#" -gt 0 ]; then names=("$@"); else names=(); for f in "$RENDER"/recipes/*.json; do names+=("$(basename "$f" .json)"); done; fi
 
