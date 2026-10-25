@@ -1,0 +1,17 @@
+{
+  "ticks": 760,
+  "checksum": [
+    1601733016,
+    1601733016
+  ],
+  "simChecksum": [
+    1781936962,
+    1781936962
+  ],
+  "whitelistSha256": [
+    "b1fa51fe8d4051f2798ced1330c5732f0bbfb07796a3217fe7845f229943f3da",
+    "b1fa51fe8d4051f2798ced1330c5732f0bbfb07796a3217fe7845f229943f3da"
+  ],
+  "fields": 35,
+  "screenshotEqual": true
+}

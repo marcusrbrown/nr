@@ -1,0 +1,45 @@
+[
+  {
+    "variant": "baseline",
+    "removed": null,
+    "missing": 0,
+    "states": [],
+    "ok": true
+  },
+  {
+    "variant": "without-standard-l0400",
+    "removed": "standard+l0400",
+    "missing": 1,
+    "states": [
+      "standard+l0400"
+    ],
+    "ok": true
+  },
+  {
+    "variant": "without-standard-map-nearest-instbig-nmap-atest-l0400",
+    "removed": "standard+map+nearest+instbig+nmap+atest+l0400",
+    "missing": 1,
+    "states": [
+      "standard+map+nearest+instbig+nmap+atest+l0400"
+    ],
+    "ok": true
+  },
+  {
+    "variant": "without-standard-map-nearest-nmap-atest-l0400",
+    "removed": "standard+map+nearest+nmap+atest+l0400",
+    "missing": 1,
+    "states": [
+      "standard+map+nearest+nmap+atest+l0400"
+    ],
+    "ok": true
+  },
+  {
+    "variant": "without-standard-instbig-l0400",
+    "removed": "standard+instbig+l0400",
+    "missing": 1,
+    "states": [
+      "standard+instbig+l0400"
+    ],
+    "ok": true
+  }
+]

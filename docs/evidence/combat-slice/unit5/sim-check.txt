@@ -1,0 +1,18 @@
+ok   layout: heroes on team 0, 7 dummies on team 1 at the layout main.c sets
+ok   combo: hit1 at 30, hit2 at 45 (15 ticks in; window 13..21), hit3 at 60; hits on the dummy at 34,49,64 for 1, 1, 2 hp; it ends knocked down with hp 8
+ok   late press: hit1 at 100; a press at 108 (tick 8, in the active ticks 4..12) does not chain; the swing ends at 122; a press at 124 starts hit1 again; no hit2 in between
+ok   knockback: the victim of hit1 moves 0.060, 0.050, 0.040, 0.030, 0.020, 0.010, 0.000 units on the ticks after the hit (a strictly falling speed to 0), 0.210 in all
+ok   grab and throw: grab at 172 takes the dummy at 178 (hp 8), the throw state holds it until 188, it flies 34 ticks (peak 1.27 high, 3.40 units on), lands at 222 taking 2 (hp 6) and is knocked down; the hero is idle at 207
+ok   grab fails: grab at 230: the dummy that cannot be grabbed is found at 236 (grab-fail logged), no grab and no throw, the hero is idle again at 250 (the table's 20 ticks), the dummy keeps hp 12
+ok   jump kick: jump at 252, kick at 277 on the way down (vy -0.052, 1.02 high); one hit on the dummy, on the first active tick 279 (kick tick 2), for 2; the kick lasts to the landing at 289 and meets nobody twice
+ok   radius special: special at 350: on its first active tick 362 the 4 dummies within 2.4 units (a3,a4,a5,a6) are each hit once for 1 and pushed away (0.32->2.42, 1.44->3.54, 0.48->2.58, 2.09->3.44); the 3 outside (a2,a7,a8) are untouched; the other player in range is skipped as a teammate
+ok   pillar: a dummy pushed at the pillar (the push alone would take it from x 9.60 to 11.69) stops at the pillar's rectangle, x 10.934 (edge 10.950), with no input of its own
+ok   dash special: special+l at 420: the hero moves 4.500 units (15 ticks at 0.3) from x 7.52; each of the 2 dummies on the path is hit once (ticks 429,435), as the swept box reaches it, in path order
+ok   friendly fire: hit1 at 600 with player 1 0.28 units away in the swing's reach and 0.48 lanes apart: the overlap is logged as a teammate skip at 604, player 1 keeps hp 9 and never leaves idle, and the same swing hits the enemy dummy
+ok   hero hurt: a swing at 84 hurts player 1 (hp 11, invulnerable 60 ticks); the swing at 114 is skipped (invulnerable); the knockdown swing at 174 hits for 2 (hp 9), the hero is down 43 ticks, gets up for 32 and is idle at 249
+ok   movement: walk 26 ticks -> x 1.560 (0.06/tick); the double tap makes player 1 run at 0.110/tick; dash 2.60 units over its 25 ticks; a plain jump lasts 36 ticks (the jump clip's 36), peak 1.18; walking left turns the hero (facing -1); a hit victim turns to face its attacker (the dummy left of the special's hero turns right, the one right of it keeps facing left)
+ok   state table: 10 timed states: every length is within a tick of its clip's frames x ms
+ok   determinism: the same script twice: 35 whitelisted fields byte-identical (sha256 b1fa51fe8d4051f2), checksum 1601733016 both times, the screenshot byte-identical
+ok   input shift: the script one tick late: the checksum differs at tick 2 (2895164928 against 306849859) and at the end (1601733016 against 3538269910); first field to differ in the dump order: nr.hero_pos; 11 fields differ at that tick
+ok   whitelist: 26 fields with the expected sizes (9 actors); wave 0, lives 3, rng 4279844869,360203698,281235837,2134020091 (no consumer yet), input count 314 of 760 ticks, 106 events (0 dropped), cw.three.missing 0
+all 17 scenarios passed (106 events, whitelist sha256 b1fa51fe8d4051f2)

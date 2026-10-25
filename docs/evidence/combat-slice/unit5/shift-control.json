@@ -1,0 +1,26 @@
+{
+  "shift": 1,
+  "firstDivergentTick": 2,
+  "firstField": "nr.hero_pos",
+  "differingFields": [
+    "nr.hero_pos",
+    "nr.hero_clip",
+    "nr.hero_frame",
+    "nr.actor_state",
+    "nr.actor_state_tick",
+    "nr.actor_facing",
+    "nr.input_count",
+    "nr.sim_checksum",
+    "nr.events",
+    "nr.event_count",
+    "nr.checksum"
+  ],
+  "checksumAtFirst": [
+    2895164928,
+    306849859
+  ],
+  "checksumAtEnd": [
+    1601733016,
+    3538269910
+  ]
+}
