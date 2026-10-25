@@ -36,7 +36,7 @@ foreach(app ${NR_APPS})
   if(app MATCHES "_flat$")
     set(flat 1)
   endif()
-  cw_add_app(${app} SOURCES main.c anim.c arena.c PACK ${NR_ASSETS} PROGRAMS ${NR_PROGRAMS})
+  cw_add_app(${app} SOURCES main.c anim.c arena.c json.c PACK ${NR_ASSETS} PROGRAMS ${NR_PROGRAMS})
   target_compile_definitions(${app} PRIVATE NR_LIT_TEST=${lit} NR_FLAT_NORMALS=${flat} NR_NO_HEROES=${bare}
     NR_STAGE_LEGACY=${legacy} NR_REVERSE_DEPTH=$<BOOL:${NR_REVERSE_DEPTH}>)
   target_compile_options(${app} PRIVATE -ffp-contract=off -Wall -Wextra)

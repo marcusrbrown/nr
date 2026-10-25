@@ -1,7 +1,6 @@
 /* arena: the street block. See arena.h. */
 #include "arena.h"
 
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +8,7 @@
 #include "cartwheel/core.h"
 #include "cartwheel/math.h"
 #include "cartwheel/platform.h"
+#include "json.h"
 
 #ifndef NR_REVERSE_DEPTH
 #define NR_REVERSE_DEPTH 0
@@ -18,182 +18,44 @@
 #define LANE_EPS 0.004f
 #define ARENA_ACTOR_SLOTS 8
 
-/* ── a small JSON reader: the arena files are written by hand and by assets/arena/gen-arena.mjs ───────────────── */
-
-typedef enum { J_NULL, J_BOOL, J_NUM, J_STR, J_ARR, J_OBJ } jtype;
-typedef struct jv {
-  jtype t;
-  double n;
-  char *s;
-  struct jv **kid;
-  char **key;
-  int count;
-} jv;
-typedef struct { const char *p, *end; bool bad; } jcur;
-
-static void jfree(jv *v) {
-  if (!v) return;
-  for (int i = 0; i < v->count; i++) {
-    jfree(v->kid[i]);
-    if (v->key) free(v->key[i]);
-  }
-  free(v->kid);
-  free(v->key);
-  free(v->s);
-  free(v);
-}
-
-static void jskip(jcur *c) {
-  while (c->p < c->end && isspace((unsigned char)*c->p)) c->p++;
-}
-
-static char *jstring(jcur *c) {
-  if (c->p >= c->end || *c->p != '"') { c->bad = true; return NULL; }
-  c->p++;
-  size_t cap = 16, len = 0;
-  char *out = malloc(cap);
-  while (c->p < c->end && *c->p != '"') {
-    char ch = *c->p++;
-    if (ch == '\\' && c->p < c->end) ch = *c->p++;
-    if (len + 1 >= cap) out = realloc(out, cap *= 2);
-    out[len++] = ch;
-  }
-  if (c->p >= c->end) { c->bad = true; free(out); return NULL; }
-  c->p++;
-  out[len] = 0;
-  return out;
-}
-
-static jv *jparse(jcur *c) {
-  jskip(c);
-  if (c->p >= c->end) { c->bad = true; return NULL; }
-  jv *v = calloc(1, sizeof *v);
-  char ch = *c->p;
-  if (ch == '{' || ch == '[') {
-    bool obj = ch == '{';
-    v->t = obj ? J_OBJ : J_ARR;
-    c->p++;
-    jskip(c);
-    int cap = 0;
-    if (c->p < c->end && *c->p == (obj ? '}' : ']')) { c->p++; return v; }
-    for (;;) {
-      if (v->count == cap) {
-        cap = cap ? cap * 2 : 8;
-        v->kid = realloc(v->kid, (size_t)cap * sizeof *v->kid);
-        if (obj) v->key = realloc(v->key, (size_t)cap * sizeof *v->key);
-      }
-      char *key = NULL;
-      if (obj) {
-        jskip(c);
-        key = jstring(c);
-        jskip(c);
-        if (c->bad || c->p >= c->end || *c->p != ':') { free(key); c->bad = true; break; }
-        c->p++;
-      }
-      jv *item = jparse(c);
-      if (!item) { free(key); break; }
-      if (obj) v->key[v->count] = key;
-      v->kid[v->count++] = item;
-      jskip(c);
-      if (c->p < c->end && *c->p == ',') { c->p++; continue; }
-      if (c->p < c->end && *c->p == (obj ? '}' : ']')) { c->p++; return v; }
-      c->bad = true;
-      break;
-    }
-    jfree(v);
-    return NULL;
-  }
-  if (ch == '"') {
-    v->t = J_STR;
-    v->s = jstring(c);
-    if (!v->s) { free(v); return NULL; }
-    return v;
-  }
-  if (!strncmp(c->p, "true", 4) || !strncmp(c->p, "false", 5)) {
-    v->t = J_BOOL;
-    v->n = c->p[0] == 't';
-    c->p += v->n ? 4 : 5;
-    return v;
-  }
-  if (!strncmp(c->p, "null", 4)) { c->p += 4; return v; }
-  char *e;
-  v->t = J_NUM;
-  v->n = strtod(c->p, &e);
-  if (e == c->p) { c->bad = true; free(v); return NULL; }
-  c->p = e;
-  return v;
-}
-
-static const jv *jget(const jv *o, const char *key) {
-  if (!o || o->t != J_OBJ) return NULL;
-  for (int i = 0; i < o->count; i++)
-    if (!strcmp(o->key[i], key)) return o->kid[i];
-  return NULL;
-}
-static double jnum(const jv *v, double d) { return v && v->t == J_NUM ? v->n : d; }
-static bool jbool(const jv *v) { return v && v->t == J_BOOL && v->n != 0; }
-
-/* "#rrggbb" -> 0xrrggbb */
-static uint32_t jcolor(const jv *v, uint32_t d) {
-  if (!v || v->t != J_STR || v->s[0] != '#') return d;
-  return (uint32_t)strtoul(v->s + 1, NULL, 16);
-}
-
-static jv *load_json(const char *path) {
-  size_t len = 0;
-  char *text = cw_asset_load(path, &len);
-  if (!text) {
-    cw_error("arena: %s is missing", path);
-    return NULL;
-  }
-  jcur cur = { text, text + len, false };
-  jv *root = jparse(&cur);
-  free(text);
-  if (!root || cur.bad || root->t != J_OBJ) {
-    cw_error("arena: %s is not valid JSON", path);
-    jfree(root);
-    return NULL;
-  }
-  return root;
-}
-
 /* ── load ─────────────────────────────────────────────────────────────────────────────────────────────────────── */
 
 static bool load_layout(arena *a, float half_width, float reach) {
-  jv *root = load_json("arena/layout.json");
+  nr_json *root = nr_json_load("arena/layout.json", "arena");
   if (!root) return false;
-  const jv *b = jget(root, "bounds"), *solids = jget(root, "solids");
-  if (!b || !solids || solids->t != J_ARR || solids->count < 1 || solids->count > ARENA_MAX_SOLIDS) {
+  const nr_json *b = nr_json_get(root, "bounds"), *solids = nr_json_get(root, "solids");
+  if (!b || !solids || solids->type != NR_JSON_ARR || solids->count < 1 || solids->count > ARENA_MAX_SOLIDS) {
     cw_error("arena: layout.json has no bounds, or no solids, or more than %d", ARENA_MAX_SOLIDS);
-    jfree(root);
+    nr_json_free(root);
     return false;
   }
-  a->x_min = (float)jnum(jget(b, "x_min"), -4.0);
-  a->x_max = (float)jnum(jget(b, "x_max"), 24.0);
-  a->lane_min = (float)jnum(jget(b, "lane_min"), -1.6);
-  a->lane_max = (float)jnum(jget(b, "lane_max"), 1.8);
-  a->street_x_min = (float)jnum(jget(b, "street_x_min"), -5.0);
-  a->street_x_max = (float)jnum(jget(b, "street_x_max"), 25.0);
+  a->x_min = (float)nr_json_num(nr_json_get(b, "x_min"), -4.0);
+  a->x_max = (float)nr_json_num(nr_json_get(b, "x_max"), 24.0);
+  a->lane_min = (float)nr_json_num(nr_json_get(b, "lane_min"), -1.6);
+  a->lane_max = (float)nr_json_num(nr_json_get(b, "lane_max"), 1.8);
+  a->street_x_min = (float)nr_json_num(nr_json_get(b, "street_x_min"), -5.0);
+  a->street_x_max = (float)nr_json_num(nr_json_get(b, "street_x_max"), 25.0);
   for (int i = 0; i < solids->count; i++) {
-    const jv *s = solids->kid[i];
-    const jv *shape = jget(s, "shape");
+    const nr_json *s = solids->kid[i];
+    const nr_json *shape = nr_json_get(s, "shape");
+    const char *shape_name = nr_json_str(shape);
     arena_solid *o = &a->solid[a->solid_count++];
-    o->shape = shape && shape->t == J_STR && !strcmp(shape->s, "plane") ? 'p' : shape && shape->t == J_STR && !strcmp(shape->s, "decal") ? 'd' : 'b';
-    o->x = (float)jnum(jget(s, "x"), 0);
-    o->y = (float)jnum(jget(s, "y"), 0);
-    o->z = (float)jnum(jget(s, "z"), 0);
-    o->w = (float)jnum(jget(s, "w"), 1);
-    o->h = (float)jnum(jget(s, "h"), 1);
-    o->d = (float)jnum(jget(s, "d"), 1);
-    o->color = jcolor(jget(s, "color"), 0x808080);
-    o->emissive = jcolor(jget(s, "emissive"), 0);
-    o->emissive_intensity = (float)jnum(jget(s, "emissive_intensity"), 0);
-    o->order = (int)jnum(jget(s, "order"), 0);
-    o->blocks = jbool(jget(s, "blocks"));
+    o->shape = shape_name && !strcmp(shape_name, "plane") ? 'p' : shape_name && !strcmp(shape_name, "decal") ? 'd' : 'b';
+    o->x = (float)nr_json_num(nr_json_get(s, "x"), 0);
+    o->y = (float)nr_json_num(nr_json_get(s, "y"), 0);
+    o->z = (float)nr_json_num(nr_json_get(s, "z"), 0);
+    o->w = (float)nr_json_num(nr_json_get(s, "w"), 1);
+    o->h = (float)nr_json_num(nr_json_get(s, "h"), 1);
+    o->d = (float)nr_json_num(nr_json_get(s, "d"), 1);
+    o->color = nr_json_color(nr_json_get(s, "color"), 0x808080);
+    o->emissive = nr_json_color(nr_json_get(s, "emissive"), 0);
+    o->emissive_intensity = (float)nr_json_num(nr_json_get(s, "emissive_intensity"), 0);
+    o->order = (int)nr_json_num(nr_json_get(s, "order"), 0);
+    o->blocks = nr_json_bool(nr_json_get(s, "blocks"));
     if (o->blocks) {
       if (a->block_count >= ARENA_MAX_BLOCKS) {
         cw_error("arena: more than %d blocking solids", ARENA_MAX_BLOCKS);
-        jfree(root);
+        nr_json_free(root);
         return false;
       }
       /* the footprint widened by the actor's half width at both sides; behind the solid an actor stands clear of its back
@@ -205,50 +67,50 @@ static bool load_layout(arena *a, float half_width, float reach) {
       k->lane1 = o->z + o->d * 0.5f + reach;
     }
   }
-  jfree(root);
+  nr_json_free(root);
   return true;
 }
 
-static void load_wave(arena_wave *w, const jv *v) {
-  w->sweep_amp = v && v->t == J_ARR && v->count > 0 ? (float)jnum(v->kid[0], 0) : 0.0f;
-  w->sweep_period = v && v->t == J_ARR && v->count > 1 ? (float)jnum(v->kid[1], 1) : 1.0f;
-  w->sweep_phase = v && v->t == J_ARR && v->count > 2 ? (float)jnum(v->kid[2], 0) : 0.0f;
+static void load_wave(arena_wave *w, const nr_json *v) {
+  w->sweep_amp = v && v->type == NR_JSON_ARR && v->count > 0 ? (float)nr_json_num(v->kid[0], 0) : 0.0f;
+  w->sweep_period = v && v->type == NR_JSON_ARR && v->count > 1 ? (float)nr_json_num(v->kid[1], 1) : 1.0f;
+  w->sweep_phase = v && v->type == NR_JSON_ARR && v->count > 2 ? (float)nr_json_num(v->kid[2], 0) : 0.0f;
 }
 
 static bool load_lights(arena *a) {
-  jv *root = load_json("arena/lights.json");
+  nr_json *root = nr_json_load("arena/lights.json", "arena");
   if (!root) return false;
-  const jv *lights = jget(root, "lights"), *amb = jget(root, "ambient");
-  if (!lights || lights->t != J_ARR || lights->count != ARENA_LIGHTS) {
+  const nr_json *lights = nr_json_get(root, "lights"), *amb = nr_json_get(root, "ambient");
+  if (!lights || lights->type != NR_JSON_ARR || lights->count != ARENA_LIGHTS) {
     cw_error("arena: lights.json must list exactly %d lights", ARENA_LIGHTS);
-    jfree(root);
+    nr_json_free(root);
     return false;
   }
-  a->ambient_color = jcolor(jget(amb, "color"), 0x808080);
-  a->ambient_intensity = (float)jnum(jget(amb, "intensity"), 1.0);
-  a->light_distance = (float)jnum(jget(root, "distance"), 14.0);
-  a->light_decay = (float)jnum(jget(root, "decay"), 2.0);
+  a->ambient_color = nr_json_color(nr_json_get(amb, "color"), 0x808080);
+  a->ambient_intensity = (float)nr_json_num(nr_json_get(amb, "intensity"), 1.0);
+  a->light_distance = (float)nr_json_num(nr_json_get(root, "distance"), 14.0);
+  a->light_decay = (float)nr_json_num(nr_json_get(root, "decay"), 2.0);
   for (int i = 0; i < ARENA_LIGHTS; i++) {
-    const jv *l = lights->kid[i];
+    const nr_json *l = lights->kid[i];
     arena_light_def *d = &a->light[a->light_count++];
-    d->color = jcolor(jget(l, "color"), 0xffffff);
-    d->intensity = (float)jnum(jget(l, "intensity"), 0);
-    d->follow = (float)jnum(jget(l, "follow"), 0);
-    const jv *base = jget(l, "base");
-    for (int k = 0; k < 3; k++) d->base[k] = base && base->t == J_ARR && k < base->count ? (float)jnum(base->kid[k], 0) : 0.0f;
-    load_wave(&d->sweep[0], jget(l, "sweep_x"));
-    load_wave(&d->sweep[1], jget(l, "sweep_y"));
-    load_wave(&d->sweep[2], jget(l, "sweep_z"));
-    const jv *f = jget(l, "flicker"), *bz = jget(l, "buzz");
-    d->flicker_depth = (float)jnum(jget(f, "depth"), 0);
-    d->flicker_period = (float)jnum(jget(f, "period"), 1);
-    d->flicker_phase = (float)jnum(jget(f, "phase"), 0);
-    d->buzz_every = (int)jnum(jget(bz, "every"), 0);
-    d->buzz_ticks = (int)jnum(jget(bz, "ticks"), 0);
-    d->buzz_scale = (float)jnum(jget(bz, "scale"), 1);
-    d->buzz_offset = (int)jnum(jget(bz, "offset"), 0);
+    d->color = nr_json_color(nr_json_get(l, "color"), 0xffffff);
+    d->intensity = (float)nr_json_num(nr_json_get(l, "intensity"), 0);
+    d->follow = (float)nr_json_num(nr_json_get(l, "follow"), 0);
+    const nr_json *base = nr_json_get(l, "base");
+    for (int k = 0; k < 3; k++) d->base[k] = base && base->type == NR_JSON_ARR && k < base->count ? (float)nr_json_num(base->kid[k], 0) : 0.0f;
+    load_wave(&d->sweep[0], nr_json_get(l, "sweep_x"));
+    load_wave(&d->sweep[1], nr_json_get(l, "sweep_y"));
+    load_wave(&d->sweep[2], nr_json_get(l, "sweep_z"));
+    const nr_json *f = nr_json_get(l, "flicker"), *bz = nr_json_get(l, "buzz");
+    d->flicker_depth = (float)nr_json_num(nr_json_get(f, "depth"), 0);
+    d->flicker_period = (float)nr_json_num(nr_json_get(f, "period"), 1);
+    d->flicker_phase = (float)nr_json_num(nr_json_get(f, "phase"), 0);
+    d->buzz_every = (int)nr_json_num(nr_json_get(bz, "every"), 0);
+    d->buzz_ticks = (int)nr_json_num(nr_json_get(bz, "ticks"), 0);
+    d->buzz_scale = (float)nr_json_num(nr_json_get(bz, "scale"), 1);
+    d->buzz_offset = (int)nr_json_num(nr_json_get(bz, "offset"), 0);
   }
-  jfree(root);
+  nr_json_free(root);
   return true;
 }
 
