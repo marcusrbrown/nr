@@ -372,7 +372,7 @@ runtime tick (60 Hz, deterministic):
 
 **Verification:** `sim-check.mjs` green across waves; grunt/heavy atlases committed with provenance; program tables unchanged or recommitted.
 
-- [ ] **Unit 7: Title, join, upgrade choice, end screens, audio**
+- [x] **Unit 7: Title, join, upgrade choice, end screens, audio** (e4bf408..5cdf7b0; rim-normal darkening on lying bodies left as is for this slice)
 
 **Goal:** The flow around the fight: title with join, mid-fight join, upgrade pause and choice, arena-clear and game-over screens, HUD, and sound effects.
 
