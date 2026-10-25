@@ -11,8 +11,9 @@
  * fire). Heroes are team 0 and actors 0 .. NR_PLAYERS - 1; every actor after them is an enemy: a grunt, a heavy (both
  * spawned by the waves) or the test dummy, which has no AI (it stands still, or swings on a schedule).
  *
- * Players. A player is present when its pad is connected on the first tick (player 0 always is); the pool of lives
- * is NR_LIVES_PER_PLAYER for each present player. A hero whose hp runs out is knocked down and dies; each death takes
+ * Players. A player is present when its pad is connected on tick NR_PRESENCE_TICKS (player 0 always is; every hero
+ * stands on the street until then, so a pad the platform reports a frame or two late is not left out); the pool of
+ * lives is NR_LIVES_PER_PLAYER for each present player. A hero whose hp runs out is knocked down and dies; each death takes
  * a life from the pool, and while lives remain the hero stands up at the left edge of the camera's frame after
  * NR_RESPAWN_DELAY ticks. When the pool is empty and no hero is alive or waiting to respawn the game is over: the
  * simulation stops advancing its actors (the tick counter and the checksum go on) and a start press is refused. A
@@ -51,6 +52,7 @@
 #define NR_LIVES_PER_PLAYER 3
 #define NR_RESPAWN_DELAY 90 /* ticks a dead hero lies before it stands up again */
 #define NR_RESPAWN_INVULN 120
+#define NR_PRESENCE_TICKS 30 /* the tick on which the players present are decided (the title's stand-in) */
 #define NR_HERO_HP 12
 #define NR_GRUNT_HP 2
 #define NR_HEAVY_HP 16
@@ -139,7 +141,7 @@ typedef struct {
   cw_rng rng;
   nr_waves waves;
   int32_t ticks, input_count, wave, lives;
-  int32_t players;                 /* present at the first tick */
+  int32_t players;                 /* present on tick NR_PRESENCE_TICKS (both until then) */
   int32_t waves_on;                /* the waves spawn enemies (off for the test dummies' arena) */
   int32_t game_over, start_refused;
   int32_t log_moves;               /* log a hero's walk, run and idle-after-walk entries too */

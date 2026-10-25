@@ -1,0 +1,15 @@
+## all apps, idle street, 120 frames
+{"runs":[{"app":"nr","missing":[]},{"app":"nr_dummies","missing":[]},{"app":"nr_bot","missing":[]},{"app":"nr_arena_bare","missing":[]},{"app":"nr_stage","missing":[]},{"app":"nr_lit_h","missing":[]},{"app":"nr_lit_v","missing":[]},{"app":"nr_lit_h_flat","missing":[]},{"app":"nr_lit_v_flat","missing":[]},{"app":"nr_lit_h_left","missing":[]},{"app":"nr_lit_v_left","missing":[]},{"app":"nr_lit_h_left_flat","missing":[]},{"app":"nr_lit_v_left_flat","missing":[]},{"app":"nr_solo_0","missing":[]},{"app":"nr_solo_1","missing":[]},{"app":"nr_solo_2","missing":[]},{"app":"nr_bare","missing":[]}],"added":[]}
+no new program state
+## the four-wave script, 2700 frames
+{"runs":[{"app":"nr","missing":[]},{"app":"nr_dummies","missing":[]},{"app":"nr_bot","missing":[]},{"app":"nr_bot1","missing":[]}],"added":[]}
+no new program state
+## the combat script, 760 frames
+{"runs":[{"app":"nr","missing":[]},{"app":"nr_dummies","missing":[]}],"added":[]}
+no new program state
+## solo, game over, 6000 frames
+{"runs":[{"app":"nr","missing":[]}],"added":[]}
+no new program state
+## pad 2 disconnect, 700 frames
+{"runs":[{"app":"nr","missing":[]}],"added":[]}
+no new program state

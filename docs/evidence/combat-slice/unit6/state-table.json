@@ -1,0 +1,176 @@
+[
+  {
+    "state": "idle",
+    "total": 0,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": 120
+  },
+  {
+    "state": "walk",
+    "total": 0,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": 58
+  },
+  {
+    "state": "run",
+    "total": 0,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": 43
+  },
+  {
+    "state": "hit1",
+    "total": 22,
+    "startup": 4,
+    "active": 9,
+    "recovery": 9,
+    "clipTicks": 21.6,
+    "match": true
+  },
+  {
+    "state": "hit2",
+    "total": 22,
+    "startup": 4,
+    "active": 9,
+    "recovery": 9,
+    "clipTicks": 21.6,
+    "match": true
+  },
+  {
+    "state": "hit3",
+    "total": 25,
+    "startup": 4,
+    "active": 9,
+    "recovery": 12,
+    "clipTicks": 25.2,
+    "match": true
+  },
+  {
+    "state": "jump",
+    "total": 0,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": 36
+  },
+  {
+    "state": "jumpkick",
+    "total": 0,
+    "startup": 2,
+    "active": 255,
+    "clipTicks": null
+  },
+  {
+    "state": "grab",
+    "total": 20,
+    "startup": 6,
+    "active": 4,
+    "clipTicks": null
+  },
+  {
+    "state": "throw",
+    "total": 29,
+    "startup": 0,
+    "active": 0,
+    "recovery": 29,
+    "clipTicks": 28.8,
+    "match": true
+  },
+  {
+    "state": "hurt",
+    "total": 19,
+    "startup": 0,
+    "active": 0,
+    "recovery": 19,
+    "clipTicks": 19.2,
+    "match": true
+  },
+  {
+    "state": "knockdown",
+    "total": 43,
+    "startup": 0,
+    "active": 0,
+    "recovery": 43,
+    "clipTicks": 43.2,
+    "match": true
+  },
+  {
+    "state": "getup",
+    "total": 32,
+    "startup": 0,
+    "active": 0,
+    "recovery": 32,
+    "clipTicks": 32.4,
+    "match": true
+  },
+  {
+    "state": "dash",
+    "total": 25,
+    "startup": 0,
+    "active": 0,
+    "recovery": 25,
+    "clipTicks": 25.2,
+    "match": true
+  },
+  {
+    "state": "special_knockback",
+    "total": 38,
+    "startup": 12,
+    "active": 4,
+    "recovery": 22,
+    "clipTicks": 37.8,
+    "match": true
+  },
+  {
+    "state": "special_dash",
+    "total": 29,
+    "startup": 6,
+    "active": 15,
+    "recovery": 8,
+    "clipTicks": 28.8,
+    "match": true
+  },
+  {
+    "state": "grabbed",
+    "total": 0,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": null
+  },
+  {
+    "state": "thrown",
+    "total": 0,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": null
+  },
+  {
+    "state": "dead",
+    "total": 0,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": null
+  },
+  {
+    "state": "attack",
+    "total": 21,
+    "startup": 8,
+    "active": 4,
+    "clipTicks": null
+  },
+  {
+    "state": "heavy_attack",
+    "total": 62,
+    "startup": 24,
+    "active": 6,
+    "clipTicks": null
+  },
+  {
+    "state": "stagger",
+    "total": 60,
+    "startup": 0,
+    "active": 0,
+    "clipTicks": null
+  }
+]

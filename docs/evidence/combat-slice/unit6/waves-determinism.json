@@ -1,0 +1,19 @@
+{
+  "script": "games/nr/tests/input-waves.json",
+  "ticks": 2700,
+  "checksum": [
+    2063173580,
+    2063173580
+  ],
+  "botChecksum": 2063173580,
+  "simChecksum": [
+    1202227655,
+    1202227655
+  ],
+  "whitelistSha256": [
+    "329b849e13efc19f8c9bbb98ad41d7ff835851860d1f5547e438a40520ab1471",
+    "329b849e13efc19f8c9bbb98ad41d7ff835851860d1f5547e438a40520ab1471"
+  ],
+  "fields": 44,
+  "screenshotEqual": true
+}

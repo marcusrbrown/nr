@@ -1,6 +1,7 @@
 [
-  {"frame":1,"buttons":["right"],"pad2":{"buttons":["right"]}},
-  {"frame":35,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":1,"buttons":[],"pad2":{"buttons":[]}},
+  {"frame":2,"buttons":["right"],"pad2":{"buttons":["right"]}},
+  {"frame":36,"buttons":[],"pad2":{"buttons":[]}},
   {"frame":61,"buttons":["right"],"pad2":{"buttons":["right"]}},
   {"frame":82,"buttons":["right"],"pad2":{"buttons":["down"]}},
   {"frame":87,"buttons":["right"],"pad2":{"buttons":["right"]}},

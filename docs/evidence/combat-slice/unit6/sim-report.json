@@ -1,0 +1,908 @@
+{
+  "script": "games/nr/tests/input-combat.json",
+  "ticks": 760,
+  "presses": {
+    "p0": {
+      "right": [
+        2,
+        147,
+        208,
+        330
+      ],
+      "west": [
+        30,
+        45,
+        60,
+        100,
+        108,
+        124,
+        277,
+        600
+      ],
+      "east": [
+        172,
+        230
+      ],
+      "south": [
+        252,
+        500
+      ],
+      "r": [
+        300
+      ],
+      "north": [
+        350,
+        420
+      ],
+      "down": [
+        395
+      ],
+      "l": [
+        420
+      ],
+      "left": [
+        650
+      ]
+    },
+    "p1": {
+      "left": [
+        2
+      ],
+      "down": [
+        252
+      ],
+      "right": [
+        282,
+        288,
+        480
+      ]
+    }
+  },
+  "results": [
+    {
+      "name": "layout",
+      "ok": true,
+      "detail": "heroes on team 0, 7 dummies on team 1 at the layout main.c sets",
+      "bad": []
+    },
+    {
+      "name": "combo",
+      "ok": true,
+      "detail": "hit1 at 30, hit2 at 45 (15 ticks in; window 13..21), hit3 at 60; hits on the dummy at 34,49,64 for 1, 1, 2 hp; it ends knocked down with hp 8",
+      "presses": [
+        30,
+        45,
+        60
+      ],
+      "hits": [
+        {
+          "tick": 34,
+          "kind": "HIT",
+          "actor": 0,
+          "a": 3,
+          "b": 1
+        },
+        {
+          "tick": 49,
+          "kind": "HIT",
+          "actor": 0,
+          "a": 3,
+          "b": 1
+        },
+        {
+          "tick": 64,
+          "kind": "HIT",
+          "actor": 0,
+          "a": 3,
+          "b": 2
+        }
+      ]
+    },
+    {
+      "name": "late press",
+      "ok": true,
+      "detail": "hit1 at 100; a press at 108 (tick 8, in the active ticks 4..12) does not chain; the swing ends at 122; a press at 124 starts hit1 again; no hit2 in between",
+      "presses": [
+        100,
+        108,
+        124
+      ]
+    },
+    {
+      "name": "knockback",
+      "ok": true,
+      "detail": "the victim of hit1 moves 0.060, 0.050, 0.040, 0.030, 0.020, 0.010, 0.000 units on the ticks after the hit (a strictly falling speed to 0), 0.210 in all",
+      "dx": [
+        0.059999942779541016,
+        0.04999995231628418,
+        0.039999961853027344,
+        0.029999971389770508,
+        0.019999980926513672,
+        0.009999990463256836,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "grab and throw",
+      "ok": true,
+      "detail": "grab at 172 takes the dummy at 178 (hp 8), the throw state holds it until 188, it flies 34 ticks (peak 1.27 high, 3.40 units on), lands at 222 taking 2 (hp 6) and is knocked down; the hero is idle at 207",
+      "grab": 172,
+      "release": 188,
+      "land": 222,
+      "flight": 34
+    },
+    {
+      "name": "grab fails",
+      "ok": true,
+      "detail": "grab at 230: the dummy that cannot be grabbed is found at 236 (grab-fail logged), no grab and no throw, the hero is idle again at 250 (the table's 20 ticks), the dummy keeps hp 12",
+      "grab": 230
+    },
+    {
+      "name": "jump kick",
+      "ok": true,
+      "detail": "jump at 252, kick at 277 on the way down (vy -0.052, 1.02 high); one hit on the dummy, on the first active tick 279 (kick tick 2), for 2; the kick lasts to the landing at 289 and meets nobody twice",
+      "jump": 252,
+      "kick": 277,
+      "connect": [
+        {
+          "tick": 279,
+          "kind": "HIT",
+          "actor": 0,
+          "a": 4,
+          "b": 2
+        }
+      ]
+    },
+    {
+      "name": "radius special",
+      "ok": true,
+      "detail": "special at 350: on its first active tick 362 the 4 dummies within 2.4 units (a3,a4,a5,a6) are each hit once for 1 and pushed away (0.32->2.42, 1.44->3.54, 0.48->2.58, 2.09->3.44); the 3 outside (a2,a7,a8) are untouched; the other player in range is skipped as a teammate",
+      "special": 350,
+      "inside": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "outside": [
+        2,
+        7,
+        8
+      ],
+      "pushed": [
+        {
+          "id": 3,
+          "from": 0.31999874114990234,
+          "to": 2.419997215270996,
+          "state": "hurt"
+        },
+        {
+          "id": 4,
+          "from": 1.4399943351745605,
+          "to": 3.5399932861328125,
+          "state": "hurt"
+        },
+        {
+          "id": 5,
+          "from": 0.48000621795654297,
+          "to": 2.580007553100586,
+          "state": "hurt"
+        },
+        {
+          "id": 6,
+          "from": 2.0895998326974934,
+          "to": 3.4373246260078374,
+          "state": "hurt"
+        }
+      ]
+    },
+    {
+      "name": "pillar",
+      "ok": true,
+      "detail": "a dummy pushed at the pillar (the push alone would take it from x 9.60 to 11.69) stops at the pillar's rectangle, x 10.934 (edge 10.950), with no input of its own",
+      "before": {
+        "x": 9.600000381469727,
+        "lane": 0.4000000059604645,
+        "y": 0,
+        "vy": 0,
+        "state": "idle",
+        "tick": 361,
+        "hp": 12,
+        "facing": -1,
+        "invuln": 0
+      },
+      "after": {
+        "x": 10.93384838104248,
+        "lane": 0.19900456070899963,
+        "y": 0,
+        "vy": 0,
+        "state": "idle",
+        "tick": 6,
+        "hp": 11,
+        "facing": -1,
+        "invuln": 0
+      },
+      "free": 11.690359401625484,
+      "edge": 10.950000000000001
+    },
+    {
+      "name": "dash special",
+      "ok": true,
+      "detail": "special+l at 420: the hero moves 4.500 units (15 ticks at 0.3) from x 7.52; each of the 2 dummies on the path is hit once (ticks 429,435), as the swept box reaches it, in path order",
+      "special": 420,
+      "from": {
+        "x": 7.519993782043457,
+        "lane": 1.4999995231628418,
+        "y": 0,
+        "vy": 0,
+        "state": "special_dash",
+        "tick": 5,
+        "hp": 12,
+        "facing": 1,
+        "invuln": 0
+      },
+      "to": {
+        "x": 12.019996643066406,
+        "lane": 1.4999995231628418,
+        "y": 0,
+        "vy": 0,
+        "state": "special_dash",
+        "tick": 20,
+        "hp": 12,
+        "facing": 1,
+        "invuln": 0
+      },
+      "onPath": [
+        {
+          "id": 8,
+          "hit": [
+            {
+              "tick": 429,
+              "kind": "HIT",
+              "actor": 0,
+              "a": 8,
+              "b": 2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "hit": [
+            {
+              "tick": 435,
+              "kind": "HIT",
+              "actor": 0,
+              "a": 2,
+              "b": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "friendly fire",
+      "ok": true,
+      "detail": "hit1 at 600 with player 1 0.28 units away in the swing's reach and 0.48 lanes apart: the overlap is logged as a teammate skip at 604, player 1 keeps hp 9 and never leaves idle, and the same swing hits the enemy dummy",
+      "swing": 600,
+      "p0": {
+        "x": 12.019996643066406,
+        "lane": 1.4999995231628418,
+        "y": 0,
+        "vy": 0,
+        "state": "hit1",
+        "tick": 4,
+        "hp": 12,
+        "facing": 1,
+        "invuln": 0
+      },
+      "p1": {
+        "x": 12.300034523010254,
+        "lane": 1.0199999809265137,
+        "y": 0,
+        "vy": 0,
+        "state": "idle",
+        "tick": 48,
+        "hp": 9,
+        "facing": 1,
+        "invuln": 0
+      }
+    },
+    {
+      "name": "hero hurt",
+      "ok": true,
+      "detail": "a swing at 84 hurts player 1 (hp 11, invulnerable 60 ticks); the swing at 114 is skipped (invulnerable); the knockdown swing at 174 hits for 2 (hp 9), the hero is down 43 ticks, gets up for 32 and is idle at 249",
+      "hit1": 84,
+      "skip": 114,
+      "hit3": 174
+    },
+    {
+      "name": "movement",
+      "ok": true,
+      "detail": "walk 26 ticks -> x 1.560 (0.06/tick); the double tap makes player 1 run at 0.110/tick; dash 2.60 units over its 25 ticks; a plain jump lasts 36 ticks (the jump clip's 36), peak 1.18; walking left turns the hero (facing -1); a hit victim turns to face its attacker (the dummy left of the special's hero turns right, the one right of it keeps facing left)",
+      "walkSpeed": 0.06,
+      "runSpeed": 0.11,
+      "x28": 1.5599994659423828,
+      "jumpTicks": 36
+    },
+    {
+      "name": "state table",
+      "ok": true,
+      "detail": "10 timed states: every length is within a tick of its clip's frames x ms",
+      "rows": [
+        {
+          "state": "idle",
+          "total": 0,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": 120
+        },
+        {
+          "state": "walk",
+          "total": 0,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": 58
+        },
+        {
+          "state": "run",
+          "total": 0,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": 43
+        },
+        {
+          "state": "hit1",
+          "total": 22,
+          "startup": 4,
+          "active": 9,
+          "recovery": 9,
+          "clipTicks": 21.6,
+          "match": true
+        },
+        {
+          "state": "hit2",
+          "total": 22,
+          "startup": 4,
+          "active": 9,
+          "recovery": 9,
+          "clipTicks": 21.6,
+          "match": true
+        },
+        {
+          "state": "hit3",
+          "total": 25,
+          "startup": 4,
+          "active": 9,
+          "recovery": 12,
+          "clipTicks": 25.2,
+          "match": true
+        },
+        {
+          "state": "jump",
+          "total": 0,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": 36
+        },
+        {
+          "state": "jumpkick",
+          "total": 0,
+          "startup": 2,
+          "active": 255,
+          "clipTicks": null
+        },
+        {
+          "state": "grab",
+          "total": 20,
+          "startup": 6,
+          "active": 4,
+          "clipTicks": null
+        },
+        {
+          "state": "throw",
+          "total": 29,
+          "startup": 0,
+          "active": 0,
+          "recovery": 29,
+          "clipTicks": 28.8,
+          "match": true
+        },
+        {
+          "state": "hurt",
+          "total": 19,
+          "startup": 0,
+          "active": 0,
+          "recovery": 19,
+          "clipTicks": 19.2,
+          "match": true
+        },
+        {
+          "state": "knockdown",
+          "total": 43,
+          "startup": 0,
+          "active": 0,
+          "recovery": 43,
+          "clipTicks": 43.2,
+          "match": true
+        },
+        {
+          "state": "getup",
+          "total": 32,
+          "startup": 0,
+          "active": 0,
+          "recovery": 32,
+          "clipTicks": 32.4,
+          "match": true
+        },
+        {
+          "state": "dash",
+          "total": 25,
+          "startup": 0,
+          "active": 0,
+          "recovery": 25,
+          "clipTicks": 25.2,
+          "match": true
+        },
+        {
+          "state": "special_knockback",
+          "total": 38,
+          "startup": 12,
+          "active": 4,
+          "recovery": 22,
+          "clipTicks": 37.8,
+          "match": true
+        },
+        {
+          "state": "special_dash",
+          "total": 29,
+          "startup": 6,
+          "active": 15,
+          "recovery": 8,
+          "clipTicks": 28.8,
+          "match": true
+        },
+        {
+          "state": "grabbed",
+          "total": 0,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": null
+        },
+        {
+          "state": "thrown",
+          "total": 0,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": null
+        },
+        {
+          "state": "dead",
+          "total": 0,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": null
+        },
+        {
+          "state": "attack",
+          "total": 21,
+          "startup": 8,
+          "active": 4,
+          "clipTicks": null
+        },
+        {
+          "state": "heavy_attack",
+          "total": 62,
+          "startup": 24,
+          "active": 6,
+          "clipTicks": null
+        },
+        {
+          "state": "stagger",
+          "total": 60,
+          "startup": 0,
+          "active": 0,
+          "clipTicks": null
+        }
+      ]
+    },
+    {
+      "name": "determinism",
+      "ok": true,
+      "detail": "the same script twice: 44 whitelisted fields byte-identical (sha256 42201de11792c016), checksum 1016920866 both times, the screenshot byte-identical",
+      "checksum": 1016920866,
+      "whitelistSha256": "42201de11792c01665009e0182f15721cf2215f8a0c6d341faf58d191bb57b9e",
+      "screenshotEqual": true
+    },
+    {
+      "name": "input shift",
+      "ok": true,
+      "detail": "the script one tick late: the checksum differs at tick 2 (2265258476 against 1229841601) and at the end (1016920866 against 2101889652); first field to differ in the dump order: nr.hero_pos; 11 fields differ at that tick",
+      "firstDivergentTick": 2,
+      "firstField": "nr.hero_pos",
+      "fields": [
+        "nr.hero_pos",
+        "nr.hero_clip",
+        "nr.hero_frame",
+        "nr.actor_state",
+        "nr.actor_state_tick",
+        "nr.actor_facing",
+        "nr.input_count",
+        "nr.sim_checksum",
+        "nr.events",
+        "nr.event_count",
+        "nr.checksum"
+      ]
+    },
+    {
+      "name": "whitelist",
+      "ok": true,
+      "detail": "36 fields with the expected sizes (11 actors); the dummies' street: wave 0, lives 6 (3 for each of 2 players), rng 4279844869,360203698,281235837,2134020091 (the waves are off, so no consumer), input count 314 of 760 ticks, 106 events (0 dropped), cw.three.missing 0",
+      "missing": [],
+      "badSize": []
+    },
+    {
+      "name": "waves: schedule",
+      "ok": true,
+      "detail": "4 waves of 4 / 6 / 6 + 1 heavy / 8 + 1 heavy: wave 1 60..219, wave 2 369..668, wave 3 818..1244, wave 4 1394..2374; every wave ends on its last kill and the heavy spawns after the grunts; 6 spawns checked at the frame's edge inside the clamp (3 left, 3 right); cleared at 2374",
+      "rows": [
+        {
+          "wave": 1,
+          "grunts": 4,
+          "heavies": 0,
+          "begin": 60,
+          "end": 219,
+          "lastKill": 219
+        },
+        {
+          "wave": 2,
+          "grunts": 6,
+          "heavies": 0,
+          "begin": 369,
+          "end": 668,
+          "lastKill": 668
+        },
+        {
+          "wave": 3,
+          "grunts": 6,
+          "heavies": 1,
+          "begin": 818,
+          "end": 1244,
+          "lastKill": 1244
+        },
+        {
+          "wave": 4,
+          "grunts": 8,
+          "heavies": 1,
+          "begin": 1394,
+          "end": 2374,
+          "lastKill": 2374
+        }
+      ],
+      "spots": [
+        {
+          "tick": 61,
+          "actor": 2,
+          "x": 6.624,
+          "lane": 0.1,
+          "cam": 2.1,
+          "half": 4.524,
+          "atEdge": true,
+          "inside": true
+        },
+        {
+          "tick": 370,
+          "actor": 2,
+          "x": 9.702,
+          "lane": 1.6,
+          "cam": 5.575,
+          "half": 4.127,
+          "atEdge": true,
+          "inside": true
+        },
+        {
+          "tick": 819,
+          "actor": 2,
+          "x": 4.914,
+          "lane": 1.413,
+          "cam": 9.09,
+          "half": 4.176,
+          "atEdge": true,
+          "inside": true
+        },
+        {
+          "tick": 961,
+          "actor": 7,
+          "x": 4.963,
+          "lane": 1.6,
+          "cam": 9.09,
+          "half": 4.127,
+          "atEdge": true,
+          "inside": true
+        },
+        {
+          "tick": 1395,
+          "actor": 2,
+          "x": 7.719,
+          "lane": -1.212,
+          "cam": 12.59,
+          "half": 4.871,
+          "atEdge": true,
+          "inside": true
+        },
+        {
+          "tick": 1562,
+          "actor": 10,
+          "x": 17.399,
+          "lane": 0.288,
+          "cam": 12.925,
+          "half": 4.474,
+          "atEdge": true,
+          "inside": true
+        }
+      ],
+      "bad": [],
+      "artifact": "events-waves.txt"
+    },
+    {
+      "name": "assignment",
+      "ok": true,
+      "detail": "wave 2's 6 spawns are assigned 0,1,0,1,0,1 (3 to player 1, 3 to player 2; wave 1: 0,1,0,1); at 494 an enemy chasing player 2 dies with 4 others standing: no retarget on that tick and the others keep their targets (a4->0 a5->1 a6->0 a7->1)",
+      "wave2": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "wave1": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "kill": {
+        "tick": 494,
+        "actor": 3
+      },
+      "artifact": "events-waves.txt"
+    },
+    {
+      "name": "retarget",
+      "ok": true,
+      "detail": "player 2 (idle, left to its grunts) falls at 1131 (life lost at 1174, 5 left in the pool); the 2 enemies chasing it (a3,a5) each get a retarget to player 1 (ticks 1144,1151), and 70 ticks on none still chases it",
+      "dead": 1131,
+      "chasing": [
+        3,
+        5
+      ],
+      "retargets": [
+        1144,
+        1151
+      ],
+      "artifact": "events-retarget.txt"
+    },
+    {
+      "name": "heavy",
+      "ok": true,
+      "detail": "4 grabs on the heavy fail (ticks 987,996,1623,1679): no grab or grabbed state, its hp unchanged, the hero idle again 20 ticks after the grab began (struck at 1000,struck at 1000,1637,1693); 1 staggers (ticks 2050), each from a hero in special_knockback and lasting 60 ticks; no other hit staggers it (1 stagger entries for 1 events)",
+      "fails": [
+        {
+          "hero": 0,
+          "heavy": 7,
+          "grab": 981,
+          "fail": 987,
+          "struckAt": 1000,
+          "ok": true
+        },
+        {
+          "hero": 1,
+          "heavy": 7,
+          "grab": 990,
+          "fail": 996,
+          "struckAt": 1000,
+          "ok": true
+        },
+        {
+          "hero": 1,
+          "heavy": 10,
+          "grab": 1617,
+          "fail": 1623,
+          "idleAt": 1637,
+          "ok": true
+        },
+        {
+          "hero": 0,
+          "heavy": 10,
+          "grab": 1673,
+          "fail": 1679,
+          "idleAt": 1693,
+          "struckAt": 1693,
+          "ok": true
+        }
+      ],
+      "staggers": [
+        {
+          "heavy": 10,
+          "hero": 0,
+          "tick": 2050,
+          "special": "special_knockback",
+          "ok": true
+        }
+      ],
+      "artifact": "events-waves.txt"
+    },
+    {
+      "name": "wave order",
+      "ok": true,
+      "detail": "wave 2's last enemy dies at 668: the wave ends and the upgrade flag goes 0 -> 1 on that tick; at 743 the arena is clear, wave counter 2, phase waiting; wave 3 begins at 818 (150 ticks later) and nothing spawns before; the flag is the only effect (no UI yet); wave 1 began 60 ticks in",
+      "last": 668,
+      "wave3": 818,
+      "upgrade": 668,
+      "artifact": "events-waves.txt"
+    },
+    {
+      "name": "solo",
+      "ok": true,
+      "detail": "no second pad: both heroes stand on the street until tick 30 (players 2, lives 6 at tick 1), then players 1 and lives 3 (3 for one player), before wave 1 begins at 60; the 4 spawns of wave 1 all chase player 1 (targets 0,0,0,0), at tick 200 every enemy on the street does, and the absent second hero has no event, no move and full hp",
+      "players": 1,
+      "lives": 3,
+      "spawns": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "artifact": "events-solo.txt"
+    },
+    {
+      "name": "respawn",
+      "ok": true,
+      "detail": "6 respawns (solo a0 at 1154, solo a0 at 2298, retarget a1 at 1264, retarget a1 at 2490, retarget a0 at 3468, retarget a1 at 3739): each 90 ticks after its life was lost with lives left, standing idle at hp 12, 120 ticks invulnerable, inside the frame at the left edge (x -3.99,-3.99,-0.69,3.53,3.85,6.77 against camera 0,0,3.62,7.843,7.843,11.082 and frame half width 4.391,4.391,4.709,4.709,4.391,4.709) and inside the lanes",
+      "rows": [
+        {
+          "run": "solo",
+          "tick": 1154,
+          "hero": 0,
+          "x": -3.991,
+          "lane": 0.6,
+          "cam": 0,
+          "half": 4.391,
+          "lifeLostAt": 1064,
+          "poolAfter": 2,
+          "ok": true
+        },
+        {
+          "run": "solo",
+          "tick": 2298,
+          "hero": 0,
+          "x": -3.991,
+          "lane": 0.6,
+          "cam": 0,
+          "half": 4.391,
+          "lifeLostAt": 2208,
+          "poolAfter": 1,
+          "ok": true
+        },
+        {
+          "run": "retarget",
+          "tick": 1264,
+          "hero": 1,
+          "x": -0.689,
+          "lane": -0.6,
+          "cam": 3.62,
+          "half": 4.709,
+          "lifeLostAt": 1174,
+          "poolAfter": 5,
+          "ok": true
+        },
+        {
+          "run": "retarget",
+          "tick": 2490,
+          "hero": 1,
+          "x": 3.534,
+          "lane": -0.6,
+          "cam": 7.843,
+          "half": 4.709,
+          "lifeLostAt": 2400,
+          "poolAfter": 4,
+          "ok": true
+        },
+        {
+          "run": "retarget",
+          "tick": 3468,
+          "hero": 0,
+          "x": 3.852,
+          "lane": 0.6,
+          "cam": 7.843,
+          "half": 4.391,
+          "lifeLostAt": 3378,
+          "poolAfter": 3,
+          "ok": true
+        },
+        {
+          "run": "retarget",
+          "tick": 3739,
+          "hero": 1,
+          "x": 6.773,
+          "lane": -0.6,
+          "cam": 11.082,
+          "half": 4.709,
+          "lifeLostAt": 3649,
+          "poolAfter": 2,
+          "ok": true
+        }
+      ],
+      "bad": [],
+      "artifact": "events-solo.txt"
+    },
+    {
+      "name": "game over",
+      "ok": true,
+      "detail": "solo, idle: lives lost at 1064,2208,3389 (pool 2,1,0 left), game over at 3389; from then every actor's position, state, hp, target, the camera, wave, lives and the rng are identical at 3391, 3789 and 6000 while the tick counter runs on; the 8 start presses after it (3600,3900,4200,4500,4800,5100,5400,5700) are each refused (8 events, counter 8) and the 10 before it are not",
+      "over": 3389,
+      "lost": [
+        1064,
+        2208,
+        3389
+      ],
+      "presses": [
+        600,
+        900,
+        1200,
+        1500,
+        1800,
+        2100,
+        2400,
+        2700,
+        3000,
+        3300,
+        3600,
+        3900,
+        4200,
+        4500,
+        4800,
+        5100,
+        5400,
+        5700
+      ],
+      "refused": [
+        3600,
+        3900,
+        4200,
+        4500,
+        4800,
+        5100,
+        5400,
+        5700
+      ],
+      "artifact": "events-solo.txt"
+    },
+    {
+      "name": "disconnect",
+      "ok": true,
+      "detail": "player 2's pad is unplugged at 118, in hit2 (entered 115): the swing runs its 22 ticks and the hero is idle at 137 (no hit3 though it was in the combo's window); away it stays idle at hp 12 (flag 1), is hit or skipped 0 times between 118 and 560, enters no state; no enemy chases it at ticks 200, 300, 450 and 559 (0,0,0,0); the grunt that did retargets to player 1 at 118 and the spawn at 132 chases player 1; lives stay 6; the same pad back at 560 and a press at 580 starts hit1 (580)",
+      "gone": 118,
+      "back": 560,
+      "hit2": 115,
+      "idle": 137,
+      "retargets": [
+        118
+      ],
+      "artifact": "events-disconnect.txt"
+    },
+    {
+      "name": "four-wave run",
+      "ok": true,
+      "detail": "the four-wave script (225 entries, 2700 ticks) twice: 44 whitelisted fields byte-identical (sha256 329b849e13efc19f), checksum 2063173580 both times and the screenshot identical; the bot's own run on nr_bot ends on checksum 2063173580, the same; 482 events, 0 dropped, cleared 1",
+      "checksum": [
+        2063173580,
+        2063173580,
+        2063173580
+      ],
+      "whitelistSha256": "329b849e13efc19f8c9bbb98ad41d7ff835851860d1f5547e438a40520ab1471",
+      "artifact": "waves-determinism.json"
+    }
+  ]
+}

@@ -95,6 +95,13 @@ and `tools/render/tests/hero-profile.mjs`.
 | heavy | 38 | 1920x640 | 9.38 |
 | total, planned | 171 | | 37.50 |
 
+Re-verified in Unit 6 with the three atlases installed (`games/nr/tests/enemies-check.mjs`, `docs/evidence/combat-slice/unit6/`):
+the grunt is 27 frames of 160x160 on a 1920x480 page (7.03 MiB), the heavy 27 frames of 224x224 on a 2016x672 page
+(10.34 MiB; its hook reaches 190 texels from the cell's left edge, which the 160 cell cannot hold), the hero 96 frames
+(18.75 MiB). The total is **36.12 MiB** decoded (38.46 MiB with the hero's planned 106 frames) against 64 MiB; the load
+peak, one more sheet decoding, is 49.01 MiB. The heavy's cell is 1.96 times the hero's area, so its allowance is by
+frames (27 of 38) and its page is the larger of the two enemies'.
+
 The planned total leaves 26.5 MiB of the budget unused; with the largest sheet (10.5 MiB) held during a load the peak is
 48.0 MiB. A character past its frame cap or past 144 frames has frames cut, or moves to a second page (the packer places
 it there and records the page; the loader reads one page per character today). The frame counts below needed no cut.

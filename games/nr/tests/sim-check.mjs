@@ -495,11 +495,11 @@ dump(revents, 'events-retarget.txt');
 const S1 = wrun(SOLO_T, SOLO_IN, 'solo'), sevents = decode(S1.st);
 dump(sevents, 'events-solo.txt');
 {
-  const t1 = wrun(1, SOLO_IN, 'solo'), t200 = wrun(200, SOLO_IN, 'solo'), spawns = sevents.filter((e) => e.kind === 'SPAWN');
+  const PRESENCE = +simH.match(/#define NR_PRESENCE_TICKS (\d+)/)[1], t0 = wrun(1, SOLO_IN, 'solo'), t1 = wrun(PRESENCE, SOLO_IN, 'solo'), t200 = wrun(200, SOLO_IN, 'solo'), spawns = sevents.filter((e) => e.kind === 'SPAWN');
   const second = pick(S1, 1), pre = pick(t200, 1);
-  record('solo', t1.st['nr.players'] === 1 && t1.st['nr.lives'] === LIVES_EACH && spawns.length >= 4 && spawns.every((s) => s.b === 0) && t200.st['nr.actor_present'][1] === 0 && !sevents.some((e) => e.actor === 1 || (e.kind === 'SPAWN' && e.b === 1))
+  record('solo', t0.st['nr.players'] === 2 && PRESENCE < FIRST_DELAY && t1.st['nr.players'] === 1 && t1.st['nr.lives'] === LIVES_EACH && spawns.length >= 4 && spawns.every((s) => s.b === 0) && t200.st['nr.actor_present'][1] === 0 && !sevents.some((e) => e.actor === 1 || (e.kind === 'SPAWN' && e.b === 1))
     && [...Array(N).keys()].filter((i) => i >= 2 && t200.st['nr.actor_present'][i]).every((i) => t200.st['nr.actor_target'][i] === 0) && second.x === pre.x && second.lane === pre.lane && second.hp === HERO_HP_C,
-    `no second pad: players ${t1.st['nr.players']}, lives ${t1.st['nr.lives']} (${LIVES_EACH} for one player); the ${spawns.length} spawns of wave 1 all chase player 1 (targets ${spawns.map((s) => s.b)}), at tick 200 every enemy on the street does, and the absent second hero has no event, no move and full hp`,
+    `no second pad: both heroes stand on the street until tick ${PRESENCE} (players ${t0.st['nr.players']}, lives ${t0.st['nr.lives']} at tick 1), then players ${t1.st['nr.players']} and lives ${t1.st['nr.lives']} (${LIVES_EACH} for one player), before wave 1 begins at ${FIRST_DELAY}; the ${spawns.length} spawns of wave 1 all chase player 1 (targets ${spawns.map((s) => s.b)}), at tick 200 every enemy on the street does, and the absent second hero has no event, no move and full hp`,
     { players: t1.st['nr.players'], lives: t1.st['nr.lives'], spawns: spawns.map((s) => s.b), artifact: 'events-solo.txt' });
 }
 

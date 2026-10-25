@@ -21,7 +21,9 @@
 //        lit     the lit-side check's builds (nr_lit_h, nr_lit_v, their left-facing versions and the flat-normal controls of each);
 //                ticks 30, 60, 180, 210
 //        bare    the Unit 2 stage without heroes (nr_bare), the control for the silhouette checks; tick 60
-//        combat  input-combat.json on `nr`: ticks 49 (hit2 landing), 183 (a dummy held for a throw), 205 (the dummy in the
+//        waves   input-waves.json on `nr` (the four waves, played by the bot's buttons): ticks 130 (wave 1 closing in), 450 (wave 2, a
+//                grunt in the air), 990 (the heavy winding up), 1600 (wave 4's crowd), 2050 (the heavy staggered)
+//        combat  input-combat.json on `nr_dummies`: ticks 49 (hit2 landing), 183 (a dummy held for a throw), 205 (the dummy in the
 //                air), 279 (the jump kick connecting), 362 (the radius special), 429 (the dash special), 700 (player 0
 //                facing left)
 //
@@ -44,11 +46,11 @@ const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 && argv[
 
 const OUT = resolve(ROOT, opt('out', 'out/unit4/caps'));
 const PUBLISH = opt('publish') ? resolve(ROOT, opt('publish')) : null;
-const ONLY = opt('only', 'scroll,pillar,stage,solo,lit,bare,combat').split(',');
+const ONLY = opt('only', 'scroll,pillar,stage,solo,lit,bare,combat,waves').split(',');
 mkdirSync(join(OUT, 'cart'), { recursive: true });
 mkdirSync(join(OUT, 'gl'), { recursive: true });
 
-const COMBAT = 'games/nr/tests/input-combat.json', SCROLL = 'games/nr/tests/input-scroll.json', PILLAR = 'games/nr/tests/input-pillar.json', IDLE = 'games/nr/tests/input-idle.json';
+const WAVES = 'games/nr/tests/input-waves.json', COMBAT = 'games/nr/tests/input-combat.json', SCROLL = 'games/nr/tests/input-scroll.json', PILLAR = 'games/nr/tests/input-pillar.json', IDLE = 'games/nr/tests/input-idle.json';
 // a run: the app, the name its files take, the input script, the ticks; `gl` is how many frames its GL state run takes
 export const SETS = {
   scroll: { runs: [{ app: 'nr_dummies', name: 'scroll', input: SCROLL, frames: [61, 232, 352, 426, 640] }], gl: { frames: 760 } },
@@ -57,9 +59,10 @@ export const SETS = {
   solo: { runs: ['nr_solo_0', 'nr_solo_1', 'nr_solo_2'].map((app) => ({ app, name: app.replace(/^nr_/, ''), input: IDLE, frames: [60] })), gl: { frames: 60 } },
   lit: { runs: ['nr_lit_h', 'nr_lit_v', 'nr_lit_h_flat', 'nr_lit_v_flat', 'nr_lit_h_left', 'nr_lit_v_left', 'nr_lit_h_left_flat', 'nr_lit_v_left_flat'].map((app) => ({ app, name: app.replace(/^nr_/, ''), input: IDLE, frames: [30, 60, 180, 210] })), gl: { frames: 60 } },
   bare: { runs: [{ app: 'nr_bare', name: 'bare', input: IDLE, frames: [60] }], gl: { frames: 60 } },
+  waves: { runs: [{ app: 'nr', name: 'waves', input: WAVES, frames: [130, 450, 990, 1600, 2050] }], gl: { frames: 2700 } },
   combat: { runs: [{ app: 'nr_dummies', name: 'combat', input: COMBAT, frames: [49, 183, 205, 279, 362, 429, 700] }], gl: { frames: 760 } },
 };
-const REVIEW = ['scroll', 'pillar', 'stage', 'solo', 'combat'];
+const REVIEW = ['scroll', 'pillar', 'stage', 'solo', 'combat', 'waves'];
 
 const glRun = (host, app, state, input, frames) => spawnSync('node', ['deps/cartwheel-engine/tools/run-cart.mjs', '--host', host === 'native-gl' ? 'native' : 'chromium', '--app', app,
   ...(host === 'cart-gl' ? ['--cart', join(ROOT, 'build/cart/carts', `${app}.wasc`)] : []), '--frames', String(frames), '--state', state, '--gpu', 'gl', '--input', input],
@@ -69,7 +72,7 @@ const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const pngSize = (p) => { const d = readFileSync(p); return [d.readUInt32BE(16), d.readUInt32BE(20)]; };
 const SIM = ['nr.ticks', 'nr.hero_pos', 'nr.hero_clip', 'nr.hero_step', 'nr.hero_frame', 'nr.light_pos', 'nr.light_intensity', 'nr.cam_x', 'nr.cam_left', 'nr.checksum',
   'nr.sim_checksum', 'nr.actor_y', 'nr.actor_vy', 'nr.actor_state', 'nr.actor_state_tick', 'nr.actor_hp', 'nr.actor_facing', 'nr.actor_team', 'nr.actor_invuln', 'nr.rng', 'nr.wave', 'nr.lives',
-  'nr.input_count', 'nr.event_count', 'nr.events', 'nr.events_dropped'];
+  'nr.input_count', 'nr.event_count', 'nr.events', 'nr.events_dropped', 'nr.actor_kind', 'nr.actor_target', 'nr.actor_away', 'nr.actor_present', 'nr.game_over', 'nr.start_refused', 'nr.upgrade_ready', 'nr.cleared', 'nr.wave_phase', 'nr.players'];
 const simEqual = (a, b) => SIM.every((k) => JSON.stringify(a[k]) === JSON.stringify(b[k]));
 
 function comparePixels(a, b) {

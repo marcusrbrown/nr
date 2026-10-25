@@ -751,6 +751,12 @@ void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
   for (int p = 0; p < NR_PLAYERS; p++) any = any || input[p].any;
   if (any) s->input_count++;
   if (s->ticks == 1) {
+    /* every hero stands on the street until the presence tick: a pad the platform reports a frame or two late is still in */
+    for (int p = 0; p < NR_PLAYERS; p++) s->actor[p].present = 1;
+    s->players = NR_PLAYERS;
+    s->lives = NR_LIVES_PER_PLAYER * s->players;
+  }
+  if (s->ticks == NR_PRESENCE_TICKS) {
     s->players = 0;
     for (int p = 0; p < NR_PLAYERS; p++) {
       s->actor[p].present = p == 0 || input[p].connected ? 1 : 0;
@@ -770,7 +776,7 @@ void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]) {
   nr_input idle_input = { .connected = false };
   const nr_input *eff[NR_PLAYERS];
   for (int p = 0; p < NR_PLAYERS; p++) {
-    if (s->actor[p].present) set_away(s, p, p != 0 && !input[p].connected);
+    if (s->actor[p].present && s->ticks >= NR_PRESENCE_TICKS) set_away(s, p, p != 0 && !input[p].connected);
     eff[p] = s->actor[p].away ? &idle_input : &input[p];
   }
   float before[NR_SIM_MAX_ACTORS];

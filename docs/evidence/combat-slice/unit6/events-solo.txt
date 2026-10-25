@@ -1,0 +1,415 @@
+   60 WAVE_BEGIN    a-1 1 4
+   61 SPAWN         a2 2 0
+   82 SPAWN         a3 2 0
+  105 SPAWN         a4 2 0
+  132 SPAWN         a5 2 0
+  140 ENTER         a2 attack
+  148 HIT           a2 0 1
+  148 ENTER         a0 hurt
+  158 ENTER         a3 attack
+  166 SKIP_INVULN   a3 0 0
+  167 ENTER         a0 idle
+  179 ENTER         a4 attack
+  187 SKIP_INVULN   a4 0 0
+  213 ENTER         a5 attack
+  220 ENTER         a2 attack
+  221 HIT           a5 0 1
+  221 ENTER         a0 hurt
+  228 SKIP_INVULN   a2 0 0
+  238 ENTER         a3 attack
+  240 ENTER         a0 idle
+  246 SKIP_INVULN   a3 0 0
+  259 ENTER         a4 attack
+  267 SKIP_INVULN   a4 0 0
+  293 ENTER         a5 attack
+  300 ENTER         a2 attack
+  301 HIT           a5 0 1
+  301 ENTER         a0 hurt
+  308 SKIP_INVULN   a2 0 0
+  318 ENTER         a3 attack
+  320 ENTER         a0 idle
+  326 SKIP_INVULN   a3 0 0
+  339 ENTER         a4 attack
+  347 SKIP_INVULN   a4 0 0
+  373 ENTER         a5 attack
+  380 ENTER         a2 attack
+  381 HIT           a5 0 1
+  381 ENTER         a0 hurt
+  388 SKIP_INVULN   a2 0 0
+  398 ENTER         a3 attack
+  400 ENTER         a0 idle
+  406 SKIP_INVULN   a3 0 0
+  419 ENTER         a4 attack
+  427 SKIP_INVULN   a4 0 0
+  453 ENTER         a5 attack
+  460 ENTER         a2 attack
+  461 HIT           a5 0 1
+  461 ENTER         a0 hurt
+  468 SKIP_INVULN   a2 0 0
+  478 ENTER         a3 attack
+  480 ENTER         a0 idle
+  486 SKIP_INVULN   a3 0 0
+  499 ENTER         a4 attack
+  507 SKIP_INVULN   a4 0 0
+  533 ENTER         a5 attack
+  540 ENTER         a2 attack
+  541 HIT           a5 0 1
+  541 ENTER         a0 hurt
+  548 SKIP_INVULN   a2 0 0
+  558 ENTER         a3 attack
+  560 ENTER         a0 idle
+  566 SKIP_INVULN   a3 0 0
+  579 ENTER         a4 attack
+  587 SKIP_INVULN   a4 0 0
+  613 ENTER         a5 attack
+  620 ENTER         a2 attack
+  621 HIT           a5 0 1
+  621 ENTER         a0 hurt
+  628 SKIP_INVULN   a2 0 0
+  638 ENTER         a3 attack
+  640 ENTER         a0 idle
+  646 SKIP_INVULN   a3 0 0
+  659 ENTER         a4 attack
+  667 SKIP_INVULN   a4 0 0
+  693 ENTER         a5 attack
+  700 ENTER         a2 attack
+  701 HIT           a5 0 1
+  701 ENTER         a0 hurt
+  708 SKIP_INVULN   a2 0 0
+  718 ENTER         a3 attack
+  720 ENTER         a0 idle
+  726 SKIP_INVULN   a3 0 0
+  739 ENTER         a4 attack
+  747 SKIP_INVULN   a4 0 0
+  773 ENTER         a5 attack
+  780 ENTER         a2 attack
+  781 HIT           a5 0 1
+  781 ENTER         a0 hurt
+  788 SKIP_INVULN   a2 0 0
+  798 ENTER         a3 attack
+  800 ENTER         a0 idle
+  806 SKIP_INVULN   a3 0 0
+  819 ENTER         a4 attack
+  827 SKIP_INVULN   a4 0 0
+  853 ENTER         a5 attack
+  860 ENTER         a2 attack
+  861 HIT           a5 0 1
+  861 ENTER         a0 hurt
+  868 SKIP_INVULN   a2 0 0
+  878 ENTER         a3 attack
+  880 ENTER         a0 idle
+  886 SKIP_INVULN   a3 0 0
+  899 ENTER         a4 attack
+  907 SKIP_INVULN   a4 0 0
+  933 ENTER         a5 attack
+  940 ENTER         a2 attack
+  941 HIT           a5 0 1
+  941 ENTER         a0 hurt
+  948 SKIP_INVULN   a2 0 0
+  958 ENTER         a3 attack
+  960 ENTER         a0 idle
+  966 SKIP_INVULN   a3 0 0
+  979 ENTER         a4 attack
+  987 SKIP_INVULN   a4 0 0
+ 1013 ENTER         a5 attack
+ 1020 ENTER         a2 attack
+ 1021 HIT           a5 0 1
+ 1021 DEAD          a0 0 0
+ 1021 ENTER         a0 knockdown
+ 1022 RETARGET      a3 -1 0
+ 1022 RETARGET      a4 -1 0
+ 1034 RETARGET      a5 -1 0
+ 1041 RETARGET      a2 -1 0
+ 1064 ENTER         a0 dead
+ 1064 LIFE_LOST     a0 2 1
+ 1154 ENTER         a0 idle
+ 1154 RESPAWN       a0 -3991 600
+ 1154 RETARGET      a2 0 0
+ 1154 RETARGET      a3 0 0
+ 1154 RETARGET      a4 0 0
+ 1154 RETARGET      a5 0 0
+ 1197 ENTER         a2 attack
+ 1197 ENTER         a3 attack
+ 1197 ENTER         a4 attack
+ 1197 ENTER         a5 attack
+ 1205 SKIP_INVULN   a2 0 0
+ 1205 SKIP_INVULN   a3 0 0
+ 1205 SKIP_INVULN   a4 0 0
+ 1205 SKIP_INVULN   a5 0 0
+ 1277 ENTER         a2 attack
+ 1277 ENTER         a3 attack
+ 1277 ENTER         a4 attack
+ 1277 ENTER         a5 attack
+ 1285 HIT           a2 0 1
+ 1285 ENTER         a0 hurt
+ 1285 SKIP_INVULN   a3 0 0
+ 1285 SKIP_INVULN   a4 0 0
+ 1285 SKIP_INVULN   a5 0 0
+ 1304 ENTER         a0 idle
+ 1357 ENTER         a2 attack
+ 1357 ENTER         a3 attack
+ 1357 ENTER         a4 attack
+ 1357 ENTER         a5 attack
+ 1365 HIT           a2 0 1
+ 1365 ENTER         a0 hurt
+ 1365 SKIP_INVULN   a3 0 0
+ 1365 SKIP_INVULN   a4 0 0
+ 1365 SKIP_INVULN   a5 0 0
+ 1384 ENTER         a0 idle
+ 1437 ENTER         a2 attack
+ 1437 ENTER         a3 attack
+ 1437 ENTER         a4 attack
+ 1437 ENTER         a5 attack
+ 1445 HIT           a2 0 1
+ 1445 ENTER         a0 hurt
+ 1445 SKIP_INVULN   a3 0 0
+ 1445 SKIP_INVULN   a4 0 0
+ 1445 SKIP_INVULN   a5 0 0
+ 1464 ENTER         a0 idle
+ 1517 ENTER         a2 attack
+ 1517 ENTER         a3 attack
+ 1517 ENTER         a4 attack
+ 1517 ENTER         a5 attack
+ 1525 HIT           a2 0 1
+ 1525 ENTER         a0 hurt
+ 1525 SKIP_INVULN   a3 0 0
+ 1525 SKIP_INVULN   a4 0 0
+ 1525 SKIP_INVULN   a5 0 0
+ 1544 ENTER         a0 idle
+ 1597 ENTER         a2 attack
+ 1597 ENTER         a3 attack
+ 1597 ENTER         a4 attack
+ 1597 ENTER         a5 attack
+ 1605 HIT           a2 0 1
+ 1605 ENTER         a0 hurt
+ 1605 SKIP_INVULN   a3 0 0
+ 1605 SKIP_INVULN   a4 0 0
+ 1605 SKIP_INVULN   a5 0 0
+ 1624 ENTER         a0 idle
+ 1677 ENTER         a2 attack
+ 1677 ENTER         a3 attack
+ 1677 ENTER         a4 attack
+ 1677 ENTER         a5 attack
+ 1685 HIT           a2 0 1
+ 1685 ENTER         a0 hurt
+ 1685 SKIP_INVULN   a3 0 0
+ 1685 SKIP_INVULN   a4 0 0
+ 1685 SKIP_INVULN   a5 0 0
+ 1704 ENTER         a0 idle
+ 1757 ENTER         a2 attack
+ 1757 ENTER         a3 attack
+ 1757 ENTER         a4 attack
+ 1757 ENTER         a5 attack
+ 1765 HIT           a2 0 1
+ 1765 ENTER         a0 hurt
+ 1765 SKIP_INVULN   a3 0 0
+ 1765 SKIP_INVULN   a4 0 0
+ 1765 SKIP_INVULN   a5 0 0
+ 1784 ENTER         a0 idle
+ 1837 ENTER         a2 attack
+ 1837 ENTER         a3 attack
+ 1837 ENTER         a4 attack
+ 1837 ENTER         a5 attack
+ 1845 HIT           a2 0 1
+ 1845 ENTER         a0 hurt
+ 1845 SKIP_INVULN   a3 0 0
+ 1845 SKIP_INVULN   a4 0 0
+ 1845 SKIP_INVULN   a5 0 0
+ 1864 ENTER         a0 idle
+ 1917 ENTER         a2 attack
+ 1917 ENTER         a3 attack
+ 1917 ENTER         a4 attack
+ 1917 ENTER         a5 attack
+ 1925 HIT           a2 0 1
+ 1925 ENTER         a0 hurt
+ 1925 SKIP_INVULN   a3 0 0
+ 1925 SKIP_INVULN   a4 0 0
+ 1925 SKIP_INVULN   a5 0 0
+ 1944 ENTER         a0 idle
+ 1997 ENTER         a2 attack
+ 1997 ENTER         a3 attack
+ 1997 ENTER         a4 attack
+ 1997 ENTER         a5 attack
+ 2005 HIT           a2 0 1
+ 2005 ENTER         a0 hurt
+ 2005 SKIP_INVULN   a3 0 0
+ 2005 SKIP_INVULN   a4 0 0
+ 2005 SKIP_INVULN   a5 0 0
+ 2024 ENTER         a0 idle
+ 2077 ENTER         a2 attack
+ 2077 ENTER         a3 attack
+ 2077 ENTER         a4 attack
+ 2077 ENTER         a5 attack
+ 2085 HIT           a2 0 1
+ 2085 ENTER         a0 hurt
+ 2085 SKIP_INVULN   a3 0 0
+ 2085 SKIP_INVULN   a4 0 0
+ 2085 SKIP_INVULN   a5 0 0
+ 2104 ENTER         a0 idle
+ 2157 ENTER         a2 attack
+ 2157 ENTER         a3 attack
+ 2157 ENTER         a4 attack
+ 2157 ENTER         a5 attack
+ 2165 HIT           a2 0 1
+ 2165 DEAD          a0 0 0
+ 2165 ENTER         a0 knockdown
+ 2178 RETARGET      a2 -1 0
+ 2178 RETARGET      a3 -1 0
+ 2178 RETARGET      a4 -1 0
+ 2178 RETARGET      a5 -1 0
+ 2208 ENTER         a0 dead
+ 2208 LIFE_LOST     a0 1 1
+ 2298 ENTER         a0 idle
+ 2298 RESPAWN       a0 -3991 600
+ 2298 RETARGET      a2 0 0
+ 2298 ENTER         a2 attack
+ 2298 RETARGET      a3 0 0
+ 2298 ENTER         a3 attack
+ 2298 RETARGET      a4 0 0
+ 2298 ENTER         a4 attack
+ 2298 RETARGET      a5 0 0
+ 2298 ENTER         a5 attack
+ 2306 SKIP_INVULN   a2 0 0
+ 2306 SKIP_INVULN   a3 0 0
+ 2306 SKIP_INVULN   a4 0 0
+ 2306 SKIP_INVULN   a5 0 0
+ 2378 ENTER         a2 attack
+ 2378 ENTER         a3 attack
+ 2378 ENTER         a4 attack
+ 2378 ENTER         a5 attack
+ 2386 SKIP_INVULN   a2 0 0
+ 2386 SKIP_INVULN   a3 0 0
+ 2386 SKIP_INVULN   a4 0 0
+ 2386 SKIP_INVULN   a5 0 0
+ 2458 ENTER         a2 attack
+ 2458 ENTER         a3 attack
+ 2458 ENTER         a4 attack
+ 2458 ENTER         a5 attack
+ 2466 HIT           a2 0 1
+ 2466 ENTER         a0 hurt
+ 2466 SKIP_INVULN   a3 0 0
+ 2466 SKIP_INVULN   a4 0 0
+ 2466 SKIP_INVULN   a5 0 0
+ 2485 ENTER         a0 idle
+ 2538 ENTER         a2 attack
+ 2538 ENTER         a3 attack
+ 2538 ENTER         a4 attack
+ 2538 ENTER         a5 attack
+ 2546 HIT           a2 0 1
+ 2546 ENTER         a0 hurt
+ 2546 SKIP_INVULN   a3 0 0
+ 2546 SKIP_INVULN   a4 0 0
+ 2546 SKIP_INVULN   a5 0 0
+ 2565 ENTER         a0 idle
+ 2618 ENTER         a2 attack
+ 2618 ENTER         a3 attack
+ 2618 ENTER         a4 attack
+ 2618 ENTER         a5 attack
+ 2626 HIT           a2 0 1
+ 2626 ENTER         a0 hurt
+ 2626 SKIP_INVULN   a3 0 0
+ 2626 SKIP_INVULN   a4 0 0
+ 2626 SKIP_INVULN   a5 0 0
+ 2645 ENTER         a0 idle
+ 2698 ENTER         a2 attack
+ 2698 ENTER         a3 attack
+ 2698 ENTER         a4 attack
+ 2698 ENTER         a5 attack
+ 2706 HIT           a2 0 1
+ 2706 ENTER         a0 hurt
+ 2706 SKIP_INVULN   a3 0 0
+ 2706 SKIP_INVULN   a4 0 0
+ 2706 SKIP_INVULN   a5 0 0
+ 2725 ENTER         a0 idle
+ 2778 ENTER         a2 attack
+ 2778 ENTER         a3 attack
+ 2778 ENTER         a4 attack
+ 2778 ENTER         a5 attack
+ 2786 HIT           a2 0 1
+ 2786 ENTER         a0 hurt
+ 2786 SKIP_INVULN   a3 0 0
+ 2786 SKIP_INVULN   a4 0 0
+ 2786 SKIP_INVULN   a5 0 0
+ 2805 ENTER         a0 idle
+ 2858 ENTER         a2 attack
+ 2858 ENTER         a3 attack
+ 2858 ENTER         a4 attack
+ 2858 ENTER         a5 attack
+ 2866 HIT           a2 0 1
+ 2866 ENTER         a0 hurt
+ 2866 SKIP_INVULN   a3 0 0
+ 2866 SKIP_INVULN   a4 0 0
+ 2866 SKIP_INVULN   a5 0 0
+ 2885 ENTER         a0 idle
+ 2938 ENTER         a2 attack
+ 2938 ENTER         a3 attack
+ 2938 ENTER         a4 attack
+ 2938 ENTER         a5 attack
+ 2946 HIT           a2 0 1
+ 2946 ENTER         a0 hurt
+ 2946 SKIP_INVULN   a3 0 0
+ 2946 SKIP_INVULN   a4 0 0
+ 2946 SKIP_INVULN   a5 0 0
+ 2965 ENTER         a0 idle
+ 3018 ENTER         a2 attack
+ 3018 ENTER         a3 attack
+ 3018 ENTER         a4 attack
+ 3018 ENTER         a5 attack
+ 3026 HIT           a2 0 1
+ 3026 ENTER         a0 hurt
+ 3026 SKIP_INVULN   a3 0 0
+ 3026 SKIP_INVULN   a4 0 0
+ 3026 SKIP_INVULN   a5 0 0
+ 3045 ENTER         a0 idle
+ 3098 ENTER         a2 attack
+ 3098 ENTER         a3 attack
+ 3098 ENTER         a4 attack
+ 3098 ENTER         a5 attack
+ 3106 HIT           a2 0 1
+ 3106 ENTER         a0 hurt
+ 3106 SKIP_INVULN   a3 0 0
+ 3106 SKIP_INVULN   a4 0 0
+ 3106 SKIP_INVULN   a5 0 0
+ 3125 ENTER         a0 idle
+ 3178 ENTER         a2 attack
+ 3178 ENTER         a3 attack
+ 3178 ENTER         a4 attack
+ 3178 ENTER         a5 attack
+ 3186 HIT           a2 0 1
+ 3186 ENTER         a0 hurt
+ 3186 SKIP_INVULN   a3 0 0
+ 3186 SKIP_INVULN   a4 0 0
+ 3186 SKIP_INVULN   a5 0 0
+ 3205 ENTER         a0 idle
+ 3258 ENTER         a2 attack
+ 3258 ENTER         a3 attack
+ 3258 ENTER         a4 attack
+ 3258 ENTER         a5 attack
+ 3266 HIT           a2 0 1
+ 3266 ENTER         a0 hurt
+ 3266 SKIP_INVULN   a3 0 0
+ 3266 SKIP_INVULN   a4 0 0
+ 3266 SKIP_INVULN   a5 0 0
+ 3285 ENTER         a0 idle
+ 3338 ENTER         a2 attack
+ 3338 ENTER         a3 attack
+ 3338 ENTER         a4 attack
+ 3338 ENTER         a5 attack
+ 3346 HIT           a2 0 1
+ 3346 DEAD          a0 0 0
+ 3346 ENTER         a0 knockdown
+ 3359 RETARGET      a2 -1 0
+ 3359 RETARGET      a3 -1 0
+ 3359 RETARGET      a4 -1 0
+ 3359 RETARGET      a5 -1 0
+ 3389 ENTER         a0 dead
+ 3389 LIFE_LOST     a0 0 0
+ 3389 GAME_OVER     a-1 0 0
+ 3600 START_REFUSED a0 0 0
+ 3900 START_REFUSED a0 0 0
+ 4200 START_REFUSED a0 0 0
+ 4500 START_REFUSED a0 0 0
+ 4800 START_REFUSED a0 0 0
+ 5100 START_REFUSED a0 0 0
+ 5400 START_REFUSED a0 0 0
+ 5700 START_REFUSED a0 0 0

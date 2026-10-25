@@ -18,7 +18,7 @@ const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : d; };
 const all = (k) => argv.flatMap((a, i) => (a === `--${k}` && argv[i + 1] ? [argv[i + 1]] : []));
 
-const APPS = opt('apps', 'nr,nr_arena_bare,nr_stage,nr_lit_h,nr_lit_v,nr_lit_h_flat,nr_lit_v_flat,nr_lit_h_left,nr_lit_v_left,nr_lit_h_left_flat,nr_lit_v_left_flat,nr_solo_0,nr_solo_1,nr_solo_2,nr_bare').split(',');
+const APPS = opt('apps', 'nr,nr_dummies,nr_bot,nr_arena_bare,nr_stage,nr_lit_h,nr_lit_v,nr_lit_h_flat,nr_lit_v_flat,nr_lit_h_left,nr_lit_v_left,nr_lit_h_left_flat,nr_lit_v_left_flat,nr_solo_0,nr_solo_1,nr_solo_2,nr_bare').split(',');
 const FRAMES = opt('frames', '120');
 const INPUT = opt('input', 'games/nr/tests/input-idle.json');
 const MANIFEST = join(ROOT, 'games/nr/programs/nr.txt');

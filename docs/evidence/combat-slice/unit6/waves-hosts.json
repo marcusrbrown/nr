@@ -1,0 +1,208 @@
+{
+  "hosts": [
+    "native-wgpu",
+    "cart-wgpu",
+    "native-gl",
+    "cart-gl"
+  ],
+  "compared": [
+    "nr.ticks",
+    "nr.hero_pos",
+    "nr.hero_clip",
+    "nr.hero_step",
+    "nr.hero_frame",
+    "nr.light_pos",
+    "nr.light_intensity",
+    "nr.cam_x",
+    "nr.cam_left",
+    "nr.checksum",
+    "nr.sim_checksum",
+    "nr.actor_y",
+    "nr.actor_vy",
+    "nr.actor_state",
+    "nr.actor_state_tick",
+    "nr.actor_hp",
+    "nr.actor_facing",
+    "nr.actor_team",
+    "nr.actor_invuln",
+    "nr.actor_kind",
+    "nr.actor_target",
+    "nr.actor_away",
+    "nr.actor_present",
+    "nr.rng",
+    "nr.wave",
+    "nr.lives",
+    "nr.input_count",
+    "nr.event_count",
+    "nr.events",
+    "nr.events_dropped",
+    "nr.game_over",
+    "nr.start_refused",
+    "nr.upgrade_ready",
+    "nr.cleared",
+    "nr.wave_phase",
+    "nr.players"
+  ],
+  "runs": [
+    {
+      "name": "waves",
+      "app": "nr",
+      "input": "games/nr/tests/input-waves.json",
+      "frames": 2700,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "bot",
+      "app": "nr_bot",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 2700,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 2325798357,
+          "ticks": 2700,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "solo",
+      "app": "nr",
+      "input": "games/nr/tests/input-waves-solo.json",
+      "frames": 6000,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 2220542028,
+          "ticks": 6000,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 2220542028,
+          "ticks": 6000,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 2220542028,
+          "ticks": 6000,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 2220542028,
+          "ticks": 6000,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "disconnect",
+      "app": "nr",
+      "input": "games/nr/tests/input-waves-disconnect.json",
+      "frames": 700,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 748833893,
+          "ticks": 700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 748833893,
+          "ticks": 700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 748833893,
+          "ticks": 700,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 748833893,
+          "ticks": 700,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    },
+    {
+      "name": "retarget",
+      "app": "nr_bot1",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 4200,
+      "hosts": {
+        "native-wgpu": {
+          "missing": 0,
+          "checksum": 1353874543,
+          "ticks": 4200,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-wgpu": {
+          "missing": 0,
+          "checksum": 1353874543,
+          "ticks": 4200,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "native-gl": {
+          "missing": 0,
+          "checksum": 1353874543,
+          "ticks": 4200,
+          "simStateEqualToNativeWebGPU": true
+        },
+        "cart-gl": {
+          "missing": 0,
+          "checksum": 1353874543,
+          "ticks": 4200,
+          "simStateEqualToNativeWebGPU": true
+        }
+      }
+    }
+  ]
+}

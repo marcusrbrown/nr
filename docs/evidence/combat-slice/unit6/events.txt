@@ -1,0 +1,106 @@
+   2 ENTER       a0 walk
+   2 ENTER       a1 walk
+  28 ENTER       a0 idle
+  30 ENTER       a0 hit1
+  34 HIT         a0 3 1
+  34 ENTER       a3 hurt
+  45 ENTER       a0 hit2
+  49 HIT         a0 3 1
+  49 ENTER       a3 hurt
+  52 ENTER       a1 idle
+  60 ENTER       a0 hit3
+  64 HIT         a0 3 2
+  64 ENTER       a3 knockdown
+  80 ENTER       a7 hit1
+  84 HIT         a7 1 1
+  84 ENTER       a1 hurt
+  85 ENTER       a0 idle
+ 100 ENTER       a0 hit1
+ 102 ENTER       a7 idle
+ 103 ENTER       a1 idle
+ 107 ENTER       a3 getup
+ 110 ENTER       a7 hit1
+ 114 SKIP_INVULN a7 1 0
+ 122 ENTER       a0 idle
+ 124 ENTER       a0 hit1
+ 132 ENTER       a7 idle
+ 139 ENTER       a3 idle
+ 146 ENTER       a0 idle
+ 147 ENTER       a0 walk
+ 170 ENTER       a7 hit3
+ 171 ENTER       a0 idle
+ 172 ENTER       a0 grab
+ 174 HIT         a7 1 2
+ 174 ENTER       a1 knockdown
+ 178 ENTER       a0 throw
+ 178 ENTER       a3 grabbed
+ 178 GRAB        a0 3 0
+ 188 RELEASE     a0 3 0
+ 188 ENTER       a3 thrown
+ 195 ENTER       a7 idle
+ 207 ENTER       a0 idle
+ 208 ENTER       a0 walk
+ 217 ENTER       a1 getup
+ 222 LAND        a3 2 0
+ 222 ENTER       a3 knockdown
+ 228 ENTER       a0 idle
+ 230 ENTER       a0 grab
+ 236 GRAB_FAIL   a0 4 0
+ 249 ENTER       a1 idle
+ 250 ENTER       a0 idle
+ 252 ENTER       a0 jump
+ 252 ENTER       a1 walk
+ 265 ENTER       a3 getup
+ 277 ENTER       a0 jumpkick
+ 279 ENTER       a1 idle
+ 279 HIT         a0 4 2
+ 279 ENTER       a4 hurt
+ 282 ENTER       a1 walk
+ 284 ENTER       a1 idle
+ 288 ENTER       a1 run
+ 289 ENTER       a0 idle
+ 297 ENTER       a3 idle
+ 298 ENTER       a4 idle
+ 300 ENTER       a0 dash
+ 325 ENTER       a0 idle
+ 330 ENTER       a0 walk
+ 342 ENTER       a0 idle
+ 350 ENTER       a0 special_knockback
+ 362 SKIP_TEAM   a0 1 0
+ 362 HIT         a0 3 1
+ 362 ENTER       a3 hurt
+ 362 HIT         a0 4 1
+ 362 ENTER       a4 hurt
+ 362 HIT         a0 5 1
+ 362 ENTER       a5 hurt
+ 362 HIT         a0 6 1
+ 362 ENTER       a6 hurt
+ 372 ENTER       a1 idle
+ 381 ENTER       a3 idle
+ 381 ENTER       a4 idle
+ 381 ENTER       a5 idle
+ 381 ENTER       a6 idle
+ 388 ENTER       a0 idle
+ 395 ENTER       a0 walk
+ 410 ENTER       a0 idle
+ 420 ENTER       a0 special_dash
+ 426 SKIP_TEAM   a0 1 0
+ 429 HIT         a0 8 2
+ 429 ENTER       a8 hurt
+ 435 HIT         a0 2 2
+ 435 ENTER       a2 hurt
+ 448 ENTER       a8 idle
+ 449 ENTER       a0 idle
+ 454 ENTER       a2 idle
+ 480 ENTER       a1 walk
+ 500 ENTER       a0 jump
+ 536 ENTER       a0 idle
+ 556 ENTER       a1 idle
+ 600 ENTER       a0 hit1
+ 604 SKIP_TEAM   a0 1 0
+ 604 HIT         a0 2 1
+ 604 ENTER       a2 hurt
+ 622 ENTER       a0 idle
+ 623 ENTER       a2 idle
+ 650 ENTER       a0 walk
+ 658 ENTER       a0 idle

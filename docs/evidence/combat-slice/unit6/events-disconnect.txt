@@ -1,0 +1,83 @@
+   60 WAVE_BEGIN    a-1 1 4
+   61 SPAWN         a2 2 0
+   82 SPAWN         a3 2 1
+  100 ENTER         a1 hit1
+  105 SPAWN         a4 2 0
+  115 ENTER         a1 hit2
+  118 AWAY          a1 1 0
+  118 RETARGET      a3 0 0
+  132 SPAWN         a5 2 0
+  137 ENTER         a1 idle
+  140 ENTER         a2 attack
+  148 HIT           a2 0 1
+  148 ENTER         a0 hurt
+  158 ENTER         a3 attack
+  166 SKIP_INVULN   a3 0 0
+  167 ENTER         a0 idle
+  179 ENTER         a4 attack
+  187 SKIP_INVULN   a4 0 0
+  213 ENTER         a5 attack
+  220 ENTER         a2 attack
+  221 HIT           a5 0 1
+  221 ENTER         a0 hurt
+  228 SKIP_INVULN   a2 0 0
+  238 ENTER         a3 attack
+  240 ENTER         a0 idle
+  246 SKIP_INVULN   a3 0 0
+  259 ENTER         a4 attack
+  267 SKIP_INVULN   a4 0 0
+  293 ENTER         a5 attack
+  300 ENTER         a2 attack
+  301 HIT           a5 0 1
+  301 ENTER         a0 hurt
+  308 SKIP_INVULN   a2 0 0
+  318 ENTER         a3 attack
+  320 ENTER         a0 idle
+  326 SKIP_INVULN   a3 0 0
+  339 ENTER         a4 attack
+  347 SKIP_INVULN   a4 0 0
+  373 ENTER         a5 attack
+  380 ENTER         a2 attack
+  381 HIT           a5 0 1
+  381 ENTER         a0 hurt
+  388 SKIP_INVULN   a2 0 0
+  398 ENTER         a3 attack
+  400 ENTER         a0 idle
+  406 SKIP_INVULN   a3 0 0
+  419 ENTER         a4 attack
+  427 SKIP_INVULN   a4 0 0
+  453 ENTER         a5 attack
+  460 ENTER         a2 attack
+  461 HIT           a5 0 1
+  461 ENTER         a0 hurt
+  468 SKIP_INVULN   a2 0 0
+  478 ENTER         a3 attack
+  480 ENTER         a0 idle
+  486 SKIP_INVULN   a3 0 0
+  499 ENTER         a4 attack
+  507 SKIP_INVULN   a4 0 0
+  533 ENTER         a5 attack
+  540 ENTER         a2 attack
+  541 HIT           a5 0 1
+  541 ENTER         a0 hurt
+  548 SKIP_INVULN   a2 0 0
+  558 ENTER         a3 attack
+  560 AWAY          a1 0 0
+  560 ENTER         a0 idle
+  566 SKIP_INVULN   a3 0 0
+  579 ENTER         a4 attack
+  580 ENTER         a1 hit1
+  587 SKIP_INVULN   a4 0 0
+  602 ENTER         a1 idle
+  613 ENTER         a5 attack
+  620 ENTER         a2 attack
+  621 HIT           a5 0 1
+  621 ENTER         a0 hurt
+  628 SKIP_INVULN   a2 0 0
+  638 ENTER         a3 attack
+  640 ENTER         a0 idle
+  646 SKIP_INVULN   a3 0 0
+  659 ENTER         a4 attack
+  667 SKIP_INVULN   a4 0 0
+  693 ENTER         a5 attack
+  700 ENTER         a2 attack

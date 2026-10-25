@@ -1,0 +1,2493 @@
+{
+  "hosts": {
+    "native": "native binary on WebGPU (Dawn, Metal, offscreen)",
+    "cart": "build/cart-wgpu in headless Chromium on WebGPU",
+    "gl": "state-only: native binary on GL and build/cart in headless Chromium on GL"
+  },
+  "sets": [
+    "scroll",
+    "pillar",
+    "stage",
+    "solo",
+    "lit",
+    "bare",
+    "combat",
+    "waves"
+  ],
+  "runs": [
+    {
+      "set": "scroll",
+      "app": "nr_dummies",
+      "frames": 61,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f61.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr_dummies",
+      "frames": 232,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f232.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr_dummies",
+      "frames": 352,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f352.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr_dummies",
+      "frames": 426,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f426.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "scroll",
+      "app": "nr_dummies",
+      "frames": 640,
+      "input": "games/nr/tests/input-scroll.json",
+      "file": "scroll-f640.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "pillar",
+      "app": "nr_dummies",
+      "frames": 243,
+      "input": "games/nr/tests/input-pillar.json",
+      "file": "pillar-f243.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "pillar",
+      "app": "nr_arena_bare",
+      "frames": 243,
+      "input": "games/nr/tests/input-pillar.json",
+      "file": "pillar_bare-f243.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "stage",
+      "app": "nr_stage",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "stage-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "stage",
+      "app": "nr_stage",
+      "frames": 120,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "stage-f120.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "stage",
+      "app": "nr_stage",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "stage-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "stage",
+      "app": "nr_stage",
+      "frames": 240,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "stage-f240.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "solo",
+      "app": "nr_solo_0",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "solo_0-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "solo",
+      "app": "nr_solo_1",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "solo_1-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "solo",
+      "app": "nr_solo_2",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "solo_2-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_flat",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_flat-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_flat",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_flat-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_flat",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_flat-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_flat",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_flat-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_flat",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_flat-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_flat",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_flat-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_flat",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_flat-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_flat",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_flat-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left_flat",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left_flat-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left_flat",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left_flat-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left_flat",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left_flat-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_h_left_flat",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_h_left_flat-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left_flat",
+      "frames": 30,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left_flat-f30.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left_flat",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left_flat-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left_flat",
+      "frames": 180,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left_flat-f180.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "lit",
+      "app": "nr_lit_v_left_flat",
+      "frames": 210,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "lit_v_left_flat-f210.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "bare",
+      "app": "nr_bare",
+      "frames": 60,
+      "input": "games/nr/tests/input-idle.json",
+      "file": "bare-f60.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "combat",
+      "app": "nr_dummies",
+      "frames": 49,
+      "input": "games/nr/tests/input-combat.json",
+      "file": "combat-f49.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "combat",
+      "app": "nr_dummies",
+      "frames": 183,
+      "input": "games/nr/tests/input-combat.json",
+      "file": "combat-f183.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "combat",
+      "app": "nr_dummies",
+      "frames": 205,
+      "input": "games/nr/tests/input-combat.json",
+      "file": "combat-f205.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "combat",
+      "app": "nr_dummies",
+      "frames": 279,
+      "input": "games/nr/tests/input-combat.json",
+      "file": "combat-f279.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "combat",
+      "app": "nr_dummies",
+      "frames": 362,
+      "input": "games/nr/tests/input-combat.json",
+      "file": "combat-f362.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "combat",
+      "app": "nr_dummies",
+      "frames": 429,
+      "input": "games/nr/tests/input-combat.json",
+      "file": "combat-f429.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "combat",
+      "app": "nr_dummies",
+      "frames": 700,
+      "input": "games/nr/tests/input-combat.json",
+      "file": "combat-f700.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "waves",
+      "app": "nr",
+      "frames": 130,
+      "input": "games/nr/tests/input-waves.json",
+      "file": "waves-f130.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "waves",
+      "app": "nr",
+      "frames": 450,
+      "input": "games/nr/tests/input-waves.json",
+      "file": "waves-f450.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "waves",
+      "app": "nr",
+      "frames": 990,
+      "input": "games/nr/tests/input-waves.json",
+      "file": "waves-f990.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "waves",
+      "app": "nr",
+      "frames": 1600,
+      "input": "games/nr/tests/input-waves.json",
+      "file": "waves-f1600.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    },
+    {
+      "set": "waves",
+      "app": "nr",
+      "frames": 2050,
+      "input": "games/nr/tests/input-waves.json",
+      "file": "waves-f2050.png",
+      "native": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "cart": {
+        "size": [
+          1920,
+          1080
+        ],
+        "missing": 0
+      },
+      "hosts": {
+        "cartVsNative": {
+          "sameSize": true,
+          "identical": true,
+          "differingPixels": 0,
+          "maxChannelDiff": 0,
+          "simStateEqual": true
+        }
+      }
+    }
+  ],
+  "gl": [
+    {
+      "app": "nr_dummies",
+      "name": "scroll",
+      "input": "games/nr/tests/input-scroll.json",
+      "frames": 760,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 3890942881,
+        "ticks": 760,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 3890942881,
+        "ticks": 760,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_dummies",
+      "name": "pillar",
+      "input": "games/nr/tests/input-pillar.json",
+      "frames": 300,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1727584357,
+        "ticks": 300,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1727584357,
+        "ticks": 300,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_arena_bare",
+      "name": "pillar_bare",
+      "input": "games/nr/tests/input-pillar.json",
+      "frames": 300,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1727584357,
+        "ticks": 300,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1727584357,
+        "ticks": 300,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_stage",
+      "name": "stage",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4004692503,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4004692503,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_solo_0",
+      "name": "solo_0",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 2615578657,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 2615578657,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_solo_1",
+      "name": "solo_1",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4114350337,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4114350337,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_solo_2",
+      "name": "solo_2",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1310471553,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1310471553,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_h",
+      "name": "lit_h",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_v",
+      "name": "lit_v",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_h_flat",
+      "name": "lit_h_flat",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_v_flat",
+      "name": "lit_v_flat",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_h_left",
+      "name": "lit_h_left",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_v_left",
+      "name": "lit_v_left",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_h_left_flat",
+      "name": "lit_h_left_flat",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4106871587,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_lit_v_left_flat",
+      "name": "lit_v_left_flat",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4066660890,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_bare",
+      "name": "bare",
+      "input": "games/nr/tests/input-idle.json",
+      "frames": 60,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4004692503,
+        "ticks": 60,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 4004692503,
+        "ticks": 60,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr_dummies",
+      "name": "combat",
+      "input": "games/nr/tests/input-combat.json",
+      "frames": 760,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1016920866,
+        "ticks": 760,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 1016920866,
+        "ticks": 760,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    },
+    {
+      "app": "nr",
+      "name": "waves",
+      "input": "games/nr/tests/input-waves.json",
+      "frames": 2700,
+      "native-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 2325798357,
+        "ticks": 2700,
+        "api": 1
+      },
+      "cart-gl": {
+        "missing": 0,
+        "px": [
+          1920,
+          1080,
+          640,
+          360,
+          640,
+          360,
+          3,
+          0
+        ],
+        "checksum": 2325798357,
+        "ticks": 2700,
+        "api": 1
+      },
+      "simChecksumEqual": true
+    }
+  ]
+}

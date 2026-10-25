@@ -17,8 +17,8 @@
  *
  * Controls (key / pad): move arrows / d-pad or left stick, attack Z / west, jump space / south, grab X / east,
  * special C / north, dash left shift / right shoulder, start Return / start; the special's dash variant is picked by
- * holding V / left shoulder with it. A player is present when its pad is connected on the first tick (player 0 always
- * is); a pad that goes away leaves its hero idle and untouchable until it is back.
+ * holding V / left shoulder with it. A player is present when its pad is connected on tick 30 (player 0 always is; the
+ * title will decide this); a pad that goes away leaves its hero idle and untouchable until it is back.
  *
  * Self-play. `nr.demo` is a field a host sets: 1 plays the combat script of the test dummies' arena (demo_combat.inc), 2
  * hands both players to the bot below, which fights the waves. NR_BOT_MASK builds an app whose players are bots from
@@ -426,7 +426,8 @@ static uint16_t bot_choose(int p) {
 
 /* The bot's input for player `p`; with the masks of both players known the tick is logged when either changed. */
 static void bot_input(int p, nr_input *in) {
-  bot.mask[p] = bot_choose(p);
+  /* the first tick is neutral: a host that loads the app consumes its first frame with no input */
+  bot.mask[p] = S.sim.ticks == 0 ? 0 : bot_choose(p);
   input_from_mask(bot.mask[p], bot.was[p], in);
 }
 
@@ -521,11 +522,17 @@ static void start_sim(void) {
   S.sim.log_moves = 0;
 #endif
   memset(&bot, 0, sizeof bot);
+  S.checksum = CW_HASH32_INIT;
 }
 
 static void step_sim(void) {
   nr_input in[NR_PLAYERS];
-  static int32_t end_tick;
+  static int32_t end_tick, demo_was;
+  if (S.demo != demo_was) {
+    /* a host turning the self-play on starts the street over: both players are bots from the first tick */
+    if (S.demo == 2 && S.sim.ticks > 0) start_sim();
+    demo_was = S.demo;
+  }
   if (S.demo == 1 && NR_DUMMIES && S.sim.ticks >= NR_DEMO_LOOP) start_sim();
   if (S.demo == 2 && (S.sim.game_over || S.sim.waves.cleared)) {
     if (!end_tick) end_tick = S.sim.ticks;

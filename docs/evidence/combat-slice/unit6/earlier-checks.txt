@@ -1,0 +1,20 @@
+## stage-check --dir out/unit6/caps
+native: heroes 0-2 on atlas frame 4, hero 3 on frame 8
+
+all checks passed
+## lit-side-check --dir out/unit6/caps
+             ratio swing 1: 7.27x
+
+all checks passed
+## lit-side-check --dir out/unit6/caps --facing left
+             ratio swing 1: 7.27x
+
+all checks passed
+## scroll-check --dir out/unit6/caps --out out/unit6/scroll
+ok   lights: x spans 1.1..21.7, -0.7..24.8, 2.1..24.4 (together -0.7..24.8), flash slot at 0
+ok   parallax: camera 4.44 units; shifts (screen px) play lane 879, near shop sign 780 (x0.887), far tower sign 695 (x0.791), skyline window 483 (x0.549); an actor's world shift is 852.5
+all scroll checks passed
+## ordering-check --out out/unit6/ordering
+ok   npc2 against the pillar: {"expect":"actor in front of the pillar","overlapPixels":2156,"actorShare":1}
+ok   npc2 away from the pillar: {"silhouettePixels":450,"visibleShare":1,"note":"the projection finds the actor where the picture has it"}
+PASS: the pillar occludes the actor behind it and the actor in front occludes the pillar
