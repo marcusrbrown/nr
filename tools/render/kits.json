@@ -120,10 +120,31 @@
       },
       "licenceFile": {
         "path": "License.txt",
-        "sha256": null
+        "sha256": "6d01f55c6e4c49a2c9963e147e561945ae2c83958c8ca667d90a6bffdbfac061"
       },
-      "notes": "Not yet downloaded: no file is pinned. First fetch: download the Standard pack from downloadPage, then run tools/render/fetch-kits.sh --from <dir> --kit universal-animation-library-2 --pin and commit kits.json. The licence file name above is assumed from UAL1's pack and is corrected at that point if it differs.",
-      "files": [],
+      "notes": "Standard (free) pack: UAL2_Standard.glb is the animation set; UAL2_Standard_RM.glb is the same set with root motion; Mannequin_F is a mannequin the animations are authored on. Sizes and sha256 were computed on first fetch.",
+      "files": [
+        {
+          "path": "Mannequin_F.blend",
+          "sha256": "980c6eee3a2fb2ee1028d8bdd5bb95f7df983bc9de45e974ee77646b1eafbc70",
+          "size": 4130952
+        },
+        {
+          "path": "Mannequin_F.glb",
+          "sha256": "2ee6cc3fe888d9b144afa8cc4b2ab7bfc5d13a0d5b7548df777f61f64ad65fa6",
+          "size": 1442824
+        },
+        {
+          "path": "UAL2_Standard_RM.glb",
+          "sha256": "814eee878f82934992d3ea746c539df25e981487109c591f5efbb8dd03286f99",
+          "size": 8095936
+        },
+        {
+          "path": "UAL2_Standard.glb",
+          "sha256": "8cee20ab1bc55130092447e810e26df22dd2803eccc54f52137a7d54d7ab88a8",
+          "size": 8091444
+        }
+      ],
       "advertisedActions": "130+"
     }
   ]

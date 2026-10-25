@@ -3,12 +3,13 @@
 //   node --test tools/render/tests/kits.test.mjs
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { ALLOWED_LICENCES, KitError, assertLicenceAllowed, loadManifest, stageKit } from '../kits.mjs';
+import { ALLOWED_LICENCES, KitError, assertLicenceAllowed, loadManifest, selectKits, stageKit } from '../kits.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const sha = (b) => createHash('sha256').update(b).digest('hex');
@@ -85,4 +86,24 @@ test('the committed manifest names a manual-download page for every kit', () => 
     assert.match(kit.downloadPage, /^https:\/\/quaternius\.itch\.io\//, kit.id);
     assert.equal(kit.acquisition.method, 'manual', kit.id);
   }
+});
+
+test('an unknown --kit id is an error that lists the valid ids, and --pin writes nothing', () => {
+  const f = fixture();
+  assert.throws(() => selectKits(f.manifest, 'ual2'), (e) => e instanceof KitError && /unknown kit id "ual2"; valid ids: toy$/.test(e.message));
+  assert.equal(selectKits(f.manifest, 'toy').length, 1);
+  assert.equal(selectKits(f.manifest, undefined).length, 1);
+
+  const manifestPath = join(f.dir, 'kits.json');
+  writeFileSync(manifestPath, JSON.stringify(f.manifest, null, 2));
+  const before = readFileSync(manifestPath, 'utf8');
+  const r = spawnSync('node', [join(ROOT, 'tools/render/kits.mjs'), '--from', f.src, '--kit', 'ual2', '--pin'], { encoding: 'utf8', env: { ...process.env, KITS_JSON: manifestPath, KITS_DIR: f.depsDir } });
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stderr, /unknown kit id "ual2"; valid ids: toy/);
+  assert.equal(r.stdout, '');
+  assert.equal(readFileSync(manifestPath, 'utf8'), before, 'the manifest is untouched');
+  const bare = spawnSync('node', [join(ROOT, 'tools/render/kits.mjs'), '--kit'], { encoding: 'utf8', env: { ...process.env, KITS_JSON: manifestPath, KITS_DIR: f.depsDir } });
+  assert.equal(bare.status, 1);
+  assert.match(bare.stderr, /--kit needs a kit id/);
+  rmSync(f.dir, { recursive: true, force: true });
 });

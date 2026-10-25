@@ -33,6 +33,14 @@ export class KitError extends Error {}
 
 const sha256 = (buf) => createHash('sha256').update(buf).digest('hex');
 
+/** The kits a --kit option selects: all of them without one; an unknown id is an error listing the valid ids. */
+export function selectKits(manifest, only) {
+  if (only === undefined) return manifest.kits;
+  const kit = manifest.kits.find((k) => k.id === only);
+  if (!kit) throw new KitError(`unknown kit id ${JSON.stringify(only)}; valid ids: ${manifest.kits.map((k) => k.id).join(', ')}`);
+  return [kit];
+}
+
 export function loadManifest(path = KITS_JSON) {
   const m = JSON.parse(readFileSync(path, 'utf8'));
   if (m.schemaVersion !== 1 || !Array.isArray(m.kits)) throw new KitError(`${path}: not a schemaVersion 1 kit manifest`);
@@ -167,10 +175,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const manifestPath = resolve(process.env.KITS_JSON ?? KITS_JSON);
     const manifest = loadManifest(manifestPath);
     const only = opt('kit');
+    if (argv.includes('--kit') && only === undefined) throw new KitError('--kit needs a kit id');
     const from = opt('from') ? resolve(opt('from')) : undefined;
     if (flag('pin') && !(from && only)) throw new KitError('--pin needs --from <dir> and --kit <id>');
-    for (const kit of manifest.kits) {
-      if (only && kit.id !== only) continue;
+    for (const kit of selectKits(manifest, only)) {
       if (!kit.files.length && !flag('pin')) {
         console.log(`${kit.id}: no files pinned yet (awaiting the first manual download; ${kit.downloadPage})`);
         continue;
