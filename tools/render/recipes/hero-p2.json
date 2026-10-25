@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "name": "hero-p2",
+  "blender": { "version": "4.5.15", "buildHash": "5afeabba6097" },
+  "cell": { "width": 160, "height": 160 },
+  "supersample": 4,
+  "camera": {
+    "projection": "orthographic",
+    "elevationDeg": 20,
+    "azimuthDeg": 0,
+    "distance": 10,
+    "target": [0, 0.342020, 0.939693],
+    "orthoHeight": 2.5,
+    "pivotWorld": [0, 0, 0]
+  },
+  "render": { "seed": 1, "samples": 1 },
+  "atlas": { "pageSize": 2048, "dilate": 2 },
+  "model": { "profile": "../profiles/hero.json", "profileSha256": "ed1477fa48405d010845aa0dcff3d903fe9713f1acd22d6b1b6390380ef87879",
+    "paletteOverride": { "hair": "#1fe8ff", "trim": "#1fe8ff", "glove": "#1fe8ff" } },
+  "slots": [
+    { "id": "idle", "clip": "idle", "frames": 8, "facing": "east", "ms": 250, "loop": true },
+    { "id": "walk", "clip": "walk", "frames": 8, "facing": "east", "ms": 120, "loop": true },
+    { "id": "run", "clip": "run", "frames": 8, "facing": "east", "ms": 90, "loop": true },
+    { "id": "hit1", "clip": "hit1", "frames": 6, "facing": "east", "ms": 60, "loop": false },
+    { "id": "hit2", "clip": "hit2", "frames": 6, "facing": "east", "ms": 60, "loop": false },
+    { "id": "hit3", "clip": "hit3", "frames": 7, "facing": "east", "ms": 60, "loop": false },
+    { "id": "jump", "clip": "jump", "frames": 6, "facing": "east", "ms": 100, "loop": false },
+    { "id": "throw", "clip": "throw", "frames": 6, "facing": "east", "ms": 80, "loop": false },
+    { "id": "hurt", "clip": "hurt", "frames": 4, "facing": "east", "ms": 80, "loop": false },
+    { "id": "knockdown", "clip": "knockdown", "frames": 8, "facing": "east", "ms": 90, "loop": false },
+    { "id": "getup", "clip": "getup", "frames": 6, "facing": "east", "ms": 90, "loop": false },
+    { "id": "dash", "clip": "dash", "frames": 6, "facing": "east", "ms": 70, "loop": true },
+    { "id": "special_knockback", "clip": "special_knockback", "frames": 9, "facing": "east", "ms": 70, "loop": false },
+    { "id": "special_dash", "clip": "special_dash", "frames": 8, "facing": "east", "ms": 60, "loop": false }
+  ]
+}

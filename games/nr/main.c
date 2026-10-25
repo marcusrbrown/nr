@@ -11,7 +11,8 @@
  * Simulation. sim.c owns the actors (two heroes, then the grunts and heavies the waves spawn, or the test dummies),
  * their states, hits, lives, the leash and the camera; waves.c the spawn schedule. This file feeds the simulation each
  * player's input, maps every actor's state to its character's clip and frame, and draws: the hero, the grunt and the
- * heavy each have an atlas and a material, and an actor shows the plane of its own. An actor faces left on a mirrored
+ * heavy each have an atlas and a material (player 2's hero a second colour sheet over the same frames and normals, so the
+ * two players wear the HUD's magenta and cyan), and an actor shows the plane of its own. An actor faces left on a mirrored
  * plane (anim.h: nr_atlas_geometry): the plane's tangent frame mirrors with the picture, so the normal map still lights
  * the side that faces the light.
  *
@@ -217,6 +218,7 @@ static struct {
   nr_sim sim;
   nr_view view;
   nr_atlas atlas[CHARS];      /* hero, grunt, heavy */
+  nr_atlas hero_p2;           /* the hero's colour sheet for player 2 (accent cyan; player 1's is magenta): the same frames and normals */
   int vclip[CHARS][NR_ST_COUNT]; /* the atlas clip each state shows, per character */
   arena ar;
   t3_renderer *renderer;
@@ -934,7 +936,9 @@ static void build_scene(int w, int h) {
 
   for (int i = 0; i < ACTORS; i++) {
     for (int c = 0; c < (NR_ARENA ? CHARS : 1); c++) {
-      S.mesh[i][c] = t3_mesh_new(S.atlas[c].geom[c == char_of_actor(i) ? S.frame[i] : 0], S.atlas[c].material);
+      /* the players wear their HUD colours: player 2 (actor 1) draws with the hero's second colour sheet */
+      t3_material *mat = NR_ARENA && c == 0 && i == 1 ? S.hero_p2.material : S.atlas[c].material;
+      S.mesh[i][c] = t3_mesh_new(S.atlas[c].geom[c == char_of_actor(i) ? S.frame[i] : 0], mat);
       t3_object_set_rotation(S.mesh[i][c], -S.pitch, 0, 0);
       S.mesh[i][c]->base.visible = false;
       t3_object_add((t3_object *)S.scene, S.mesh[i][c]);
@@ -1121,6 +1125,10 @@ static void init(void *user) {
   }
   for (int i = 0; i < ACTORS; i++) S.actor_facing[i] = NR_LIT_FACE; /* the sim sets the arena's actors' facing */
 #if NR_ARENA
+  if (!nr_atlas_variant(&S.hero_p2, &S.atlas[0], "atlases/hero-p2.png")) {
+    cw_error("nr: the hero's second colour sheet did not load");
+    return;
+  }
   /* a standing actor's head recedes behind its ground point by its height times the sine of the plane's pitch */
   float reach = HERO_ATLAS.pivot_y / PPU * cw_sin(S.pitch) + 0.03f;
   if (!arena_load(&S.ar, ACTOR_HALF, reach)) {

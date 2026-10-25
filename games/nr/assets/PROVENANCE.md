@@ -8,17 +8,32 @@ The manifest `hero.json` records the recipe, profile and per-frame payload hashe
 
 | Input | sha256 |
 | --- | --- |
-| `tools/render/recipes/hero.json` | `13af28929f0d17f68cebd5ae6ad0efb5db1070e4b90d1d8463384585f1d298d3` |
-| `tools/render/profiles/hero.json` | `ecef1347ea52e6b977b3cc804ecf1359f115cc8be4e99cea94c17c92ceff33b6` |
-| `atlases/hero.png` | `920b7ca292249feed69485f72cf249cd21afdb9d0ada6f4190d6f83db5f083f7` |
+| `tools/render/recipes/hero.json` | `365e95c19299c76716fde13e3fc7af776530cf81d3ce86f2da9639c89083baa3` |
+| `tools/render/profiles/hero.json` | `ed1477fa48405d010845aa0dcff3d903fe9713f1acd22d6b1b6390380ef87879` |
+| `atlases/hero.png` | `1dbb9fbc96c22eff84dce0ddbb35dbb93930bb16f3214ea1768201b21c4be934` |
 | `atlases/hero-n.png` | `31a68391ac36877f5d5e66e611b9fd41a0aaf6fadeca668603daac4232b722f6` |
-| `atlases/hero.json` | `45cb1b49513383e59daed2d14485393eb6eaaf457c89d70fca078ac52b996ee5` |
+| `atlases/hero.json` | `903ddeee52d0c38063e4e3420be7310a0e43635892121351e92d67683ff5b062` |
 
 The atlas holds 14 clips and 96 frames on one 1920x1280 page per sheet: idle, walk, run, hit1, hit2, hit3, jump, throw,
 hurt, knockdown, getup, dash, special_knockback and special_dash. Rendered twice from this recipe and profile, the
 manifest and both sheets are byte-identical (`docs/evidence/combat-slice/unit3/reproducibility.json`).
 
 Changing the profile changes its hash; `tools/render/pin-profile.mjs` re-pins the recipe, and the atlas is re-rendered.
+The accents (`hair`, `trim`, `glove`) are the HUD's magenta (`PINK` of `ui.c`, `#ff2bd6`): this atlas is player 1's.
+
+## atlases/hero-p2.png, hero-p2.json
+
+Player 2's colour sheet: rendered by `tools/render/render-all.sh hero-p2` from `tools/render/recipes/hero-p2.json`, which pins the
+same `tools/render/profiles/hero.json` as the hero's recipe and overrides its `hair`, `trim` and `glove` palette entries with the HUD's
+cyan (`CYAN` of `ui.c`, `#1fe8ff`) (`model.paletteOverride`), installed with `INSTALL=games/nr/assets/atlases INSTALL_SKIP=hero-p2-n.png`.
+Everything but those texels is the hero atlas: the frames, clips, pivots, alpha and the normal sheet are the same, so the game loads this
+colour sheet over `hero-n.png` and the normal sheet of this render is not kept. `games/nr/tests/hero-variant-check.mjs` checks all of it.
+
+| Input | sha256 |
+| --- | --- |
+| `tools/render/recipes/hero-p2.json` | `910aa3f5ecef2c8514105e54dec25e53a4c0db5a9d40a87e07478d9b075dbf9f` |
+| `atlases/hero-p2.png` | `50d718a25d757971ee9f13451d8c1f6e909bac05a4f2a9b212585e36a16aebbe` |
+| `atlases/hero-p2.json` | `e1c92e9d5468d65dfeccbed452afabdac64c1378be58ec18bc0c20c49ffb570f` |
 
 ## atlases/grunt.png, grunt-n.png, grunt.json
 

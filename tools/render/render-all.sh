@@ -7,6 +7,7 @@
 #                                                   docs/evidence/combat-slice/clip-audit.md, <OUT>/audit/clip-audit.json
 #   OUT=<dir> tools/render/render-all.sh ...        output root (default out/render)
 #   INSTALL=<dir> tools/render/render-all.sh hero   also copy each atlas (sheets + manifest) into <dir>
+#   INSTALL_SKIP="hero-p2-n.png"                    files of the atlas not copied (a colour variant shares the base's normal sheet)
 #
 # Per recipe <name>: <OUT>/<name>/raw (nr_render.py frames + done.json), <OUT>/<name>/atlas (sheets + manifest),
 # <OUT>/<name>/blender.log. A render that exits non-zero stops the run with that exit code (11: Blender version or
@@ -55,5 +56,12 @@ for name in "${names[@]}"; do
     exit "$rc"
   fi
   node "$RENDER/post.mjs" --recipe "$recipe" --raw "$dir/raw" --out "$dir/atlas"
-  if [ -n "${INSTALL:-}" ]; then mkdir -p "$INSTALL" && cp "$dir"/atlas/* "$INSTALL"/ && echo "render-all: $name installed in $INSTALL"; fi
+  if [ -n "${INSTALL:-}" ]; then
+    mkdir -p "$INSTALL"
+    for f in "$dir"/atlas/*; do
+      case " ${INSTALL_SKIP:-} " in *" $(basename "$f") "*) continue ;; esac
+      cp "$f" "$INSTALL"/
+    done
+    echo "render-all: $name installed in $INSTALL"
+  fi
 done

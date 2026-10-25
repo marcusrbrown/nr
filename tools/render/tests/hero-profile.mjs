@@ -234,6 +234,21 @@ test('a slot naming a clip the profile lacks exits 12', () => {
   assert.match(r.log, /the profile has no clip 'moonwalk'/);
 });
 
+test('a palette override naming a colour the profile lacks exits 12, and the schema refuses a malformed one', () => {
+  const dir = join(OUT, 'bad-override');
+  mkdirSync(join(dir, 'recipes'), { recursive: true });
+  cpSync(join(RENDER, 'profiles'), join(dir, 'profiles'), { recursive: true });
+  const bad = structuredClone(recipe);
+  bad.model.paletteOverride = { warpaint: '#ff0000' };
+  writeFileSync(join(dir, 'recipes/hero.json'), JSON.stringify(bad));
+  const r = render(join(dir, 'recipes/hero.json'), join(dir, 'raw'));
+  assert.equal(r.status, 12);
+  assert.match(r.log, /paletteOverride names colours the profile's palette does not have: \['warpaint'\]/);
+  const malformed = structuredClone(recipe);
+  malformed.model.paletteOverride = { hair: 'cyan' };
+  assert.ok(validateRecipe(malformed).some((e) => /paletteOverride\.hair/.test(e)));
+});
+
 test('every ready clip of the profile renders (its actions bind and pose the figure), the gaps are refused', () => {
   const dir = join(OUT, 'all-clips');
   mkdirSync(join(dir, 'recipes'), { recursive: true });

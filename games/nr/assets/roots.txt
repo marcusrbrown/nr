@@ -3,6 +3,7 @@
 atlases/hero.png
 atlases/hero-n.png
 atlases/hero.json
+atlases/hero-p2.png
 atlases/grunt.png
 atlases/grunt-n.png
 atlases/grunt.json

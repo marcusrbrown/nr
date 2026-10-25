@@ -149,6 +149,31 @@ artifacts). Measured on one machine: Apple M1 Pro, macOS 15.7.9, romdev 0.150.2.
   The full game's 2D screens are not in that scene.
 - Not settled here: the look. Whether the lit side, silhouettes, occlusion and screens are right is the owner's checklist.
 
+## Round 2: the look-gate review
+
+The independent review of the look set (`docs/evidence/combat-slice/look/REVIEW-oracle.md`) found six things to tune. Each is a
+presentation change except the camera's allowance, which is in the simulation's leash; the decisions follow, with the captures
+that show them in `docs/evidence/combat-slice/README.md` ("Round 2").
+
+### Per-player accent (finding 3)
+
+Player 1 and player 2 wear the HUD's colours: `PINK` (`#ff2bd6`, magenta) and `CYAN` (`#1fe8ff`) of `ui.c`. The accent regions of the
+hero profile are `hair`, `trim` and `glove`. Options weighed:
+
+- A tint of the accent regions at run time: the sprite's colour pass has no mask (the atlas carries colour, normal and alpha only), and a
+  tint multiplies every texel, so it cannot recolour the accents alone. Rejected.
+- A second hero atlas rendered from a second profile: a duplicate of a 400-line profile that drifts from the hero's. Rejected.
+- A second colour sheet from the same profile with a recipe-level override: chosen. `tools/render/recipes/hero-p2.json` pins the hero's
+  profile and sets `model.paletteOverride` (`hair`, `trim`, `glove` to cyan); `hero.json`'s palette has those three entries magenta, so
+  the hero atlas is player 1's. The renderer refuses an override that names a colour the profile lacks (exit 12).
+
+The frames, clips, pivots, alpha and normal sheet of the two renders are identical (`games/nr/tests/hero-variant-check.mjs` compares the
+manifests, the normal sheet's pixel hash and every texel: the only differences are the accent colour pair). The game therefore keeps one
+hero atlas for geometry and normals and loads only the second colour sheet (`nr_atlas_variant` in `anim.c`: a material of its own over
+the hero's geometry and normal texture, its draws are a second batch of the same `l0400` program state, so the program table is unchanged). Player 2 (actor 1) draws with it.
+Cost: one more decoded colour sheet, 9.38 MiB (the normal sheet is shared), 45.49 MiB for the three atlases and the variant against
+64 MiB. Presentation only: no simulation field, checksum or golden changes.
+
 ## Consequences
 
 - Art is reproducible from a recipe and a pinned Blender; a Blender or kit change is a pin change and a re-render with hash comparison.

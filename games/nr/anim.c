@@ -142,6 +142,25 @@ bool nr_atlas_load(nr_atlas *a, const char *name, float pixels_per_unit, bool fl
   return true;
 }
 
+bool nr_atlas_variant(nr_atlas *v, const nr_atlas *base, const char *colour_file) {
+  *v = *base;
+  t3_texture *albedo = load_sheet(colour_file, T3_SRGB_COLOR_SPACE);
+  if (!albedo) return false;
+  t3_texture *nrm = base->material->normal_map;
+  if (!nrm || albedo->width != nrm->width || albedo->height != nrm->height) {
+    cw_error("anim: %s is not the size of the atlas's sheets", colour_file);
+    return false;
+  }
+  v->material = t3_mesh_standard_material_new(0xffffff);
+  v->material->metalness = 0.0f;
+  v->material->roughness = 1.0f;
+  t3_material_set_map(v->material, albedo);
+  t3_material_set_texture(v->material, T3_NORMAL_MAP, nrm);
+  v->material->normal_scale = base->material->normal_scale;
+  v->material->alpha_test = base->material->alpha_test;
+  return true;
+}
+
 t3_geometry *nr_atlas_geometry(const nr_atlas *a, int frame, bool flip) { return flip ? a->geom_flip[frame] : a->geom[frame]; }
 
 int nr_clip_index(const nr_atlas *a, const char *name) {

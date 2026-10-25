@@ -40,6 +40,12 @@ typedef struct {
  * (one page, one atlas page's frames). */
 bool nr_atlas_load(nr_atlas *a, const char *name, float pixels_per_unit, bool flat_normals);
 
+/* A colour variant of a loaded atlas: the same frames, geometry and normal sheet with the colour sheet `colour_file`
+ * ("atlases/hero-p2.png": same size, the base's layout, rendered from the same profile with other palette entries) under a
+ * material of its own. `v` borrows the base's geometry (it does not own it) and the base must outlive it; it is the one
+ * way to give actors of one character different colours, since all draws of a material share its textures. */
+bool nr_atlas_variant(nr_atlas *v, const nr_atlas *base, const char *colour_file);
+
 /* The plane of atlas frame `frame`, mirrored when `flip` is set. A mirrored plane keeps the winding and the material of
  * the plain one (three.c does not turn the front face of a mirrored world matrix, so a negative x scale would cull the
  * plane); its u axis runs against world x, so the tangent frame that the normal map is read in flips with the picture

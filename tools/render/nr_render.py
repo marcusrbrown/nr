@@ -440,7 +440,11 @@ class KitFigure:
     def __init__(self, scene, cam, recipe: dict, profile: dict, kits_dir: Path):
         self.scene, self.cam, self.profile = scene, cam, profile
         self.cell = recipe["cell"]
-        self.palette = profile["palette"]
+        override = recipe["model"].get("paletteOverride", {})
+        unknown = sorted(set(override) - set(profile["palette"]))
+        if unknown:
+            raise InputError(f"recipe.model.paletteOverride names colours the profile's palette does not have: {unknown}")
+        self.palette = {**profile["palette"], **override}
         self.root = bpy.data.objects.new("figure", None)
         scene.collection.objects.link(self.root)
         models = profile["models"]
