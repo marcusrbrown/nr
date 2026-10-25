@@ -27,9 +27,9 @@ const r3 = (v) => Math.round(v * 1000) / 1000;
 const hex = (n) => `#${n.toString(16).padStart(6, '0')}`;
 const pick = (list) => list[Math.floor(rand() * list.length)];
 
-// signs: the three reference colours below are used once each, so the parallax check can find them by colour
+// signs: the four reference colours below are used once each, so the parallax check can find them by colour
 const NEON = [0xff2bd6, 0x20e8ff, 0xffa020, 0xf4f4ff, 0xff5fa0];
-const REF = { nearSign: 0x39ff14, farSign: 0x5a4cff, pillarBand: 0xff1a1a, x: 12.6 };
+const REF = { nearSign: 0x39ff14, farSign: 0x5a4cff, pillarBand: 0xff1a1a, skyWindow: 0xb0ff00, x: 12.6 };
 const WINDOW = [0xffcf70, 0x8fe8ff, 0xffe2b0, 0xff9ad0];
 const SHOP = [0x2c3144, 0x3b2f48, 0x28383f, 0x44353a, 0x2f3b50, 0x383044];
 const AWNING = [0x7a2f4f, 0x2f6a7a, 0x7a5a2f, 0x4f3f7a];
@@ -72,13 +72,20 @@ for (let i = 0; i < shops.length - 1; i++) {
 // far layer: buildings behind the shop fronts, facade plane z = -5.5. The belt camera looks 20 degrees down, so the
 // top of the frame at this depth is y 3.33: the buildings stop at 2.75 to 3.4 and what shows above the lower ones is the
 // mid and skyline layers behind them.
+// The far row has one wide gap, FAR_GAP, and the skyline's reference window stands behind it: the scroll check follows
+// that window while the camera moves 4.44 units, and it has to stay in view through a gap at both ends of the move.
+// The far tower with the reference sign ends where the gap begins, so its sign stays in view through that move too.
+const FAR_GAP = [16.4, 20.0], SKY_REF_X = 18.6, REF_TOWER = { cx: 14.6, w: 3.4 };
 const towers = [];
 for (let x = -10; x < 30;) {
   const w = r3(3.2 + Math.floor(rand() * 15) / 10);
-  towers.push({ cx: r3(x + w / 2), w });
-  x += w + r3(1.8 + Math.floor(rand() * 17) / 10);
+  const cx = r3(x + w / 2);
+  if (cx + w / 2 > REF_TOWER.cx - REF_TOWER.w / 2 - 0.1 && cx - w / 2 < FAR_GAP[1] + 0.1) x = FAR_GAP[1] + 0.1;
+  else { towers.push({ cx, w }); x += w + r3(1.8 + Math.floor(rand() * 17) / 10); }
 }
-const refTower = towers.reduce((b, s, i) => (Math.abs(s.cx - REF.x) < Math.abs(towers[b].cx - REF.x) ? i : b), 0);
+towers.push(REF_TOWER);
+towers.sort((a, b) => a.cx - b.cx);
+const refTower = towers.indexOf(REF_TOWER);
 towers.forEach((s, i) => {
   const n = String(i).padStart(2, '0');
   const h = i === refTower ? 3.2 : 2.75 + Math.floor(rand() * 7) / 10;
@@ -119,6 +126,9 @@ for (let x = -18, i = 0; x < 38; i++) {
   }
   x += w + r3(0.1 + Math.floor(rand() * 5) / 10);
 }
+// the skyline's reference: a tower of its own behind the far row's gap, with a window of a colour used nowhere else
+box('skyline-ref', 'backdrop', SKY_REF_X, 0.65, SKY_Z, 1.4, 1.3, 1.2, 0x0b0e1a, { emissive: 0x141a3c, intensity: 0.55 });
+box('skyline-ref-window', 'backdrop', SKY_REF_X, 0.95, SKY_Z + 0.62, 0.22, 0.24, 0.03, 0x0a0c14, { emissive: REF.skyWindow, intensity: 1.0 });
 
 // play lane: the pillar. Its front face is at z = PILLAR_Z + d / 2.
 const P = { x: 12.0, z: -0.15, w: 1.2, h: 3.2, d: 0.5 };
@@ -127,7 +137,7 @@ box('pillar-band', 'play', P.x, 2.5, P.z, P.w + 0.04, 0.14, P.d + 0.04, 0x101010
 
 const layout = {
   bounds: { x_min: X_MIN, x_max: X_MAX, lane_min: LANE_MIN, lane_max: LANE_MAX, street_x_min: -5, street_x_max: 25 },
-  reference: { near_sign: hex(REF.nearSign), far_sign: hex(REF.farSign), pillar_band: hex(REF.pillarBand), x: REF.x },
+  reference: { near_sign: hex(REF.nearSign), far_sign: hex(REF.farSign), pillar_band: hex(REF.pillarBand), sky_window: hex(REF.skyWindow), x: REF.x },
   solids,
 };
 const text = `{\n"bounds": ${JSON.stringify(layout.bounds)},\n"reference": ${JSON.stringify(layout.reference)},\n"solids": [\n${solids.map((s) => JSON.stringify(s)).join(',\n')}\n]\n}\n`;

@@ -10,11 +10,12 @@
 //   end         the camera stops at the street's end with both players at the arena's right bound
 //   lights      the neon lights sweep over the belt (each light's x covers >= 10 units over the ticks, the three together
 //               >= 20) and cw.three.missing is 0 at every tick
-//   parallax    the pictures at ticks 352 and 426 (scroll-f352.png, scroll-f426.png under --dir): three emissive references
-//               (the play lane pillar's band, a near shop's sign, a far tower's sign), each found by colour (its right
-//               edge, which the pillar does not hide), move by
-//               the shift the belt camera predicts, in the order pillar > near > far, and the near and far shifts are
-//               smaller than the play lane's by the predicted ratios (the actors' own world shift is the play lane's)
+//   parallax    the pictures at ticks 352 and 426 (scroll-f352.png, scroll-f426.png under --dir): four emissive references
+//               (the play lane pillar's band, a near shop's sign, a far tower's sign, a window of the skyline), each found
+//               by colour (its right edge, which the pillar does not hide), move by
+//               the shift the belt camera predicts, in the order pillar > near > far > skyline, and the near, far and
+//               skyline shifts are smaller than the play lane's by the predicted ratios (the actors' own world shift is the
+//               play lane's)
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { CAM, ROOT, camera, project, readImage } from './look-lib.mjs';
@@ -121,6 +122,7 @@ const REFS = [
   { name: 'pillar band (play lane)', solid: byEmissive(ref.pillar_band), mask: (r, g, b) => r > 200 && g < 140 && b < 140 && r - g > 100 && r - b > 100 },
   { name: 'near shop sign', solid: byEmissive(ref.near_sign), mask: (r, g, b) => g > 200 && g - r > 50 && g - b > 100 },
   { name: 'far tower sign', solid: byEmissive(ref.far_sign), mask: (r, g, b) => b > 200 && b - g > 50 && b - r > 30 },
+  { name: 'skyline window', solid: byEmissive(ref.sky_window), mask: (r, g, b) => r > 130 && g > 200 && b < 100 },
 ];
 const S3 = CAM.scale;
 function locate(img, cam, r) {
@@ -152,10 +154,10 @@ function locate(img, cam, r) {
   const dcam = sb['nr.cam_x'] - sa['nr.cam_x'];
   report.parallax = { ticks: [A, B], cameraShiftUnits: dcam, actorWorldShiftPx: +(dcam * CAM.ppu * S3).toFixed(1), rows };
   let good = rows.every((r) => r.measuredShift !== null && Math.abs(r.measuredShift - r.predictedShift) <= 8 && r.pixels.every((n) => n >= 20));
-  const [pl, near, far] = rows.map((r) => Math.abs(r.measuredShift ?? 0));
-  report.parallax.ratios = { near: +(near / pl).toFixed(3), far: +(far / pl).toFixed(3), predictedNear: +(rows[1].predictedShift / rows[0].predictedShift).toFixed(3), predictedFar: +(rows[2].predictedShift / rows[0].predictedShift).toFixed(3) };
-  good = good && pl > near * 1.05 && near > far * 1.05 && Math.abs(report.parallax.ratios.near - report.parallax.ratios.predictedNear) < 0.03 && Math.abs(report.parallax.ratios.far - report.parallax.ratios.predictedFar) < 0.03;
-  if (good) ok(`parallax: camera ${dcam.toFixed(2)} units; shifts (screen px) play lane ${pl}, near shop sign ${near} (x${report.parallax.ratios.near}), far tower sign ${far} (x${report.parallax.ratios.far}); an actor's world shift is ${report.parallax.actorWorldShiftPx}`);
+  const [pl, near, far, sky] = rows.map((r) => Math.abs(r.measuredShift ?? 0));
+  report.parallax.ratios = { near: +(near / pl).toFixed(3), far: +(far / pl).toFixed(3), sky: +(sky / pl).toFixed(3), predictedNear: +(rows[1].predictedShift / rows[0].predictedShift).toFixed(3), predictedFar: +(rows[2].predictedShift / rows[0].predictedShift).toFixed(3), predictedSky: +(rows[3].predictedShift / rows[0].predictedShift).toFixed(3) };
+  good = good && pl > near * 1.05 && near > far * 1.05 && far > sky * 1.05 && Math.abs(report.parallax.ratios.near - report.parallax.ratios.predictedNear) < 0.03 && Math.abs(report.parallax.ratios.far - report.parallax.ratios.predictedFar) < 0.03 && Math.abs(report.parallax.ratios.sky - report.parallax.ratios.predictedSky) < 0.03;
+  if (good) ok(`parallax: camera ${dcam.toFixed(2)} units; shifts (screen px) play lane ${pl}, near shop sign ${near} (x${report.parallax.ratios.near}), far tower sign ${far} (x${report.parallax.ratios.far}), skyline window ${sky} (x${report.parallax.ratios.sky}); an actor's world shift is ${report.parallax.actorWorldShiftPx}`);
   else fail(`parallax: ${JSON.stringify(report.parallax)}`);
 }
 
