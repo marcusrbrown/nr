@@ -135,6 +135,7 @@ artifacts). Measured on one machine: Apple M1 Pro, macOS 15.7.9, romdev 0.150.2.
   one program state, `l0400`, covers the game; the four `l0400` rows of `games/nr/programs/nr.txt` are all it draws. three.c covers a
   frame with fewer lights than a row's with that row; a fifth light has no row and is a missing state (the gate's light-count
   control). A host that draws a program state without a row fails the gate on `cw.three.missing`.
+- Camera follow: the leash's silhouette allowance is 1.2 units (the hero's widest frame, 1.188), the soft wall 7.6 units ahead of the trailing player (Round 2, finding 4).
 - Depth: two planes of the arena at one depth with overlapping extents are ordered by the host's tie-break, which differed between
   romdev GL and native (8,037 pixels at the top of the frame); planes that overlap stand at distinct depths (`gen-arena.mjs`,
   the second haze band 0.02 behind the first).
@@ -173,6 +174,34 @@ hero atlas for geometry and normals and loads only the second colour sheet (`nr_
 the hero's geometry and normal texture, its draws are a second batch of the same `l0400` program state, so the program table is unchanged). Player 2 (actor 1) draws with it.
 Cost: one more decoded colour sheet, 9.38 MiB (the normal sheet is shared), 45.49 MiB for the three atlases and the variant against
 64 MiB. Presentation only: no simulation field, checksum or golden changes.
+
+### Camera clamp allowance (finding 4)
+
+The leash holds a player inside the frame less an allowance (`CAMERA_ALLOWANCE` in `main.c`, `nr_view.allowance`). It was a fixed 0.45
+units, which a hero's reach exceeds in most attacks (a hero standing at the edge with the dash special out lost its fist and its
+body past the frame). It is now sized from the atlases: the widest a frame of any clip reaches from its pivot along x, both
+facings (a plane facing left is the frame mirrored about the pivot, so the extents swap and the maximum is the same). Measured
+by `games/nr/tests/reach-check.mjs` (`docs/evidence/combat-slice/round2/reach-check.txt`):
+
+| Character | Widest reach (units) | Where |
+| --- | ---: | --- |
+| hero | 1.188 | special_dash, frame 2, to the front |
+| grunt | 1.000 | getup, frame 0 |
+| heavy | 1.688 | attack, frame 2, the hook |
+
+The allowance is **1.2**, the hero's 1.188 rounded up (the check requires it to hold the widest hero frame and to be at most 0.05
+over it). A hero's idle, walk and run reach 0.42, 0.56 and 0.95, so the hero at the edge is whole in the frame. FOV (18 degrees) and
+pitch (20 degrees) are unchanged. The leash at the centre lane is 3.80 units either side of the camera (it was 4.55); the leader's soft
+wall is 7.60 units ahead of the trailing player at lanes 0.6 and -0.6 (it was 9.1) of a 10 unit screen. The enemies' clamp uses the same allowance. A grunt's widest frame (1.00) is inside it; the heavy's hook (1.69, the
+frame its 224 texel cell was widened for) is not, so a heavy swinging at the frame's edge can lose the tip of its fist for the
+ticks of the hook. Holding the hook inside would take a 1.7 unit allowance, 2.5 of the screen's 10 units, which is not taken here.
+
+This is a simulation change and cannot be a presentation-only one: the leash decides where players and wave enemies stand, so the
+bot-driven scripts (`input-2p-full`, `-waves`, `-join-mid`, `-upgrade*`) were regenerated from the bots (they play the new
+geometry), the goldens rewritten, and the last frames of the waves and join-mid gate runs moved to ticks where the picture still
+changes (waves 2099, the tick the last wave ends; join-mid 790). `input-combat` has no leashed enemies and its checksum is unchanged.
+At the street's end the camera stops at 20 and the players stand at the furthest the frame allows at their lane (23.48 and 23.96), not at the
+arena's bound 24; the scroll check asserts that.
 
 ## Consequences
 

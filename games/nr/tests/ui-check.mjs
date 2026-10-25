@@ -62,13 +62,13 @@ const SFX = Object.fromEntries(enumNames(simH, 'nr_sfx', 'NR_SFX_').filter(([n])
 const define = (s, name) => +s.match(new RegExp(`#define ${name} ([0-9.]+)`))[1];
 const LIVES = define(simH, 'NR_LIVES_PER_PLAYER'), GRACE = define(simH, 'NR_UPGRADE_GRACE'), PRESENCE = define(simH, 'NR_PRESENCE_TICKS');
 const MARGIN = define(simC, 'RESPAWN_MARGIN'), PPU = define(mainC, 'PPU'), DESIGN_W = define(mainC, 'DESIGN_W'), DESIGN_H = define(mainC, 'DESIGN_H'), SCALE = define(mainC, 'PIXEL_SCALE');
-const FOV = define(mainC, 'FOV_DEG'), PITCH = define(mainC, 'PITCH_DEG'), ACTOR_HALF = define(mainC, 'ACTOR_HALF');
+const FOV = define(mainC, 'FOV_DEG'), PITCH = define(mainC, 'PITCH_DEG'), ALLOWANCE = define(mainC, 'CAMERA_ALLOWANCE');
 const voiceCaps = Object.fromEntries([...mainC.matchAll(/\[NR_SFX_([A-Z]+)\] = \{ "audio\/(\w+)\.wav", (\d+) \}/g)].map((m) => [m[1], { file: `${m[2]}.wav`, maxVoices: +m[3] }]));
 
-/** the half width of the frame at `lane`, less the actor's, as nr_sim_view_half computes it from main.c's camera constants */
+/** the half width of the frame at `lane`, less the camera's allowance, as nr_sim_view_half computes it from main.c's camera constants */
 function viewHalf(lane) {
   const tanHalf = Math.tan((FOV * 0.5 * Math.PI) / 180), dist = (DESIGN_H / SCALE / PPU) / (2 * tanHalf), cosP = Math.cos((PITCH * Math.PI) / 180);
-  return (DESIGN_W / SCALE / PPU) * 0.5 * (dist - lane * cosP) / dist - ACTOR_HALF;
+  return (DESIGN_W / SCALE / PPU) * 0.5 * (dist - lane * cosP) / dist - ALLOWANCE;
 }
 
 // ── runs ────────────────────────────────────────────────────────────────────────────────────────────────────────────

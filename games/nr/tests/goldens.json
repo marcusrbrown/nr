@@ -6,10 +6,10 @@
       "app": "nr",
       "input": "games/nr/tests/input-2p-full.json",
       "frames": 2164,
-      "checksum": 3853076974,
+      "checksum": 1196977218,
       "final": {
         "nr.ticks": 2164,
-        "nr.input_count": 1203,
+        "nr.input_count": 1025,
         "nr.phase": 3,
         "nr.wave": 4,
         "nr.cleared": 1,
@@ -19,52 +19,7 @@
         "nr.joins": 0,
         "nr.special_variant": 1,
         "nr.actor_hp": [
-          9,
           12,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "nr.actor_state": [
-          3,
-          3,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18,
-          18
-        ],
-        "nr.sim_checksum": 2841677422
-      }
-    },
-    "waves": {
-      "app": "nr_waves",
-      "input": "games/nr/tests/input-waves.json",
-      "frames": 2374,
-      "checksum": 2932405792,
-      "final": {
-        "nr.ticks": 2374,
-        "nr.input_count": 1615,
-        "nr.phase": 1,
-        "nr.wave": 4,
-        "nr.cleared": 1,
-        "nr.game_over": 0,
-        "nr.lives": 4,
-        "nr.players": 2,
-        "nr.joins": 0,
-        "nr.special_variant": 0,
-        "nr.actor_hp": [
-          3,
           12,
           0,
           0,
@@ -77,8 +32,8 @@
           -1
         ],
         "nr.actor_state": [
+          4,
           5,
-          1,
           18,
           18,
           18,
@@ -89,7 +44,52 @@
           18,
           18
         ],
-        "nr.sim_checksum": 1164827956
+        "nr.sim_checksum": 2106371700
+      }
+    },
+    "waves": {
+      "app": "nr_waves",
+      "input": "games/nr/tests/input-waves.json",
+      "frames": 2099,
+      "checksum": 1922784415,
+      "final": {
+        "nr.ticks": 2099,
+        "nr.input_count": 1300,
+        "nr.phase": 1,
+        "nr.wave": 4,
+        "nr.cleared": 1,
+        "nr.game_over": 0,
+        "nr.lives": 4,
+        "nr.players": 2,
+        "nr.joins": 0,
+        "nr.special_variant": 0,
+        "nr.actor_hp": [
+          9,
+          9,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "nr.actor_state": [
+          5,
+          5,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18,
+          18
+        ],
+        "nr.sim_checksum": 562435507
       }
     },
     "combat": {
@@ -140,11 +140,11 @@
     "join-mid": {
       "app": "nr",
       "input": "games/nr/tests/input-join-mid.json",
-      "frames": 800,
-      "checksum": 1670758902,
+      "frames": 790,
+      "checksum": 3971475687,
       "final": {
-        "nr.ticks": 800,
-        "nr.input_count": 307,
+        "nr.ticks": 790,
+        "nr.input_count": 328,
         "nr.phase": 1,
         "nr.wave": 2,
         "nr.cleared": 0,
@@ -172,24 +172,24 @@
           18,
           0,
           18,
-          0,
+          19,
           0,
           0,
           0,
           0,
           0
         ],
-        "nr.sim_checksum": 1697955339
+        "nr.sim_checksum": 63844208
       }
     },
     "upgrade": {
       "app": "nr",
       "input": "games/nr/tests/input-upgrade.json",
       "frames": 989,
-      "checksum": 3196666525,
+      "checksum": 1355188033,
       "final": {
         "nr.ticks": 989,
-        "nr.input_count": 430,
+        "nr.input_count": 375,
         "nr.phase": 1,
         "nr.wave": 3,
         "nr.cleared": 0,
@@ -199,32 +199,32 @@
         "nr.joins": 0,
         "nr.special_variant": 1,
         "nr.actor_hp": [
-          10,
-          10,
+          9,
+          9,
           2,
           2,
           2,
-          0,
-          -1,
-          0,
+          2,
+          2,
+          2,
           0,
           0,
           0
         ],
         "nr.actor_state": [
+          10,
+          10,
           0,
           0,
+          19,
           1,
           1,
           1,
-          18,
-          18,
-          18,
           0,
           0,
           0
         ],
-        "nr.sim_checksum": 2713987517
+        "nr.sim_checksum": 2546568433
       }
     }
   }

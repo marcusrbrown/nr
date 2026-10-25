@@ -15,14 +15,15 @@ const T = 'games/nr/tests/';
 
 /** id: the script's name in goldens.json; gate: the stem of its tests/gates.json entries; need: requirements checked on the final state.
  * `frames` is the last frame of the run, chosen where the picture is still changing so that the image predicate can see a
- * one-frame shift: 2164 is the tick the arena is cleared (the clear screen appears), 2374 the tick the last wave ends in
- * the waves script, 658 the last input of the combat script. The clear screens are static afterwards (the simulation stops
- * and the only thing that moves is the prompt's blink). */
+ * one-frame shift: 2164 is the last tick the clear screen is still appearing (the arena is cleared at 2103; the screen holds still from
+ * 2165), 2099 the tick the last wave ends in the waves script, 790 a tick of the join script where the street moves, 658 the
+ * last input of the combat script. The clear screens are static afterwards (the simulation stops and the only thing that
+ * moves is the prompt's blink). */
 export const SCRIPTS = [
   { id: '2p-full', gate: 'nr-2p-full', app: 'nr', input: `${T}input-2p-full.json`, frames: 2164, need: ['phase-clear', 'cleared', 'wave-4', 'heroes-alive', 'two-players'] },
-  { id: 'waves', gate: 'nr-waves', app: 'nr_waves', input: `${T}input-waves.json`, frames: 2374, need: ['cleared', 'wave-4', 'heroes-alive', 'two-players'] },
+  { id: 'waves', gate: 'nr-waves', app: 'nr_waves', input: `${T}input-waves.json`, frames: 2099, need: ['cleared', 'wave-4', 'heroes-alive', 'two-players'] },
   { id: 'combat', gate: 'nr-combat', app: 'nr_dummies', input: `${T}input-combat.json`, frames: 658, need: ['heroes-alive', 'two-players'] },
-  { id: 'join-mid', gate: 'nr-join-mid', app: 'nr', input: `${T}input-join-mid.json`, frames: 800, need: ['heroes-alive', 'joined-once', 'two-players'] },
+  { id: 'join-mid', gate: 'nr-join-mid', app: 'nr', input: `${T}input-join-mid.json`, frames: 790, need: ['heroes-alive', 'joined-once', 'two-players'] },
   { id: 'upgrade', gate: 'nr-upgrade', app: 'nr', input: `${T}input-upgrade.json`, frames: 989, need: ['heroes-alive', 'dash-picked', 'two-players'] },
 ];
 

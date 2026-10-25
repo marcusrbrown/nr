@@ -1,0 +1,246 @@
+{
+  "allowance": 1.2,
+  "widest": {
+    "hero": {
+      "clip": "special_dash",
+      "reach": 1.1875,
+      "side": "right",
+      "frame": 2
+    },
+    "grunt": {
+      "clip": "getup",
+      "reach": 1,
+      "side": "right",
+      "frame": 0
+    },
+    "heavy": {
+      "clip": "attack",
+      "reach": 1.6875,
+      "side": "right",
+      "frame": 2
+    }
+  },
+  "lanes": [
+    {
+      "lane": -1.6,
+      "frameHalf": 5.4233463177109975,
+      "leash": 4.223346317710997
+    },
+    {
+      "lane": 0,
+      "frameHalf": 5,
+      "leash": 3.8
+    },
+    {
+      "lane": 1.8,
+      "frameHalf": 4.523735392575127,
+      "leash": 3.323735392575127
+    }
+  ],
+  "softWall": 7.6,
+  "tables": {
+    "hero": [
+      {
+        "clip": "idle",
+        "right": 0.421875,
+        "rightFrame": 0,
+        "left": 0.359375,
+        "leftFrame": 0
+      },
+      {
+        "clip": "walk",
+        "right": 0.5625,
+        "rightFrame": 0,
+        "left": 0.546875,
+        "leftFrame": 1
+      },
+      {
+        "clip": "run",
+        "right": 0.8125,
+        "rightFrame": 0,
+        "left": 0.953125,
+        "leftFrame": 0
+      },
+      {
+        "clip": "hit1",
+        "right": 0.875,
+        "rightFrame": 2,
+        "left": 0.5,
+        "leftFrame": 1
+      },
+      {
+        "clip": "hit2",
+        "right": 0.859375,
+        "rightFrame": 2,
+        "left": 0.4375,
+        "leftFrame": 1
+      },
+      {
+        "clip": "hit3",
+        "right": 1.078125,
+        "rightFrame": 2,
+        "left": 0.828125,
+        "leftFrame": 2
+      },
+      {
+        "clip": "jump",
+        "right": 0.703125,
+        "rightFrame": 4,
+        "left": 0.359375,
+        "leftFrame": 5
+      },
+      {
+        "clip": "throw",
+        "right": 0.71875,
+        "rightFrame": 1,
+        "left": 0.703125,
+        "leftFrame": 1
+      },
+      {
+        "clip": "hurt",
+        "right": 0.421875,
+        "rightFrame": 2,
+        "left": 0.390625,
+        "leftFrame": 0
+      },
+      {
+        "clip": "knockdown",
+        "right": 1.140625,
+        "rightFrame": 7,
+        "left": 1,
+        "leftFrame": 6
+      },
+      {
+        "clip": "getup",
+        "right": 1.15625,
+        "rightFrame": 0,
+        "left": 1.015625,
+        "leftFrame": 0
+      },
+      {
+        "clip": "dash",
+        "right": 0.8125,
+        "rightFrame": 5,
+        "left": 0.828125,
+        "leftFrame": 2
+      },
+      {
+        "clip": "special_knockback",
+        "right": 1.015625,
+        "rightFrame": 6,
+        "left": 0.421875,
+        "leftFrame": 6
+      },
+      {
+        "clip": "special_dash",
+        "right": 1.1875,
+        "rightFrame": 2,
+        "left": 0.953125,
+        "leftFrame": 0
+      }
+    ],
+    "grunt": [
+      {
+        "clip": "idle",
+        "right": 0.375,
+        "rightFrame": 1,
+        "left": 0.296875,
+        "leftFrame": 0
+      },
+      {
+        "clip": "walk",
+        "right": 0.484375,
+        "rightFrame": 0,
+        "left": 0.46875,
+        "leftFrame": 3
+      },
+      {
+        "clip": "attack",
+        "right": 0.765625,
+        "rightFrame": 1,
+        "left": 0.4375,
+        "leftFrame": 1
+      },
+      {
+        "clip": "hurt",
+        "right": 0.359375,
+        "rightFrame": 2,
+        "left": 0.328125,
+        "leftFrame": 0
+      },
+      {
+        "clip": "knockdown",
+        "right": 0.96875,
+        "rightFrame": 4,
+        "left": 0.828125,
+        "leftFrame": 3
+      },
+      {
+        "clip": "getup",
+        "right": 1,
+        "rightFrame": 0,
+        "left": 0.84375,
+        "leftFrame": 0
+      }
+    ],
+    "heavy": [
+      {
+        "clip": "idle",
+        "right": 0.59375,
+        "rightFrame": 0,
+        "left": 0.484375,
+        "leftFrame": 0
+      },
+      {
+        "clip": "walk",
+        "right": 0.78125,
+        "rightFrame": 0,
+        "left": 0.71875,
+        "leftFrame": 0
+      },
+      {
+        "clip": "attack",
+        "right": 1.6875,
+        "rightFrame": 2,
+        "left": 1.234375,
+        "leftFrame": 2
+      },
+      {
+        "clip": "hurt",
+        "right": 0.59375,
+        "rightFrame": 3,
+        "left": 0.578125,
+        "leftFrame": 0
+      },
+      {
+        "clip": "stagger",
+        "right": 0.640625,
+        "rightFrame": 1,
+        "left": 0.484375,
+        "leftFrame": 0
+      }
+    ]
+  },
+  "results": [
+    {
+      "name": "the allowance holds the hero's widest frame, both facings",
+      "ok": true,
+      "detail": "CAMERA_ALLOWANCE 1.2 against 1.188 (special_dash frame 2, right)"
+    },
+    {
+      "name": "the allowance is not more than 0.05 above it",
+      "ok": true,
+      "detail": "0.012 over"
+    },
+    {
+      "name": "a walking, running or idle hero at the edge is whole in the frame",
+      "ok": true,
+      "detail": "idle 0.42, walk 0.56, run 0.95 against 1.2"
+    },
+    {
+      "name": "the leash leaves play room: the leader's soft wall is more than 6 units ahead of the trailing player",
+      "ok": true,
+      "detail": "7.60 units at lanes 0.6 and -0.6 (a screen is 10.00 wide at the centre lane)"
+    }
+  ]
+}

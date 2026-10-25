@@ -1,0 +1,56 @@
+{
+  "results": [
+    {
+      "name": "manifest: cell, supersample, frames, clips",
+      "ok": true,
+      "detail": "96 frames, 14 clips equal"
+    },
+    {
+      "name": "manifest: one page of the same size",
+      "ok": true,
+      "detail": "1920x1280"
+    },
+    {
+      "name": "manifest: the normal sheet is the hero's (pixel hash)",
+      "ok": true,
+      "detail": "52e7ff4d596ffb8b"
+    },
+    {
+      "name": "colour sheets: same size",
+      "ok": true,
+      "detail": "1920x1280"
+    },
+    {
+      "name": "colour sheets: alpha equal",
+      "ok": true,
+      "detail": "0 texels differ in alpha"
+    },
+    {
+      "name": "colour sheets: every differing texel is player 1's accent in hero.png and player 2's in hero-p2.png",
+      "ok": true,
+      "detail": "31343 opaque texels and 17388 dilated transparent ones, 1 colour pair(s): 255,43,214>31,232,255 x48731; wanted 255,43,214>31,232,255"
+    },
+    {
+      "name": "the accents are the HUD's: PINK (player 1) and CYAN (player 2) of ui.c",
+      "ok": true,
+      "detail": "PINK 255,43,214 CYAN 31,232,255"
+    },
+    {
+      "name": "the accent covers a visible share of the figure",
+      "ok": true,
+      "detail": "10.67% of the opaque texels of the sheet"
+    },
+    {
+      "name": "budget: the three atlases and the variant fit 64 MiB decoded",
+      "ok": true,
+      "detail": "45.49 MiB (hero pair 18.75, grunt 7.03, heavy 10.34, variant colour 9.38)"
+    }
+  ],
+  "pairs": [
+    [
+      "255,43,214>31,232,255",
+      48731
+    ]
+  ],
+  "budgetMiB": 45.4921875
+}

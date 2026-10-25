@@ -159,8 +159,9 @@ typedef struct {
 } nr_actor;
 
 /* How the leash sees the frame: the half width of the frame at the centre lane in world units, the camera's distance
- * for one unit to be a pixel-per-unit scale, and the cosine of the camera's pitch (view_half() in sim.c). */
-typedef struct { float half_width, distance, cos_pitch, actor_half; } nr_view;
+ * for one unit to be a pixel-per-unit scale, the cosine of the camera's pitch (view_half() in sim.c) and the allowance: how far
+ * the widest frame of a hero's clips reaches from its pivot, which the leash keeps inside the frame. */
+typedef struct { float half_width, distance, cos_pitch, allowance; } nr_view;
 
 typedef struct {
   const arena *arena;
@@ -227,7 +228,7 @@ int nr_sim_enemies_alive(const nr_sim *s);
 /* One tick. */
 void nr_sim_step(nr_sim *s, const nr_input input[NR_PLAYERS]);
 
-/* The half width of the frame at `lane` less the actor's half width: how far from the camera an actor can stand. */
+/* The half width of the frame at `lane` less the silhouette allowance: how far from the camera an actor can stand. */
 float nr_sim_view_half(const nr_sim *s, float lane);
 
 /* The static description of a state: its name, length in ticks (0 until an event ends it), first hit-test tick and

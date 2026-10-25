@@ -369,7 +369,7 @@ const mainSrc = readFileSync(join(ROOT, 'games/nr/main.c'), 'utf8');
 const VIEW = { half: (+mainSrc.match(/#define DESIGN_W (\d+)/)[1] / +mainSrc.match(/#define PIXEL_SCALE (\d+)/)[1] / +mainSrc.match(/#define PPU ([0-9.]+)f/)[1]) / 2 };
 VIEW.dist = (+mainSrc.match(/#define DESIGN_H (\d+)/)[1] / +mainSrc.match(/#define PIXEL_SCALE (\d+)/)[1] / +mainSrc.match(/#define PPU ([0-9.]+)f/)[1]) / (2 * Math.tan((+mainSrc.match(/#define FOV_DEG ([0-9.]+)f/)[1] * 0.5 * Math.PI) / 180));
 VIEW.cosp = Math.cos((+mainSrc.match(/#define PITCH_DEG ([0-9.]+)f/)[1] * Math.PI) / 180);
-VIEW.actor = +mainSrc.match(/#define ACTOR_HALF ([0-9.]+)f/)[1];
+VIEW.actor = +mainSrc.match(/#define CAMERA_ALLOWANCE ([0-9.]+)f/)[1];
 const viewHalf = (lane) => (VIEW.half * (VIEW.dist - lane * VIEW.cosp)) / VIEW.dist - VIEW.actor;
 const arenaBounds = readJson(join(ROOT, 'games/nr/assets/arena/layout.json')).bounds;
 

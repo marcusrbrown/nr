@@ -608,7 +608,7 @@ static void update_actor(nr_sim *s, int i, const nr_input *in) {
 
 float nr_sim_view_half(const nr_sim *s, float lane) {
   float depth = s->view.distance - lane * s->view.cos_pitch;
-  return s->view.half_width * depth / s->view.distance - s->view.actor_half;
+  return s->view.half_width * depth / s->view.distance - s->view.allowance;
 }
 
 /* A hero the camera follows: present, its pad plugged in, alive. */

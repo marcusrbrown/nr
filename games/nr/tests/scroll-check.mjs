@@ -7,7 +7,7 @@
 //               both players at one x at the start leave the camera unmoved (centred) over 60 idle ticks
 //   leash       tick 230 (AE4, AE8): the trailing player stands at the frame's left edge and the belt has not scrolled
 //               since tick 142; the leading player stands at the soft wall, the frame's right edge
-//   end         the camera stops at the street's end with both players at the arena's right bound
+//   end         the camera stops at the street's end with both players where the leash puts them (the furthest the frame allows at their lane, within the arena's right bound)
 //   lights      the neon lights sweep over the belt (each light's x covers >= 10 units over the ticks, the three together
 //               >= 20) and cw.three.missing is 0 at every tick
 //   parallax    the pictures at ticks 352 and 426 (scroll-f352.png, scroll-f426.png under --dir): four emissive references
@@ -44,10 +44,10 @@ for (const t of TICKS) {
   states.set(t, JSON.parse(readFileSync(`${base}.json`, 'utf8')));
 }
 
-// the frame's half width at a lane, as main.c's view_half(): scene width / 2 / ppu, scaled by the distance, less the actor's half width
-const ACTOR_HALF = 0.45;
+// the frame's half width at a lane, as main.c's view_half(): scene width / 2 / ppu, scaled by the distance, less the camera's allowance
+const ALLOWANCE = +readFileSync(join(ROOT, 'games/nr/main.c'), 'utf8').match(/#define CAMERA_ALLOWANCE ([0-9.]+)f/)[1];
 const dist = (CAM.sceneH / CAM.ppu) / (2 * Math.tan((CAM.fovDeg * Math.PI) / 360));
-const viewHalf = (lane) => (CAM.sceneW / CAM.ppu / 2) * (dist - lane * Math.cos((CAM.pitchDeg * Math.PI) / 180)) / dist - ACTOR_HALF;
+const viewHalf = (lane) => (CAM.sceneW / CAM.ppu / 2) * (dist - lane * Math.cos((CAM.pitchDeg * Math.PI) / 180)) / dist - ALLOWANCE;
 const pos = (st, p) => ({ x: st['nr.hero_pos'][p * 3], lane: st['nr.hero_pos'][p * 3 + 1] });
 const EPS = 1e-3;
 
@@ -97,7 +97,11 @@ if (!failed) ok(`camera: monotonic, every player in frame, cw.three.missing 0 at
   const a = pos(st, 0), b = pos(st, 1), cam = st['nr.cam_x'];
   const xmax = JSON.parse(readFileSync(join(ROOT, 'games/nr/assets/arena/layout.json'), 'utf8')).bounds.x_max;
   report.end = { cam, p0: a, p1: b, xmax };
-  if (cam === 20 && a.x === xmax && b.x === xmax) ok(`end: camera at ${cam}, both players at the arena's right bound ${xmax}`); else fail(`end: camera ${cam}, players at ${a.x} and ${b.x}, bound ${xmax}`);
+  // at the end of the street the leader and the trailing player stand where the leash puts them: the furthest the frame at their lane allows (the camera at 20), or the arena's bound
+  const reach = (lane) => Math.min(xmax, cam + viewHalf(lane));
+  const near = (x, lane) => Math.abs(x - reach(lane)) < 1e-3;
+  if (cam === 20 && near(a.x, a.lane) && near(b.x, b.lane)) ok(`end: camera at ${cam}, players at ${a.x.toFixed(3)} (lane ${a.lane.toFixed(2)}) and ${b.x.toFixed(3)} (lane ${b.lane.toFixed(2)}), where the leash puts them (the arena's bound is ${xmax})`);
+  else fail(`end: camera ${cam}, players at ${a.x} and ${b.x}, the leash allows ${reach(a.lane)} and ${reach(b.lane)}, bound ${xmax}`);
 }
 
 // lights

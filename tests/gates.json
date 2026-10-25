@@ -132,7 +132,7 @@
     "maxGt16Calibration": "docs/evidence/combat-slice/image-calibration.json",
     "minColors": 8,
     "expect": { "cw.three.missing": 0, "nr.ticks": 2164 },
-    "note": "title to clear, two players, the upgrade pick, four waves; ends on the tick the arena is cleared; romdev GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
+    "note": "title to clear, two players, the upgrade pick, four waves; ends on the last tick the clear screen is still appearing; romdev GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
   },
   {
     "name": "nr-2p-full-chromium",
@@ -147,37 +147,37 @@
     "maxGt16Calibration": "docs/evidence/combat-slice/image-calibration.json",
     "minColors": 8,
     "expect": { "cw.three.missing": 0, "nr.ticks": 2164 },
-    "note": "title to clear, two players, the upgrade pick, four waves; ends on the tick the arena is cleared; Chromium GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
+    "note": "title to clear, two players, the upgrade pick, four waves; ends on the last tick the clear screen is still appearing; Chromium GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
   },
   {
     "name": "nr-waves-romdev",
     "brawler": true,
     "app": "nr_waves",
     "hosts": ["native", "romdev"],
-    "frames": 2374,
+    "frames": 2099,
     "input": "../games/nr/tests/input-waves.json",
     "fields": ["nr.ticks", "nr.hero_pos", "nr.hero_clip", "nr.hero_step", "nr.hero_frame", "nr.light_pos", "nr.light_intensity", "nr.cam_x", "nr.cam_left", "nr.checksum", "nr.sim_checksum", "nr.actor_y", "nr.actor_vy", "nr.actor_state", "nr.actor_state_tick", "nr.actor_hp", "nr.actor_facing", "nr.actor_team", "nr.actor_invuln", "nr.actor_kind", "nr.actor_target", "nr.actor_away", "nr.actor_present", "nr.rng", "nr.wave", "nr.lives", "nr.input_count", "nr.event_count", "nr.events", "nr.events_dropped", "nr.game_over", "nr.start_refused", "nr.upgrade_ready", "nr.cleared", "nr.wave_phase", "nr.players", "nr.phase", "nr.special_variant", "nr.pick_player", "nr.joins", "nr.ignored_starts", "nr.sfx_count", "nr.sfx_tick"],
     "tol": 0,
     "maxGt16": 0.0005,
     "maxGt16Calibration": "docs/evidence/combat-slice/image-calibration.json",
     "minColors": 8,
-    "expect": { "cw.three.missing": 0, "nr.ticks": 2374 },
-    "note": "the four waves with no title or upgrade pause, played by the pads; ends on the tick the last wave ends; romdev GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
+    "expect": { "cw.three.missing": 0, "nr.ticks": 2099 },
+    "note": "the four waves with no title or upgrade pause, played by the pads; ends on the tick the last wave ends (the clear tick); romdev GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
   },
   {
     "name": "nr-waves-chromium",
     "brawler": true,
     "app": "nr_waves",
     "hosts": ["native", "chromium"],
-    "frames": 2374,
+    "frames": 2099,
     "input": "../games/nr/tests/input-waves.json",
     "fields": ["nr.ticks", "nr.hero_pos", "nr.hero_clip", "nr.hero_step", "nr.hero_frame", "nr.light_pos", "nr.light_intensity", "nr.cam_x", "nr.cam_left", "nr.checksum", "nr.sim_checksum", "nr.actor_y", "nr.actor_vy", "nr.actor_state", "nr.actor_state_tick", "nr.actor_hp", "nr.actor_facing", "nr.actor_team", "nr.actor_invuln", "nr.actor_kind", "nr.actor_target", "nr.actor_away", "nr.actor_present", "nr.rng", "nr.wave", "nr.lives", "nr.input_count", "nr.event_count", "nr.events", "nr.events_dropped", "nr.game_over", "nr.start_refused", "nr.upgrade_ready", "nr.cleared", "nr.wave_phase", "nr.players", "nr.phase", "nr.special_variant", "nr.pick_player", "nr.joins", "nr.ignored_starts", "nr.sfx_count", "nr.sfx_tick"],
     "tol": 0,
     "maxGt16": 0.0005,
     "maxGt16Calibration": "docs/evidence/combat-slice/image-calibration.json",
     "minColors": 8,
-    "expect": { "cw.three.missing": 0, "nr.ticks": 2374 },
-    "note": "the four waves with no title or upgrade pause, played by the pads; ends on the tick the last wave ends; Chromium GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
+    "expect": { "cw.three.missing": 0, "nr.ticks": 2099 },
+    "note": "the four waves with no title or upgrade pause, played by the pads; ends on the tick the last wave ends (the clear tick); Chromium GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
   },
   {
     "name": "nr-combat-romdev",
@@ -214,30 +214,30 @@
     "brawler": true,
     "app": "nr",
     "hosts": ["native", "romdev"],
-    "frames": 800,
+    "frames": 790,
     "input": "../games/nr/tests/input-join-mid.json",
     "fields": ["nr.ticks", "nr.hero_pos", "nr.hero_clip", "nr.hero_step", "nr.hero_frame", "nr.light_pos", "nr.light_intensity", "nr.cam_x", "nr.cam_left", "nr.checksum", "nr.sim_checksum", "nr.actor_y", "nr.actor_vy", "nr.actor_state", "nr.actor_state_tick", "nr.actor_hp", "nr.actor_facing", "nr.actor_team", "nr.actor_invuln", "nr.actor_kind", "nr.actor_target", "nr.actor_away", "nr.actor_present", "nr.rng", "nr.wave", "nr.lives", "nr.input_count", "nr.event_count", "nr.events", "nr.events_dropped", "nr.game_over", "nr.start_refused", "nr.upgrade_ready", "nr.cleared", "nr.wave_phase", "nr.players", "nr.phase", "nr.special_variant", "nr.pick_player", "nr.joins", "nr.ignored_starts", "nr.sfx_count", "nr.sfx_tick"],
     "tol": 0,
     "maxGt16": 0.0005,
     "maxGt16Calibration": "docs/evidence/combat-slice/image-calibration.json",
     "minColors": 8,
-    "expect": { "cw.three.missing": 0, "nr.ticks": 800 },
-    "note": "a second player joins mid-fight; ends 800 frames in; romdev GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
+    "expect": { "cw.three.missing": 0, "nr.ticks": 790 },
+    "note": "a second player joins mid-fight; ends 790 frames in; romdev GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
   },
   {
     "name": "nr-join-mid-chromium",
     "brawler": true,
     "app": "nr",
     "hosts": ["native", "chromium"],
-    "frames": 800,
+    "frames": 790,
     "input": "../games/nr/tests/input-join-mid.json",
     "fields": ["nr.ticks", "nr.hero_pos", "nr.hero_clip", "nr.hero_step", "nr.hero_frame", "nr.light_pos", "nr.light_intensity", "nr.cam_x", "nr.cam_left", "nr.checksum", "nr.sim_checksum", "nr.actor_y", "nr.actor_vy", "nr.actor_state", "nr.actor_state_tick", "nr.actor_hp", "nr.actor_facing", "nr.actor_team", "nr.actor_invuln", "nr.actor_kind", "nr.actor_target", "nr.actor_away", "nr.actor_present", "nr.rng", "nr.wave", "nr.lives", "nr.input_count", "nr.event_count", "nr.events", "nr.events_dropped", "nr.game_over", "nr.start_refused", "nr.upgrade_ready", "nr.cleared", "nr.wave_phase", "nr.players", "nr.phase", "nr.special_variant", "nr.pick_player", "nr.joins", "nr.ignored_starts", "nr.sfx_count", "nr.sfx_tick"],
     "tol": 0,
     "maxGt16": 0.0005,
     "maxGt16Calibration": "docs/evidence/combat-slice/image-calibration.json",
     "minColors": 8,
-    "expect": { "cw.three.missing": 0, "nr.ticks": 800 },
-    "note": "a second player joins mid-fight; ends 800 frames in; Chromium GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
+    "expect": { "cw.three.missing": 0, "nr.ticks": 790 },
+    "note": "a second player joins mid-fight; ends 790 frames in; Chromium GL against the native binary on GL: whitelisted simulation state exact, frame within the calibrated bound, final state equal to the committed golden (games/nr/tests/goldens.json); control: native one frame early"
   },
   {
     "name": "nr-upgrade-romdev",

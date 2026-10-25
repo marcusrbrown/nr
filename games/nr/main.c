@@ -152,7 +152,11 @@
 #define GROUND_PX_BELOW_CENTRE 100.0f /* the centre lane's ground line, in scene pixels below the frame's centre */
 #define LANE_EPS 0.004f
 
-#define ACTOR_HALF 0.45f   /* half the width of an actor's silhouette, with a margin */
+#define ACTOR_HALF 0.45f   /* half the width an actor takes up on the street: blocks are widened by it (arena_load) */
+/* The allowance of the camera's leash: how far the widest frame of a hero's clips reaches from its pivot, both facings
+ * (1.19 units: special_dash, facing right; tests/reach-check.mjs measures the atlas), so a hero held inside the frame
+ * has its whole silhouette inside it. */
+#define CAMERA_ALLOWANCE 1.2f
 
 #define NEON_INTENSITY 28.0f
 #define AMBIENT_COLOR 0x7482a8 /* the legacy stage's fill; the street block's is in lights.json */
@@ -1141,7 +1145,7 @@ static void init(void *user) {
     cw_error("nr: a character's clips do not match its atlas");
     return;
   }
-  S.view = (nr_view){ ((float)SCENE_W / PPU) * 0.5f, S.view_dist, cw_cos(S.pitch), ACTOR_HALF };
+  S.view = (nr_view){ ((float)SCENE_W / PPU) * 0.5f, S.view_dist, cw_cos(S.pitch), CAMERA_ALLOWANCE };
 #if NR_UI
   ui_init();
   init_audio();

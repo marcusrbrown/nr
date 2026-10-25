@@ -1,0 +1,9 @@
+PASS manifest: cell, supersample, frames, clips: 96 frames, 14 clips equal
+PASS manifest: one page of the same size: 1920x1280
+PASS manifest: the normal sheet is the hero's (pixel hash): 52e7ff4d596ffb8b
+PASS colour sheets: same size: 1920x1280
+PASS colour sheets: alpha equal: 0 texels differ in alpha
+PASS colour sheets: every differing texel is player 1's accent in hero.png and player 2's in hero-p2.png: 31343 opaque texels and 17388 dilated transparent ones, 1 colour pair(s): 255,43,214>31,232,255 x48731; wanted 255,43,214>31,232,255
+PASS the accents are the HUD's: PINK (player 1) and CYAN (player 2) of ui.c: PINK 255,43,214 CYAN 31,232,255
+PASS the accent covers a visible share of the figure: 10.67% of the opaque texels of the sheet
+PASS budget: the three atlases and the variant fit 64 MiB decoded: 45.49 MiB (hero pair 18.75, grunt 7.03, heavy 10.34, variant colour 9.38)
