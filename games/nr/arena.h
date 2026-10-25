@@ -15,7 +15,7 @@
 
 #define ARENA_LIGHTS 4
 #define ARENA_FLASH 3 /* the light slot the special uses; intensity 0 until then */
-#define ARENA_MAX_SOLIDS 160
+#define ARENA_MAX_SOLIDS 320
 #define ARENA_MAX_BLOCKS 8
 
 typedef struct {

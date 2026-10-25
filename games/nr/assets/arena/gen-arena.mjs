@@ -7,7 +7,8 @@
 // y is up, z is the lane (a larger z is nearer the camera). One world unit is 64 scene pixels at the belt's centre
 // lane. The street is three screens (30 units) wide, x -5 to 25; the play lane runs from LANE_MIN to LANE_MAX.
 //
-// Layers: near = shop fronts behind the sidewalk, far = tall buildings behind them, backdrop = the skyline plane,
+// Layers: near = shop fronts behind the sidewalk, far = the buildings behind them, mid = a lower row of dark buildings
+// behind those, backdrop = the sky, the haze and the skyline of distant towers,
 // play = the pillar that stands in the play lane (it blocks movement and occludes actors behind it), ground = street
 // surface and markings.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -33,6 +34,7 @@ const WINDOW = [0xffcf70, 0x8fe8ff, 0xffe2b0, 0xff9ad0];
 const SHOP = [0x2c3144, 0x3b2f48, 0x28383f, 0x44353a, 0x2f3b50, 0x383044];
 const AWNING = [0x7a2f4f, 0x2f6a7a, 0x7a5a2f, 0x4f3f7a];
 const TOWER = [0x1f2333, 0x232a3b, 0x1b2030, 0x262336];
+const MID = [0x161a29, 0x181d2e, 0x141828, 0x1a1a2c];
 
 const solids = [];
 const add = (s) => solids.push(Object.fromEntries(Object.entries({ blocks: undefined, ...s }).filter(([, v]) => v !== undefined).map(([k, v]) => [k, typeof v === 'number' ? r3(v) : v])));
@@ -67,32 +69,55 @@ for (let i = 0; i < shops.length - 1; i++) {
   box(`column-${String(i).padStart(2, '0')}`, 'near', x, 1.5, -2.2, 0.5, 3.0, 0.5, 0x4a5062);
 }
 
-// far layer: tall buildings with window bands and a vertical neon sign, facade plane z = -5.5
+// far layer: buildings behind the shop fronts, facade plane z = -5.5. The belt camera looks 20 degrees down, so the
+// top of the frame at this depth is y 3.33: the buildings stop at 2.75 to 3.4 and what shows above the lower ones is the
+// mid and skyline layers behind them.
 const towers = [];
 for (let x = -10; x < 30;) {
-  const w = r3(4 + Math.floor(rand() * 21) / 10);
+  const w = r3(3.2 + Math.floor(rand() * 15) / 10);
   towers.push({ cx: r3(x + w / 2), w });
-  x += w + r3(1.2 + Math.floor(rand() * 13) / 10);
+  x += w + r3(1.8 + Math.floor(rand() * 17) / 10);
 }
 const refTower = towers.reduce((b, s, i) => (Math.abs(s.cx - REF.x) < Math.abs(towers[b].cx - REF.x) ? i : b), 0);
 towers.forEach((s, i) => {
   const n = String(i).padStart(2, '0');
-  const h = 9 + Math.floor(rand() * 30) / 10;
-  box(`tower-${n}`, 'far', s.cx, h / 2, -7, s.w, h, 3, pick(TOWER));
-  box(`tower-${n}-band-a`, 'far', s.cx, 2.6, -5.48, s.w * 0.78, 0.45, 0.05, 0x10131c, { emissive: pick(WINDOW), intensity: 0.18 });
-  box(`tower-${n}-band-b`, 'far', s.cx, 3.4, -5.48, s.w * 0.78, 0.45, 0.05, 0x10131c, { emissive: pick(WINDOW), intensity: 0.18 });
-  box(`tower-${n}-sign`, 'far', s.cx + s.w * 0.36, 3.0, -5.44, 0.35, 2.4, 0.08, 0x101010, { emissive: i === refTower ? REF.farSign : pick(NEON), intensity: 1.3 });
+  const h = i === refTower ? 3.2 : 2.75 + Math.floor(rand() * 7) / 10;
+  box(`tower-${n}`, 'far', s.cx, h / 2, -6.3, s.w, h, 1.6, pick(TOWER));
+  box(`tower-${n}-band-a`, 'far', s.cx, 2.45, -5.48, s.w * 0.78, 0.2, 0.05, 0x10131c, { emissive: pick(WINDOW), intensity: 0.18 });
+  box(`tower-${n}-band-b`, 'far', s.cx, 2.85, -5.48, s.w * 0.78, 0.2, 0.05, 0x10131c, { emissive: pick(WINDOW), intensity: 0.18 });
+  box(`tower-${n}-sign`, 'far', s.cx + s.w * 0.36, h - 0.45, -5.44, 0.35, 0.8, 0.08, 0x101010, { emissive: i === refTower ? REF.farSign : pick(NEON), intensity: 1.3 });
 });
 // tall piers between the near and far rows
-for (const x of [-3, 5, 13, 21, 29]) box(`pier-${x}`, 'far', x, 3, -4.4, 0.9, 6, 0.9, 0x3c4254);
+for (const x of [-3, 5, 13, 21, 29]) box(`pier-${x}`, 'far', x, 2.1, -4.4, 0.9, 4.2, 0.9, 0x3c4254);
 
-// backdrop: the sky plane and a skyline
-add({ id: 'sky', layer: 'backdrop', shape: 'plane', x: 10, y: 12, z: -16, w: 90, h: 30, color: '#151a2e' });
-for (let i = 0; i < 8; i++) {
-  const w = 3 + Math.floor(rand() * 30) / 10, h = 12 + Math.floor(rand() * 80) / 10;
-  const x = -12 + i * 6.2 + rand() * 2;
-  box(`skyline-${i}`, 'backdrop', x, h / 2, -15.4, w, h, 1.5, 0x0f1322);
-  box(`skyline-${i}-band`, 'backdrop', x, h * 0.5, -14.62, w * 0.7, 0.5, 0.05, 0x0a0c14, { emissive: 0x4a6fa5, intensity: 0.4 });
+// mid layer: a row of lower dark buildings at z = -10.5 (frame top y 2.35 there; the buildings stop at 0.8 to 1.6 so the skyline shows above them) with a few lit windows
+const MID_Z = -10.5;
+for (let x = -14, i = 0; x < 34; i++) {
+  const w = r3(2.4 + Math.floor(rand() * 20) / 10), h = 0.8 + Math.floor(rand() * 9) / 10;
+  const cx = r3(x + w / 2);
+  box(`mid-${String(i).padStart(2, '0')}`, 'mid', cx, h / 2, MID_Z, w, h, 1.4, pick(MID), { emissive: 0x121830, intensity: 0.6 });
+  for (let k = 0; k < 3; k++) {
+    if (rand() < 0.45) continue;
+    box(`mid-${String(i).padStart(2, '0')}-window-${k}`, 'mid', r3(cx - w * 0.3 + k * w * 0.3), r3(0.3 + rand() * (h - 0.5)), MID_Z + 0.72, 0.18, 0.22, 0.04, 0x0c0e18, { emissive: pick(WINDOW), intensity: 0.9 });
+  }
+  x += w + r3(0.2 + Math.floor(rand() * 8) / 10);
+}
+
+// backdrop: the sky, a haze that glows toward the horizon, and the skyline: dark silhouettes of distant towers at
+// z = -15.4 (frame top y 1.4 there) with a few lit windows and aerials
+add({ id: 'sky', layer: 'backdrop', shape: 'plane', x: 10, y: 12, z: -16, w: 90, h: 30, color: '#151a2e', emissive: hex(0x1a2246), emissive_intensity: 0.5 });
+[[0.1, 0.8, 0xc23fa0, 1.0], [0.8, 0.6, 0x8a35b0, 0.95], [1.3, 0.8, 0x4a3aa0, 0.9]].forEach(([y, h, c, k], i) => add({ id: `haze-${i}`, layer: 'backdrop', shape: 'plane', x: 10, y, z: -15.95, w: 90, h, color: '#151a2e', emissive: hex(c), emissive_intensity: k }));
+const SKY_Z = -15.4;
+for (let x = -18, i = 0; x < 38; i++) {
+  const w = r3(1.4 + Math.floor(rand() * 22) / 10), h = r3(0.6 + Math.floor(rand() * 75) / 100);
+  const cx = r3(x + w / 2), n = String(i).padStart(2, '0');
+  box(`skyline-${n}`, 'backdrop', cx, h / 2, SKY_Z, w, h, 1.2, 0x0b0e1a, { emissive: 0x141a3c, intensity: 0.55 });
+  if (rand() < 0.5) box(`skyline-${n}-aerial`, 'backdrop', r3(cx + w * 0.2), h + 0.2, SKY_Z, 0.04, 0.4, 0.04, 0x0b0e1a, { emissive: 0x141a3c, intensity: 0.55 });
+  for (let k = 0; k < 5; k++) {
+    if (rand() < 0.45) continue;
+    box(`skyline-${n}-window-${k}`, 'backdrop', r3(cx - w * 0.38 + rand() * w * 0.76), r3(0.2 + rand() * (h - 0.35)), SKY_Z + 0.62, 0.18, 0.2, 0.03, 0x0a0c14, { emissive: pick(WINDOW), intensity: 1.2 });
+  }
+  x += w + r3(0.1 + Math.floor(rand() * 5) / 10);
 }
 
 // play lane: the pillar. Its front face is at z = PILLAR_Z + d / 2.
