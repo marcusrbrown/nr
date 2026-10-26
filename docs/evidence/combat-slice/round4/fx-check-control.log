@@ -1,0 +1,13 @@
+ok   p1-mid: the ring is on (radius 1.80) and the control run has the same simulation (same states, same checksum)
+ok   p1-mid: the pictures differ on 135027 pixels inside the ring's outline and 0 outside it
+ok   p1-mid: the ring changes 135027 pixels (more than 5000)
+FAIL p1-mid: 4983 interior actor texels inside the ring (276 below the pivot): 393 of them differ from the control
+ok   p1-mid: the ring's colour is on 59 of 72 samples on the street (0.82)
+     p1-mid: 0 sidewalk points inside the ring's outline, 0 differ from the control
+ok   p2-mid: the ring is on (radius 1.80) and the control run has the same simulation (same states, same checksum)
+ok   p2-mid: the pictures differ on 94671 pixels inside the ring's outline and 0 outside it
+ok   p2-mid: the ring changes 94671 pixels (more than 5000)
+FAIL p2-mid: 4334 interior actor texels inside the ring (62 below the pivot): 31 of them differ from the control
+ok   p2-mid: the ring's colour is on 41 of 55 samples on the street (0.75)
+     p2-mid: 37 sidewalk points inside the ring's outline, 0 differ from the control
+PASS control: the ring drawn after the actors is rejected on every capture (actor texels changed: p1-mid 393 of 4983, 276 below the pivot; p2-mid 31 of 4334, 62 below the pivot)

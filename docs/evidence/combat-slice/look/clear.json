@@ -7980,6 +7980,16 @@
  ],
  "nr.event_count": 488,
  "nr.events_dropped": 0,
+ "nr.fx_radius": [
+  0,
+  0
+ ],
+ "nr.fx_alpha": [
+  0,
+  0
+ ],
+ "nr.fx_flash": 0,
+ "nr.fx_flash_player": -1,
  "nr.cam_x": 12.619038581848145,
  "nr.cam_left": 12.619038581848145,
  "nr.heroes": 11,

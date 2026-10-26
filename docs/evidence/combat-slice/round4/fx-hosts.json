@@ -1,0 +1,213 @@
+{
+  "bad": 0,
+  "rows": [
+    {
+      "shot": "mid",
+      "tick": 123,
+      "host": "native-webgpu",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 2948608090
+    },
+    {
+      "shot": "mid",
+      "tick": 123,
+      "host": "cart-webgpu",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 2948608090
+    },
+    {
+      "shot": "mid",
+      "tick": 123,
+      "host": "native-gl",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 2948608090
+    },
+    {
+      "shot": "mid",
+      "tick": 123,
+      "host": "cart-gl",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 2948608090
+    },
+    {
+      "shot": "mid",
+      "tick": 123,
+      "compare": "cart-vs-native webgpu",
+      "differingPixels": 0
+    },
+    {
+      "shot": "mid",
+      "tick": 123,
+      "compare": "cart-vs-native gl",
+      "differingPixels": 0
+    },
+    {
+      "shot": "hit-radius",
+      "tick": 125,
+      "host": "native-webgpu",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.765625,
+      "flash": 4.900000095367432,
+      "checksum": 2746876930
+    },
+    {
+      "shot": "hit-radius",
+      "tick": 125,
+      "host": "cart-webgpu",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.765625,
+      "flash": 4.900000095367432,
+      "checksum": 2746876930
+    },
+    {
+      "shot": "hit-radius",
+      "tick": 125,
+      "host": "native-gl",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.765625,
+      "flash": 4.900000095367432,
+      "checksum": 2746876930
+    },
+    {
+      "shot": "hit-radius",
+      "tick": 125,
+      "host": "cart-gl",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.765625,
+      "flash": 4.900000095367432,
+      "checksum": 2746876930
+    },
+    {
+      "shot": "hit-radius",
+      "tick": 125,
+      "compare": "cart-vs-native webgpu",
+      "differingPixels": 0
+    },
+    {
+      "shot": "hit-radius",
+      "tick": 125,
+      "compare": "cart-vs-native gl",
+      "differingPixels": 0
+    },
+    {
+      "shot": "fade",
+      "tick": 128,
+      "host": "native-webgpu",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.5625,
+      "flash": 1.5999997854232788,
+      "checksum": 2608772036
+    },
+    {
+      "shot": "fade",
+      "tick": 128,
+      "host": "cart-webgpu",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.5625,
+      "flash": 1.5999997854232788,
+      "checksum": 2608772036
+    },
+    {
+      "shot": "fade",
+      "tick": 128,
+      "host": "native-gl",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.5625,
+      "flash": 1.5999997854232788,
+      "checksum": 2608772036
+    },
+    {
+      "shot": "fade",
+      "tick": 128,
+      "host": "cart-gl",
+      "missing": 0,
+      "radius": 2.4000000953674316,
+      "scale": 0.5625,
+      "flash": 1.5999997854232788,
+      "checksum": 2608772036
+    },
+    {
+      "shot": "fade",
+      "tick": 128,
+      "compare": "cart-vs-native webgpu",
+      "differingPixels": 0
+    },
+    {
+      "shot": "fade",
+      "tick": 128,
+      "compare": "cart-vs-native gl",
+      "differingPixels": 0
+    },
+    {
+      "shot": "p2-mid",
+      "tick": 103,
+      "host": "native-webgpu",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 3924522826
+    },
+    {
+      "shot": "p2-mid",
+      "tick": 103,
+      "host": "cart-webgpu",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 3924522826
+    },
+    {
+      "shot": "p2-mid",
+      "tick": 103,
+      "host": "native-gl",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 3924522826
+    },
+    {
+      "shot": "p2-mid",
+      "tick": 103,
+      "host": "cart-gl",
+      "missing": 0,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "checksum": 3924522826
+    },
+    {
+      "shot": "p2-mid",
+      "tick": 103,
+      "compare": "cart-vs-native webgpu",
+      "differingPixels": 0
+    },
+    {
+      "shot": "p2-mid",
+      "tick": 103,
+      "compare": "cart-vs-native gl",
+      "differingPixels": 0
+    }
+  ]
+}

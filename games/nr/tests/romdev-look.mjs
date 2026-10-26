@@ -1,9 +1,9 @@
 // romdev run of the look gate's combat captures and the upgrade choice on the dual cart with WebGPU (build/cart-wgpu/carts), one
 // `x-romdev-session` (nr-look) carrying every call.
 //
-//   node games/nr/tests/romdev-look.mjs [--out out/round2/romdev] [--publish docs/evidence/combat-slice/round2/romdev]
+//   node games/nr/tests/romdev-look.mjs [--out out/round4/romdev] [--publish docs/evidence/combat-slice/round4/romdev]
 //
-// For each of those captures of look-set.mjs (hit 2, hit 3, the radius special, the dash special on nr_look; the upgrade choice on nr): loadMedia with a deterministic clock,
+// For each of those captures of look-set.mjs (hit 2, hit 3, the radius special at the full radius, the radius special mid-expansion, player 2's radius special, the dash special on nr_look; the upgrade choice on nr): loadMedia with a deterministic clock,
 // the capture's input script as input{sequence} steps counting the frame loadMedia already ran, a screenshot at the capture's tick, and the debug
 // state. The state's nr.* and cw.three.* fields must equal the native run's (look/<name>.json, which look-set.mjs kept), cw.three.missing
 // 0 (the host's state does not carry the byte field naming the states, so `cw.three.missing_states` is not compared), cw.gpu.api 2 with no WebGPU errors, and the screenshot pixel-identical to the committed capture. The session ends with the full game
@@ -19,14 +19,14 @@ const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : d; };
 const BASE = process.env.ROMDEV_URL || 'http://localhost:7331';
 const SESSION = 'nr-look';
-const OUT = resolve(ROOT, opt('out', 'out/round2/romdev'));
+const OUT = resolve(ROOT, opt('out', 'out/round4/romdev'));
 const PUBLISH = opt('publish') ? resolve(ROOT, opt('publish')) : null;
 const LOOK = join(ROOT, 'docs/evidence/combat-slice/look');
 const CARTS = join(ROOT, 'build/cart-wgpu/carts');
 const script = (f) => JSON.parse(readFileSync(join(ROOT, 'games/nr/tests', f), 'utf8'));
 // [capture, cart, script, tick]: the combat captures on nr_look and the upgrade choice on the full game
 const CAPTURES = [['combat-hit2', 'nr_look', 'input-look.json', 264], ['combat-hit3', 'nr_look', 'input-look.json', 280], ['combat-radius-special', 'nr_look', 'input-look.json', 128],
-  ['combat-dash-special', 'nr_look', 'input-look.json', 49], ['upgrade', 'nr', 'input-2p-full.json', 700]];
+  ['combat-radius-special-mid', 'nr_look', 'input-look.json', 123], ['combat-radius-special-p2', 'nr_look', 'input-fx-p2.json', 103], ['combat-dash-special', 'nr_look', 'input-look.json', 49], ['upgrade', 'nr', 'input-2p-full.json', 700]];
 mkdirSync(OUT, { recursive: true });
 
 const log = (event, data = {}) => { const l = JSON.stringify({ event, ...data }); console.log(l); appendFileSync(join(OUT, 'events.ndjson'), `${l}\n`); };

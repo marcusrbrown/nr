@@ -1,0 +1,187 @@
+{
+  "ok": true,
+  "constants": {
+    "FX_TICKS": 24,
+    "FX_Y": 0.012,
+    "FX_ORDER": -8,
+    "FX_RING_INNER": 0.86,
+    "FX_RING_PEAK": 0.95,
+    "FX_DISC_PEAK": 0.14,
+    "FX_FLASH_TICKS": 10,
+    "FX_FLASH_PEAK": 10,
+    "FX_FLASH_LIFT": 0.45,
+    "FX_FLASH_Y": 1.6,
+    "FX_FLASH_Z": 1.4,
+    "FX_SEGMENTS": 64
+  },
+  "special": {
+    "total": 38,
+    "startup": 12,
+    "active": 4,
+    "radius": 2.4
+  },
+  "curve": [
+    {
+      "tick": 121,
+      "stateTick": 11,
+      "radius": 0,
+      "scale": 0,
+      "flash": 0,
+      "flashPlayer": -1,
+      "other": 0
+    },
+    {
+      "tick": 122,
+      "stateTick": 12,
+      "radius": 1.0500000715255737,
+      "scale": 1,
+      "flash": 10,
+      "flashPlayer": 0,
+      "other": 0
+    },
+    {
+      "tick": 123,
+      "stateTick": 13,
+      "radius": 1.8000000715255737,
+      "scale": 0.9184027314186096,
+      "flash": 8.09999942779541,
+      "flashPlayer": 0,
+      "other": 0
+    },
+    {
+      "tick": 124,
+      "stateTick": 14,
+      "radius": 2.25,
+      "scale": 0.8402777910232544,
+      "flash": 6.400000095367432,
+      "flashPlayer": 0,
+      "other": 0
+    },
+    {
+      "tick": 125,
+      "stateTick": 15,
+      "radius": 2.4000000953674316,
+      "scale": 0.765625,
+      "flash": 4.900000095367432,
+      "flashPlayer": 0,
+      "other": 0
+    },
+    {
+      "tick": 126,
+      "stateTick": 16,
+      "radius": 2.4000000953674316,
+      "scale": 0.6944444179534912,
+      "flash": 3.6000001430511475,
+      "flashPlayer": 0,
+      "other": 0
+    },
+    {
+      "tick": 127,
+      "stateTick": 17,
+      "radius": 2.4000000953674316,
+      "scale": 0.6267361640930176,
+      "flash": 2.5,
+      "flashPlayer": 0,
+      "other": 0
+    },
+    {
+      "tick": 130,
+      "stateTick": 20,
+      "radius": 2.4000000953674316,
+      "scale": 0.4444443881511688,
+      "flash": 0.3999999463558197,
+      "flashPlayer": 0,
+      "other": 0
+    },
+    {
+      "tick": 134,
+      "stateTick": 24,
+      "radius": 2.4000000953674316,
+      "scale": 0.25,
+      "flash": 0,
+      "flashPlayer": -1,
+      "other": 0
+    },
+    {
+      "tick": 140,
+      "stateTick": 30,
+      "radius": 2.4000000953674316,
+      "scale": 0.0625,
+      "flash": 0,
+      "flashPlayer": -1,
+      "other": 0
+    },
+    {
+      "tick": 145,
+      "stateTick": 35,
+      "radius": 2.4000000953674316,
+      "scale": 0.0017361127538606524,
+      "flash": 0,
+      "flashPlayer": -1,
+      "other": 0
+    },
+    {
+      "tick": 146,
+      "stateTick": 36,
+      "radius": 0,
+      "scale": 0,
+      "flash": 0,
+      "flashPlayer": -1,
+      "other": 0
+    }
+  ],
+  "ordering": [
+    {
+      "name": "p1-mid",
+      "tick": 123,
+      "player": 0,
+      "diffIn": 128934,
+      "diffOut": 0,
+      "texels": 4983,
+      "feet": 276,
+      "bad": 0,
+      "tinted": {
+        "samples": 72,
+        "tinted": 57,
+        "fraction": 0.7916666666666666
+      },
+      "walk": 0,
+      "walkBad": 0
+    },
+    {
+      "name": "p1-fade",
+      "tick": 128,
+      "player": 0,
+      "diffIn": 237474,
+      "diffOut": 0,
+      "texels": 5953,
+      "feet": 266,
+      "bad": 0,
+      "tinted": {
+        "samples": 61,
+        "tinted": 50,
+        "fraction": 0.819672131147541
+      },
+      "walk": 0,
+      "walkBad": 0
+    },
+    {
+      "name": "p2-mid",
+      "tick": 103,
+      "player": 1,
+      "diffIn": 94113,
+      "diffOut": 0,
+      "texels": 4334,
+      "feet": 62,
+      "bad": 0,
+      "tinted": {
+        "samples": 55,
+        "tinted": 41,
+        "fraction": 0.7454545454545455
+      },
+      "walk": 37,
+      "walkBad": 0
+    }
+  ],
+  "failures": []
+}

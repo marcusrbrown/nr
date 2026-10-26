@@ -235,5 +235,7 @@ float nr_sim_view_half(const nr_sim *s, float lane);
  * number of hit-test ticks. */
 typedef struct { const char *name; int32_t total, startup, active; } nr_state_info;
 const nr_state_info *nr_state_info_of(int32_t state);
+/* The radius, on the ground plane, a state hits everything within; 0 for a state that does not hit by radius. */
+float nr_state_radius(int32_t state);
 
 #endif

@@ -1,0 +1,25 @@
+ok   mid        t123 native-webgpu cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   mid        t123 cart-webgpu   cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   mid        t123 native-gl     cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   mid        t123 cart-gl       cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   mid        t123 webgpu: cart vs native identical pixels
+ok   mid        t123 gl: cart vs native identical pixels
+ok   hit-radius t125 native-webgpu cw.three.missing 0, ring radius 2.40 scale 0.766 flash 4.90
+ok   hit-radius t125 cart-webgpu   cw.three.missing 0, ring radius 2.40 scale 0.766 flash 4.90
+ok   hit-radius t125 native-gl     cw.three.missing 0, ring radius 2.40 scale 0.766 flash 4.90
+ok   hit-radius t125 cart-gl       cw.three.missing 0, ring radius 2.40 scale 0.766 flash 4.90
+ok   hit-radius t125 webgpu: cart vs native identical pixels
+ok   hit-radius t125 gl: cart vs native identical pixels
+ok   fade       t128 native-webgpu cw.three.missing 0, ring radius 2.40 scale 0.563 flash 1.60
+ok   fade       t128 cart-webgpu   cw.three.missing 0, ring radius 2.40 scale 0.563 flash 1.60
+ok   fade       t128 native-gl     cw.three.missing 0, ring radius 2.40 scale 0.563 flash 1.60
+ok   fade       t128 cart-gl       cw.three.missing 0, ring radius 2.40 scale 0.563 flash 1.60
+ok   fade       t128 webgpu: cart vs native identical pixels
+ok   fade       t128 gl: cart vs native identical pixels
+ok   p2-mid     t103 native-webgpu cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   p2-mid     t103 cart-webgpu   cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   p2-mid     t103 native-gl     cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   p2-mid     t103 cart-gl       cw.three.missing 0, ring radius 1.80 scale 0.918 flash 8.10
+ok   p2-mid     t103 webgpu: cart vs native identical pixels
+ok   p2-mid     t103 gl: cart vs native identical pixels
+PASS: cw.three.missing is 0 on native and cart, WebGPU and GL, with the ring on the screen; each cart is pixel-identical to the native on its backend

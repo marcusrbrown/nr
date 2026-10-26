@@ -56,6 +56,7 @@
  *     frame (nr.perf_ms); the measurement build, GL only, outside the simulation.
  *   NR_PERF_CONTROL: spins NR_PERF_CONTROL_MS per actor per frame in the render callback; the control build that must exceed
  *     the frame budget.
+ *   NR_NO_FX_RING: the knockback special's ground ring and disc are not built (its flash light is); the control build of the shockwave check.
  *   NR_EXTRA_LIGHT: a fifth point light (intensity 0) is added to the scene, so every lit draw is an l0500 program state the
  *     table does not have (three.c draws a frame with fewer lights than a row's with that row, never one with more); the
  *     control build of the missing-state predicate.
@@ -129,6 +130,9 @@
 #endif
 #ifndef NR_EXTRA_LIGHT
 #define NR_EXTRA_LIGHT 0
+#endif
+#ifndef NR_NO_FX_RING
+#define NR_NO_FX_RING 0
 #endif
 #define NR_PERF_RING 1024
 #define NR_ARENA (NR_LIT_TEST == 0 && NR_STAGE_LEGACY == 0)
@@ -206,6 +210,15 @@ static struct {
   int32_t demo;               /* set by a host: 1 plays the combat script (demo_combat.inc), 2 the bot */
   int32_t events[NR_EVENT_CAP * NR_EVENT_FIELDS];
   int32_t event_count, events_dropped;
+#if NR_ARENA
+  /* the knockback special's shockwave (fx_update): what it shows this tick, per player, and its meshes. Outside the checksum. */
+  float fx_radius[NR_PLAYERS];  /* the ring's radius in units; 0 when it is not shown */
+  float fx_alpha[NR_PLAYERS];   /* the colour scale left in the fade, 1 on the hit tick */
+  float fx_flash;               /* the flash slot's intensity */
+  int32_t fx_flash_player;      /* the player the flash is at, or -1 */
+  t3_color fx_base[NR_PLAYERS];
+  t3_mesh *fx_mesh[NR_PLAYERS][2]; /* disc, ring */
+#endif
 #if NR_PERF
   float perf_ms[NR_PERF_RING]; /* wall ms from the end of one frame's render to the end of the next's */
   int32_t perf_n;
@@ -855,6 +868,121 @@ static void lights_at(int32_t tick) {
 #endif
 }
 
+/* ── the knockback special's shockwave ───────────────────────────────────────────────────────────────────────────── */
+
+/* A ground ring and the flash light, both driven by the hero's special_knockback state tick and the state's hit radius:
+ * nothing here is read by the simulation, hashed or compared between hosts (the fields it publishes are not in the
+ * whitelist). On the hit tick (the state's startup) a disc and a ring of the player's HUD colour start at the hero's ground
+ * point; the radius grows to the hit radius over the state's active ticks (ease-out) and holds while the colour fades to
+ * nothing over FX_TICKS; the flash slot is a light of the same colour, lifted toward white, at the hero, decaying over
+ * FX_FLASH_TICKS.
+ * Ordering: both meshes are additive, not transparent, so they stand in the opaque list at render order FX_ORDER: after the
+ * street (-10) and the lane dashes (-9), which write no depth, and before every solid and actor (0). They write no depth, so
+ * nothing they draw can tie with the street in depth, a solid that stands on or beside the street (the curb, the sidewalk,
+ * the pillar) is drawn over them, and an actor is drawn over them whole, feet included. They lie FX_Y above the street. */
+#if NR_ARENA
+#define FX_TICKS 24         /* ticks from the hit to the end of the fade */
+#define FX_Y 0.012f         /* above the street (0) and the lane dashes (0.005), below the sidewalk (0.12) */
+#ifndef FX_ORDER
+#define FX_ORDER -8 /* a control build sets it past the actors' order (tests/fx-check.mjs --control) */
+#endif
+#define FX_RING_INNER 0.86f /* the ring's inner edge as a share of the radius */
+#define FX_RING_PEAK 0.95f  /* colour scale of the ring at the hit tick */
+#define FX_DISC_PEAK 0.14f  /* colour scale of the disc at the hit tick */
+#define FX_FLASH_TICKS 10
+#define FX_FLASH_PEAK 10.0f /* intensity of the flash slot on the hit tick */
+#define FX_FLASH_LIFT 0.45f /* share of white in the flash's colour */
+#define FX_FLASH_Y 1.6f
+#define FX_FLASH_Z 1.4f     /* toward the camera, from the hero's lane */
+#define FX_SEGMENTS 64
+
+static const uint32_t FX_COLOR[NR_PLAYERS] = { 0xff2bd6, 0x1fe8ff }; /* ui.c PINK and CYAN */
+
+/* The ring's radius and the colour scale it shows at tick `t` of the state; scale 0 outside the effect's ticks. */
+static void fx_ring_at(int32_t t, float *radius, float *scale) {
+  const nr_state_info *info = nr_state_info_of(NR_ST_SPECIAL_KNOCKBACK);
+  int32_t k = t - info->startup;
+  *radius = 0.0f;
+  *scale = 0.0f;
+  if (k < 0 || k >= FX_TICKS) return;
+  float p = (float)(k + 1) / (float)info->active;
+  if (p > 1.0f) p = 1.0f;
+  float u = (float)k / (float)FX_TICKS, left = 1.0f - u;
+  *radius = nr_state_radius(NR_ST_SPECIAL_KNOCKBACK) * (1.0f - (1.0f - p) * (1.0f - p));
+  *scale = left * left;
+}
+
+static float fx_flash_at(int32_t t) {
+  int32_t k = t - nr_state_info_of(NR_ST_SPECIAL_KNOCKBACK)->startup;
+  if (k < 0 || k >= FX_FLASH_TICKS) return 0.0f;
+  float left = 1.0f - (float)k / (float)FX_FLASH_TICKS;
+  return FX_FLASH_PEAK * left * left;
+}
+
+static void fx_update(void) {
+  S.fx_flash = 0.0f;
+  S.fx_flash_player = -1;
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    bool on = S.actor_present[p] && S.actor_state[p] == NR_ST_SPECIAL_KNOCKBACK;
+    float radius, scale;
+    fx_ring_at(on ? S.actor_state_tick[p] : -1, &radius, &scale);
+    S.fx_radius[p] = radius;
+    S.fx_alpha[p] = scale;
+    float flash = on ? fx_flash_at(S.actor_state_tick[p]) : 0.0f;
+    if (flash > S.fx_flash) {
+      S.fx_flash = flash;
+      S.fx_flash_player = p;
+    }
+  }
+}
+
+static void fx_build(void) {
+  for (int p = 0; p < NR_PLAYERS; p++) S.fx_base[p] = t3_color_hex(FX_COLOR[p]);
+#if !NR_NO_FX_RING
+  t3_geometry *disc = t3_circle_geometry_new(1.0f, FX_SEGMENTS), *ring = t3_ring_geometry_new(FX_RING_INNER, 1.0f, FX_SEGMENTS, 1);
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    t3_geometry *g[2] = { disc, ring };
+    for (int k = 0; k < 2; k++) {
+      t3_material *m = t3_mesh_basic_material_new(FX_COLOR[p]);
+      m->blending = T3_ADDITIVE_BLENDING;
+      m->depth_write = false;
+      t3_mesh *mesh = t3_mesh_new(g[k], m);
+      t3_object_set_rotation(mesh, -1.5707963f, 0, 0);
+      mesh->base.render_order = FX_ORDER;
+      mesh->base.visible = false;
+      t3_object_add((t3_object *)S.scene, mesh);
+      S.fx_mesh[p][k] = mesh;
+    }
+  }
+#endif
+}
+
+static void fx_sync(void) {
+  for (int p = 0; p < NR_PLAYERS; p++) {
+    bool on = S.fx_alpha[p] > 0.0f;
+    for (int k = 0; k < 2; k++) {
+      t3_mesh *mesh = S.fx_mesh[p][k];
+      if (!mesh) continue;
+      mesh->base.visible = on;
+      if (!on) continue;
+      float peak = k == 0 ? FX_DISC_PEAK : FX_RING_PEAK, s = peak * S.fx_alpha[p];
+      t3_material *m = mesh->materials[0];
+      m->color = (t3_color){ S.fx_base[p].r * s, S.fx_base[p].g * s, S.fx_base[p].b * s };
+      t3_object_set_position(mesh, S.pos[p][0], FX_Y, S.pos[p][1]);
+      t3_object_set_scale(mesh, S.fx_radius[p], S.fx_radius[p], 1.0f);
+    }
+  }
+  /* the flash slot: at the hero, in front of it, in the player's colour lifted toward white */
+  t3_light *f = S.light[ARENA_LIGHTS - 1];
+  int p = S.fx_flash_player;
+  if (p < 0) return;
+  t3_color c = S.fx_base[p];
+  f->color = (t3_color){ c.r + (1.0f - c.r) * FX_FLASH_LIFT, c.g + (1.0f - c.g) * FX_FLASH_LIFT, c.b + (1.0f - c.b) * FX_FLASH_LIFT };
+  t3_object_set_position(f, S.pos[p][0], FX_FLASH_Y, S.pos[p][1] + FX_FLASH_Z);
+  f->intensity = S.fx_flash;
+}
+#endif
+
 static void fixed_update(void *user, double dt) {
   (void)user, (void)dt;
 #if !NR_ARENA
@@ -862,6 +990,9 @@ static void fixed_update(void *user, double dt) {
 #endif
   step_sim();
   lights_at(S.ticks);
+#if NR_ARENA
+  fx_update();
+#endif
   int32_t scalars[4] = { S.ticks, S.heroes, S.lights, S.players };
   float cam[2] = { S.cam_x, S.cam_left };
   uint32_t h = S.checksum;
@@ -951,6 +1082,9 @@ static void build_scene(int w, int h) {
       t3_object_add((t3_object *)S.scene, S.mesh[i][c]);
     }
   }
+#if NR_ARENA
+  fx_build();
+#endif
 }
 
 /* An actor's plane faces the camera; its centre sits where the pivot texel (the ground anchor) lands on the actor's
@@ -980,6 +1114,9 @@ static void sync_scene(void) {
     t3_object_set_position(S.light[i], S.light_pos[i][0], S.light_pos[i][1], S.light_pos[i][2]);
     S.light[i]->intensity = S.light_intensity[i];
   }
+#if NR_ARENA
+  fx_sync();
+#endif
 }
 
 /* A bare three.c renderer has no pipeline to publish the draws it skipped, so the counts are read here, as
@@ -1047,6 +1184,12 @@ static void register_debug(void) {
   cw_debug_field("nr.events", S.events, CW_DBG_I32, NR_EVENT_CAP * NR_EVENT_FIELDS);
   cw_debug_i32("nr.event_count", &S.event_count);
   cw_debug_i32("nr.events_dropped", &S.events_dropped);
+#if NR_ARENA
+  cw_debug_f32_array("nr.fx_radius", S.fx_radius, NR_PLAYERS);
+  cw_debug_f32_array("nr.fx_alpha", S.fx_alpha, NR_PLAYERS);
+  cw_debug_f32("nr.fx_flash", &S.fx_flash);
+  cw_debug_i32("nr.fx_flash_player", &S.fx_flash_player);
+#endif
 #if NR_BOT_MASK
   cw_debug_field("nr.bot_log", S.bot_log, CW_DBG_I32, BOT_LOG * 2);
   cw_debug_i32("nr.bot_log_count", &S.bot_log_count);
@@ -1118,6 +1261,9 @@ static void init(void *user) {
     S.actor_present[i] = 1;
     S.actor_target[i] = -1;
   }
+#if NR_ARENA
+  S.fx_flash_player = -1;
+#endif
   S.lit_test = NR_LIT_TEST;
   S.flat_normals = NR_FLAT_NORMALS;
   S.arena_on = NR_ARENA;

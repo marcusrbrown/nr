@@ -91,6 +91,10 @@ static const state_def DEF[NR_ST_COUNT] = {
 
 const nr_state_info *nr_state_info_of(int32_t state) { return state >= 0 && state < NR_ST_COUNT ? &DEF[state].info : NULL; }
 
+float nr_state_radius(int32_t state) {
+  return state >= 0 && state < NR_ST_COUNT && DEF[state].shape == SHAPE_RADIUS ? DEF[state].x1 : 0.0f;
+}
+
 /* The enemies' numbers: how fast they walk along the street and across the lanes, how close they stand, how near they
  * must be to swing (along x and across lanes), the ticks before the next swing and the swing's state. */
 typedef struct {

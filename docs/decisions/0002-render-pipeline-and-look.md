@@ -250,6 +250,35 @@ changes (waves 2099, the tick the last wave ends; join-mid 790). `input-combat` 
 At the street's end the camera stops at 20 and the players stand at the furthest the frame allows at their lane (23.48 and 23.96), not at the
 arena's bound 24; the scroll check asserts that.
 
+## Round 4: the knockback special's shockwave
+
+The owner played the radius special natively: the landing-crouch clip alone does not read as an area attack. The clip is unchanged; the special
+gains a ground ring and a pulse of the flash-slot light. Presentation only: the effect reads the hero's `special_knockback` state tick and the
+state's hit radius (`nr_state_radius`, a read-only accessor over the table row; the simulation is unchanged and the goldens are the same five
+checksums), draws no random number and reads no clock, and its state (`S.fx_*` in `main.c`, published as `nr.fx_radius`, `nr.fx_alpha`,
+`nr.fx_flash`, `nr.fx_flash_player`) is outside the checksum and the hosts' whitelist.
+
+Current values (open to tuning; `FX_*` in `games/nr/main.c`, read by `games/nr/tests/fx-lib.mjs`). Tick k is counted from the hit (tick 12 of the
+state, its startup):
+
+- Ring: a ring (inner edge 0.86 of the radius) and a filled disc, both on the ground at the hero's position and 0.012 units above the street, in the
+  player's HUD colour: `#ff2bd6` (magenta) for player 1, `#1fe8ff` (cyan) for player 2. Radius: ease-out `r = R (1 - (1 - p)^2)` with `p = min(1, (k + 1) / 4)`,
+  so it reaches the hit radius R = 2.4 on the last of the 4 active ticks: 1.05, 1.80, 2.25, 2.40 units on k = 0 to 3 (about 307 by 105 scene pixels across at R), then holds.
+- Fade: the colour is scaled by `(1 - k / 24)^2` (1 at the hit, 0.77 at the last active tick, 0.56 on tick 18 of the state, 0.0017 on k = 23) and the
+  effect ends after 24 ticks (0.4 s). The ring's colour peak is 0.95 and the disc's 0.14 of the colour: they add to the street and the signs behind.
+- Flash: the flash slot (intensity 0 otherwise) is at the hero's x, 1.6 up and 1.4 toward the camera from its lane, in the player's colour lifted 0.45 toward white,
+  intensity `10 (1 - k / 10)^2`: 10, 8.1, 6.4, 4.9, 3.6, 2.5, 1.6, 0.9, 0.4, 0.1 on k = 0 to 9, 0 after. A neon is 28 at about 3.5 units. When both players use the special on one tick the flash goes to the stronger
+  (the lower player on a tie); the rings are one each.
+- Ordering: the ring and disc are additive materials that are not transparent, so they are in three.c's opaque list, at render order -8: after the street (-10)
+  and the lane dashes (-9), which are decals and write no depth, and before every solid and actor (0). They write no depth. They therefore have no depth value to
+  tie with the street; a solid that stands on or beside the street (curb 0.16, sidewalk 0.12, pillar) is drawn over them wherever it is nearer; and an actor is drawn over them whole, its feet below the pivot included. At 0.012 they are above the street (0) and the dashes
+  (0.005). `depth-check.mjs` asserts these facts from the sources and the layout; `fx-check.mjs` proves them on the pictures.
+- Program state: the ring is `basic` (three.c's own table); the manifest `games/nr/programs/nr.txt` gains no row.
+- Hosts: WebGPU blends the additive draw in linear light, GL in the encoded colour, so the same values read brighter on GL (the disc especially); the values are tuned on WebGPU, which the owner plays and the look set uses, and the GL picture was checked by eye
+  (`docs/evidence/combat-slice/round4/fx-hosts-mid-native-gl.png` beside `-webgpu.png`); pictures of different backends are not compared with each other, each cart is with its own backend's native.
+
+Evidence: `docs/evidence/combat-slice/README.md`, "Round 4".
+
 ## Consequences
 
 - Art is reproducible from a recipe and a pinned Blender; a Blender or kit change is a pin change and a re-render with hash comparison.

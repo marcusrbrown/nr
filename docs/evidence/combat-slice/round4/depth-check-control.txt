@@ -1,0 +1,7 @@
+PASS control: the planted tie and the planted ring ordering faults are found: 275 boxes and planes, 944 faces, eps 0.004; 1 tie(s)
+  haze-1 / haze-2-control: z+ at -15.950 / -15.950, area 18
+nearest overlapping same-facing pair beyond eps: 0.0100
+shockwave: render order -10 (decals -9, depth-writing solids 0, actors 0), height 0 (decals 0.005, sidewalk top 0.12), depth write ON; 3 problem(s)
+  order: the ring's render order -10 is not after the street's decals (-9)
+  height: the ring's height 0 is not above the decals (0.005) and below the sidewalk (0.12)
+  depth: the ring writes depth

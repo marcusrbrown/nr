@@ -348,3 +348,39 @@ on WebGPU of the 128 MiB wasm (`round2/perf/`), up from 46.0 and 46.5.
   1.7 units, 2.5 of the screen's 10 (ADR-0002).
 - Hit 3's capture shows the UAL hook's bent-over pose at tick 8 of the state (the clip frame whose reach, 1.08 units, was the widest the ticks tested drew); the other ticks of its active window were not compared by eye.
 - `host{op:play}` was not called; the romdev session below ends on the cart at the title.
+
+## Round 4: the knockback special's shockwave
+
+The owner played the radius special natively and the landing-crouch clip (`NinjaJump_Land` frames 2 to 24, kept as it is) did not read as an area
+attack. The special now draws a ground ring and a flash. Presentation only; values and the ordering rule are in ADR-0002, "Round 4". One machine
+and one GPU, as above. All logs and pictures are in `round4/`.
+
+| What | Result | Artifact |
+| --- | --- | --- |
+| Effect | ring and disc in the player's HUD colour (magenta, cyan) on the ground at the hero, radius ease-out to the hit radius 2.4 over the 4 active ticks (1.05, 1.80, 2.25, 2.40), fading over 24 ticks; flash-slot light at the hero, 10 at the hit decaying over 10 ticks | `main.c` `FX_*`, `nr_state_radius` in `sim.c` |
+| Simulation, goldens | unchanged: the five checksums 1196977218, 1922784415, 1835212864, 3971475687, 1355188033 reproduce on two native runs each; `goldens.json` is not in the diff. The effect's state is outside the checksum and the whitelist | `round4/goldens.log` |
+| Curve, determinism, ordering | `fx-check.mjs`: radius, colour scale and flash on 12 ticks equal what the C computes from the state tick (`fx-lib.mjs`); the radius reaches 2.4 on the last active tick; the same tick twice is byte-identical; against a control build with no ring (`-DNR_NO_FX_RING=ON`) the pictures differ only inside the ring's outline (0 pixels outside; 128,934 / 237,474 / 94,113 inside), on none of the 4,983 / 5,953 / 4,334 interior texels of the actors standing in the ring (276 / 266 / 62 of them below the pivot: the ring is under the feet), and on none of the 37 sidewalk points inside player 2's outline (the sidewalk is drawn over the ring); the ring's colour is on 57 of 72, 50 of 61 and 41 of 55 street samples | `round4/fx-check.log`, `fx-check.json`, `fx-p1-mid.png` and `-noring` pairs |
+| Ordering control | the same check on a ring drawn after the actors (`-DCMAKE_C_FLAGS=-DFX_ORDER=1`, render order 1, still no depth write) is rejected on both captures: 393 of 4,983 and 31 of 4,334 actor texels change, 276 and 62 of the exposed ones below the pivot | `round4/fx-check-control.log` |
+| No z-fight with the street | `depth-check.mjs`: render order -8 (street -10, dashes -9, depth-writing solids and actors 0), height 0.012 (dashes 0.005, sidewalk 0.12), depth write off, additive and not transparent, no other render order in `main.c`; 0 coplanar ties as before. Its control (ring at order -10, height 0, depth write on) is found on all three counts. Cart equals native pixel for pixel on every capture below, the symptom a host-dependent tie-break produced before | `round4/depth-check.log`, `depth-check-control.log` |
+| Programs | the ring is the `basic` state, in three.c's own table; `programs-survey` over `nr_look` (140 frames of `input-look.json`, the ring on screen) and the bots `nr_botfull` and `nr_bot` (2,400 frames) finds no new state, so `games/nr/programs/nr.txt` and both C tables are unchanged. `cw.three.missing` is 0 with the ring on screen on native and cart, WebGPU and GL, at ticks 123, 125, 128 and player 2's 103; each cart is pixel-identical to the native on its backend | `round4/fx-hosts.log` |
+| Look set | 28 captures (26, `combat-radius-special` replaced, `-mid` and `-p2` added), each cart pixel-identical to native with equal state (43 fields) and equal `nr.fx_*` fields, `cw.three.missing` 0/0. Only `combat-radius-special` and `heavy-staggered` (both heroes in the special: a magenta and a cyan ring) changed as pictures; the other 24 are byte-identical to Round 3's | `round4/look-set.log`, `look/` |
+| Wrong-screen control | `look-set.mjs --control`: the screens at the wrong ticks and the radius captures at tick 150 (ring gone) and at 128 for the mid-expansion capture are rejected (6 of 6) | `round4/look-set-control.log` |
+| Gate | `gate.mjs`: exit 0, 23 entries `ok`, including `nr-strict`, `nr-wgpu` and `nr-controls` | `round4/gates/gate-all.log` |
+| `sim-check`, `ui-check` | 27 and 12 scenarios passed (0 glyph bakes after frame 0) | `round4/sim-check.log`, `ui-check.log` |
+| romdev session `nr-look` | the dual cart (`build/cart-wgpu/carts`, `loadMedia wgpu:true`, `gpu: webgpu`, apple metal-3) took the radius capture, the mid-expansion and player 2's, with hit 2, hit 3, the dash special and the upgrade: 0 differing pixels against native, state equal, `cw.three.missing` 0; the session ends with `nr.wasc` on the title, `host{op:play}` not called | `round4/romdev/` |
+
+Captures of the radius special (before is Round 3's picture in git history at 16fc767): `combat-radius-special` is tick 128, state tick 18, the ring at full
+radius 0.56 into its fade (the clip's frame 4, enemies six ticks into their reaction); `combat-radius-special-mid` is tick 123, state tick 13; `combat-radius-special-p2` is
+tick 103 on `input-fx-p2.json`. Each asserts the player's state and tick, the published ring radius, colour scale and flash, and the ring's colour on the picture before it is kept.
+
+GL and WebGPU blend an additive draw in different spaces (`round4/fx-hosts-mid-native-gl.png` beside `-webgpu.png`): the same colour scale is brighter on GL.
+The values were tuned on WebGPU.
+
+### Not verified in Round 4
+
+- Whether the ring and flash read as an area attack to the owner's eye; the values are the agent's, against the neon palette on one machine.
+- The GL look: checked by eye on one picture only; the values are not tuned for it.
+- A row-removal control for the ring's program state: `basic` is in three.c's own table and cannot be removed through the manifest; `cw.three.missing`'s
+  sensitivity is shown by the existing `l0400` row controls (`nr-controls`).
+- Two simultaneous specials: the flash goes to one player; covered by `heavy-staggered`'s picture, not by an assertion.
+- `host{op:play}` was not called; the session ends on the cart at the title.

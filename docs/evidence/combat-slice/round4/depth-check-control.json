@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "eps": 0.004,
+  "faces": 944,
+  "ties": [
+    {
+      "a": "haze-1",
+      "b": "haze-2-control",
+      "axis": "z",
+      "dir": 1,
+      "at": [
+        -15.95,
+        -15.95
+      ],
+      "area": 18
+    }
+  ],
+  "nearest": 0.009999999999999787,
+  "ring": {
+    "fx": {
+      "FX_TICKS": 24,
+      "FX_Y": 0,
+      "FX_ORDER": -10,
+      "FX_RING_INNER": 0.86,
+      "FX_RING_PEAK": 0.95,
+      "FX_DISC_PEAK": 0.14,
+      "FX_FLASH_TICKS": 10,
+      "FX_FLASH_PEAK": 10,
+      "FX_FLASH_LIFT": 0.45,
+      "FX_FLASH_Y": 1.6,
+      "FX_FLASH_Z": 1.4,
+      "FX_SEGMENTS": 64
+    },
+    "decalOrder": -9,
+    "decalTop": 0.005,
+    "writerOrder": 0,
+    "groundTop": 0.12,
+    "problems": [
+      "order: the ring's render order -10 is not after the street's decals (-9)",
+      "height: the ring's height 0 is not above the decals (0.005) and below the sidewalk (0.12)",
+      "depth: the ring writes depth"
+    ]
+  }
+}
