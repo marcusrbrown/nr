@@ -25,6 +25,16 @@
       "notes": "The free Standard download is glTF/FBX/OBJ with a portion of the models and no rigged .blend (the .blend files are the paid Source version). Sizes and sha256 below were computed on first fetch.",
       "files": [
         {
+          "path": "Eyebrows_Female.bin",
+          "sha256": "7a450832ca276c3d8299acaf78cd83c53b4290d79375c85266286ef617932e46",
+          "size": 100592
+        },
+        {
+          "path": "Eyebrows_Female.gltf",
+          "sha256": "ec294eb3dbe1b2027090e336255fa34ade5f2182c8964530404f3af7ad45939e",
+          "size": 25053
+        },
+        {
           "path": "Hair_Beard.bin",
           "sha256": "bf2f46ef5808665ef31082f787bc68c51ff063e81b76ca1a51ac86a9ae723be7",
           "size": 41356
@@ -33,6 +43,26 @@
           "path": "Hair_Beard.gltf",
           "sha256": "80013b9791ce12c65fbe693cf669b02ef5c38091c653bf13b9415d2d8380e0ce",
           "size": 23104
+        },
+        {
+          "path": "Hair_Buns.bin",
+          "sha256": "811606cc84f0bfdefa2e6f1396f3d94c35138308a96d78a4f447b2e7dfc6ed6c",
+          "size": 205916
+        },
+        {
+          "path": "Hair_Buns.gltf",
+          "sha256": "cbdd6f509ec8f1021361b53da6fa1a077b95762ebc8bc2d8acae59bb0cb263c1",
+          "size": 23807
+        },
+        {
+          "path": "Hair_BuzzedFemale.bin",
+          "sha256": "48fcdac8751e85c1d08ac9ff25b5c4d649e5b5d450d37ad8743b9f111a3a7e04",
+          "size": 33372
+        },
+        {
+          "path": "Hair_BuzzedFemale.gltf",
+          "sha256": "096a7a4ea5bcadc588f4c1e95f04b3461f8a20f3643a0308cfd23e81e180ab32",
+          "size": 23779
         },
         {
           "path": "Hair_Long.bin",
@@ -53,6 +83,16 @@
           "path": "Hair_SimpleParted.gltf",
           "sha256": "fe0f354d7f95d83d38e15c60794dcc063fa4d60550706f3d7ba51491cdc07c56",
           "size": 23114
+        },
+        {
+          "path": "Superhero_Female_FullBody.bin",
+          "sha256": "3a8220a485b33d05d879115a50697728b45a151781106033afb8b8c243fca208",
+          "size": 990808
+        },
+        {
+          "path": "Superhero_Female_FullBody.gltf",
+          "sha256": "adedf28000a0716f689b009a70314506fc62f827498f77ba852acb5610f3f3f4",
+          "size": 31656
         },
         {
           "path": "Superhero_Male_FullBody.bin",
